@@ -21,6 +21,7 @@ There is a docker image hosted on [Docker Hub](https://registry.hub.docker.com/r
 It serves compiled assets statically.
 
 This is the list of available app paths provided by the service:
+
 ```
 /extensions/cast/cast.js
 ```
@@ -43,9 +44,9 @@ If you want to deploy web-extensions to the [ocis_traefik](https://github.com/ow
        - "traefik.http.services.web-extensions.loadbalancer.server.port=8080"
 ```
 
-You can verify this work correctly by checking `https://ocis.owncloud.test/extensions/cast/cast.js` is a minified javascript file.
+You can verify this works correctly by checking `https://ocis.owncloud.test/extensions/cast/cast.js` is a minified javascript file.
 
-Now you can create a `web.config.yaml` file in the `ocis_traefik` folder with the following content:
+Now you can create a `web.config.yaml` file in the `ocis_traefik` folder with the following content. The `cast` app is used as an example here. You need to add a block to the `external_apps` for every app you want to use. 
 
 ```yaml
 web:
