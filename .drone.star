@@ -114,8 +114,8 @@ def appBuild(ctx, name):
         "commands": [
             "cd 'packages/web-app-%s'" % name,
             "pnpm build",
-            "mkdir -p ../../assets",
-            "mv dist ../../assets/%s" % name,
+            "mkdir -p ../../assets/extensions",
+            "mv dist ../../assets/extensions/%s" % name,
         ],
     }]
 
