@@ -1,0 +1,33 @@
+{
+  "name": "web-extensions",
+  "version": "0.0.0",
+  "description": "Collection of ownCloud Web Extensions",
+  "license": "AGPL-3.0",
+  "author": "ownCloud",
+  "private": true,
+  "homepage": "https://github.com/owncloud/web-extensions",
+  "type": "module",
+  "scripts": {
+    "check:types": "vue-tsc --noEmit",
+    "lint": "eslint 'packages/**/*.{js,ts,vue}' --color"
+  },
+  "devDependencies": {
+    "@ownclouders/eslint-config": "0.0.1",
+    "@ownclouders/extension-sdk": "0.0.5-alpha.1",
+    "@ownclouders/prettier-config": "0.0.1",
+    "@ownclouders/tsconfig": "0.0.5-alpha.1",
+    "@types/node": "^20.2.3",
+    "eslint": "8.50.0",
+    "prettier": "3.0.3",
+    "typescript": "4.9.5",
+    "vite": "4.1.1",
+    "vue-tsc": "1.8.15"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "design-system*"
+      ]
+    }
+  }
+}

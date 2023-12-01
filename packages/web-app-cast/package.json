@@ -1,0 +1,18 @@
+{
+  "name": "web-app-cast",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud Cast Integration",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development"
+  },
+  "peerDependencies": {
+    "@ownclouders/web-pkg": "0.0.5-alpha.9",
+    "@ownclouders/web-client": "0.0.1",
+    "vue3-gettext": "2.4.0",
+    "vue": "3.3.9"
+  }
+}
