@@ -27,7 +27,7 @@ This is the list of available app paths provided by the service:
 
 ### ocis_traefik
 
-If you want to deploy web-extensions to the [ocis_traefik]https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_traefik) example, you need to add a service like this to the `docker-compose.yml` file.
+If you want to deploy web-extensions to the [ocis_traefik](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_traefik) example, you need to add a service like this to the `docker-compose.yml` file.
 
 ```yaml
    web-extensions:
