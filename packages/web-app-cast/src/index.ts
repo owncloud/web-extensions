@@ -13,7 +13,7 @@ export default defineWebApplication({
     const applicationId = applicationConfig?.receiverApplicationId || 'CC1AD845'
 
     const isAvailable = ref(false)
-    window['__onGCastApiAvailable'] = (available) => {
+    window.__onGCastApiAvailable = (available) => {
       isAvailable.value = available
       console.log('Chromecast SDK available:', available)
       const castContext = cast.framework.CastContext.getInstance()

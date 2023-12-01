@@ -11,6 +11,9 @@ dependencies:
   '@ownclouders/web-pkg':
     specifier: 0.0.5-alpha.9
     version: 0.0.5-alpha.9(@casl/ability@6.5.0)(@casl/vue@2.2.1)(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@0.0.1)(@uppy/core@3.7.1)(@uppy/drop-target@2.0.2)(@uppy/tus@3.4.0)(@uppy/utils@5.6.0)(@uppy/xhr-upload@3.5.0)(@vueuse/core@10.6.1)(axios@0.27.2)(clean-publish@4.2.0)(filesize@9.0.11)(fuse.js@6.6.2)(js-generate-password@0.1.9)(lodash-es@4.17.21)(luxon@2.5.2)(mark.js@8.11.1)(p-queue@6.6.2)(password-sheriff@1.1.1)(pinia@2.1.7)(qs@6.11.2)(semver@7.5.4)(uuid@9.0.1)(vue-concurrency@4.0.1)(vue-router@4.2.0)(vue3-gettext@2.4.0)(vuex@4.1.0)
+  '@types/chromecast-caf-sender':
+    specifier: 1.0.8
+    version: 1.0.8
   vue:
     specifier: 3.3.9
     version: 3.3.9
@@ -186,11 +189,38 @@ packages:
     resolution: {integrity: sha512-pCvdmea/F3Tn4hAtHqNXmjcixSaroJJ+L3STXlYJdir1g1m2mRQpWbN8a4SvgQtaw2930Ckhdx8qXdXBFMKbAA==}
     dev: false
 
+  /@types/chrome@0.0.253:
+    resolution: {integrity: sha512-ZnBlbeoje0XaBrJbFCXI8DsDfqvqdoWQO5NSGecMCHFC8W8z/rb/n7lI1FHob+TFKKLR4L2c3QJJSFLwtVc9TA==}
+    dependencies:
+      '@types/filesystem': 0.0.35
+      '@types/har-format': 1.2.15
+    dev: false
+
+  /@types/chromecast-caf-sender@1.0.8:
+    resolution: {integrity: sha512-3vByTZptIkYpNz/wErOnpFQ4hWGU1ghO5bcivNButxARbXXKfClLJv6r5Pd622nD/UecjSwrAeIposAIzd4HvA==}
+    dependencies:
+      '@types/chrome': 0.0.253
+    dev: false
+
+  /@types/filesystem@0.0.35:
+    resolution: {integrity: sha512-1eKvCaIBdrD2mmMgy5dwh564rVvfEhZTWVQQGRNn0Nt4ZEnJ0C8oSUCzvMKRA4lGde5oEVo+q2MrTTbV/GHDCQ==}
+    dependencies:
+      '@types/filewriter': 0.0.32
+    dev: false
+
+  /@types/filewriter@0.0.32:
+    resolution: {integrity: sha512-Kpi2GXQyYJdjL8mFclL1eDgihn1SIzorMZjD94kdPZh9E4VxGOeyjPxi5LpsM4Zku7P0reqegZTt2GxhmA9VBg==}
+    dev: false
+
   /@types/glob@7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 20.10.1
+    dev: false
+
+  /@types/har-format@1.2.15:
+    resolution: {integrity: sha512-RpQH4rXLuvTXKR0zqHq3go0RVXYv/YVqv4TnPH95VbwUxZdQlK1EtcMvQvMpDngHbt13Csh9Z4qT9AbkiQH5BA==}
     dev: false
 
   /@types/minimatch@5.1.2:

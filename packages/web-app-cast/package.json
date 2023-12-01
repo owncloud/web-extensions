@@ -12,6 +12,7 @@
   "peerDependencies": {
     "@ownclouders/web-pkg": "0.0.5-alpha.9",
     "@ownclouders/web-client": "0.0.1",
+    "@types/chromecast-caf-sender": "1.0.8",
     "vue3-gettext": "2.4.0",
     "vue": "3.3.9"
   }
