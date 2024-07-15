@@ -76,7 +76,8 @@ def buildDockerImage(ctx):
 def buildWeb(ctx):
     return installPnpm() + \
            webLint() + \
-           appBuild(ctx, "cast")
+           appBuild(ctx, "cast") + \
+           appBuild(ctx, "progress-bars")
 
 def installPnpm():
     return [{
