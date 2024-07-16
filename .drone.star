@@ -110,7 +110,7 @@ def buildRelease(ctx):
             "image": OC_CI_ALPINE,
             "commands": [
                 "apk add zip",
-                "find",
+                "find assets/",
                 "mkdir release/",
                 "cd assets/",
                 "zip -r ../release/%s.zip %s/" % (package, package),
