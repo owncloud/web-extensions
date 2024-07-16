@@ -44,7 +44,7 @@ export default defineComponent({
     let setProgressToken: string
     let catAnimationTimerId: number
     let positionTimerId: number
-    const nyanCatContainer = ref(null)
+    const nyanCatContainer = ref<HTMLElement>(null)
 
     const currentCatFrame = ref(1)
     const currentPositionFrame = ref(1)
