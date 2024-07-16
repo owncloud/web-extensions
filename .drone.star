@@ -112,7 +112,7 @@ def buildRelease(ctx):
                 "apk add zip",
                 "find assets/",
                 "mkdir release/",
-                "cd assets/",
+                "cd assets/extensions",
                 "zip -r ../release/%s.zip %s/" % (package, package),
             ],
             "when": {
