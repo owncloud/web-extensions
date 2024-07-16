@@ -111,9 +111,8 @@ def buildRelease(ctx):
             "commands": [
                 "apk add zip",
                 "find assets/",
-                "mkdir release/",
                 "cd assets/extensions",
-                "zip -r ../release/%s.zip %s/" % (package, package),
+                "zip -r ../../%s-%s.zip %s/" % (package, version, package),
             ],
             "when": {
                 "ref": [
@@ -129,14 +128,14 @@ def buildRelease(ctx):
                     "from_secret": "github_token",
                 },
                 "files": [
-                    "release/*",
+                    "%s-%s.zip" % (package, version),
                 ],
                 "checksum": [
                     "md5",
                     "sha256",
                 ],
                 "title": "%s %s" % (package, version),
-                "note": "dist/CHANGELOG.md",
+                "note": ".release_note",
                 "overwrite": True,
             },
             "when": {
