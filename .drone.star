@@ -146,8 +146,6 @@ def buildRelease(ctx):
         },
     ]
 
-    return steps
-
 def buildWeb(ctx):
     return installPnpm() + \
            webLint() + \
