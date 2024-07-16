@@ -1,7 +1,11 @@
 OC_CI_NODEJS = "owncloudci/nodejs:18"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
+OC_CI_ALPINE = "owncloudci/alpine:latest"
 
 PLUGINS_DOCKER = "plugins/docker:20.14"
+PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
+
+WEB_EXTENSIONS_PUBLISH_PACKAGES = ["cast", "progress-bars"]
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -22,7 +26,7 @@ def build(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "build",
-        "steps": buildWeb(ctx) + buildDockerImage(ctx),
+        "steps": buildWeb(ctx) + buildDockerImage(ctx) + buildRelease(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
@@ -33,7 +37,28 @@ def build(ctx):
         },
     }]
 
+def determineReleasePackage(ctx):
+    if ctx.build.event != "tag":
+        return None
+
+    matches = [p for p in WEB_EXTENSIONS_PUBLISH_PACKAGES if ctx.build.ref.startswith("refs/tags/%s-v" % p)]
+    if len(matches) > 0:
+        return matches[0]
+
+    return None
+
+def determineReleaseVersion(ctx):
+    package = determineReleasePackage(ctx)
+    if package == None:
+        return ctx.build.ref.replace("refs/tags/v", "")
+
+    return ctx.build.ref.replace("refs/tags/" + package + "-v", "")
+
 def buildDockerImage(ctx):
+    package = determineReleasePackage(ctx)
+    if package != "":
+        return []
+
     return [
         {
             "name": "docker-dry-run",
@@ -72,6 +97,59 @@ def buildDockerImage(ctx):
             },
         },
     ]
+
+def buildRelease(ctx):
+    steps = []
+    package = determineReleasePackage(ctx)
+    version = determineReleaseVersion(ctx)
+    if package == "":
+        return []
+
+    steps.append(
+        [
+            {
+                "name": "package",
+                "image": OC_CI_ALPINE,
+                "commands": [
+                    "apk add zip",
+                    "mkdir release/",
+                    "cd assets/",
+                    "zip -r ../release/%s.zip %s/" % (package, package),
+                ],
+                "when": {
+                    "ref": [
+                        "refs/tags/**",
+                    ],
+                },
+            },
+            {
+                "name": "publish",
+                "image": PLUGINS_GITHUB_RELEASE,
+                "settings": {
+                    "api_key": {
+                        "from_secret": "github_token",
+                    },
+                    "files": [
+                        "release/*",
+                    ],
+                    "checksum": [
+                        "md5",
+                        "sha256",
+                    ],
+                    "title": "%s %s" % (package, version),
+                    "note": "dist/CHANGELOG.md",
+                    "overwrite": True,
+                },
+                "when": {
+                    "ref": [
+                        "refs/tags/**",
+                    ],
+                },
+            },
+        ],
+    )
+
+    return steps
 
 def buildWeb(ctx):
     return installPnpm() + \
