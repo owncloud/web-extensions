@@ -99,55 +99,52 @@ def buildDockerImage(ctx):
     ]
 
 def buildRelease(ctx):
-    steps = []
     package = determineReleasePackage(ctx)
     version = determineReleaseVersion(ctx)
     if package == "":
         return []
 
-    # steps.append(
-    #     [
-    #         {
-    #             "name": "package",
-    #             "image": OC_CI_ALPINE,
-    #             "commands": [
-    #                 "apk add zip",
-    #                 "mkdir release/",
-    #                 "cd assets/",
-    #                 "zip -r ../release/%s.zip %s/" % (package, package),
-    #             ],
-    #             "when": {
-    #                 "ref": [
-    #                     "refs/tags/**",
-    #                 ],
-    #             },
-    #         },
-    #         {
-    #             "name": "publish",
-    #             "image": PLUGINS_GITHUB_RELEASE,
-    #             "settings": {
-    #                 "api_key": {
-    #                     "from_secret": "github_token",
-    #                 },
-    #                 "files": [
-    #                     "release/*",
-    #                 ],
-    #                 "checksum": [
-    #                     "md5",
-    #                     "sha256",
-    #                 ],
-    #                 "title": "%s %s" % (package, version),
-    #                 "note": "dist/CHANGELOG.md",
-    #                 "overwrite": True,
-    #             },
-    #             "when": {
-    #                 "ref": [
-    #                     "refs/tags/**",
-    #                 ],
-    #             },
-    #         },
-    #     ],
-    # )
+    return [
+        {
+            "name": "package",
+            "image": OC_CI_ALPINE,
+            "commands": [
+                "apk add zip",
+                "mkdir release/",
+                "cd assets/",
+                "zip -r ../release/%s.zip %s/" % (package, package),
+            ],
+            "when": {
+                "ref": [
+                    "refs/tags/**",
+                ],
+            },
+        },
+        {
+            "name": "publish",
+            "image": PLUGINS_GITHUB_RELEASE,
+            "settings": {
+                "api_key": {
+                    "from_secret": "github_token",
+                },
+                "files": [
+                    "release/*",
+                ],
+                "checksum": [
+                    "md5",
+                    "sha256",
+                ],
+                "title": "%s %s" % (package, version),
+                "note": "dist/CHANGELOG.md",
+                "overwrite": True,
+            },
+            "when": {
+                "ref": [
+                    "refs/tags/**",
+                ],
+            },
+        },
+    ]
 
     return steps
 
