@@ -1,0 +1,19 @@
+{
+  "name": "draw-io",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ownCloud web draw.io integration",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development"
+  },
+  "peerDependencies": {
+    "@ownclouders/web-client": "^0.0.3",
+    "@ownclouders/web-pkg": "^0.0.6",
+    "qs": "^6.11.2",
+    "vue3-gettext": "^2.4.0",
+    "vue": "^3.4.21"
+  }
+}
