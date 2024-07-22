@@ -1,0 +1,15 @@
+import { defineConfig } from '@ownclouders/extension-sdk'
+
+export default defineConfig({
+  name: 'web-app-draw-io',
+  server: {
+    port: 9724
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        entryFileNames: 'draw-io.js'
+      }
+    }
+  }
+})
