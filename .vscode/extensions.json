@@ -4,9 +4,8 @@
   "recommendations": [
     "esbenp.prettier-vscode",
     "EditorConfig.EditorConfig",
-    "Orta.vscode-jest",
     "Vue.volar",
-    "Vue.vscode-typescript-vue-plugin",
-    "alexkrechik.cucumberautocomplete"
+    "vitest.explorer",
+    "vscode.typescript-language-features"
   ]
 }
