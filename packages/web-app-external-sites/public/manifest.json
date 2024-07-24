@@ -1,0 +1,6 @@
+{
+  "entrypoint": "external-sites.js",
+  "config": {
+    "sites": []
+  }
+}

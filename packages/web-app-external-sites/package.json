@@ -1,0 +1,20 @@
+{
+  "name": "external-sites",
+  "version": "0.0.0",
+  "private": true,
+  "description": "add external sites to the ownCloud Web app menu",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development"
+  },
+  "peerDependencies": {
+    "@ownclouders/web-client": "^0.0.3",
+    "@ownclouders/web-pkg": "^0.0.6",
+    "vue3-gettext": "^2.4.0",
+    "vue-router": "^4.2.5",
+    "vue": "^3.4.21",
+    "zod": "^3.22.4"
+  }
+}
