@@ -7,7 +7,14 @@
   "type": "module",
   "scripts": {
     "build": "pnpm vite build",
-    "build:w": "pnpm vite build --watch --mode development"
+    "build:w": "pnpm vite build --watch --mode development",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^13.3.1",
+    "vitest": "^2.0.4",
+    "vitest-mock-extended": "1.3.2"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "^0.0.3",
