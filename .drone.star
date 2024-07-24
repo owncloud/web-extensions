@@ -3,6 +3,10 @@ OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 
 PLUGINS_DOCKER = "plugins/docker:20.14"
 
+PACKAGES_WITH_UNIT_TESTS = [
+    "web-app-draw-io",
+]
+
 def main(ctx):
     before = beforePipelines(ctx)
 
@@ -124,7 +128,7 @@ def beforePipelines(ctx):
     return checkStarlark()
 
 def stagePipelines(ctx):
-    return []
+    return unitTests(ctx)
 
 def afterPipelines(ctx):
     return build(ctx)
@@ -186,6 +190,35 @@ def checkStarlark():
         ],
         "trigger": {
             "ref": [
+                "refs/pull/**",
+            ],
+        },
+    }]
+
+def unitTests(ctx):
+    unitTestPipelines = []
+
+    for package in PACKAGES_WITH_UNIT_TESTS:
+        unitTestPipelines.append({
+            "name": package,
+            "image": OC_CI_NODEJS,
+            "depends_on": [],
+            "commands": [
+                "cd packages/%s" % package,
+                "pnpm test:unit",
+            ],
+        })
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "unit-tests",
+        "steps": installPnpm() + unitTestPipelines,
+        "trigger": {
+            "ref": [
+                "refs/heads/main",
+                "refs/heads/stable-*",
+                "refs/tags/**",
                 "refs/pull/**",
             ],
         },
