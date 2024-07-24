@@ -42,8 +42,8 @@ export default defineComponent({
     let addLoadingEventToken: string
     let removeLoadingEventToken: string
     let setProgressToken: string
-    let catAnimationTimerId: number
-    let positionTimerId: number
+    let catAnimationTimerId: ReturnType<typeof setTimeout>
+    let positionTimerId: ReturnType<typeof setTimeout>
     const nyanCatContainer = ref<HTMLElement>(null)
 
     const currentCatFrame = ref(1)

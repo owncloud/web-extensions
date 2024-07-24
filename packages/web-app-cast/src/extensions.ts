@@ -55,7 +55,7 @@ export const extensions = ({
             icon: 'cast',
             handler,
             label: () => $gettext('Cast'),
-            isEnabled: ({ resources }: FileActionOptions) => {
+            isVisible: ({ resources }: FileActionOptions) => {
               return unref(isAvailable) && !resources[0]?.isFolder
             },
             componentType: 'button'
