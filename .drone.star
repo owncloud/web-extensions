@@ -151,8 +151,9 @@ def buildRelease(ctx):
 
 def buildWeb(ctx):
     return installPnpm() + \
-           webLint() + \
            appBuild(ctx, "cast") + \
+           appBuild(ctx, "draw-io") + \
+           appBuild(ctx, "external-sites") + \
            appBuild(ctx, "progress-bars")
 
 def installPnpm():
@@ -170,6 +171,7 @@ def webLint():
     return [{
         "name": "lint",
         "image": OC_CI_NODEJS,
+        "depends_on": ["pnpm-install"],
         "commands": [
             "pnpm lint",
         ],
@@ -179,6 +181,7 @@ def webTypecheck():
     return [{
         "name": "typecheck",
         "image": OC_CI_NODEJS,
+        "depends_on": ["pnpm-install"],
         "commands": [
             "pnpm check:types",
         ],
@@ -188,6 +191,7 @@ def appBuild(ctx, name):
     return [{
         "name": "build-%s" % name,
         "image": OC_CI_NODEJS,
+        "depends_on": ["pnpm-install"],
         "commands": [
             "cd 'packages/web-app-%s'" % name,
             "pnpm build",
@@ -200,7 +204,7 @@ def beforePipelines(ctx):
     return checkStarlark()
 
 def stagePipelines(ctx):
-    return unitTests(ctx)
+    return checks(ctx) + unitTests(ctx)
 
 def afterPipelines(ctx):
     return build(ctx)
@@ -267,6 +271,24 @@ def checkStarlark():
         },
     }]
 
+def checks(ctx):
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "lint+types",
+        "steps": installPnpm() +
+                 webLint() +
+                 webTypecheck(),
+        "trigger": {
+            "ref": [
+                "refs/heads/main",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
+
 def unitTests(ctx):
     unitTestPipelines = []
 
@@ -274,7 +296,7 @@ def unitTests(ctx):
         unitTestPipelines.append({
             "name": package,
             "image": OC_CI_NODEJS,
-            "depends_on": [],
+            "depends_on": ["pnpm-install"],
             "commands": [
                 "cd packages/%s" % package,
                 "pnpm test:unit",

@@ -55,7 +55,7 @@ export default defineWebApplication({
       id: 'cast',
       icon: 'cast',
       iconFillType: 'line'
-    }
+    } as const
 
     return {
       appInfo,

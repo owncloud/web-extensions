@@ -8,7 +8,7 @@
   "homepage": "https://github.com/owncloud/web-extensions",
   "type": "module",
   "scripts": {
-    "check:types": "vue-tsc --noEmit",
+    "check:types": "pnpm -r check:types",
     "lint": "eslint 'packages/**/*.{js,ts,vue}' --color"
   },
   "devDependencies": {
@@ -21,7 +21,7 @@
     "prettier": "3.3.3",
     "typescript": "5.5.3",
     "vite": "5.2.8",
-    "vue-tsc": "2.0.24"
+    "vitest": "2.0.4"
   },
   "pnpm": {
     "peerDependencyRules": {
