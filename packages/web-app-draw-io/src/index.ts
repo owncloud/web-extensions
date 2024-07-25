@@ -1,8 +1,16 @@
-import { Resource } from '@ownclouders/web-client'
-import { AppWrapperRoute, defineWebApplication, useUserStore } from '@ownclouders/web-pkg'
+import { Resource, urlJoin } from '@ownclouders/web-client'
+import {
+  ApplicationInformation,
+  AppMenuItemExtension,
+  AppWrapperRoute,
+  defineWebApplication,
+  useUserStore,
+  useOpenEmptyEditor
+} from '@ownclouders/web-pkg'
 import translations from '../l10n/translations.json'
 import App from './App.vue'
 import { useGettext } from 'vue3-gettext'
+import { computed } from 'vue'
 
 const applicationId = 'draw-io'
 
@@ -10,6 +18,7 @@ export default defineWebApplication({
   setup() {
     const { $gettext } = useGettext()
     const userStore = useUserStore()
+    const { openEmptyEditor } = useOpenEmptyEditor()
 
     const routes = [
       {
@@ -28,38 +37,53 @@ export default defineWebApplication({
       }
     ]
 
-    return {
-      appInfo: {
-        name: 'Draw.io',
-        id: applicationId,
-        icon: 'grid',
-        color: '#EF6C00',
-        applicationMenu: {
-          enabled: () => {
-            return !!userStore.user
-          },
-          priority: 30,
-          openAsEditor: true
-        },
-        defaultExtension: 'drawio',
-        extensions: [
-          {
-            extension: 'drawio',
-            routeName: 'draw-io',
-            newFileMenu: {
-              menuTitle() {
-                return $gettext('Draw.io document')
-              }
+    const appInfo: ApplicationInformation = {
+      name: 'Draw.io',
+      id: applicationId,
+      icon: 'grid',
+      color: '#EF6C00',
+      defaultExtension: 'drawio',
+      extensions: [
+        {
+          extension: 'drawio',
+          routeName: 'draw-io',
+          newFileMenu: {
+            menuTitle() {
+              return $gettext('Draw.io document')
             }
-          },
-          {
-            extension: 'vsdx',
-            routeName: 'draw-io'
           }
-        ]
-      },
+        },
+        {
+          extension: 'vsdx',
+          routeName: 'draw-io'
+        }
+      ]
+    }
+
+    const menuItems = computed<AppMenuItemExtension[]>(() => {
+      const items: AppMenuItemExtension[] = []
+
+      if (userStore.user) {
+        items.push({
+          id: `app.${appInfo.id}.menuItem`,
+          type: 'appMenuItem',
+          label: () => appInfo.name,
+          color: appInfo.color,
+          icon: appInfo.icon,
+          priority: 30,
+          path: urlJoin(appInfo.id),
+          handler: () => openEmptyEditor(appInfo.id, appInfo.defaultExtension)
+        })
+      }
+
+      return items
+    })
+
+    return {
+      appInfo,
       routes,
-      translations
+      translations,
+      extensions: menuItems
     }
   }
 })
