@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "check:types": "pnpm -r check:types",
-    "lint": "eslint 'packages/**/*.{js,ts,vue}' --color"
+    "lint": "eslint 'packages/**/*.{js,ts,vue}' --color",
+    "test:unit": "pnpm -r test:unit"
   },
   "devDependencies": {
     "@ownclouders/eslint-config": "0.0.1",
