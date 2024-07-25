@@ -5,7 +5,7 @@ OC_CI_ALPINE = "owncloudci/alpine:latest"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 
-WEB_EXTENSIONS_PUBLISH_PACKAGES = ["cast", "progress-bars"]
+WEB_EXTENSIONS_PUBLISH_PACKAGES = ["cast", "progress-bars", "draw-io", "external-sites"]
 
 PACKAGES_WITH_UNIT_TESTS = [
     "web-app-draw-io",
