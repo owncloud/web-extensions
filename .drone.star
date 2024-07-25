@@ -1,6 +1,7 @@
 OC_CI_NODEJS = "owncloudci/nodejs:18"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
+OC_CI_UBUNTU = "owncloud/ubuntu:latest"
 
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
@@ -214,7 +215,7 @@ def publishSteps(ctx):
                 "sha256",
             ],
             "title": "%s %s" % (app, version),
-            "note": ".release_note",
+            "note": "release_note",
             "overwrite": True,
         },
         "when": {
@@ -246,9 +247,23 @@ def appBuilds(ctx):
         })
 
         app_build_steps.append({
+            "name": "prepare-release-%s" % app,
+            "image": OC_CI_UBUNTU,
+            "depends_on": ["build-%s" % app],
+            "commands": [
+                "echo '{\"Name\": \"%s\",\"Version\": \"%s\"}' | gomplate -f .release_note -c Product=stdin:///product.json | tee release_note" % (release_app, release_version),
+            ],
+            "when": {
+                "ref": [
+                    "refs/tags/**",
+                ],
+            },
+        })
+
+        app_build_steps.append({
             "name": "package-%s" % app,
             "image": OC_CI_ALPINE,
-            "depends_on": ["build-%s" % app],
+            "depends_on": ["prepare-release-%s" % app],
             "commands": [
                 "apk add zip",
                 "cd assets/extensions",

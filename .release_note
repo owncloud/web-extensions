@@ -1,5 +1,5 @@
-{{ .Product }}-{{ .Version }}
+{{ .Product.Name }}-{{ .Product.Version }}
 
 ## How to use
-Download the attached release artifact "{{ .Product }}-{{ .Version }}.zip" and extract it to your oCIS apps folder.
+Download the attached release artifact "{{ .Product.Name }}-{{ .Product.Version }}.zip" and extract it to your oCIS apps folder.
 Please refer to [our documentation](https://owncloud.dev/services/web/#loading-applications) for more information.
