@@ -20,8 +20,8 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@vue/compiler-dom": "3.4.21",
-    "@vue/server-renderer": "3.4.21",
+    "@vue/compiler-dom": "3.4.34",
+    "@vue/server-renderer": "3.4.34",
     "happy-dom": "^13.3.1"
   }
 }
