@@ -13,7 +13,7 @@ importers:
         version: 0.0.3(@casl/ability@6.5.0)(@microsoft/fetch-event-source@2.0.1)(axios@0.27.2)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@2.5.2)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4)
       '@ownclouders/web-pkg':
         specifier: 0.0.6
-        version: 0.0.6(vsk6cf7pr7xhbukdlktira3chy)
+        version: 0.0.6(rt66bk3aosjimtyjvn2dvjihoy)
       '@types/chromecast-caf-sender':
         specifier: ^1.0.8
         version: 1.0.8
@@ -22,7 +22,7 @@ importers:
         version: 5.5.4
       vitest:
         specifier: 2.0.4
-        version: 2.0.4(@types/node@20.10.1)(happy-dom@13.10.1)
+        version: 2.0.4(@types/node@20.10.1)(happy-dom@14.12.3)
       vue:
         specifier: ^3.4.21
         version: 3.4.31(typescript@5.5.4)
@@ -40,8 +40,8 @@ importers:
         specifier: 3.4.34
         version: 3.4.34(vue@3.4.31(typescript@5.5.4))
       happy-dom:
-        specifier: ^13.3.1
-        version: 13.10.1
+        specifier: ^14.0.0
+        version: 14.12.3
 
 packages:
 
@@ -931,8 +931,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  happy-dom@13.10.1:
-    resolution: {integrity: sha512-9GZLEFvQL5EgfJX2zcBgu1nsPUn98JF/EiJnSfQbdxI6YEQGqpd09lXXxOmYonRBIEFz9JlGCOiPflDzgS1p8w==}
+  happy-dom@14.12.3:
+    resolution: {integrity: sha512-vsYlEs3E9gLwA1Hp+w3qzu+RUDFf4VTT8cyKqVICoZ2k7WM++Qyd2LwzyTi5bqMJFiIC/vNpTDYuxdreENRK/g==}
     engines: {node: '>=16.0.0'}
 
   has-flag@3.0.0:
@@ -1772,7 +1772,7 @@ snapshots:
       xml-js: 1.6.11
       zod: 3.22.4
 
-  '@ownclouders/web-pkg@0.0.6(vsk6cf7pr7xhbukdlktira3chy)':
+  '@ownclouders/web-pkg@0.0.6(rt66bk3aosjimtyjvn2dvjihoy)':
     dependencies:
       '@casl/ability': 6.5.0
       '@casl/vue': 2.2.1(@casl/ability@6.5.0)(vue@3.4.31(typescript@5.5.4))
@@ -1801,7 +1801,7 @@ snapshots:
       qs: 6.11.2
       semver: 7.5.4
       uuid: 9.0.1
-      vitest: 2.0.4(@types/node@20.10.1)(happy-dom@13.10.1)
+      vitest: 2.0.4(@types/node@20.10.1)(happy-dom@14.12.3)
       vue-concurrency: 4.0.1(vue@3.4.31(typescript@5.5.4))
       vue-router: 4.2.0(vue@3.4.31(typescript@5.5.4))
       vue3-gettext: 3.0.0-beta.5(@vue/compiler-sfc@3.4.31)(typescript@5.5.4)(vue@3.4.31(typescript@5.5.4))
@@ -2513,7 +2513,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  happy-dom@13.10.1:
+  happy-dom@14.12.3:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -2993,7 +2993,7 @@ snapshots:
       '@types/node': 20.10.1
       fsevents: 2.3.3
 
-  vitest@2.0.4(@types/node@20.10.1)(happy-dom@13.10.1):
+  vitest@2.0.4(@types/node@20.10.1)(happy-dom@14.12.3):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.4
@@ -3016,7 +3016,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.10.1
-      happy-dom: 13.10.1
+      happy-dom: 14.12.3
     transitivePeerDependencies:
       - less
       - lightningcss
