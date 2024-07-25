@@ -1,5 +1,5 @@
 
-FROM owncloudops/nginx@sha256:24563623d6fe925ce033f09491d12e2b1d905984b247305b2166faa7f995d462
+FROM owncloudops/nginx@sha256:479684e60dea289c8e9688bef8b32ec1954aeffb25034685c78dd7ea74842978
 
 LABEL maintainer="ownCloud GmbH <devops@owncloud.com>" \
   org.opencontainers.image.title="ownCloud Web Extensions" \
