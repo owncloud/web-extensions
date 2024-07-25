@@ -8,13 +8,20 @@
   "scripts": {
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
-    "check:types": "vue-tsc --noEmit"
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "peerDependencies": {
     "@ownclouders/web-pkg": "^0.0.6",
     "@vueuse/core": "^10.0.0",
-    "vue3-gettext": "3.0.0-beta.5",
+    "vitest": "2.0.4",
     "vue": "^3.4.21",
-    "vue-tsc": "2.0.28"
+    "vue-tsc": "2.0.28",
+    "vue3-gettext": "3.0.0-beta.5"
+  },
+  "devDependencies": {
+    "@vue/compiler-dom": "3.4.21",
+    "@vue/server-renderer": "3.4.21",
+    "happy-dom": "^13.3.1"
   }
 }

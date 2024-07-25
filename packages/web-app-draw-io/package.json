@@ -12,6 +12,8 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "devDependencies": {
+    "@vue/compiler-dom": "3.4.21",
+    "@vue/server-renderer": "3.4.21",
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^13.3.1",
     "vitest": "^2.0.4",

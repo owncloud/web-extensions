@@ -5,10 +5,11 @@ OC_CI_ALPINE = "owncloudci/alpine:latest"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
 
-WEB_EXTENSIONS_PUBLISH_PACKAGES = ["cast", "progress-bars", "draw-io", "external-sites"]
-
-PACKAGES_WITH_UNIT_TESTS = [
-    "web-app-draw-io",
+APPS = [
+    "cast",
+    "draw-io",
+    "external-sites",
+    "progress-bars",
 ]
 
 def main(ctx):
@@ -25,138 +26,22 @@ def main(ctx):
 
     return pipelines
 
-def build(ctx):
-    return [{
-        "kind": "pipeline",
-        "type": "docker",
-        "name": "build",
-        "steps": buildWeb(ctx) + buildDockerImage(ctx) + buildRelease(ctx),
-        "trigger": {
-            "ref": [
-                "refs/heads/main",
-                "refs/heads/stable-*",
-                "refs/tags/**",
-                "refs/pull/**",
-            ],
-        },
-    }]
-
-def determineReleasePackage(ctx):
+def determineReleaseApp(ctx):
     if ctx.build.event != "tag":
         return None
 
-    matches = [p for p in WEB_EXTENSIONS_PUBLISH_PACKAGES if ctx.build.ref.startswith("refs/tags/%s-v" % p)]
+    matches = [p for p in APPS if ctx.build.ref.startswith("refs/tags/%s-v" % p)]
     if len(matches) > 0:
         return matches[0]
 
     return None
 
 def determineReleaseVersion(ctx):
-    package = determineReleasePackage(ctx)
-    if package == None:
-        return ctx.build.ref.replace("refs/tags/v", "")
+    app = determineReleaseApp(ctx)
+    if app == None:
+        return None
 
-    return ctx.build.ref.replace("refs/tags/" + package + "-v", "")
-
-def buildDockerImage(ctx):
-    package = determineReleasePackage(ctx)
-    if package != "":
-        return []
-
-    return [
-        {
-            "name": "docker-dry-run",
-            "image": PLUGINS_DOCKER,
-            "settings": {
-                "dry_run": "true",
-                "dockerfile": "docker/Dockerfile",
-                "repo": "owncloud/web-extensions",
-            },
-            "when": {
-                "ref": [
-                    "refs/pull/**",
-                ],
-            },
-        },
-        {
-            "name": "docker",
-            "image": PLUGINS_DOCKER,
-            "settings": {
-                "username": {
-                    "from_secret": "docker_username",
-                },
-                "password": {
-                    "from_secret": "docker_password",
-                },
-                "auto_tag": True,
-                "dockerfile": "docker/Dockerfile",
-                "repo": "owncloud/web-extensions",
-            },
-            "when": {
-                "ref": {
-                    "exclude": [
-                        "refs/pull/**",
-                    ],
-                },
-            },
-        },
-    ]
-
-def buildRelease(ctx):
-    package = determineReleasePackage(ctx)
-    version = determineReleaseVersion(ctx)
-    if package == None:
-        return []
-
-    return [
-        {
-            "name": "package",
-            "image": OC_CI_ALPINE,
-            "depends_on": ["build-%s" % package],
-            "commands": [
-                "apk add zip",
-                "cd assets/extensions",
-                "zip -r ../../%s-%s.zip %s/" % (package, version, package),
-            ],
-            "when": {
-                "ref": [
-                    "refs/tags/**",
-                ],
-            },
-        },
-        {
-            "name": "publish",
-            "image": PLUGINS_GITHUB_RELEASE,
-            "depends_on": ["package"],
-            "settings": {
-                "api_key": {
-                    "from_secret": "github_token",
-                },
-                "files": [
-                    "%s-%s.zip" % (package, version),
-                ],
-                "checksum": [
-                    "md5",
-                    "sha256",
-                ],
-                "title": "%s %s" % (package, version),
-                "note": ".release_note",
-                "overwrite": True,
-            },
-            "when": {
-                "ref": [
-                    "refs/tags/**",
-                ],
-            },
-        },
-    ]
-
-def buildWeb(ctx):
-    return installPnpm() + \
-           appBuild(ctx, "cast") + \
-           appBuild(ctx, "draw-io") + \
-           appBuild(ctx, "external-sites") + \
-           appBuild(ctx, "progress-bars")
+    return ctx.build.ref.replace("refs/tags/%s-v" % app, "")
 
 def installPnpm():
     return [{
@@ -189,19 +74,6 @@ def webTypecheck():
         ],
     }]
 
-def appBuild(ctx, name):
-    return [{
-        "name": "build-%s" % name,
-        "image": OC_CI_NODEJS,
-        "depends_on": ["pnpm-install"],
-        "commands": [
-            "cd 'packages/web-app-%s'" % name,
-            "pnpm build",
-            "mkdir -p ../../assets/extensions",
-            "mv dist ../../assets/extensions/%s" % name,
-        ],
-    }]
-
 def beforePipelines(ctx):
     return checkStarlark()
 
@@ -209,7 +81,7 @@ def stagePipelines(ctx):
     return checks(ctx) + unitTests(ctx)
 
 def afterPipelines(ctx):
-    return build(ctx)
+    return appBuilds(ctx)
 
 def pipelineDependsOn(pipeline, dependant_pipelines):
     if "depends_on" in pipeline.keys():
@@ -292,15 +164,15 @@ def checks(ctx):
     }]
 
 def unitTests(ctx):
-    unitTestPipelines = []
+    unit_test_steps = []
 
-    for package in PACKAGES_WITH_UNIT_TESTS:
-        unitTestPipelines.append({
-            "name": package,
+    for app in APPS:
+        unit_test_steps.append({
+            "name": app,
             "image": OC_CI_NODEJS,
             "depends_on": ["pnpm-install"],
             "commands": [
-                "cd packages/%s" % package,
+                "cd packages/web-app-%s" % app,
                 "pnpm test:unit",
             ],
         })
@@ -309,7 +181,91 @@ def unitTests(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "unit-tests",
-        "steps": installPnpm() + unitTestPipelines,
+        "steps": installPnpm() + unit_test_steps,
+        "trigger": {
+            "ref": [
+                "refs/heads/main",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+    }]
+
+def publishSteps(ctx):
+    app = determineReleaseApp(ctx)
+    version = determineReleaseVersion(ctx)
+    if app == None:
+        return []
+
+    return [{
+        "name": "publish",
+        "image": PLUGINS_GITHUB_RELEASE,
+        "depends_on": ["package-%s" % app],
+        "settings": {
+            "api_key": {
+                "from_secret": "github_token",
+            },
+            "files": [
+                "%s-%s.zip" % (app, version),
+            ],
+            "checksum": [
+                "md5",
+                "sha256",
+            ],
+            "title": "%s %s" % (app, version),
+            "note": ".release_note",
+            "overwrite": True,
+        },
+        "when": {
+            "ref": [
+                "refs/tags/**",
+            ],
+        },
+    }]
+
+def appBuilds(ctx):
+    release_app = determineReleaseApp(ctx)
+    release_version = determineReleaseVersion(ctx)
+
+    app_build_steps = []
+    for app in APPS:
+        if release_app != None and release_app != app:
+            continue
+
+        app_build_steps.append({
+            "name": "build-%s" % app,
+            "image": OC_CI_NODEJS,
+            "depends_on": ["pnpm-install"],
+            "commands": [
+                "cd 'packages/web-app-%s'" % app,
+                "pnpm build",
+                "mkdir -p ../../assets/extensions",
+                "mv dist ../../assets/extensions/%s" % app,
+            ],
+        })
+
+        app_build_steps.append({
+            "name": "package-%s" % app,
+            "image": OC_CI_ALPINE,
+            "depends_on": ["build-%s" % app],
+            "commands": [
+                "apk add zip",
+                "cd assets/extensions",
+                "zip -r ../../%s-%s.zip %s/" % (app, release_version, app),
+            ],
+            "when": {
+                "ref": [
+                    "refs/tags/**",
+                ],
+            },
+        })
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "build",
+        "steps": installPnpm() + app_build_steps + publishSteps(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
