@@ -105,13 +105,14 @@ def buildDockerImage(ctx):
 def buildRelease(ctx):
     package = determineReleasePackage(ctx)
     version = determineReleaseVersion(ctx)
-    if package == "":
+    if package == None:
         return []
 
     return [
         {
             "name": "package",
             "image": OC_CI_ALPINE,
+            "depends_on": ["build-%s" % package],
             "commands": [
                 "apk add zip",
                 "cd assets/extensions",
@@ -126,6 +127,7 @@ def buildRelease(ctx):
         {
             "name": "publish",
             "image": PLUGINS_GITHUB_RELEASE,
+            "depends_on": ["package"],
             "settings": {
                 "api_key": {
                     "from_secret": "github_token",
