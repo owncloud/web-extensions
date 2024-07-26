@@ -15,3 +15,10 @@ Extensions are provided by apps. These are the apps, that are provided by this r
 - [web-app-draw-io](./packages/web-app-draw-io/)
 - [web-app-external-sites](./packages/web-app-external-sites/)
 - [web-app-progress-bars](./packages/web-app-progress-bars/)
+
+## Adding a new app
+
+New apps must be placed inside the `packages` folder and be prefixed with `web-app-`. Additionally, the following changes are needed:
+
+- add the new app to the `APPS` variable in the `.drone.star` file
+- add the `dist` folder of the new app to the list of volume mounts of the docker `ocis` service
