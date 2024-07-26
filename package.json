@@ -8,18 +8,25 @@
   "homepage": "https://github.com/owncloud/web-extensions",
   "type": "module",
   "scripts": {
+    "build": "pnpm -r build",
+    "build:w": "pnpm -r build:w",
     "check:types": "pnpm -r check:types",
     "lint": "eslint 'packages/**/*.{js,ts,vue}' --color",
-    "test:unit": "pnpm -r test:unit"
+    "test:unit": "pnpm -r test:unit",
+    "test:e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 TS_NODE_PROJECT=./tests/e2e/tsconfig.json cucumber-js packages/"
   },
   "devDependencies": {
+    "@cucumber/cucumber": "^10.3.1",
+    "@cucumber/pretty-formatter": "^1.0.0",
     "@ownclouders/eslint-config": "0.0.1",
     "@ownclouders/extension-sdk": "0.0.7",
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
+    "@playwright/test": "^1.41.2",
     "@types/node": "20.14.12",
     "eslint": "8.57.0",
     "prettier": "3.3.3",
+    "ts-node": "^10.9.2",
     "typescript": "5.5.4",
     "vite": "5.3.5",
     "vitest": "2.0.4"
