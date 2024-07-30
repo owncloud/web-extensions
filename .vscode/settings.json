@@ -17,5 +17,6 @@
   "typescript.format.enable": false,
   "editor.quickSuggestions": {
     "strings": true
-  }
+  },
+  "vitest.disableWorkspaceWarning": true
 }
