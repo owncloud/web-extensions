@@ -10,7 +10,7 @@ APPS = [
     "draw-io",
     "external-sites",
     "progress-bars",
-    "json-viewer"
+    "json-viewer",
 ]
 
 def main(ctx):
