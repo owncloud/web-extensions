@@ -14,9 +14,6 @@ importers:
       '@ownclouders/web-pkg':
         specifier: 0.0.6
         version: 0.0.6(@casl/ability@6.7.1)(@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.4.34(typescript@5.5.4)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4))(@sentry/vue@7.101.0(vue@3.4.34(typescript@5.5.4)))(@uppy/core@3.3.0)(@uppy/drop-target@2.1.0(@uppy/core@3.3.0))(@uppy/tus@3.5.5(@uppy/core@3.3.0))(@uppy/utils@5.9.0)(@uppy/xhr-upload@3.6.8(@uppy/core@3.3.0))(@vue/shared@3.4.34)(@vueuse/core@10.11.0(vue@3.4.34(typescript@5.5.4)))(axios@1.6.8)(deepmerge@4.3.1)(dompurify@3.1.6)(filesize@10.1.4)(fuse.js@6.6.2)(js-generate-password@0.1.9)(lodash-es@4.17.21)(luxon@3.2.1)(mark.js@8.11.1)(p-queue@6.6.2)(password-sheriff@1.1.1)(pinia@2.1.7(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(qs@6.11.2)(semver@7.6.3)(uuid@9.0.1)(vitest@2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.77.8))(vue-concurrency@5.0.0(@algolia/client-search@4.24.0)(@types/node@22.0.0)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.15.0)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(vue-router@4.2.5(vue@3.4.34(typescript@5.5.4)))(vue3-gettext@3.0.0-beta.5(@vue/compiler-sfc@3.4.34)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))
-      '@types/chromecast-caf-sender':
-        specifier: ^1.0.8
-        version: 1.0.10
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -596,26 +593,11 @@ packages:
   '@transloadit/prettier-bytes@0.0.9':
     resolution: {integrity: sha512-pCvdmea/F3Tn4hAtHqNXmjcixSaroJJ+L3STXlYJdir1g1m2mRQpWbN8a4SvgQtaw2930Ckhdx8qXdXBFMKbAA==}
 
-  '@types/chrome@0.0.269':
-    resolution: {integrity: sha512-vF7x8YywnhXX2F06njQ/OE7a3Qeful43C5GUOsUksXWk89WoSFUU3iLeZW8lDpVO9atm8iZIEiLQTRC3H7NOXQ==}
-
-  '@types/chromecast-caf-sender@1.0.10':
-    resolution: {integrity: sha512-B4iO+T4kMonmvIV+9xyWeIjxNWYVh6RyIQlFUeLk9fgQuXzHtFLnbnVwY7no5qshdUk9szKy0qbCWEMAjMkj4w==}
-
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
 
-  '@types/filesystem@0.0.36':
-    resolution: {integrity: sha512-vPDXOZuannb9FZdxgHnqSwAG/jvdGM8Wq+6N4D/d80z+D4HWH+bItqsZaVRQykAn6WEVeEkLm2oQigyHtgb0RA==}
-
-  '@types/filewriter@0.0.33':
-    resolution: {integrity: sha512-xFU8ZXTw4gd358lb2jw25nxY9QAgqn2+bKKjKOYfNCzN4DKCFetK7sPtrlpg66Ywe3vWY9FNxprZawAh9wfJ3g==}
-
   '@types/glob@7.2.0':
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
-
-  '@types/har-format@1.2.15':
-    resolution: {integrity: sha512-RpQH4rXLuvTXKR0zqHq3go0RVXYv/YVqv4TnPH95VbwUxZdQlK1EtcMvQvMpDngHbt13Csh9Z4qT9AbkiQH5BA==}
 
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
@@ -2557,29 +2539,12 @@ snapshots:
 
   '@transloadit/prettier-bytes@0.0.9': {}
 
-  '@types/chrome@0.0.269':
-    dependencies:
-      '@types/filesystem': 0.0.36
-      '@types/har-format': 1.2.15
-
-  '@types/chromecast-caf-sender@1.0.10':
-    dependencies:
-      '@types/chrome': 0.0.269
-
   '@types/estree@1.0.5': {}
-
-  '@types/filesystem@0.0.36':
-    dependencies:
-      '@types/filewriter': 0.0.33
-
-  '@types/filewriter@0.0.33': {}
 
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 22.0.0
-
-  '@types/har-format@1.2.15': {}
 
   '@types/hast@3.0.4':
     dependencies:
