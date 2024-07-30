@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, unref } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject, useMessages, useThemeStore } from '@ownclouders/web-pkg'
 import { Content, JSONEditor, Mode } from 'vanilla-jsoneditor'
@@ -34,35 +34,40 @@ export default defineComponent({
     const darkTheme = computed(() => {
       return themeStore.currentTheme.isDark
     })
-
-    let content: Content = null
-    try {
-      content = {
-        json: JSON.parse(props.currentContent),
-        text: props.currentContent
-      }
-    } catch (e) {
-      content = {
-        json: undefined,
-        text: props.currentContent
-      }
-      showErrorMessage({ title: $gettext('JSON not properly formatted') })
-    }
+    const editor = ref<JSONEditor>()
 
     onMounted(async () => {
-      const editor = new JSONEditor({
+      editor.value = new JSONEditor({
         target: unref(editorRef),
         props: {
-          content,
           mode: Mode.tree,
           askToFormat: false,
           readOnly: true,
           navigationBar: false
         }
       })
+    })
 
+    watch([props.currentContent, editor], async () => {
+      if (!unref(editor)) {
+        return
+      }
+
+      let content: Content = null
+      try {
+        content = {
+          json: JSON.parse(props.currentContent)
+        }
+      } catch (e) {
+        content = {
+          text: props.currentContent
+        }
+        showErrorMessage({ title: $gettext('JSON not properly formatted') })
+      }
+
+      await unref(editor).set(content)
       // expand all paths up to 2 levels
-      await editor.expand((path) => path.length < 2)
+      await unref(editor).expand((path) => path.length < 2)
     })
 
     return {
@@ -87,6 +92,7 @@ export default defineComponent({
       border-bottom-left-radius: 8px !important;
       border-top-left-radius: 8px !important;
     }
+
     button:nth-of-type(3) {
       border-bottom-right-radius: 8px !important;
       border-top-right-radius: 8px !important;
