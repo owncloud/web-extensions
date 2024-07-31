@@ -27,6 +27,7 @@ services:
       - ./packages/web-app-draw-io/dist:/web/apps/draw-io
       - ./packages/web-app-external-sites/dist:/web/apps/external-sites
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
+      - ./packages/web-app-json-viewer/dist:/web/apps/json-viewer
     depends_on:
       - traefik
 
