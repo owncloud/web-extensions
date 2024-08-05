@@ -14,10 +14,15 @@ Extensions are provided by apps. These are the apps, that are provided by this r
 - [web-app-cast](./packages/web-app-cast/)
 - [web-app-draw-io](./packages/web-app-draw-io/)
 - [web-app-external-sites](./packages/web-app-external-sites/)
-- [web-app-progress-bars](./packages/web-app-progress-bars/)
 - [web-app-json-viewer](./packages/web-app-json-viewer/)
+- [web-app-progress-bars](./packages/web-app-progress-bars/)
+- [web-app-unzip](./packages/web-app-unzip/)
 
-## Adding a new app
+## Installing apps in oCIS
+
+Please refer to [the Web app docs](https://owncloud.dev/services/web/#loading-applications) to learn how to install apps in oCIS.
+
+## Adding a new app to this repository
 
 New apps must be placed inside the `packages` folder and be prefixed with `web-app-`. Additionally, the following changes are needed:
 

@@ -9,8 +9,9 @@ APPS = [
     "cast",
     "draw-io",
     "external-sites",
-    "progress-bars",
     "json-viewer",
+    "progress-bars",
+    "unzip",
 ]
 
 def main(ctx):
