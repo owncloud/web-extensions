@@ -15,8 +15,8 @@
     "@zip.js/zip.js": "2.7.48"
   },
   "devDependencies": {
-    "@vue/compiler-dom": "3.4.34",
-    "@vue/server-renderer": "3.4.34",
+    "@vue/compiler-dom": "3.4.37",
+    "@vue/server-renderer": "3.4.37",
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^14.0.0",
     "vitest-mock-extended": "2.0.0",

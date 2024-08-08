@@ -23,13 +23,13 @@
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
     "@playwright/test": "^1.41.2",
-    "@types/node": "20.14.12",
+    "@types/node": "20.14.14",
     "eslint": "8.57.0",
     "prettier": "3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "5.5.4",
-    "vite": "5.3.5",
-    "vitest": "2.0.4"
+    "vite": "5.4.0",
+    "vitest": "2.0.5"
   },
   "pnpm": {
     "peerDependencyRules": {
