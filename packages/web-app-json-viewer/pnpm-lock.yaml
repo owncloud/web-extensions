@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@ownclouders/web-client':
-        specifier: 0.0.3
-        version: 0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4)
+        specifier: 10.2.0
+        version: 10.2.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(lodash-es@4.17.21)(zod@3.22.4)
       '@ownclouders/web-pkg':
         specifier: 0.0.6
-        version: 0.0.6(@casl/ability@6.7.1)(@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.4.34(typescript@5.5.4)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4))(@sentry/vue@7.101.0(vue@3.4.34(typescript@5.5.4)))(@uppy/core@3.3.0)(@uppy/drop-target@2.1.0(@uppy/core@3.3.0))(@uppy/tus@3.5.5(@uppy/core@3.3.0))(@uppy/utils@5.9.0)(@uppy/xhr-upload@3.6.8(@uppy/core@3.3.0))(@vue/shared@3.4.34)(@vueuse/core@10.11.0(vue@3.4.34(typescript@5.5.4)))(axios@1.6.8)(deepmerge@4.3.1)(dompurify@3.1.6)(filesize@10.1.4)(fuse.js@6.6.2)(js-generate-password@0.1.9)(lodash-es@4.17.21)(luxon@3.2.1)(mark.js@8.11.1)(p-queue@6.6.2)(password-sheriff@1.1.1)(pinia@2.1.7(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(qs@6.11.2)(semver@7.6.3)(uuid@9.0.1)(vitest@2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.77.8))(vue-concurrency@5.0.0(@algolia/client-search@4.24.0)(@types/node@22.0.0)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.15.0)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(vue-router@4.2.5(vue@3.4.34(typescript@5.5.4)))(vue3-gettext@3.0.0-beta.5(@vue/compiler-sfc@3.4.34)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))
+        version: 0.0.6(pmenzh77iu3qvkpoqzv3li7pla)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -139,8 +139,8 @@ packages:
     resolution: {integrity: sha512-LcnxQSsd9aXOIgmmSpvZ/1yo46ra2ESYyqLcryaBZOghxy5qqOBjvCWP5JfkI8yl9rlxRgdLTTMCQQRcN2hdCg==}
     engines: {node: '>=6.9.0'}
 
-  '@buttercup/fetch@0.1.2':
-    resolution: {integrity: sha512-mDBtsysQ0Gnrp4FamlRJGpu7HUHwbyLC4uUav1I7QAqThFAa/4d1cdZCxrV5gKvh6zO1fu95bILNJi4Y2hALhQ==}
+  '@buttercup/fetch@0.2.1':
+    resolution: {integrity: sha512-sCgECOx8wiqY8NN1xN22BqqKzXYIG2AicNLlakOAI4f0WgyLVUbAigMf8CZhBtJxdudTcB1gD5lciqi44jwJvg==}
 
   '@casl/ability@6.7.1':
     resolution: {integrity: sha512-e+Vgrehd1/lzOSwSqKHtmJ6kmIuZbGBlM2LBS5IuYGGKmVHuhUuyh3XgTn1VIw9+TO4gqU+uptvxfIRBUEdJuw==}
@@ -390,31 +390,16 @@ packages:
   '@microsoft/fetch-event-source@2.0.1':
     resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
 
-  '@nodelib/fs.scandir@2.1.5':
-    resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
-    engines: {node: '>= 8'}
-
-  '@nodelib/fs.stat@2.0.5':
-    resolution: {integrity: sha512-RkhPPp2zrqDAQA/2jNhnztcPAlv64XdhIp7a7454A5ovI7Bukxgt7MX7udwAu3zg1DcpPU0rz3VV1SeaqvY4+A==}
-    engines: {node: '>= 8'}
-
-  '@nodelib/fs.walk@1.2.8':
-    resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
-    engines: {node: '>= 8'}
-
-  '@ownclouders/web-client@0.0.3':
-    resolution: {integrity: sha512-k1guzcr2Yp2+09n/+RFiVcaWz+VhIVfY/BP4Q4psyAhU7hEpeJwYgsmmInty4Ht+emCwQLVddolpohQ7HG0BRg==}
+  '@ownclouders/web-client@10.2.0':
+    resolution: {integrity: sha512-i5unVsTblxw3vFqbXmhZy2c17gekjzQw5H8kkps8Iu0jVT608Ni8Ejb7OV7vk194Qf/ko1KPPF3s3toDo5saTw==}
     peerDependencies:
-      '@casl/ability': ^6.3.3
+      '@casl/ability': 6.7.1
       '@microsoft/fetch-event-source': ^2.0.1
-      axios: 1.6.8
-      clean-publish: 4.2.0
-      fast-xml-parser: 4.3.3
+      axios: 1.7.7
       lodash-es: ^4.17.21
-      luxon: 3.2.1
-      webdav: 5.3.1
-      xml-js: ^1.6.11
-      zod: 3.22.4
+      luxon: 3.5.0
+      uuid: 10.0.0
+      zod: 3.23.8
 
   '@ownclouders/web-pkg@0.0.6':
     resolution: {integrity: sha512-7LRyc2f908lJQ4WoArBX1EjJFJ1ipuu5O6t8MiC8uDY3EJOfbr+Fxv9XONYlAivrowHiDxVatp47pkoKmJi73w==}
@@ -654,9 +639,8 @@ packages:
     peerDependencies:
       '@uppy/core': ^3.11.0
 
-  '@uppy/store-default@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-store-default.tgz':
-    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-store-default.tgz}
-    version: 3.0.3
+  '@uppy/store-default@3.0.3':
+    resolution: {integrity: sha512-/zlvQNj4HjkthI+7dNdj/8mOlTg1Zb1gJ/ZsOxof0g3xXD+OAwm7asRnOwpfj2dos+lExdW/zMn8XsRGsuvb6Q==}
 
   '@uppy/tus@3.5.5':
     resolution: {integrity: sha512-Dcvqc897tSWRe9oiJo2ZCiyebn0G3j8FMYa99GYeLV9AeL37V/7akMAPG5ama4mTQLBXHcpziLqosTrf07ZMYQ==}
@@ -665,10 +649,6 @@ packages:
 
   '@uppy/utils@5.9.0':
     resolution: {integrity: sha512-9Ubddd3orCOLYjf0KobwgJ+aTrABSxk9t4X/QdM4qJHVZuMIftkaMplrViRUO+kvIBCXEZDIP2AmS060siDNGw==}
-
-  '@uppy/utils@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz':
-    resolution: {tarball: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz}
-    version: 5.4.0
 
   '@uppy/xhr-upload@3.6.8':
     resolution: {integrity: sha512-zr3OHrIdo08jmCqTYKS0C7o3E0XQpjtZI40wmB6VvXYzu4x/aZankG9QqKxLiY0n8KbZ9aCIvO8loxBGoL7Kaw==}
@@ -937,11 +917,6 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  clean-publish@4.2.0:
-    resolution: {integrity: sha512-dqZF5y6KtlkYhbnJoXiOCP4L1TPdI7HtuDysslUrbI8vLPu65ZjVO3pu5xp4qH0X2cWdDN/La04woe6fg4LNSw==}
-    engines: {node: '>= 16.0.0'}
-    hasBin: true
-
   code-red@1.0.4:
     resolution: {integrity: sha512-7qJWqItLA8/VPVlKJlFXU+NBlo/qyfs39aJcuMT/2ere32ZqvF5OSxgdM5xOfJJ7O429gg2HM47y8v9P+9wrNw==}
 
@@ -1074,6 +1049,10 @@ packages:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
 
+  entities@5.0.0:
+    resolution: {integrity: sha512-BeJFvFRJddxobhvEdm5GqHzRV/X+ACeuw0/BuuxsCh1EUZcAIz8+kYmBp/LrQuloy6K1f3a0M7+IhmZ7QnkISA==}
+    engines: {node: '>=0.12'}
+
   env-paths@2.2.1:
     resolution: {integrity: sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==}
     engines: {node: '>=6'}
@@ -1114,19 +1093,12 @@ packages:
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
-  fast-glob@3.3.2:
-    resolution: {integrity: sha512-oX2ruAFQwf/Orj8m737Y5adxDQO0LAB7/S5MnxCdTNDd4p6BsyIVsv9JQsATbTSq8KHRpLwIHbVlUNatxd+1Ow==}
-    engines: {node: '>=8.6.0'}
-
   fast-uri@3.0.1:
     resolution: {integrity: sha512-MWipKbbYiYI0UC7cl8m/i/IWTqfC8YXsqjzybjddLsFjStroQzsHXkc73JutMvBiXmOvapk+axIl79ig5t55Bw==}
 
-  fast-xml-parser@4.3.3:
-    resolution: {integrity: sha512-coV/D1MhrShMvU6D0I+VAK3umz6hUaxxhL0yp/9RjfiYUfAv14rDhGQL+PLForhMdr0wq3PiV07WtkkNjJjNHg==}
+  fast-xml-parser@4.5.0:
+    resolution: {integrity: sha512-/PlTQCI96+fZMAOLMZK4CWG1ItCbfZ/0jx7UIJFChPNrx7tcEgerUgWbeieCM9MfHInUDyK8DWYZ+YrywDJuTg==}
     hasBin: true
-
-  fastq@1.17.1:
-    resolution: {integrity: sha512-sRVD3lWVIXWg6By68ZN7vho9a1pQcN/WBFaAAsDDFzlJjvoGx0P8z7V1t72grFJfJhu3YPZBuu25f7Kaw2jN1w==}
 
   fetch-blob@3.2.0:
     resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
@@ -1356,12 +1328,8 @@ packages:
     resolution: {integrity: sha512-89lrxpwp+IEcJ6kwglF0HH3Tl17J08JEpYfXnvvjdp4zV4rjSoGu2NdQHxBs7yTOk3ETjTn9du48pBy8iBqj1w==}
     hasBin: true
 
-  layerr@2.1.0:
-    resolution: {integrity: sha512-xDD9suWxfBYeXgqffRVH/Wqh+mqZrQcqPRn0I0ijl7iJQ7vu8gMGPt1Qop59pEW/jaIDNUN7+PX1Qk40+vuflg==}
-
-  lilconfig@2.1.0:
-    resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
-    engines: {node: '>=10'}
+  layerr@3.0.0:
+    resolution: {integrity: sha512-tv754Ki2dXpPVApOrjTyRo4/QegVb9eVFq4mjqp4+NM5NaX7syQvN5BBNfV/ZpAHCEHV24XdUVrBAoka4jt3pA==}
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
@@ -1408,10 +1376,6 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
-  luxon@3.2.1:
-    resolution: {integrity: sha512-QrwPArQCNLAKGO/C+ZIilgIuDnEnKx5QYODdDtbFaxzsbZcc/a7WFq7MhsVYgRlwawLtvOUESTlfJ+hc/USqPg==}
-    engines: {node: '>=12'}
-
   magic-string@0.30.11:
     resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
 
@@ -1430,14 +1394,6 @@ packages:
   merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
 
-  merge2@1.4.1:
-    resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
-    engines: {node: '>= 8'}
-
-  micromatch@4.0.7:
-    resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
-    engines: {node: '>=8.6'}
-
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -1455,10 +1411,6 @@ packages:
 
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
-
-  minimatch@7.4.6:
-    resolution: {integrity: sha512-sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==}
-    engines: {node: '>=10'}
 
   minimatch@9.0.5:
     resolution: {integrity: sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==}
@@ -1642,9 +1594,6 @@ packages:
   querystringify@2.2.0:
     resolution: {integrity: sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==}
 
-  queue-microtask@1.2.3:
-    resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
-
   readdirp@3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
@@ -1668,10 +1617,6 @@ packages:
     resolution: {integrity: sha512-XQBQ3I8W1Cge0Seh+6gjj03LbmRFWuoszgK9ooCpwYIrhhoO80pfq4cUkU5DkknwfOfFteRwlZ56PYOGYyFWdg==}
     engines: {node: '>= 4'}
 
-  reusify@1.0.4:
-    resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
-    engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
-
   rfdc@1.4.1:
     resolution: {integrity: sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==}
 
@@ -1679,9 +1624,6 @@ packages:
     resolution: {integrity: sha512-K5vziVlg7hTpYfFBI+91zHBEMo6jafYXpkMlqZjg7/zhIG9iHqazBf4xz9AVdjS9BruRn280ROqLI7G3OFRIlw==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
-
-  run-parallel@1.2.0:
-    resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
 
   sass@1.77.8:
     resolution: {integrity: sha512-4UHg6prsrycW20fqLGPShtEvo/WyHRVRHwOP4DzkUrObWoWI05QBSfzU71TVB7PFaL104TwNaHpjlWXAZbQiNQ==}
@@ -1835,10 +1777,6 @@ packages:
   url-parse@1.5.10:
     resolution: {integrity: sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==}
 
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    hasBin: true
-
   vanilla-jsoneditor@0.23.8:
     resolution: {integrity: sha512-ly5wmhnICxYhLunBVKbe0jEkPLjDeEGWPV1Lpt7HzzsPCFOmpIs05Go2XgXErmID2nWRp2s5DkT2hBVE4B+rmA==}
 
@@ -1968,9 +1906,9 @@ packages:
     resolution: {integrity: sha512-d2JWLCivmZYTSIoge9MsgFCZrt571BikcWGYkjC1khllbTeDlGqZ2D8vD8E/lJa8WGWbb7Plm8/XJYV7IJHZZw==}
     engines: {node: '>= 8'}
 
-  webdav@5.3.1:
-    resolution: {integrity: sha512-wzZdTHtMuSIXqHGBznc8FM2L94Mc/17Tbn9ppoMybRO0bjWOSIeScdVXWX5qqHsg00EjfiOcwMqGFx6ghIhccQ==}
-    engines: {node: '>=14'}
+  webdav@5.7.1:
+    resolution: {integrity: sha512-JVPn3nLxXJfHSRvennHsOrDYjFLkilZ1Qlw8Ff6hpqp6AvkgF7a//aOh5wA4rMp+sLZ1Km0V+iv0LyO1FIwtXg==}
+    engines: {node: '>=16'}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -2148,7 +2086,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@buttercup/fetch@0.1.2':
+  '@buttercup/fetch@0.2.1':
     optionalDependencies:
       node-fetch: 3.3.2
 
@@ -2356,37 +2294,23 @@ snapshots:
 
   '@microsoft/fetch-event-source@2.0.1': {}
 
-  '@nodelib/fs.scandir@2.1.5':
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      run-parallel: 1.2.0
-
-  '@nodelib/fs.stat@2.0.5': {}
-
-  '@nodelib/fs.walk@1.2.8':
-    dependencies:
-      '@nodelib/fs.scandir': 2.1.5
-      fastq: 1.17.1
-
-  '@ownclouders/web-client@0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4)':
+  '@ownclouders/web-client@10.2.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(lodash-es@4.17.21)(zod@3.22.4)':
     dependencies:
       '@casl/ability': 6.7.1
       '@microsoft/fetch-event-source': 2.0.1
       axios: 1.6.8
-      clean-publish: 4.2.0
-      fast-xml-parser: 4.3.3
+      fast-xml-parser: 4.5.0
       lodash-es: 4.17.21
-      luxon: 3.2.1
-      webdav: 5.3.1
+      webdav: 5.7.1
       xml-js: 1.6.11
       zod: 3.22.4
 
-  ? '@ownclouders/web-pkg@0.0.6(@casl/ability@6.7.1)(@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.4.34(typescript@5.5.4)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4))(@sentry/vue@7.101.0(vue@3.4.34(typescript@5.5.4)))(@uppy/core@3.3.0)(@uppy/drop-target@2.1.0(@uppy/core@3.3.0))(@uppy/tus@3.5.5(@uppy/core@3.3.0))(@uppy/utils@5.9.0)(@uppy/xhr-upload@3.6.8(@uppy/core@3.3.0))(@vue/shared@3.4.34)(@vueuse/core@10.11.0(vue@3.4.34(typescript@5.5.4)))(axios@1.6.8)(deepmerge@4.3.1)(dompurify@3.1.6)(filesize@10.1.4)(fuse.js@6.6.2)(js-generate-password@0.1.9)(lodash-es@4.17.21)(luxon@3.2.1)(mark.js@8.11.1)(p-queue@6.6.2)(password-sheriff@1.1.1)(pinia@2.1.7(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(qs@6.11.2)(semver@7.6.3)(uuid@9.0.1)(vitest@2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.77.8))(vue-concurrency@5.0.0(@algolia/client-search@4.24.0)(@types/node@22.0.0)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.15.0)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))(vue-router@4.2.5(vue@3.4.34(typescript@5.5.4)))(vue3-gettext@3.0.0-beta.5(@vue/compiler-sfc@3.4.34)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4)))'
-  : dependencies:
+  '@ownclouders/web-pkg@0.0.6(pmenzh77iu3qvkpoqzv3li7pla)':
+    dependencies:
       '@casl/ability': 6.7.1
       '@casl/vue': 2.2.2(@casl/ability@6.7.1)(vue@3.4.34(typescript@5.5.4))
       '@microsoft/fetch-event-source': 2.0.1
-      '@ownclouders/web-client': 0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4)
+      '@ownclouders/web-client': 10.2.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(lodash-es@4.17.21)(zod@3.22.4)
       '@sentry/vue': 7.101.0(vue@3.4.34(typescript@5.5.4))
       '@uppy/core': 3.3.0
       '@uppy/drop-target': 2.1.0(@uppy/core@3.3.0)
@@ -2402,14 +2326,12 @@ snapshots:
       fuse.js: 6.6.2
       js-generate-password: 0.1.9
       lodash-es: 4.17.21
-      luxon: 3.2.1
       mark.js: 8.11.1
       p-queue: 6.6.2
       password-sheriff: 1.1.1
       pinia: 2.1.7(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4))
       qs: 6.11.2
       semver: 7.6.3
-      uuid: 9.0.1
       vitest: 2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.77.8)
       vue-concurrency: 5.0.0(@algolia/client-search@4.24.0)(@types/node@22.0.0)(axios@1.6.8)(fuse.js@6.6.2)(postcss@8.4.40)(sass@1.77.8)(search-insights@2.15.0)(typescript@5.5.4)(vue@3.4.34(typescript@5.5.4))
       vue-router: 4.2.5(vue@3.4.34(typescript@5.5.4))
@@ -2599,8 +2521,8 @@ snapshots:
   '@uppy/core@3.3.0':
     dependencies:
       '@transloadit/prettier-bytes': 0.0.9
-      '@uppy/store-default': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-store-default.tgz
-      '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
+      '@uppy/store-default': 3.0.3
+      '@uppy/utils': 5.9.0
       lodash: 4.17.21
       mime-match: 1.0.2
       namespace-emitter: 2.0.1
@@ -2612,7 +2534,7 @@ snapshots:
       '@uppy/core': 3.3.0
       '@uppy/utils': 5.9.0
 
-  '@uppy/store-default@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-store-default.tgz': {}
+  '@uppy/store-default@3.0.3': {}
 
   '@uppy/tus@3.5.5(@uppy/core@3.3.0)':
     dependencies:
@@ -2625,10 +2547,6 @@ snapshots:
     dependencies:
       lodash: 4.17.21
       preact: 10.23.1
-
-  '@uppy/utils@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz':
-    dependencies:
-      lodash: 4.17.21
 
   '@uppy/xhr-upload@3.6.8(@uppy/core@3.3.0)':
     dependencies:
@@ -2952,13 +2870,6 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  clean-publish@4.2.0:
-    dependencies:
-      cross-spawn: 7.0.3
-      fast-glob: 3.3.2
-      lilconfig: 2.1.0
-      micromatch: 4.0.7
-
   code-red@1.0.4:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -3039,8 +2950,7 @@ snapshots:
 
   custom-error-instance@2.1.1: {}
 
-  data-uri-to-buffer@4.0.1:
-    optional: true
+  data-uri-to-buffer@4.0.1: {}
 
   de-indent@1.0.2: {}
 
@@ -3073,6 +2983,8 @@ snapshots:
   emoji-regex@9.2.2: {}
 
   entities@4.5.0: {}
+
+  entities@5.0.0: {}
 
   env-paths@2.2.1: {}
 
@@ -3136,29 +3048,16 @@ snapshots:
 
   fast-deep-equal@3.1.3: {}
 
-  fast-glob@3.3.2:
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.7
-
   fast-uri@3.0.1: {}
 
-  fast-xml-parser@4.3.3:
+  fast-xml-parser@4.5.0:
     dependencies:
       strnum: 1.0.5
-
-  fastq@1.17.1:
-    dependencies:
-      reusify: 1.0.4
 
   fetch-blob@3.2.0:
     dependencies:
       node-domexception: 1.0.0
       web-streams-polyfill: 3.3.3
-    optional: true
 
   filesize@10.1.4: {}
 
@@ -3190,7 +3089,6 @@ snapshots:
   formdata-polyfill@4.0.10:
     dependencies:
       fetch-blob: 3.2.0
-    optional: true
 
   fs.realpath@1.0.0: {}
 
@@ -3355,9 +3253,7 @@ snapshots:
 
   jsonrepair@3.8.0: {}
 
-  layerr@2.1.0: {}
-
-  lilconfig@2.1.0: {}
+  layerr@3.0.0: {}
 
   lines-and-columns@1.2.4: {}
 
@@ -3401,8 +3297,6 @@ snapshots:
 
   lru-cache@10.4.3: {}
 
-  luxon@3.2.1: {}
-
   magic-string@0.30.11:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -3421,13 +3315,6 @@ snapshots:
 
   merge-stream@2.0.0: {}
 
-  merge2@1.4.1: {}
-
-  micromatch@4.0.7:
-    dependencies:
-      braces: 3.0.3
-      picomatch: 2.3.1
-
   mime-db@1.52.0: {}
 
   mime-match@1.0.2:
@@ -3443,10 +3330,6 @@ snapshots:
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
-
-  minimatch@7.4.6:
-    dependencies:
-      brace-expansion: 2.0.1
 
   minimatch@9.0.5:
     dependencies:
@@ -3472,15 +3355,13 @@ snapshots:
 
   nested-property@4.0.0: {}
 
-  node-domexception@1.0.0:
-    optional: true
+  node-domexception@1.0.0: {}
 
   node-fetch@3.3.2:
     dependencies:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    optional: true
 
   normalize-path@3.0.0: {}
 
@@ -3601,8 +3482,6 @@ snapshots:
 
   querystringify@2.2.0: {}
 
-  queue-microtask@1.2.3: {}
-
   readdirp@3.6.0:
     dependencies:
       picomatch: 2.3.1
@@ -3616,8 +3495,6 @@ snapshots:
   retry@0.12.0: {}
 
   retry@0.13.1: {}
-
-  reusify@1.0.4: {}
 
   rfdc@1.4.1: {}
 
@@ -3642,10 +3519,6 @@ snapshots:
       '@rollup/rollup-win32-ia32-msvc': 4.19.1
       '@rollup/rollup-win32-x64-msvc': 4.19.1
       fsevents: 2.3.3
-
-  run-parallel@1.2.0:
-    dependencies:
-      queue-microtask: 1.2.3
 
   sass@1.77.8:
     dependencies:
@@ -3795,8 +3668,6 @@ snapshots:
     dependencies:
       querystringify: 2.2.0
       requires-port: 1.0.0
-
-  uuid@9.0.1: {}
 
   vanilla-jsoneditor@0.23.8(@lezer/common@1.2.1):
     dependencies:
@@ -4019,21 +3890,21 @@ snapshots:
 
   w3c-keyname@2.2.8: {}
 
-  web-streams-polyfill@3.3.3:
-    optional: true
+  web-streams-polyfill@3.3.3: {}
 
-  webdav@5.3.1:
+  webdav@5.7.1:
     dependencies:
-      '@buttercup/fetch': 0.1.2
+      '@buttercup/fetch': 0.2.1
       base-64: 1.0.0
       byte-length: 1.0.2
-      fast-xml-parser: 4.3.3
-      he: 1.2.0
+      entities: 5.0.0
+      fast-xml-parser: 4.5.0
       hot-patcher: 2.0.1
-      layerr: 2.1.0
+      layerr: 3.0.0
       md5: 2.3.0
-      minimatch: 7.4.6
+      minimatch: 9.0.5
       nested-property: 4.0.0
+      node-fetch: 3.3.2
       path-posix: 1.0.0
       url-join: 5.0.0
       url-parse: 1.5.10
