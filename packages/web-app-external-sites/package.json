@@ -14,14 +14,14 @@
     "@ownclouders/web-client": "^0.0.3",
     "@ownclouders/web-pkg": "^0.0.6",
     "vitest": "2.0.4",
-    "vue": "^3.4.21",
-    "vue-router": "^4.2.5",
+    "vue": "^3.5.3",
+    "vue-router": "^4.4.3",
     "vue3-gettext": "^2.4.0",
-    "zod": "^3.22.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@vue/compiler-dom": "3.4.34",
-    "@vue/server-renderer": "3.4.34",
+    "@vue/compiler-dom": "3.5.3",
+    "@vue/server-renderer": "3.5.3",
     "happy-dom": "^14.0.0"
   }
 }
