@@ -10,28 +10,11 @@ import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from 'tui-image-editor'
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
 
-const includeUIOptions = {
-  includeUI: {
-    initMenu: 'filter'
-  }
-}
-const editorDefaultOptions = {
-  cssMaxWidth: 700,
-  cssMaxHeight: 500,
-  usageStatistics: false
-}
-
 export default defineComponent({
   props: {
-    includeUi: {
-      type: Boolean,
-      default: true
-    },
-    options: {
-      type: Object,
-      default() {
-        return editorDefaultOptions
-      }
+    url: {
+      type: String,
+      required: true
     }
   },
   setup(props, { emit }) {
@@ -44,65 +27,28 @@ export default defineComponent({
       })
     }
 
-    const getRootElement = () => {
-      return tuiImageEditor.value
-    }
-
-    const invoke = (methodName, ...args) => {
-      let result = null
-      if (editorInstance[methodName]) {
-        result = editorInstance[methodName](...args)
-      } else if (methodName.indexOf('.') > -1) {
-        const func = getMethod(editorInstance, methodName)
-        if (typeof func === 'function') {
-          result = func(...args)
-        }
-      }
-      return result
-    }
-
-    const getMethod = (instance, methodName) => {
-      const { first, rest } = parseDotMethodName(methodName)
-      const isInstance = instance.constructor.name !== 'Object'
-      const type = typeof instance[first]
-      let obj
-
-      if (isInstance && type === 'function') {
-        obj = instance[first].bind(instance)
-      } else {
-        obj = instance[first]
-      }
-
-      if (rest.length > 0) {
-        return getMethod(obj, rest)
-      }
-
-      return obj
-    }
-
-    const parseDotMethodName = (methodName) => {
-      const firstDotIdx = methodName.indexOf('.')
-      let firstMethodName = methodName
-      let restMethodName = ''
-
-      if (firstDotIdx > -1) {
-        firstMethodName = methodName.substring(0, firstDotIdx)
-        restMethodName = methodName.substring(firstDotIdx + 1, methodName.length)
-      }
-
-      return {
-        first: firstMethodName,
-        rest: restMethodName
-      }
-    }
-
     onMounted(() => {
-      let options = props.options
-      if (props.includeUi) {
-        options = Object.assign(includeUIOptions, props.options)
-      }
-      editorInstance = new ImageEditor(tuiImageEditor.value, options)
+      editorInstance = new ImageEditor(tuiImageEditor.value, {
+        includeUI: {
+          loadImage: {
+            path: props.url,
+            name: 'SampleImage'
+          }
+        },
+        // TODO: Grab window width and height via VueUse
+        cssMaxWidth: 700,
+        cssMaxHeight: 500,
+        usageStatistics: false
+      })
       addEventListener()
+
+      // TODO: Communicate to AppTopBar whether the image has been modified
+      // checkIfDirty = setInterval(() => {
+      //   const isDirty = !editorInstance.isEmptyUndoStack()
+      //   if (isDirty) {
+      //     emit('update:currentContent', isDirty)
+      //   }
+      // }, 300)
     })
 
     onBeforeUnmount(() => {
@@ -114,9 +60,7 @@ export default defineComponent({
     })
 
     return {
-      tuiImageEditor,
-      invoke,
-      getRootElement
+      tuiImageEditor
     }
   }
 })
