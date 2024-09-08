@@ -28,12 +28,10 @@ export default defineWebApplication({
       icon: 'file-code',
       defaultExtension: 'png',
       // TODO: add more extensions from web media viewer
-      extensions: [
-        {
-          extension: 'png',
-          routeName: 'image-editor'
-        }
-      ]
+      extensions: ['png', 'jpg', 'jpeg'].map((extension) => ({
+        extension,
+        routeName: 'media-editor'
+      }))
     }
 
     return {
