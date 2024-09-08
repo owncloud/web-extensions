@@ -1,5 +1,5 @@
 <template>
-  <div class="oc-media-editor oc-width-1-1 oc-height-1-1">
+  <div class="oc-image-editor oc-width-1-1 oc-height-1-1">
     <div ref="tuiImageEditor" class="oc-width-1-1 oc-height-1-1"></div>
   </div>
 </template>
@@ -9,9 +9,6 @@ import 'tui-color-picker/dist/tui-color-picker.css'
 import 'tui-image-editor/dist/tui-image-editor.css'
 import ImageEditor from 'tui-image-editor'
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue'
-import { Resource } from '@ownclouders/web-client'
-import { AppConfigObject, useMessages, useThemeStore } from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
 
 const includeUIOptions = {
   includeUI: {

@@ -2,7 +2,7 @@ import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import MediaEditor from './App.vue'
 
-const applicationId = 'media-editor'
+const applicationId = 'image-editor'
 export default defineWebApplication({
   setup() {
     const { $gettext } = useGettext()
@@ -16,14 +16,14 @@ export default defineWebApplication({
         }),
         meta: {
           authContext: 'hybrid',
-          title: $gettext('Media Editor'),
+          title: $gettext('Image Editor'),
           patchCleanPath: true
         }
       }
     ]
 
     const appInfo = {
-      name: $gettext('Media Editor'),
+      name: $gettext('Image Editor'),
       id: applicationId,
       icon: 'file-code',
       defaultExtension: 'png',
@@ -31,7 +31,7 @@ export default defineWebApplication({
       extensions: [
         {
           extension: 'png',
-          routeName: 'media-editor'
+          routeName: 'image-editor'
         }
       ]
     }
