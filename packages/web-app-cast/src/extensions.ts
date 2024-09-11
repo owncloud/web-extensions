@@ -1,7 +1,6 @@
-import { FileActionOptions, useClientService } from '@ownclouders/web-pkg'
+import { ActionExtension, FileActionOptions, useClientService } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import { computed, Ref, unref } from 'vue'
-import { Extension } from '@ownclouders/web-pkg'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({
@@ -43,24 +42,20 @@ export const extensions = ({
     }
   }
 
-  return computed(
-    () =>
-      [
-        {
-          id: 'com.github.owncloud.cast.file-action',
-          type: 'action',
-          scopes: ['files', 'files.context-menu'],
-          action: {
-            name: 'cast',
-            icon: 'cast',
-            handler,
-            label: () => $gettext('Cast'),
-            isVisible: ({ resources }: FileActionOptions) => {
-              return unref(isAvailable) && !resources[0]?.isFolder
-            },
-            componentType: 'button'
-          }
-        }
-      ] satisfies Extension[]
-  )
+  const extension: ActionExtension = {
+    id: 'com.github.owncloud.cast.file-action',
+    type: 'action',
+    extensionPointIds: ['global.files.context-actions', 'global.files.default-actions'],
+    action: {
+      name: 'cast',
+      icon: 'cast',
+      category: 'context',
+      handler,
+      label: () => $gettext('Cast'),
+      isVisible: ({ resources }: FileActionOptions) => {
+        return unref(isAvailable) && !resources[0]?.isFolder
+      }
+    }
+  }
+  return computed(() => [extension])
 }

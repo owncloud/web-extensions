@@ -11,9 +11,9 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "peerDependencies": {
-    "@ownclouders/web-client": "^0.0.3",
-    "@ownclouders/web-pkg": "^0.0.6",
-    "vitest": "2.0.4",
+    "@ownclouders/web-client": "^10.0.0",
+    "@ownclouders/web-pkg": "^10.0.0",
+    "vitest": "^2.0.4",
     "vue": "^3.4.21",
     "vue-router": "^4.2.5",
     "vue3-gettext": "^2.4.0",
