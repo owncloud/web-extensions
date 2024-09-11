@@ -21,7 +21,7 @@ services:
       traefik.http.routers.ocis.middlewares: cors
     volumes:
       - ocis-config:/etc/ocis
-      - ./docker/ocis.web.config.json:/web/config.json
+      - ./dev/docker/ocis.web.config.json:/web/config.json
       # apps
       - ./packages/web-app-cast/dist:/web/apps/cast
       - ./packages/web-app-draw-io/dist:/web/apps/draw-io
@@ -72,8 +72,8 @@ services:
     ports:
       - '9200:9200'
     volumes:
-      - './docker/traefik/certificates:/certificates'
-      - './docker/traefik/configs:/configs'
+      - './dev/docker/traefik/certificates:/certificates'
+      - './dev/docker/traefik/configs:/configs'
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
 volumes:
