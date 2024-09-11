@@ -16,7 +16,7 @@
     "test:e2e": "NODE_TLS_REJECT_UNAUTHORIZED=0 TS_NODE_PROJECT=./tests/e2e/tsconfig.json cucumber-js packages/"
   },
   "devDependencies": {
-    "@cucumber/cucumber": "^10.3.1",
+    "@cucumber/cucumber": "^11.0.0",
     "@cucumber/pretty-formatter": "^1.0.0",
     "@ownclouders/eslint-config": "0.0.1",
     "@ownclouders/extension-sdk": "0.0.7",
