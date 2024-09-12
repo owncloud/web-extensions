@@ -277,7 +277,7 @@ def appBuilds(ctx):
             "commands": [
                 "cd 'packages/web-app-%s'" % app,
                 "pnpm build",
-                "mkdir ../../apps",
+                "mkdir -p ../../apps",
                 "mv dist ../../apps/%s" % app,
             ],
         })
