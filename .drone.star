@@ -249,7 +249,7 @@ def dockerImageSteps(ctx):
                 "%s-%s" % (app, version),
                 "%s-latest" % app,
             ],
-            "args": [
+            "build_args": [
                 "app_path=%s-%s.zip" % (app, version),
             ],
         },
