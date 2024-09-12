@@ -209,7 +209,7 @@ def publishSteps(ctx):
                 "from_secret": "github_token",
             },
             "files": [
-                "%s-%s.zip" % (app, version),
+                "apps/%s-%s.zip" % (app, version),
             ],
             "checksum": [
                 "md5",
@@ -218,6 +218,41 @@ def publishSteps(ctx):
             "title": "%s %s" % (app, version),
             "note": ".release_note",
             "overwrite": True,
+        },
+        "when": {
+            "ref": [
+                "refs/tags/**",
+            ],
+        },
+    }]
+
+def dockerImageSteps(ctx):
+    app = determineReleaseApp(ctx)
+    version = determineReleaseVersion(ctx)
+    if app == None:
+        return []
+
+    return [{
+        "name": "docker",
+        "image": PLUGINS_DOCKER,
+        "depends_on": ["build-%s" % app],
+        "settings": {
+            "username": {
+                "from_secret": "docker_username",
+            },
+            "password": {
+                "from_secret": "docker_password",
+            },
+            "dockerfile": "docker/Dockerfile",
+            "repo": "owncloud/web-extensions",
+            "tags": [
+                "%s-%s" % (app, version),
+                "%s-latest" % app,
+            ],
+            "build_args": [
+                "app_path=./apps/%s" % app,
+                "app_name=%s" % app,
+            ],
         },
         "when": {
             "ref": [
@@ -242,8 +277,8 @@ def appBuilds(ctx):
             "commands": [
                 "cd 'packages/web-app-%s'" % app,
                 "pnpm build",
-                "mkdir -p ../../assets/extensions",
-                "mv dist ../../assets/extensions/%s" % app,
+                "mkdir -p ../../apps",
+                "mv dist ../../apps/%s" % app,
             ],
         })
 
@@ -253,8 +288,8 @@ def appBuilds(ctx):
             "depends_on": ["build-%s" % app],
             "commands": [
                 "apk add zip",
-                "cd assets/extensions",
-                "zip -r ../../%s-%s.zip %s/" % (app, release_version, app),
+                "cd apps",
+                "zip -r %s-%s.zip %s/" % (app, release_version, app),
             ],
             "when": {
                 "ref": [
@@ -267,7 +302,7 @@ def appBuilds(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "build",
-        "steps": installPnpm() + app_build_steps + publishSteps(ctx),
+        "steps": installPnpm() + app_build_steps + publishSteps(ctx) + dockerImageSteps(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
