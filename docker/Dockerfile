@@ -11,10 +11,11 @@ LABEL maintainer="ownCloud GmbH <devops@owncloud.com>" \
   org.opencontainers.image.source="https://github.com/owncloud/web-extensions"
 
 ARG app_path
+ARG app_name
 
 RUN rm -f /var/lib/nginx/html/*
 
-ADD $app_path /var/lib/nginx/html
+ADD $app_path /var/lib/nginx/html/$app_name
 RUN find /var/lib/nginx/html
 
 EXPOSE 8080

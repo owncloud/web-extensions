@@ -209,7 +209,7 @@ def publishSteps(ctx):
                 "from_secret": "github_token",
             },
             "files": [
-                "%s-%s.zip" % (app, version),
+                "apps/%s-%s.zip" % (app, version),
             ],
             "checksum": [
                 "md5",
@@ -235,7 +235,7 @@ def dockerImageSteps(ctx):
     return [{
         "name": "docker",
         "image": PLUGINS_DOCKER,
-        "depends_on": ["package-%s" % app],
+        "depends_on": ["build-%s" % app],
         "settings": {
             "username": {
                 "from_secret": "docker_username",
@@ -250,7 +250,8 @@ def dockerImageSteps(ctx):
                 "%s-latest" % app,
             ],
             "build_args": [
-                "app_path=%s-%s.zip" % (app, version),
+                "app_path=./apps/%s" % app,
+                "app_name=%s" % app,
             ],
         },
         "when": {
@@ -276,8 +277,8 @@ def appBuilds(ctx):
             "commands": [
                 "cd 'packages/web-app-%s'" % app,
                 "pnpm build",
-                "mkdir -p ../../assets/extensions",
-                "mv dist ../../assets/extensions/%s" % app,
+                "mkdir ../../apps",
+                "mv dist ../../apps/%s" % app,
             ],
         })
 
@@ -287,8 +288,8 @@ def appBuilds(ctx):
             "depends_on": ["build-%s" % app],
             "commands": [
                 "apk add zip",
-                "cd assets/extensions",
-                "zip -r ../../%s-%s.zip %s/" % (app, release_version, app),
+                "cd apps",
+                "zip -r %s-%s.zip %s/" % (app, release_version, app),
             ],
             "when": {
                 "ref": [
