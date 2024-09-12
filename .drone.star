@@ -226,6 +226,40 @@ def publishSteps(ctx):
         },
     }]
 
+def dockerImageSteps(ctx):
+    app = determineReleaseApp(ctx)
+    version = determineReleaseVersion(ctx)
+    if app == None:
+        return []
+
+    return [{
+        "name": "docker",
+        "image": PLUGINS_DOCKER,
+        "depends_on": ["package-%s" % app],
+        "settings": {
+            "username": {
+                "from_secret": "docker_username",
+            },
+            "password": {
+                "from_secret": "docker_password",
+            },
+            "dockerfile": "docker/Dockerfile",
+            "repo": "owncloud/web-extensions",
+            "tags": [
+                "%s-%s" % (app, version),
+                "%s-latest" % app,
+            ],
+            "args": [
+                "app_path=%s-%s.zip" % (app, version),
+            ],
+        },
+        "when": {
+            "ref": [
+                "refs/tags/**",
+            ],
+        },
+    }]
+
 def appBuilds(ctx):
     release_app = determineReleaseApp(ctx)
     release_version = determineReleaseVersion(ctx)
@@ -267,7 +301,7 @@ def appBuilds(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "build",
-        "steps": installPnpm() + app_build_steps + publishSteps(ctx),
+        "steps": installPnpm() + app_build_steps + publishSteps(ctx) + dockerImageSteps(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
