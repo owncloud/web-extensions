@@ -12,7 +12,8 @@ export default defineWebApplication({
         name: applicationId,
         path: '/:driveAliasAndItem(.*)?',
         component: AppWrapperRoute(MediaEditor, {
-          applicationId
+          applicationId,
+          contentType: 'image'
         }),
         meta: {
           authContext: 'hybrid',
@@ -27,10 +28,9 @@ export default defineWebApplication({
       id: applicationId,
       icon: 'file-code',
       defaultExtension: 'png',
-      // TODO: add more extensions from web media viewer
       extensions: ['png', 'jpg', 'jpeg'].map((extension) => ({
         extension,
-        routeName: 'media-editor'
+        routeName: 'image-editor'
       }))
     }
 

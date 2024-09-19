@@ -13,7 +13,10 @@ importers:
         version: 0.0.3(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.6.8)(clean-publish@4.2.0)(fast-xml-parser@4.3.3)(lodash-es@4.17.21)(luxon@3.2.1)(webdav@5.3.1)(xml-js@1.6.11)(zod@3.22.4)
       '@ownclouders/web-pkg':
         specifier: 0.0.6
-        version: 0.0.6(5i2tyjtcmckdmnrlmklg2klxgy)
+        version: 0.0.6(ygqufs3jd3zru6a4anyg7ckwoy)
+      pinia:
+        specifier: 2.2.2
+        version: 2.2.2(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4))
       tui-color-picker:
         specifier: ^2.2.8
         version: 2.2.8
@@ -723,9 +726,6 @@ packages:
   '@vue/shared@3.5.3':
     resolution: {integrity: sha512-Jp2v8nylKBT+PlOUjun2Wp/f++TfJVFjshLzNtJDdmFJabJa7noGMncqXRM1vXGX+Yo2V7WykQFNxusSim8SCA==}
 
-  '@vueuse/core@10.11.1':
-    resolution: {integrity: sha512-guoy26JQktXPcz+0n3GukWIy/JDNKti9v6VEMu6kV2sYBsWuGiTU8OWdg+ADfUbHg3/3DlqySDe7JmdHrktiww==}
-
   '@vueuse/core@11.0.3':
     resolution: {integrity: sha512-RENlh64+SYA9XMExmmH1a3TPqeIuJBNNB/63GT35MZI+zpru3oMRUA6cEFr9HmGqEgUisurwGwnIieF6qu3aXw==}
 
@@ -770,14 +770,8 @@ packages:
       universal-cookie:
         optional: true
 
-  '@vueuse/metadata@10.11.1':
-    resolution: {integrity: sha512-IGa5FXd003Ug1qAZmyE8wF3sJ81xGLSqTqtQ6jaVfkeZ4i5kS2mwQF61yhVqojRnenVew5PldLyRgvdl4YYuSw==}
-
   '@vueuse/metadata@11.0.3':
     resolution: {integrity: sha512-+FtbO4SD5WpsOcQTcC0hAhNlOid6QNLzqedtquTtQ+CRNBoAt9GuV07c6KNHK1wCmlq8DFPwgiLF2rXwgSHX5Q==}
-
-  '@vueuse/shared@10.11.1':
-    resolution: {integrity: sha512-LHpC8711VFZlDaYUXEBbFBCQ7GS3dVU9mjOhhMhXP6txTV4EhYQg/KGnQuvt/sPAtoUKq7VVUnL6mVtFoL42sA==}
 
   '@vueuse/shared@11.0.3':
     resolution: {integrity: sha512-0rY2m6HS5t27n/Vp5cTDsKTlNnimCqsbh/fmT2LgE+aaU42EMfXo8+bNX91W9I7DDmxfuACXMmrd7d79JxkqWA==}
@@ -1738,8 +1732,8 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
-  pinia@2.1.7:
-    resolution: {integrity: sha512-+C2AHFtcFqjPih0zpYuvof37SFxMQ7OEG2zV9jRI12i9BOy3YQVAHwdKtyyc8pDcDyIc33WCIsZaCFWU7WWxGQ==}
+  pinia@2.2.2:
+    resolution: {integrity: sha512-ja2XqFWZC36mupU4z1ZzxeTApV7DOw44cV4dhQ9sGwun+N89v/XP7+j7q6TanS1u1tdbK4r+1BUx7heMaIdagA==}
     peerDependencies:
       '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
@@ -2607,7 +2601,7 @@ snapshots:
       xml-js: 1.6.11
       zod: 3.22.4
 
-  '@ownclouders/web-pkg@0.0.6(5i2tyjtcmckdmnrlmklg2klxgy)':
+  '@ownclouders/web-pkg@0.0.6(ygqufs3jd3zru6a4anyg7ckwoy)':
     dependencies:
       '@casl/ability': 6.7.1
       '@casl/vue': 2.2.2(@casl/ability@6.7.1)(vue@3.5.3(typescript@5.5.4))
@@ -2620,7 +2614,7 @@ snapshots:
       '@uppy/utils': 5.9.0
       '@uppy/xhr-upload': 3.6.8(@uppy/core@3.3.0)
       '@vue/shared': 3.5.3
-      '@vueuse/core': 10.11.1(vue@3.5.3(typescript@5.5.4))
+      '@vueuse/core': 11.0.3(vue@3.5.3(typescript@5.5.4))
       axios: 1.6.8
       deepmerge: 4.3.1
       dompurify: 3.1.6
@@ -2632,7 +2626,7 @@ snapshots:
       mark.js: 8.11.1
       p-queue: 6.6.2
       password-sheriff: 1.1.1
-      pinia: 2.1.7(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4))
+      pinia: 2.2.2(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4))
       qs: 6.5.3
       semver: 7.6.3
       uuid: 3.4.0
@@ -3025,16 +3019,6 @@ snapshots:
 
   '@vue/shared@3.5.3': {}
 
-  '@vueuse/core@10.11.1(vue@3.5.3(typescript@5.5.4))':
-    dependencies:
-      '@types/web-bluetooth': 0.0.20
-      '@vueuse/metadata': 10.11.1
-      '@vueuse/shared': 10.11.1(vue@3.5.3(typescript@5.5.4))
-      vue-demi: 0.14.10(vue@3.5.3(typescript@5.5.4))
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
-
   '@vueuse/core@11.0.3(vue@3.5.3(typescript@5.5.4))':
     dependencies:
       '@types/web-bluetooth': 0.0.20
@@ -3058,16 +3042,7 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/metadata@10.11.1': {}
-
   '@vueuse/metadata@11.0.3': {}
-
-  '@vueuse/shared@10.11.1(vue@3.5.3(typescript@5.5.4))':
-    dependencies:
-      vue-demi: 0.14.10(vue@3.5.3(typescript@5.5.4))
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-      - vue
 
   '@vueuse/shared@11.0.3(vue@3.5.3(typescript@5.5.4))':
     dependencies:
@@ -4087,7 +4062,7 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  pinia@2.1.7(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4)):
+  pinia@2.2.2(typescript@5.5.4)(vue@3.5.3(typescript@5.5.4)):
     dependencies:
       '@vue/devtools-api': 6.6.3
       vue: 3.5.3(typescript@5.5.4)
