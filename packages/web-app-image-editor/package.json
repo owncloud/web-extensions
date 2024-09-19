@@ -18,6 +18,7 @@
   "peerDependencies": {
     "@ownclouders/web-client": "0.0.3",
     "@ownclouders/web-pkg": "0.0.6",
+    "pinia": "2.2.2",
     "typescript": "5.5.4",
     "vitest": "2.0.4",
     "vue": "^3.4.21",
