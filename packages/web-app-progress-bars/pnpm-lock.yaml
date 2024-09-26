@@ -12,7 +12,7 @@ importers:
         specifier: ^10.0.0
         version: 10.2.0(sbvzsbun2kekfqsrppozxr6waq)
       '@vueuse/core':
-        specifier: ^10.0.0
+        specifier: ^10.0.0 || ^11.0.0
         version: 10.11.0(vue@3.4.31(typescript@5.5.3))
       vitest:
         specifier: ^2.0.4
