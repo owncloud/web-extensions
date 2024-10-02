@@ -1,0 +1,6 @@
+{
+  "entrypoint": "importer.js",
+  "config": {
+    "companionUrl": ""
+  }
+}
