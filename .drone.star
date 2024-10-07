@@ -9,6 +9,7 @@ APPS = [
     "cast",
     "draw-io",
     "external-sites",
+    "importer",
     "json-viewer",
     "progress-bars",
     "unzip",

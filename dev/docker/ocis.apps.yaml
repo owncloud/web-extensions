@@ -1,0 +1,3 @@
+importer:
+  config:
+    companionUrl: 'https://host.docker.internal:9200/companion'
