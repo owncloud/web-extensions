@@ -22,7 +22,7 @@ importers:
         version: 1.0.7(@lezer/common@1.2.2)
       vitest:
         specifier: ^2.0.4
-        version: 2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.78.0)
+        version: 2.0.4(@types/node@22.0.0)(happy-dom@15.7.4)(sass@1.78.0)
       vue:
         specifier: ^3.4.21
         version: 3.4.34(typescript@5.5.4)
@@ -40,8 +40,8 @@ importers:
         specifier: 3.4.34
         version: 3.4.34(vue@3.4.34(typescript@5.5.4))
       happy-dom:
-        specifier: ^14.0.0
-        version: 14.12.3
+        specifier: ^15.0.0
+        version: 15.7.4
 
 packages:
 
@@ -1165,9 +1165,9 @@ packages:
   gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
 
-  happy-dom@14.12.3:
-    resolution: {integrity: sha512-vsYlEs3E9gLwA1Hp+w3qzu+RUDFf4VTT8cyKqVICoZ2k7WM++Qyd2LwzyTi5bqMJFiIC/vNpTDYuxdreENRK/g==}
-    engines: {node: '>=16.0.0'}
+  happy-dom@15.7.4:
+    resolution: {integrity: sha512-r1vadDYGMtsHAAsqhDuk4IpPvr6N8MGKy5ntBo7tSdim+pWDxus2PNqOcOt8LuDZ4t3KJHE+gCuzupcx/GKnyQ==}
+    engines: {node: '>=18.0.0'}
 
   has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
@@ -3092,7 +3092,7 @@ snapshots:
     dependencies:
       get-intrinsic: 1.2.4
 
-  happy-dom@14.12.3:
+  happy-dom@15.7.4:
     dependencies:
       entities: 4.5.0
       webidl-conversions: 7.0.0
@@ -3723,7 +3723,7 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@2.0.4(@types/node@22.0.0)(happy-dom@14.12.3)(sass@1.78.0):
+  vitest@2.0.4(@types/node@22.0.0)(happy-dom@15.7.4)(sass@1.78.0):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.4
@@ -3746,7 +3746,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.0.0
-      happy-dom: 14.12.3
+      happy-dom: 15.7.4
     transitivePeerDependencies:
       - less
       - lightningcss
