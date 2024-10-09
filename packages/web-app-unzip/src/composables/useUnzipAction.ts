@@ -103,7 +103,7 @@ export const useUnzipAction = () => {
                   ...(path !== '.' && { webkitRelativePath: urlJoin(path, name) }),
                   uploadId
                 }
-              }
+              } as unknown as UppyFile
             })
           )
         })

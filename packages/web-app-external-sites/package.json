@@ -13,15 +13,9 @@
   "peerDependencies": {
     "@ownclouders/web-client": "^10.0.0",
     "@ownclouders/web-pkg": "^10.0.0",
-    "vitest": "^2.0.4",
     "vue": "^3.4.21",
     "vue-router": "^4.2.5",
     "vue3-gettext": "^2.4.0",
     "zod": "^3.22.4"
-  },
-  "devDependencies": {
-    "@vue/compiler-dom": "3.4.34",
-    "@vue/server-renderer": "3.4.34",
-    "happy-dom": "^14.0.0"
   }
 }

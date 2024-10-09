@@ -11,19 +11,13 @@
     "check:types": "vue-tsc --noEmit",
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
+  "devDependencies": {
+    "@types/chromecast-caf-sender": "^1.0.8"
+  },
   "peerDependencies": {
     "@ownclouders/web-client": "^10.0.0",
     "@ownclouders/web-pkg": "^10.0.0",
-    "@types/chromecast-caf-sender": "^1.0.8",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.4",
     "vue": "^3.4.21",
-    "vue-tsc": "^2.0.29",
     "vue3-gettext": "^3.0.0-beta.5"
-  },
-  "devDependencies": {
-    "@vue/compiler-dom": "3.4.34",
-    "@vue/server-renderer": "3.4.34",
-    "happy-dom": "^14.0.0"
   }
 }
