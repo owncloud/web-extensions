@@ -36,7 +36,7 @@ export default defineComponent({
     })
     const editor = ref<JSONEditor>()
 
-    onMounted(async () => {
+    onMounted(() => {
       editor.value = new JSONEditor({
         target: unref(editorRef),
         props: {
@@ -67,7 +67,7 @@ export default defineComponent({
 
       await unref(editor).set(content)
       // expand all paths up to 2 levels
-      await unref(editor).expand((path) => path.length < 2)
+      await unref(editor).expand([], (path) => path.length < 2)
     })
 
     return {
