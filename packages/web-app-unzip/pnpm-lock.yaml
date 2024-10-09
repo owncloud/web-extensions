@@ -18,8 +18,8 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       '@zip.js/zip.js':
-        specifier: 2.7.48
-        version: 2.7.48
+        specifier: 2.7.52
+        version: 2.7.52
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2
@@ -589,8 +589,8 @@ packages:
   '@vueuse/shared@10.11.0':
     resolution: {integrity: sha512-fyNoIXEq3PfX1L3NkNhtVQUSRtqYwJtJg+Bp9rIzculIZWHTkKSysujrOk2J+NrRulLTQH9+3gGSfYLWSEWU1A==}
 
-  '@zip.js/zip.js@2.7.48':
-    resolution: {integrity: sha512-J7cliimZ2snAbr0IhLx2U8BwfA1pKucahKzTpFtYq4hEgKxwvFJcIjCIVNPwQpfVab7iVP+AKmoH1gidBlyhiQ==}
+  '@zip.js/zip.js@2.7.52':
+    resolution: {integrity: sha512-+5g7FQswvrCHwYKNMd/KFxZSObctLSsQOgqBSi0LzwHo3li9Eh1w5cF5ndjQw9Zbr3ajVnd2+XyiX85gAetx1Q==}
     engines: {bun: '>=0.7.0', deno: '>=1.0.0', node: '>=16.5.0'}
 
   abbrev@2.0.0:
@@ -2190,7 +2190,7 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@zip.js/zip.js@2.7.48': {}
+  '@zip.js/zip.js@2.7.52': {}
 
   abbrev@2.0.0: {}
 

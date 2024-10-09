@@ -12,7 +12,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@zip.js/zip.js": "2.7.48"
+    "@zip.js/zip.js": "2.7.52"
   },
   "devDependencies": {
     "@vue/compiler-dom": "3.4.34",
