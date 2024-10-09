@@ -12,7 +12,7 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "vanilla-jsoneditor": "^0.23.8"
+    "vanilla-jsoneditor": "^1.0.0"
   },
   "peerDependencies": {
     "@ownclouders/web-client": "^10.0.0",
