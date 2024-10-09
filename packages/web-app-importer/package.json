@@ -17,21 +17,11 @@
     "@uppy/onedrive": "3.3.0",
     "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz"
   },
-  "devDependencies": {
-    "@vue/compiler-dom": "^3.4.34",
-    "@vue/server-renderer": "^3.4.34",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^14.0.0",
-    "vitest-mock-extended": "2.0.0",
-    "vitest": "^2.0.4",
-    "vue-tsc": "^2.0.29"
-  },
   "peerDependencies": {
     "@ownclouders/web-client": "^10.1.0",
     "@ownclouders/web-pkg": "^10.1.0",
     "@uppy/core": "^3.3.0",
     "pinia": "^2.1.7",
-    "typescript": "^5.5.4",
     "vue": "^3.4.21",
     "vue3-gettext": "^3.0.0-beta.5"
   },
