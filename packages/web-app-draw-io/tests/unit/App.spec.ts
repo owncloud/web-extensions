@@ -1,9 +1,8 @@
 import App from '../../src/App.vue'
-import { mount } from '@vue/test-utils'
-import { createGettext } from 'vue3-gettext'
 import { mock } from 'vitest-mock-extended'
 import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject } from '@ownclouders/web-pkg'
+import { defaultPlugins, mount } from '@ownclouders/web-test-helpers'
 
 describe('Draw.io app', () => {
   it('uses the url from the app config as base iFrame url', () => {
@@ -23,9 +22,7 @@ function createWrapper({ url = '' }: { url?: string } = {}) {
         isReadOnly: false,
         isDirty: false
       },
-      global: {
-        plugins: [createGettext({ translations: {}, silent: true })]
-      }
+      global: { plugins: [...defaultPlugins()] }
     })
   }
 }
