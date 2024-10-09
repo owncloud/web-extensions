@@ -12,7 +12,7 @@
 import { computed, defineComponent, onMounted, PropType, ref, unref, watch } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject, useMessages, useThemeStore } from '@ownclouders/web-pkg'
-import { Content, JSONEditor, Mode } from 'vanilla-jsoneditor'
+import { Content, JsonEditor, Mode, createJSONEditor } from 'vanilla-jsoneditor'
 import { useGettext } from 'vue3-gettext'
 import 'vanilla-jsoneditor/themes/jse-theme-dark.css'
 
@@ -27,17 +27,17 @@ export default defineComponent({
     resource: { type: Object as PropType<Resource>, required: true }
   },
   setup: (props) => {
-    const editorRef = ref<HTMLElement>()
+    const editorRef = ref<HTMLDivElement>()
     const { $gettext } = useGettext()
     const { showErrorMessage } = useMessages()
     const themeStore = useThemeStore()
     const darkTheme = computed(() => {
       return themeStore.currentTheme.isDark
     })
-    const editor = ref<JSONEditor>()
+    const editor = ref<JsonEditor>()
 
     onMounted(() => {
-      editor.value = new JSONEditor({
+      editor.value = createJSONEditor({
         target: unref(editorRef),
         props: {
           mode: Mode.tree,
