@@ -208,11 +208,16 @@ export default defineComponent({
     top: 0;
     width: calc(var(--nyan-cat-pop-tart-width) + var(--nyan-cat-dot-size) * 2);
     height: var(--nyan-cat-pop-tart-height);
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
     background-color: #fc9;
     background-size: var(--nyan-cat-dot-size) var(--nyan-cat-dot-size);
-    background-position: 0 0, calc(var(--nyan-cat-pop-tart-width) + var(--nyan-cat-dot-size)) 0,
+    background-position:
+      0 0,
+      calc(var(--nyan-cat-pop-tart-width) + var(--nyan-cat-dot-size)) 0,
       0 calc(var(--nyan-cat-pop-tart-height) - var(--nyan-cat-dot-size)),
       calc(var(--nyan-cat-pop-tart-width) + var(--nyan-cat-dot-size))
         calc(var(--nyan-cat-pop-tart-height) - var(--nyan-cat-dot-size));
@@ -224,11 +229,17 @@ export default defineComponent({
     height: calc(var(--nyan-cat-pop-tart-height) - var(--nyan-cat-dot-size) * 2);
     top: var(--nyan-cat-dot-size);
     left: 0;
-    background: linear-gradient(#f39, #f39) no-repeat, linear-gradient(#f39, #f39) no-repeat,
-      linear-gradient(#f39, #f39) no-repeat, linear-gradient(#f39, #f39) no-repeat,
-      linear-gradient(#f39, #f39) no-repeat, linear-gradient(#f39, #f39) no-repeat,
-      linear-gradient(#f39, #f39) no-repeat, linear-gradient(#f39, #f39) no-repeat,
-      linear-gradient(#f39, #f39) no-repeat, linear-gradient(#f39, #f39) no-repeat;
+    background:
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat,
+      linear-gradient(#f39, #f39) no-repeat;
     background-color: #f9f;
     background-size: var(--nyan-cat-dot-size) var(--nyan-cat-dot-size);
     background-position:
@@ -252,11 +263,17 @@ export default defineComponent({
     height: 100%;
     left: 0;
     top: 0;
-    background: linear-gradient(#fc9, #fc9) no-repeat, linear-gradient(#fc9, #fc9) no-repeat,
-      linear-gradient(#fc9, #fc9) no-repeat, linear-gradient(#fc9, #fc9) no-repeat,
-      linear-gradient(#fc9, #fc9) no-repeat, linear-gradient(#fc9, #fc9) no-repeat,
-      linear-gradient(#fc9, #fc9) no-repeat, linear-gradient(#fc9, #fc9) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
+    background:
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat,
+      linear-gradient(#fc9, #fc9) no-repeat;
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
@@ -264,11 +281,14 @@ export default defineComponent({
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2);
-    background-position: 0 0, calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 2) 0,
+    background-position:
+      0 0,
+      calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 2) 0,
       0 calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 3),
       calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 2)
         calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 3),
-      0 0, calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size)) 0,
+      0 0,
+      calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size)) 0,
       0 calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 1)
         calc(var(--nyan-cat-pop-tart-width) - var(--nyan-cat-dot-size) * 4);
@@ -422,10 +442,15 @@ export default defineComponent({
     width: calc(var(--nyan-cat-head-width) * 0.5);
     height: var(--nyan-cat-head-height);
     top: calc(var(--nyan-cat-head-height) * -1);
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(#999, #999) no-repeat,
-      linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
       linear-gradient(#999, #999) no-repeat;
     background-size:
       // ear outline
@@ -441,7 +466,8 @@ export default defineComponent({
       var(--nyan-cat-dot-size) var(--nyan-cat-dot-size);
     background-position:
       // ear outline
-      0 var(--nyan-cat-dot-size), var(--nyan-cat-dot-size) 0,
+      0 var(--nyan-cat-dot-size),
+      var(--nyan-cat-dot-size) 0,
       calc(var(--nyan-cat-dot-size) * 5) calc(var(--nyan-cat-dot-size) * 3),
       calc(var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 2),
@@ -465,11 +491,17 @@ export default defineComponent({
     height: 100%;
     position: absolute;
     top: var(--nyan-cat-dot-size);
-    background: linear-gradient(white, white) no-repeat, linear-gradient(white, white) no-repeat,
-      linear-gradient(#f99, #f99) no-repeat, linear-gradient(#f99, #f99) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
+    background:
+      linear-gradient(white, white) no-repeat,
+      linear-gradient(white, white) no-repeat,
+      linear-gradient(#f99, #f99) no-repeat,
+      linear-gradient(#f99, #f99) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
     background-size:
       // eyes white dot
       var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
@@ -512,10 +544,15 @@ export default defineComponent({
     bottom: calc(var(--nyan-cat-dot-size) * -2);
     width: 100%;
     height: calc(var(--nyan-cat-dot-size) * 3);
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat;
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat;
     background-size:
       // chin border
       var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
@@ -530,7 +567,8 @@ export default defineComponent({
       calc(var(--nyan-cat-head-width) - var(--nyan-cat-dot-size) * 4) var(--nyan-cat-dot-size);
     background-position:
       // chin border
-      0 0, var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
+      0 0,
+      var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-head-width) - var(--nyan-cat-dot-size)) 0,
       calc(var(--nyan-cat-head-width) - var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
@@ -565,16 +603,23 @@ export default defineComponent({
     position: absolute;
     bottom: 0;
     left: calc(var(--nyan-cat-tail-width) - var(--nyan-cat-dot-size));
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
     background-size: calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 3);
   }
   .frame1 .paws,
   .frame5 .paws {
-    background-position: var(--nyan-cat-paws-1x) var(--nyan-cat-dot-size),
-      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size)) 0, var(--nyan-cat-paws-2x) 0,
+    background-position:
+      var(--nyan-cat-paws-1x) var(--nyan-cat-dot-size),
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size)) 0,
+      var(--nyan-cat-paws-2x) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       var(--nyan-cat-paws-3x) 0,
       calc(var(--nyan-cat-paws-3x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
@@ -583,8 +628,8 @@ export default defineComponent({
   }
   .frame2 .paws,
   .frame4 .paws {
-    background-position: calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size))
-        var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 2) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size)) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
@@ -594,8 +639,8 @@ export default defineComponent({
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size);
   }
   .frame3 .paws {
-    background-position: calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 2)
-        var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 3) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size) * 2) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
@@ -605,42 +650,47 @@ export default defineComponent({
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
   }
   .frame6 .paws {
-    background-position: var(--nyan-cat-paws-1x) var(--nyan-cat-dot-size),
+    background-position:
+      var(--nyan-cat-paws-1x) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size)) 0,
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size)) 0,
       var(--nyan-cat-paws-2x) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-3x) + var(--nyan-cat-dot-size)) 0,
-      var(--nyan-cat-paws-3x) var(--nyan-cat-dot-size), var(--nyan-cat-paws-4x) 0,
+      var(--nyan-cat-paws-3x) var(--nyan-cat-dot-size),
+      var(--nyan-cat-paws-4x) 0,
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size);
   }
 
   .paws:before {
     width: 100%;
     height: 100%;
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
-      linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat;
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat;
     background-size: calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2);
   }
   .frame1 .paws:before,
   .frame5 .paws:before,
   .frame6 .paws:before {
-    background-position: calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size))
-        var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-3x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size);
   }
   .frame3 .paws:before {
-    background-position: calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 3)
-        var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-3x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
   }
   .frame2 .paws:before,
   .frame4 .paws:before {
-    background-position: calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 2)
-        var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-paws-1x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-2x) + var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-3x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-paws-4x) + var(--nyan-cat-dot-size)) var(--nyan-cat-dot-size);
@@ -657,11 +707,15 @@ export default defineComponent({
 
   /* FRAME 1 */
   .frame1 .tail {
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
       linear-gradient(black, black) no-repeat;
     background-size: calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 3);
-    background-position: var(--nyan-cat-dot-size) 0,
+    background-position:
+      var(--nyan-cat-dot-size) 0,
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 3),
@@ -673,11 +727,16 @@ export default defineComponent({
     height: calc(var(--nyan-cat-dot-size) * 5);
     right: 0;
     top: var(--nyan-cat-dot-size);
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
-      linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
       linear-gradient(#999, #999) no-repeat;
     background-size: calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
-    background-position: 0 0, var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
+    background-position:
+      0 0,
+      var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 3),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 4);
@@ -686,13 +745,18 @@ export default defineComponent({
   /* FRAMES 2 AND 6 */
   .frame2 .tail,
   .frame6 .tail {
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2);
-    background-position: calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
+    background-position:
+      calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 5) calc(var(--nyan-cat-dot-size) * 3),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2);
@@ -704,11 +768,16 @@ export default defineComponent({
     height: calc(var(--nyan-cat-dot-size) * 4);
     left: calc(var(--nyan-cat-dot-size) * 2);
     top: calc(var(--nyan-cat-dot-size) * 2);
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
-      linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
       linear-gradient(#999, #999) no-repeat;
     background-size: calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
-    background-position: 0 0, 0 var(--nyan-cat-dot-size),
+    background-position:
+      0 0,
+      0 var(--nyan-cat-dot-size),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 3);
@@ -716,13 +785,18 @@ export default defineComponent({
 
   /* FRAME 3 */
   .frame3 .tail {
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 2),
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 2),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 4);
-    background-position: calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 4),
+    background-position:
+      calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 4),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 5),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 6),
       calc(var(--nyan-cat-dot-size) * 6) calc(var(--nyan-cat-dot-size) * 3);
@@ -733,21 +807,31 @@ export default defineComponent({
     height: calc(var(--nyan-cat-dot-size) * 2);
     top: calc(var(--nyan-cat-dot-size) * 5);
     right: 0;
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 4) var(--nyan-cat-dot-size),
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat;
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 4) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size);
-    background-position: var(--nyan-cat-dot-size) 0, 0 var(--nyan-cat-dot-size);
+    background-position:
+      var(--nyan-cat-dot-size) 0,
+      0 var(--nyan-cat-dot-size);
   }
 
   /* FRAME 4 */
   .frame4 .tail {
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat;
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 4),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2);
-    background-position: calc(var(--nyan-cat-dot-size) * 5) calc(var(--nyan-cat-dot-size) * 3),
+    background-position:
+      calc(var(--nyan-cat-dot-size) * 5) calc(var(--nyan-cat-dot-size) * 3),
       calc(var(--nyan-cat-dot-size) * 3) calc(var(--nyan-cat-dot-size) * 4),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 5),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 6);
@@ -758,26 +842,36 @@ export default defineComponent({
     height: calc(var(--nyan-cat-dot-size) * 4);
     top: calc(var(--nyan-cat-dot-size) * 4);
     right: 0;
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
       linear-gradient(#999, #999) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
-    background-position: calc(var(--nyan-cat-dot-size) * 3) 0, 0 calc(var(--nyan-cat-dot-size) * 2),
+    background-position:
+      calc(var(--nyan-cat-dot-size) * 3) 0,
+      0 calc(var(--nyan-cat-dot-size) * 2),
       var(--nyan-cat-dot-size) var(--nyan-cat-dot-size);
   }
 
   /* FRAME 5 */
   .frame5 .tail {
-    background: linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
-      linear-gradient(black, black) no-repeat, linear-gradient(black, black) no-repeat,
+    background:
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
+      linear-gradient(black, black) no-repeat,
       linear-gradient(black, black) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 3),
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 3),
       calc(var(--nyan-cat-dot-size) * 4) calc(var(--nyan-cat-dot-size) * 3),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2),
       var(--nyan-cat-dot-size) calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 2) var(--nyan-cat-dot-size);
-    background-position: var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
+    background-position:
+      var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 2) calc(var(--nyan-cat-dot-size) * 2),
       0 calc(var(--nyan-cat-dot-size) * 2),
       calc(var(--nyan-cat-dot-size) * 6) calc(var(--nyan-cat-dot-size) * 2),
@@ -789,12 +883,17 @@ export default defineComponent({
     height: calc(var(--nyan-cat-dot-size) * 3);
     top: calc(var(--nyan-cat-dot-size) * 2);
     right: 0;
-    background: linear-gradient(#999, #999) no-repeat, linear-gradient(#999, #999) no-repeat,
+    background:
+      linear-gradient(#999, #999) no-repeat,
+      linear-gradient(#999, #999) no-repeat,
       linear-gradient(#999, #999) no-repeat;
-    background-size: calc(var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
+    background-size:
+      calc(var(--nyan-cat-dot-size) * 3) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 4) var(--nyan-cat-dot-size),
       var(--nyan-cat-dot-size) var(--nyan-cat-dot-size);
-    background-position: 0 0, var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
+    background-position:
+      0 0,
+      var(--nyan-cat-dot-size) var(--nyan-cat-dot-size),
       calc(var(--nyan-cat-dot-size) * 5) calc(var(--nyan-cat-dot-size) * 2);
   }
 }
