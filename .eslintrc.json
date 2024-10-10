@@ -1,8 +1,0 @@
-{
-  "extends": "@ownclouders",
-  "settings": {
-    "jest": {
-      "version": "remove jest rules from @ownclouders/eslint-config and remove this"
-    }
-  }
-}
