@@ -10,7 +10,7 @@
     "build:w": "pnpm vite build --watch --mode development",
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "@ownclouders/web-client": "^10.0.0",
     "@ownclouders/web-pkg": "^10.0.0",
     "vue": "^3.4.21",

@@ -14,7 +14,7 @@
   "dependencies": {
     "@zip.js/zip.js": "2.7.52"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "@ownclouders/web-client": "^10.1.0",
     "@ownclouders/web-pkg": "^10.1.0",
     "@uppy/core": "^3.3.0",
