@@ -67,26 +67,25 @@ importers:
         version: 2.1.6(typescript@5.6.3)
 
   packages/web-app-cast:
-    dependencies:
+    devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
         version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
         version: 10.3.0(riqrmp2do2y32giwqhtcqwlxce)
+      '@types/chromecast-caf-sender':
+        specifier: ^1.0.8
+        version: 1.0.10
       vue:
         specifier: ^3.4.21
         version: 3.5.11(typescript@5.6.3)
       vue3-gettext:
         specifier: ^3.0.0-beta.5
         version: 3.0.0-beta.5(@vue/compiler-sfc@3.5.11)(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
-    devDependencies:
-      '@types/chromecast-caf-sender':
-        specifier: ^1.0.8
-        version: 1.0.10
 
   packages/web-app-draw-io:
-    dependencies:
+    devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
         version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
@@ -104,7 +103,7 @@ importers:
         version: 3.0.0-beta.5(@vue/compiler-sfc@3.5.11)(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
 
   packages/web-app-external-sites:
-    dependencies:
+    devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
         version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
@@ -126,15 +125,6 @@ importers:
 
   packages/web-app-importer:
     dependencies:
-      '@ownclouders/web-client':
-        specifier: ^10.1.0
-        version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
-      '@ownclouders/web-pkg':
-        specifier: ^10.1.0
-        version: 10.3.0(riqrmp2do2y32giwqhtcqwlxce)
-      '@uppy/core':
-        specifier: ^3.3.0
-        version: 3.13.1
       '@uppy/dashboard':
         specifier: 3.3.0
         version: 3.3.0(@uppy/core@3.13.1)
@@ -147,6 +137,16 @@ importers:
       '@uppy/webdav':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz(@uppy/core@3.13.1)
+    devDependencies:
+      '@ownclouders/web-client':
+        specifier: ^10.1.0
+        version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
+      '@ownclouders/web-pkg':
+        specifier: ^10.1.0
+        version: 10.3.0(riqrmp2do2y32giwqhtcqwlxce)
+      '@uppy/core':
+        specifier: ^3.3.0
+        version: 3.13.1
       pinia:
         specifier: ^2.1.7
         version: 2.2.4(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
@@ -159,15 +159,16 @@ importers:
 
   packages/web-app-json-viewer:
     dependencies:
+      vanilla-jsoneditor:
+        specifier: ^1.0.0
+        version: 1.0.7(@lezer/common@1.2.2)
+    devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
         version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
         version: 10.3.0(riqrmp2do2y32giwqhtcqwlxce)
-      vanilla-jsoneditor:
-        specifier: ^1.0.0
-        version: 1.0.7(@lezer/common@1.2.2)
       vue:
         specifier: ^3.4.21
         version: 3.5.11(typescript@5.6.3)
@@ -176,7 +177,7 @@ importers:
         version: 3.0.0-beta.5(@vue/compiler-sfc@3.5.11)(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
 
   packages/web-app-progress-bars:
-    dependencies:
+    devDependencies:
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
         version: 10.3.0(riqrmp2do2y32giwqhtcqwlxce)
@@ -192,6 +193,10 @@ importers:
 
   packages/web-app-unzip:
     dependencies:
+      '@zip.js/zip.js':
+        specifier: 2.7.52
+        version: 2.7.52
+    devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.1.0
         version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.2.1)(uuid@9.0.1)(zod@3.23.8)
@@ -201,9 +206,6 @@ importers:
       '@uppy/core':
         specifier: ^3.3.0
         version: 3.13.1
-      '@zip.js/zip.js':
-        specifier: 2.7.52
-        version: 2.7.52
       p-queue:
         specifier: ^6.6.2
         version: 6.6.2

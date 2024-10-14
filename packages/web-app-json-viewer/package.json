@@ -14,7 +14,7 @@
   "dependencies": {
     "vanilla-jsoneditor": "^1.0.0"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "@ownclouders/web-client": "^10.0.0",
     "@ownclouders/web-pkg": "^10.0.0",
     "vue": "^3.4.21",

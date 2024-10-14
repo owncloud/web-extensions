@@ -11,7 +11,7 @@
     "check:types": "vue-tsc --noEmit",
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
-  "peerDependencies": {
+  "devDependencies": {
     "@ownclouders/web-pkg": "^10.0.0",
     "@vueuse/core": "^11.0.0",
     "vue": "^3.4.21",
