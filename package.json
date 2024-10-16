@@ -18,11 +18,11 @@
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.0",
     "@cucumber/pretty-formatter": "^1.0.0",
-    "@ownclouders/eslint-config": "10.3.0",
-    "@ownclouders/extension-sdk": "0.0.7",
+    "@ownclouders/eslint-config": "^11.0.0",
+    "@ownclouders/extension-sdk": "^11.0.0",
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
-    "@ownclouders/web-test-helpers": "^10.3.0",
+    "@ownclouders/web-test-helpers": "^11.0.0",
     "@playwright/test": "^1.41.2",
     "@types/node": "22.8.2",
     "@vue/test-utils": "^2.4.6",
@@ -38,11 +38,6 @@
     "vue3-gettext": "^2.4.0"
   },
   "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "design-system*"
-      ]
-    },
     "overrides": {
       "@uppy/companion-client": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-companion-client.tgz",
       "@uppy/core": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz",
