@@ -4,7 +4,6 @@ import { computed, Ref, unref } from 'vue'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({
-  applicationConfig,
   isAvailable
 }: ApplicationSetupOptions & { isAvailable: Ref<boolean> }) => {
   const clientService = useClientService()
@@ -21,7 +20,7 @@ export const extensions = ({
     if (!castSession) {
       try {
         await castContext.requestSession()
-        console.log('Cast session initiated')
+        console.debug('Cast session initiated')
         castSession = castContext.getCurrentSession()
       } catch (e) {
         console.error('Could not initiate cast session', e)
@@ -33,7 +32,7 @@ export const extensions = ({
 
       try {
         await castSession.loadMedia(request)
-        console.log('Resource Cast successful')
+        console.debug('Resource Cast successful')
       } catch (e) {
         console.error('Error casting resource:', e)
       }
