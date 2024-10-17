@@ -216,10 +216,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.1.0
-        version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@9.0.1)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.1.0
-        version: 10.3.0(j64ti3fes6ucuu7q3z7szoxexq)
+        version: 10.3.0(igp7o2zcjqflrz5tgfl2e6ccsu)
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -227,8 +227,8 @@ importers:
         specifier: ^6.6.2
         version: 6.6.2
       uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
+        specifier: ^10.0.0
+        version: 10.0.0
       vue:
         specifier: ^3.4.21
         version: 3.5.11(typescript@5.6.3)
@@ -3740,19 +3740,6 @@ snapshots:
       xml-js: 1.6.11
       zod: 3.23.8
 
-  '@ownclouders/web-client@10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@9.0.1)(zod@3.23.8)':
-    dependencies:
-      '@casl/ability': 6.7.1
-      '@microsoft/fetch-event-source': 2.0.1
-      axios: 1.7.7
-      fast-xml-parser: 4.5.0
-      lodash-es: 4.17.21
-      luxon: 3.5.0
-      uuid: 9.0.1
-      webdav: 5.7.1
-      xml-js: 1.6.11
-      zod: 3.23.8
-
   '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.1)(@casl/vue@2.2.2(@casl/ability@6.7.1)(vue@3.5.11(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.33.1(vue@3.5.11(typescript@5.6.3)))(@vue/shared@3.5.11)(@vueuse/core@11.1.0(vue@3.5.11(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.11(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.11(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.11(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.11)(vue@3.5.11(typescript@5.6.3)))(zod@3.23.8)':
     dependencies:
       '@casl/ability': 6.7.1
@@ -3787,12 +3774,12 @@ snapshots:
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.11)(vue@3.5.11(typescript@5.6.3))
       zod: 3.23.8
 
-  '@ownclouders/web-pkg@10.3.0(j64ti3fes6ucuu7q3z7szoxexq)':
+  '@ownclouders/web-pkg@10.3.0(igp7o2zcjqflrz5tgfl2e6ccsu)':
     dependencies:
       '@casl/ability': 6.7.1
       '@casl/vue': 2.2.2(@casl/ability@6.7.1)(vue@3.5.11(typescript@5.6.3))
       '@microsoft/fetch-event-source': 2.0.1
-      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@9.0.1)(zod@3.23.8)
+      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.1)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
       '@sentry/vue': 8.33.1(vue@3.5.11(typescript@5.6.3))
       '@toast-ui/editor': 3.2.2
       '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
@@ -3816,7 +3803,7 @@ snapshots:
       prismjs: 1.29.0
       qs: 6.13.0
       semver: 7.6.3
-      uuid: 9.0.1
+      uuid: 10.0.0
       vue-concurrency: 5.0.1(vue@3.5.11(typescript@5.6.3))
       vue-router: 4.4.5(vue@3.5.11(typescript@5.6.3))
       vue3-gettext: 3.0.0-beta.5(@vue/compiler-sfc@3.5.11)(typescript@5.6.3)(vue@3.5.11(typescript@5.6.3))
