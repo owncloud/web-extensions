@@ -12,15 +12,15 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@uppy/dashboard": "3.3.0",
-    "@uppy/google-drive": "3.3.0",
-    "@uppy/onedrive": "3.3.0",
+    "@uppy/dashboard": "4.1.1",
+    "@uppy/google-drive": "4.1.0",
+    "@uppy/onedrive": "4.1.0",
     "@uppy/webdav": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-webdav.tgz"
   },
   "devDependencies": {
     "@ownclouders/web-client": "^10.1.0",
     "@ownclouders/web-pkg": "^10.1.0",
-    "@uppy/core": "^3.3.0",
+    "@uppy/core": "^4.0.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue3-gettext": "^3.0.0-beta.5"
