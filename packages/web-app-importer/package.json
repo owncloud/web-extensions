@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@ownclouders/web-client": "^10.1.0",
-    "@ownclouders/web-pkg": "^10.1.0",
+    "@ownclouders/web-pkg": "^11.0.0",
     "@uppy/core": "^3.3.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
