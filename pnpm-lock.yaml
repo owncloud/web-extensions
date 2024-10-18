@@ -32,8 +32,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.1(@cucumber/cucumber@11.0.1)(@cucumber/messages@24.1.0)
       '@ownclouders/eslint-config':
-        specifier: 10.3.0
-        version: 10.3.0(@babel/core@7.23.5)(@typescript-eslint/eslint-plugin@8.8.1(@typescript-eslint/parser@8.8.1(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)
+        specifier: 11.0.0
+        version: 11.0.0(@babel/core@7.23.5)(@typescript-eslint/eslint-plugin@8.8.1(@typescript-eslint/parser@8.8.1(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)
       '@ownclouders/extension-sdk':
         specifier: 0.0.7
         version: 0.0.7(sass@1.80.1)(vite@5.4.8(@types/node@20.16.11)(sass@1.80.1))(vue@3.5.11(typescript@5.6.3))
@@ -260,12 +260,12 @@ packages:
     resolution: {integrity: sha512-Cwc2XjUrG4ilcfOw4wBAK+enbdgwAcAJCfGUItPBKR7Mjw4aEfAFYrLxeRp4jWgtNIKn3n2AlBOfwwafl+42/g==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/eslint-parser@7.23.3':
-    resolution: {integrity: sha512-9bTuNlyx7oSstodm1cR1bECj4fkiknsDa1YniISkJemMY3DGhJNYBECbe6QD/q54mp2J8VO66jW3/7uP//iFCw==}
+  '@babel/eslint-parser@7.25.8':
+    resolution: {integrity: sha512-Po3VLMN7fJtv0nsOjBDSbO1J71UhzShE9MuOSkWEV9IZQXzhZklYtzKZ8ZD/Ij3a0JBv1AG3Ny2L3jvAHQVOGg==}
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
-      eslint: ^7.5.0 || ^8.0.0
+      eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
 
   '@babel/generator@7.25.7':
     resolution: {integrity: sha512-5Dqpl5fyV9pIAD62yK9P7fcA768uVPUyrQmqpqstHWgMma4feF1x/oFysBCVZLY5wJ2GkMUCdsNDnGZrPoR6rA==}
@@ -697,8 +697,8 @@ packages:
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
 
-  '@ownclouders/eslint-config@10.3.0':
-    resolution: {integrity: sha512-bUtdUI7FqgCPmunVYRooZKfoipMiYCOopErtfs3sVKTj6HBLldpzWQxmgo1j5CQDX25E4JfX+fEP3aVbiYrTUQ==}
+  '@ownclouders/eslint-config@11.0.0':
+    resolution: {integrity: sha512-ewjE04bN9iS2Z5w689e/BOBWsJJUFy35Quc2u/0vsGn6Ir35uIxYBmkhomPLkyTv624PCOlVD+k8T/QYKi29qA==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -3292,7 +3292,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/eslint-parser@7.23.3(@babel/core@7.23.5)(eslint@9.12.0)':
+  '@babel/eslint-parser@7.25.8(@babel/core@7.23.5)(eslint@9.12.0)':
     dependencies:
       '@babel/core': 7.23.5
       '@nicolo-ribaudo/eslint-scope-5-internals': 5.1.1-v1
@@ -3756,9 +3756,9 @@ snapshots:
 
   '@one-ini/wasm@0.1.1': {}
 
-  '@ownclouders/eslint-config@10.3.0(@babel/core@7.23.5)(@typescript-eslint/eslint-plugin@8.8.1(@typescript-eslint/parser@8.8.1(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)':
+  '@ownclouders/eslint-config@11.0.0(@babel/core@7.23.5)(@typescript-eslint/eslint-plugin@8.8.1(@typescript-eslint/parser@8.8.1(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)':
     dependencies:
-      '@babel/eslint-parser': 7.23.3(@babel/core@7.23.5)(eslint@9.12.0)
+      '@babel/eslint-parser': 7.25.8(@babel/core@7.23.5)(eslint@9.12.0)
       '@typescript-eslint/parser': 8.8.1(eslint@9.12.0)(typescript@5.6.3)
       eslint: 9.12.0
       eslint-config-prettier: 9.1.0(eslint@9.12.0)
