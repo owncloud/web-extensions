@@ -4,9 +4,9 @@ This application can be used for importing files and folders from other sources 
 
 - Google Drive
 - Onedrive
-- oCIS (via public links)
-- ownCloud 10 (via public links)
-- NextCloud (via public links)
+- oCIS (via public links without password)
+- ownCloud 10 (via public links without password)
+- NextCloud (via public links without password)
 
 ## Companion setup
 
