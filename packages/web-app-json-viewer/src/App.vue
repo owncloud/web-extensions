@@ -58,7 +58,7 @@ export default defineComponent({
         content = {
           json: JSON.parse(props.currentContent)
         }
-      } catch (e) {
+      } catch {
         content = {
           text: props.currentContent
         }
