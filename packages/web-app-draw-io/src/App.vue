@@ -22,6 +22,7 @@ import {
 } from 'vue'
 import { Resource } from '@ownclouders/web-client'
 import { AppConfigObject } from '@ownclouders/web-pkg'
+import { useGettext } from 'vue3-gettext'
 
 export default defineComponent({
   name: 'DrawIoEditor',
@@ -51,6 +52,8 @@ export default defineComponent({
   },
   emits: ['update:currentContent', 'save', 'close'],
   setup(props, { emit }) {
+    const { $gettext } = useGettext()
+
     const drawIoEditor = ref<HTMLElement>()
 
     const config = computed(() => {
@@ -156,7 +159,8 @@ export default defineComponent({
     return {
       config,
       drawIoEditor,
-      iframeSource
+      iframeSource,
+      $gettext
     }
   }
 })

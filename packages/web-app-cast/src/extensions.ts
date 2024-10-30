@@ -4,7 +4,6 @@ import { computed, Ref, unref } from 'vue'
 import { ApplicationSetupOptions } from '@ownclouders/web-pkg'
 
 export const extensions = ({
-  applicationConfig,
   isAvailable
 }: ApplicationSetupOptions & { isAvailable: Ref<boolean> }) => {
   const clientService = useClientService()
