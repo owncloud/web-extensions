@@ -1,6 +1,7 @@
 import { AppWrapperRoute, defineWebApplication } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import JsonViewer from './App.vue'
+import translations from '../l10n/translations.json'
 
 const applicationId = 'json-viewer'
 export default defineWebApplication({
@@ -37,7 +38,8 @@ export default defineWebApplication({
 
     return {
       appInfo,
-      routes
+      routes,
+      translations
     }
   }
 })
