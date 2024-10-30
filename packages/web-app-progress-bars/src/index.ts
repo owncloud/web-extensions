@@ -2,6 +2,7 @@ import { defineWebApplication, Extension } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import NyanCat from './NyanCat.vue'
 import { computed, h } from 'vue'
+import translations from '../l10n/translations.json'
 
 export default defineWebApplication({
   setup() {
@@ -27,7 +28,8 @@ export default defineWebApplication({
 
     return {
       appInfo,
-      extensions
+      extensions,
+      translations
     }
   }
 })
