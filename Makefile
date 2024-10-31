@@ -6,7 +6,7 @@ export PATH := node_modules/.bin:$(PATH)
 APPS = $(shell find packages -maxdepth 1 -name 'web-app-*')
 
 node_modules: package.json pnpm-lock.yaml
-	pnpm install
+	pnpm install --frozen-lockfile
 
 .PHONY: l10n-push
 l10n-push:
