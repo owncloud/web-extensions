@@ -1,12 +1,14 @@
 # On OSX the PATH variable isn't exported unless "SHELL" is also set, see: http://stackoverflow.com/a/25506676
 SHELL = /bin/bash
+NODE_MODULES := ${CURDIR}/node_modules
 export PATH := node_modules/.bin:$(PATH)
 
 # Where to find apps (it can be multiple paths).
 APPS = $(shell find packages -maxdepth 1 -name 'web-app-*')
 
 node_modules: package.json pnpm-lock.yaml
-	pnpm install --frozen-lockfile
+	[ -n "${NO_INSTALL}" ] || pnpm install --frozen-lockfile
+	touch ${NODE_MODULES}
 
 .PHONY: l10n-push
 l10n-push:
