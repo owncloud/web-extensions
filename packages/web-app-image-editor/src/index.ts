@@ -13,6 +13,7 @@ export default defineWebApplication({
         path: '/:driveAliasAndItem(.*)?',
         component: AppWrapperRoute(MediaEditor, {
           applicationId,
+          disableAutoSave: true,
           contentType: 'image'
         }),
         meta: {
