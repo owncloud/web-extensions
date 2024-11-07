@@ -32,8 +32,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.1(@cucumber/cucumber@11.0.1)(@cucumber/messages@24.1.0)
       '@ownclouders/eslint-config':
-        specifier: 10.3.0
-        version: 10.3.0(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)
+        specifier: 11.0.2
+        version: 11.0.2(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)
       '@ownclouders/extension-sdk':
         specifier: 0.0.7
         version: 0.0.7(sass@1.80.5)(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
@@ -688,8 +688,8 @@ packages:
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
 
-  '@ownclouders/eslint-config@10.3.0':
-    resolution: {integrity: sha512-bUtdUI7FqgCPmunVYRooZKfoipMiYCOopErtfs3sVKTj6HBLldpzWQxmgo1j5CQDX25E4JfX+fEP3aVbiYrTUQ==}
+  '@ownclouders/eslint-config@11.0.2':
+    resolution: {integrity: sha512-GFIZzjU4lE6U2LnwY4dr4KhgbsZaVwEEj1IxEEjbZ/ax+1qZi/QRYLlZQHAdJnIUGc/nBPwk/A+n6vrFvgiiew==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -3711,7 +3711,7 @@ snapshots:
 
   '@one-ini/wasm@0.1.1': {}
 
-  '@ownclouders/eslint-config@10.3.0(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)':
+  '@ownclouders/eslint-config@11.0.2(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)':
     dependencies:
       '@babel/eslint-parser': 7.25.9(@babel/core@7.26.0)(eslint@9.12.0)
       '@typescript-eslint/parser': 8.12.2(eslint@9.12.0)(typescript@5.6.3)
