@@ -22,7 +22,7 @@
     "@ownclouders/extension-sdk": "0.0.7",
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
-    "@ownclouders/web-test-helpers": "^10.3.0",
+    "@ownclouders/web-test-helpers": "^11.0.0",
     "@playwright/test": "^1.41.2",
     "@types/node": "22.8.2",
     "@vue/test-utils": "^2.4.6",

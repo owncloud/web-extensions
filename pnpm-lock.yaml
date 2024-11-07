@@ -44,8 +44,8 @@ importers:
         specifier: 0.0.6
         version: 0.0.6
       '@ownclouders/web-test-helpers':
-        specifier: ^10.3.0
-        version: 10.3.0(mgg6i6v6ggbpejay7qwzhawz6q)
+        specifier: ^11.0.0
+        version: 11.0.1(@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8))(@vue/compiler-sfc@3.5.12)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@2.1.2(@types/node@22.8.2)(happy-dom@15.10.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
       '@playwright/test':
         specifier: ^1.41.2
         version: 1.48.2
@@ -90,10 +90,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       '@types/chromecast-caf-sender':
         specifier: ^1.0.8
         version: 1.0.10
@@ -108,10 +108,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       qs:
         specifier: ^6.11.2
         version: 6.13.0
@@ -126,10 +126,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       vue:
         specifier: ^3.4.21
         version: 3.5.12(typescript@5.6.3)
@@ -160,10 +160,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.1.0
-        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.1.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       '@uppy/core':
         specifier: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
         version: https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
@@ -185,10 +185,10 @@ importers:
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       vue:
         specifier: ^3.4.21
         version: 3.5.12(typescript@5.6.3)
@@ -200,7 +200,7 @@ importers:
     devDependencies:
       '@ownclouders/web-pkg':
         specifier: ^10.0.0
-        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+        version: 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       '@vueuse/core':
         specifier: ^11.0.0
         version: 11.2.0(vue@3.5.12(typescript@5.6.3))
@@ -413,6 +413,9 @@ packages:
 
   '@cucumber/tag-expressions@6.1.0':
     resolution: {integrity: sha512-+3DwRumrCJG27AtzCIL37A/X+A/gSfxOPLg8pZaruh5SLumsTmpvilwroVWBT2fPzmno/tGXypeK5a7NHU4RzA==}
+
+  '@emoji-mart/data@1.2.1':
+    resolution: {integrity: sha512-no2pQMWiBy6gpBEiqGeU77/bFejDqUTRY7KX+0+iur13op3bqUsXdnwoZs6Xb1zbv0gAj5VvS1PWoUUckSr5Dw==}
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -688,6 +691,11 @@ packages:
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
 
+  '@ownclouders/design-system@11.0.1':
+    resolution: {integrity: sha512-IKxF5Xxw0LuJMnW++MZg4qC8z8Ti962TMHwo+KfPvQBN54JFXLtcL3XCmzgWVNm5j5YPC/q2LKEvbLNWnbf1MQ==}
+    peerDependencies:
+      vue: ^3.5.11
+
   '@ownclouders/eslint-config@10.3.0':
     resolution: {integrity: sha512-bUtdUI7FqgCPmunVYRooZKfoipMiYCOopErtfs3sVKTj6HBLldpzWQxmgo1j5CQDX25E4JfX+fEP3aVbiYrTUQ==}
     peerDependencies:
@@ -715,6 +723,9 @@ packages:
       luxon: 3.5.0
       uuid: 10.0.0
       zod: 3.23.8
+
+  '@ownclouders/web-client@11.0.1':
+    resolution: {integrity: sha512-zkKQ5M7du0cLF/TmaT9eAI+yu2PLItVUMRoK/3nQyJ1XdnLm2MiF/MIeUnlL5z2MNgClaONW2pf09pX7RsTxWg==}
 
   '@ownclouders/web-pkg@10.3.0':
     resolution: {integrity: sha512-b/SEp9mM8VLLmV9NIeUWDzRcoGNOYz2OBwkgXQpcoPJBoCGHU5ACmjmlFxDwvOdNEbqxkxiPqylRdJvHOq1BPA==}
@@ -752,15 +763,12 @@ packages:
       vue3-gettext: 2.4.0
       zod: 3.23.8
 
-  '@ownclouders/web-test-helpers@10.3.0':
-    resolution: {integrity: sha512-X9UsyJf5D4S2maET1sQg30dDQX9UEUgZSKC4eYdJkhRbAsEy4O2nx7ChyuJhCudfnCZoVsytgPgcf6LrNdA5Ng==}
+  '@ownclouders/web-test-helpers@11.0.1':
+    resolution: {integrity: sha512-siSLZvEvbsU6uI0L/mtQmyd1RlRcYinfmzKkZXo3bh/hsQ2NQBIhngeArFzYyHKTN94zl9NelrcGdIXcCWrVDw==}
     peerDependencies:
-      '@ownclouders/web-client': ^10.3.0
       '@ownclouders/web-pkg': ^10.3.0
       '@vue/test-utils': ^2.4.6
       vue: ^3.5.10
-    bundledDependencies:
-      - '@ownclouders/design-system'
 
   '@parcel/watcher-android-arm64@2.4.1':
     resolution: {integrity: sha512-LOi/WTbbh3aTn2RYddrO8pnapixAziFl6SMxHM69r3tvdSm94JtCenaKgk1GRg5FJ5wpMCpHeW+7yqPlvZv7kg==}
@@ -855,6 +863,9 @@ packages:
     resolution: {integrity: sha512-54w1xCWfXuax7dz4W2M9uw0gDyh+ti/0K/MxcCUxChFh37kkdxPdfZDw5QBbuPUJHr1CiHJ1hXgSs+GgeQc5Zw==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@popperjs/core@2.11.8':
+    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
   '@replit/codemirror-indentation-markers@6.5.3':
     resolution: {integrity: sha512-hL5Sfvw3C1vgg7GolLe/uxX5T3tmgOA3ZzqlMv47zjU1ON51pzNWiVbS22oh6crYhtVhv8b3gdXwoYp++2ilHw==}
@@ -1620,6 +1631,9 @@ packages:
   electron-to-chromium@1.5.49:
     resolution: {integrity: sha512-ZXfs1Of8fDb6z7WEYZjXpgIRF6MEu8JdeGA0A40aZq6OQbS+eJpnnV49epZRna2DU/YsEjSQuGtQPPtvt6J65A==}
 
+  emoji-mart@5.6.0:
+    resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
+
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
 
@@ -1878,6 +1892,15 @@ packages:
 
   flatted@3.3.1:
     resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
+
+  focus-trap-vue@4.0.3:
+    resolution: {integrity: sha512-cIX5rybkCAlNZ4IHYJ3nCFIsipDDljJHHjtTO2IgYWkVYg7X9ipUVdab3HzYp88kmHgMwjcB71LYnXRRsF6ZqQ==}
+    peerDependencies:
+      focus-trap: ^7.0.0
+      vue: ^3.0.0
+
+  focus-trap@7.6.0:
+    resolution: {integrity: sha512-1td0l3pMkWJLFipobUcGaf+5DTY4PLDDrcqoSaKP8ediO/CoWCCYk/fT/Y2A4e6TNB+Sh6clRJCjOPPnKoNHnQ==}
 
   follow-redirects@1.15.9:
     resolution: {integrity: sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==}
@@ -2841,6 +2864,9 @@ packages:
     resolution: {integrity: sha512-vrozgXDQwYO72vHjUb/HnFbQx1exDjoKzqx23aXEg2a9VIg2TSFZ8FmeZpTjUCFMYw7mpX4BE2SFu8wI7asYsw==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
+  tabbable@6.2.0:
+    resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
+
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
@@ -2875,6 +2901,9 @@ packages:
   tinyspy@3.0.2:
     resolution: {integrity: sha512-n1cw8k1k0x4pgA2+9XrOkFydTerNcJ1zWCO5Nn9scWHTD+5tp8dghT2x1uduQePZTZgd3Tupf+x9BxJjeJi77Q==}
     engines: {node: '>=14.0.0'}
+
+  tippy.js@6.3.7:
+    resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
 
   tmp@0.2.3:
     resolution: {integrity: sha512-nZD7m9iCPC5g0pYmcaxogYKggSfLsdxl8of3Q/oIbqCqLLIO9IAF0GWjX1z9NZRHPiXv8Wex4yDCaZsgEw0Y8w==}
@@ -2992,8 +3021,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  uuid@10.0.0:
-    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+  uuid@11.0.2:
+    resolution: {integrity: sha512-14FfcOJmqdjbBPdDjFQyk/SdT4NySW4eM0zcG+HqbHP5jzuH56xO3J1DGhgs/cEMCfwYi3HQI1gnTO62iaG+tQ==}
     hasBin: true
 
   uuid@9.0.1:
@@ -3107,6 +3136,11 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
+  vue-inline-svg@3.1.4:
+    resolution: {integrity: sha512-2WrOViZroRvB0UqwkwxDlCz516pkmT9ojsWri9Vxp8wBcQ1/wzfF0ubw5J/ZxNgjkBBAp0qkTiXDdzBPonT21A==}
+    peerDependencies:
+      vue: ^3
+
   vue-router@4.2.5:
     resolution: {integrity: sha512-DIUpKcyg4+PTQKfFPX88UWhlagBEBEfJ5A8XDXRJLUnZOvcpMF8o/dnL90vpVkGaPbjvXazV/rC1qBKrZlFugw==}
     peerDependencies:
@@ -3116,6 +3150,11 @@ packages:
     resolution: {integrity: sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==}
     peerDependencies:
       vue: ^3.2.0
+
+  vue-select@4.0.0-beta.6:
+    resolution: {integrity: sha512-K+zrNBSpwMPhAxYLTCl56gaMrWZGgayoWCLqe5rWwkB8aUbAUh7u6sXjIR7v4ckp2WKC7zEEUY27g6h1MRsIHw==}
+    peerDependencies:
+      vue: 3.x
 
   vue-tsc@2.1.6:
     resolution: {integrity: sha512-f98dyZp5FOukcYmbFpuSCJ4Z0vHSOSmxGttZJCsFeX0M4w/Rsq0s4uKXjcSRsZqsRgQa6z7SfuO+y0HVICE57Q==}
@@ -3149,6 +3188,9 @@ packages:
   webdav@5.7.1:
     resolution: {integrity: sha512-JVPn3nLxXJfHSRvennHsOrDYjFLkilZ1Qlw8Ff6hpqp6AvkgF7a//aOh5wA4rMp+sLZ1Km0V+iv0LyO1FIwtXg==}
     engines: {node: '>=16'}
+
+  webfontloader@1.6.28:
+    resolution: {integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==}
 
   webidl-conversions@7.0.0:
     resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
@@ -3505,6 +3547,8 @@ snapshots:
 
   '@cucumber/tag-expressions@6.1.0': {}
 
+  '@emoji-mart/data@1.2.1': {}
+
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
 
@@ -3711,6 +3755,27 @@ snapshots:
 
   '@one-ini/wasm@0.1.1': {}
 
+  '@ownclouders/design-system@11.0.1(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))':
+    dependencies:
+      '@emoji-mart/data': 1.2.1
+      '@popperjs/core': 2.11.8
+      deepmerge: 4.3.1
+      emoji-mart: 5.6.0
+      focus-trap: 7.6.0
+      focus-trap-vue: 4.0.3(focus-trap@7.6.0)(vue@3.5.12(typescript@5.6.3))
+      fuse.js: 7.0.0
+      lodash-es: 4.17.21
+      luxon: 3.5.0
+      tippy.js: 6.3.7
+      vue: 3.5.12(typescript@5.6.3)
+      vue-inline-svg: 3.1.4(vue@3.5.12(typescript@5.6.3))
+      vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
+      vue-select: 4.0.0-beta.6(vue@3.5.12(typescript@5.6.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
+      webfontloader: 1.6.28
+    transitivePeerDependencies:
+      - '@vue/compiler-sfc'
+
   '@ownclouders/eslint-config@10.3.0(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)':
     dependencies:
       '@babel/eslint-parser': 7.25.9(@babel/core@7.26.0)(eslint@9.12.0)
@@ -3748,7 +3813,7 @@ snapshots:
 
   '@ownclouders/tsconfig@0.0.6': {}
 
-  '@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)':
+  '@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)':
     dependencies:
       '@casl/ability': 6.7.2
       '@microsoft/fetch-event-source': 2.0.1
@@ -3756,7 +3821,7 @@ snapshots:
       fast-xml-parser: 4.5.0
       lodash-es: 4.17.21
       luxon: 3.5.0
-      uuid: 10.0.0
+      uuid: 11.0.2
       webdav: 5.7.1
       xml-js: 1.6.11
       zod: 3.23.8
@@ -3774,12 +3839,27 @@ snapshots:
       xml-js: 1.6.11
       zod: 3.23.8
 
-  ? '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)'
+  '@ownclouders/web-client@11.0.1':
+    dependencies:
+      '@casl/ability': 6.7.2
+      '@microsoft/fetch-event-source': 2.0.1
+      axios: 1.7.7
+      fast-xml-parser: 4.5.0
+      lodash-es: 4.17.21
+      luxon: 3.5.0
+      uuid: 11.0.2
+      webdav: 5.7.1
+      xml-js: 1.6.11
+      zod: 3.23.8
+    transitivePeerDependencies:
+      - debug
+
+  ? '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@uppy/core@https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz)(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)'
   : dependencies:
       '@casl/ability': 6.7.2
       '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3))
       '@microsoft/fetch-event-source': 2.0.1
-      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
+      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@11.0.2)(zod@3.23.8)
       '@sentry/vue': 8.32.0(vue@3.5.12(typescript@5.6.3))
       '@toast-ui/editor': 3.2.2
       '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
@@ -3803,41 +3883,7 @@ snapshots:
       prismjs: 1.29.0
       qs: 6.13.0
       semver: 7.6.3
-      uuid: 10.0.0
-      vue-concurrency: 5.0.1(vue@3.5.12(typescript@5.6.3))
-      vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
-      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
-      zod: 3.23.8
-
-  '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)':
-    dependencies:
-      '@casl/ability': 6.7.2
-      '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3))
-      '@microsoft/fetch-event-source': 2.0.1
-      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
-      '@sentry/vue': 8.32.0(vue@3.5.12(typescript@5.6.3))
-      '@toast-ui/editor': 3.2.2
-      '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
-      '@vue/shared': 3.5.12
-      '@vueuse/core': 11.2.0(vue@3.5.12(typescript@5.6.3))
-      axios: 1.7.7
-      deepmerge: 4.3.1
-      dompurify: 3.1.7
-      filesize: 10.1.6
-      fuse.js: 7.0.0
-      js-generate-password: 1.0.0
-      lodash-es: 4.17.21
-      luxon: 3.5.0
-      mark.js: 8.11.1
-      oidc-client-ts: 3.1.0
-      p-queue: 8.0.1
-      password-sheriff: 1.1.1
-      pinia: 2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
-      portal-vue: 3.0.0(vue@3.5.12(typescript@5.6.3))
-      prismjs: 1.29.0
-      qs: 6.13.0
-      semver: 7.6.3
-      uuid: 10.0.0
+      uuid: 11.0.2
       vue-concurrency: 5.0.1(vue@3.5.12(typescript@5.6.3))
       vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
@@ -3878,12 +3924,81 @@ snapshots:
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
       zod: 3.23.8
 
-  '@ownclouders/web-test-helpers@10.3.0(mgg6i6v6ggbpejay7qwzhawz6q)':
+  '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)':
     dependencies:
       '@casl/ability': 6.7.2
       '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3))
-      '@ownclouders/web-client': 10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8)
-      '@ownclouders/web-pkg': 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@10.3.0(@casl/ability@6.7.2)(@microsoft/fetch-event-source@2.0.1)(axios@1.7.7)(lodash-es@4.17.21)(luxon@3.5.0)(uuid@10.0.0)(zod@3.23.8))(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@10.0.0)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
+      '@microsoft/fetch-event-source': 2.0.1
+      '@ownclouders/web-client': 11.0.1
+      '@sentry/vue': 8.32.0(vue@3.5.12(typescript@5.6.3))
+      '@toast-ui/editor': 3.2.2
+      '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
+      '@vue/shared': 3.5.12
+      '@vueuse/core': 11.2.0(vue@3.5.12(typescript@5.6.3))
+      axios: 1.7.7
+      deepmerge: 4.3.1
+      dompurify: 3.1.7
+      filesize: 10.1.6
+      fuse.js: 7.0.0
+      js-generate-password: 1.0.0
+      lodash-es: 4.17.21
+      luxon: 3.5.0
+      mark.js: 8.11.1
+      oidc-client-ts: 3.1.0
+      p-queue: 8.0.1
+      password-sheriff: 1.1.1
+      pinia: 2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
+      portal-vue: 3.0.0(vue@3.5.12(typescript@5.6.3))
+      prismjs: 1.29.0
+      qs: 6.13.0
+      semver: 7.6.3
+      uuid: 11.0.2
+      vue-concurrency: 5.0.1(vue@3.5.12(typescript@5.6.3))
+      vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
+      zod: 3.23.8
+
+  '@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)':
+    dependencies:
+      '@casl/ability': 6.7.2
+      '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3))
+      '@microsoft/fetch-event-source': 2.0.1
+      '@ownclouders/web-client': 11.0.1
+      '@sentry/vue': 8.32.0(vue@3.5.12(typescript@5.6.3))
+      '@toast-ui/editor': 3.2.2
+      '@toast-ui/editor-plugin-code-syntax-highlight': 3.1.0
+      '@vue/shared': 3.5.12
+      '@vueuse/core': 11.2.0(vue@3.5.12(typescript@5.6.3))
+      axios: 1.7.7
+      deepmerge: 4.3.1
+      dompurify: 3.1.7
+      filesize: 10.1.6
+      fuse.js: 7.0.0
+      js-generate-password: 1.0.0
+      lodash-es: 4.17.21
+      luxon: 3.5.0
+      mark.js: 8.11.1
+      oidc-client-ts: 3.1.0
+      p-queue: 8.0.1
+      password-sheriff: 1.1.1
+      pinia: 2.2.5(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3))
+      portal-vue: 3.0.0(vue@3.5.12(typescript@5.6.3))
+      prismjs: 1.29.0
+      qs: 6.13.0
+      semver: 7.6.3
+      uuid: 11.0.2
+      vue-concurrency: 5.0.1(vue@3.5.12(typescript@5.6.3))
+      vue-router: 4.4.5(vue@3.5.12(typescript@5.6.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
+      zod: 3.23.8
+
+  '@ownclouders/web-test-helpers@11.0.1(@ownclouders/web-pkg@10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8))(@vue/compiler-sfc@3.5.12)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@2.1.2(@types/node@22.8.2)(happy-dom@15.10.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))':
+    dependencies:
+      '@casl/ability': 6.7.2
+      '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3))
+      '@ownclouders/design-system': 11.0.1(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3))
+      '@ownclouders/web-client': 11.0.1
+      '@ownclouders/web-pkg': 10.3.0(@casl/ability@6.7.2)(@casl/vue@2.2.2(@casl/ability@6.7.2)(vue@3.5.12(typescript@5.6.3)))(@microsoft/fetch-event-source@2.0.1)(@ownclouders/web-client@11.0.1)(@sentry/vue@8.32.0(vue@3.5.12(typescript@5.6.3)))(@vue/shared@3.5.12)(@vueuse/core@11.2.0(vue@3.5.12(typescript@5.6.3)))(axios@1.7.7)(deepmerge@4.3.1)(dompurify@3.1.7)(filesize@10.1.6)(fuse.js@7.0.0)(lodash-es@4.17.21)(luxon@3.5.0)(mark.js@8.11.1)(oidc-client-ts@3.1.0)(p-queue@8.0.1)(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(portal-vue@3.0.0(vue@3.5.12(typescript@5.6.3)))(qs@6.13.0)(semver@7.6.3)(uuid@11.0.2)(vue-concurrency@5.0.1(vue@3.5.12(typescript@5.6.3)))(vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)))(vue3-gettext@2.4.0(@vue/compiler-sfc@3.5.12)(vue@3.5.12(typescript@5.6.3)))(zod@3.23.8)
       '@pinia/testing': 0.1.6(pinia@2.2.4(typescript@5.6.3)(vue@3.5.12(typescript@5.6.3)))(vue@3.5.12(typescript@5.6.3))
       '@vue/test-utils': 2.4.6
       axios: 1.7.7
@@ -3971,6 +4086,8 @@ snapshots:
   '@playwright/test@1.48.2':
     dependencies:
       playwright: 1.48.2
+
+  '@popperjs/core@2.11.8': {}
 
   '@replit/codemirror-indentation-markers@6.5.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)':
     dependencies:
@@ -4792,6 +4909,8 @@ snapshots:
 
   electron-to-chromium@1.5.49: {}
 
+  emoji-mart@5.6.0: {}
+
   emoji-regex@10.4.0: {}
 
   emoji-regex@8.0.0: {}
@@ -5087,6 +5206,15 @@ snapshots:
       keyv: 4.5.4
 
   flatted@3.3.1: {}
+
+  focus-trap-vue@4.0.3(focus-trap@7.6.0)(vue@3.5.12(typescript@5.6.3)):
+    dependencies:
+      focus-trap: 7.6.0
+      vue: 3.5.12(typescript@5.6.3)
+
+  focus-trap@7.6.0:
+    dependencies:
+      tabbable: 6.2.0
 
   follow-redirects@1.15.9: {}
 
@@ -5960,6 +6088,8 @@ snapshots:
       '@pkgr/core': 0.1.1
       tslib: 2.8.0
 
+  tabbable@6.2.0: {}
+
   tapable@2.2.1: {}
 
   text-table@0.2.0: {}
@@ -5983,6 +6113,10 @@ snapshots:
   tinyrainbow@1.2.0: {}
 
   tinyspy@3.0.2: {}
+
+  tippy.js@6.3.7:
+    dependencies:
+      '@popperjs/core': 2.11.8
 
   tmp@0.2.3: {}
 
@@ -6078,7 +6212,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  uuid@10.0.0: {}
+  uuid@11.0.2: {}
 
   uuid@9.0.1: {}
 
@@ -6219,6 +6353,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  vue-inline-svg@3.1.4(vue@3.5.12(typescript@5.6.3)):
+    dependencies:
+      vue: 3.5.12(typescript@5.6.3)
+
   vue-router@4.2.5(vue@3.5.12(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
@@ -6227,6 +6365,10 @@ snapshots:
   vue-router@4.4.5(vue@3.5.12(typescript@5.6.3)):
     dependencies:
       '@vue/devtools-api': 6.6.4
+      vue: 3.5.12(typescript@5.6.3)
+
+  vue-select@4.0.0-beta.6(vue@3.5.12(typescript@5.6.3)):
+    dependencies:
       vue: 3.5.12(typescript@5.6.3)
 
   vue-tsc@2.1.6(typescript@5.6.3):
@@ -6280,6 +6422,8 @@ snapshots:
       path-posix: 1.0.0
       url-join: 5.0.0
       url-parse: 1.5.10
+
+  webfontloader@1.6.28: {}
 
   webidl-conversions@7.0.0: {}
 
