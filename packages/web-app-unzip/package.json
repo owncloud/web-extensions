@@ -15,7 +15,7 @@
     "@zip.js/zip.js": "2.7.53"
   },
   "devDependencies": {
-    "@ownclouders/web-client": "^10.1.0",
+    "@ownclouders/web-client": "^11.0.0",
     "@ownclouders/web-pkg": "^10.1.0",
     "@uppy/core": "^3.3.0",
     "p-queue": "^6.6.2",
