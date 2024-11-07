@@ -35,8 +35,8 @@ importers:
         specifier: 10.3.0
         version: 10.3.0(@babel/core@7.26.0)(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(typescript@5.6.3))(eslint@9.12.0)(prettier@3.3.3)
       '@ownclouders/extension-sdk':
-        specifier: 0.0.7
-        version: 0.0.7(sass@1.80.5)(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
+        specifier: 11.0.2
+        version: 11.0.2(sass@1.80.5)(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
       '@ownclouders/prettier-config':
         specifier: 0.0.1
         version: 0.0.1
@@ -693,10 +693,10 @@ packages:
     peerDependencies:
       eslint: ^9.0.0
 
-  '@ownclouders/extension-sdk@0.0.7':
-    resolution: {integrity: sha512-zi2Tuf4jse9G//xHQKsshSwVkbChevOa0a7eCTTJZbGjoODfqY+N5g4nqz5rxlz6aDixCRZwDCsiFE6BgQf7nA==}
+  '@ownclouders/extension-sdk@11.0.2':
+    resolution: {integrity: sha512-hjh+bWeLXxTxMMyTjYugOqq6pkNiUY0AUlwxhb7S4Dv6uaAnIRXTD5epXZ2NzGreRWFqDiJTj8PxKLY399ZRXw==}
     peerDependencies:
-      sass: 1.69.7
+      sass: ^1.79.5
       vite: ^5
 
   '@ownclouders/prettier-config@0.0.1':
@@ -1200,11 +1200,11 @@ packages:
     peerDependencies:
       '@uppy/core': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-core.tgz
 
-  '@vitejs/plugin-vue@4.6.2':
-    resolution: {integrity: sha512-kqf7SGFoG+80aZG6Pf+gsZIVvGSCKE98JbiWqcCV9cThtg91Jav0yvYFC9Zb+jKetNGF6ZKeoaxgZfND21fWKw==}
-    engines: {node: ^14.18.0 || >=16.0.0}
+  '@vitejs/plugin-vue@5.1.4':
+    resolution: {integrity: sha512-N2XSI2n3sQqp5w7Y/AN/L2XDjBIRGqXko+eDp42sydYSBeJuSm5a1sLf8zakmo8u7tA8NmBgoDLA1HeOESjp9A==}
+    engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
-      vite: ^4.0.0 || ^5.0.0
+      vite: ^5.0.0
       vue: ^3.2.25
 
   '@vitest/expect@2.1.2':
@@ -2280,6 +2280,11 @@ packages:
     engines: {node: '>=10.0.0'}
     hasBin: true
 
+  mime@4.0.4:
+    resolution: {integrity: sha512-v8yqInVjhXyqP6+Kw4fV3ZzeMRqEW6FotRsKXjRS5VMTNIuXsdRoAvklpoRgSqXm6o9VNH4/C0mgedko9DdLsQ==}
+    engines: {node: '>=16'}
+    hasBin: true
+
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
@@ -2693,8 +2698,8 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rollup-plugin-serve@2.0.3:
-    resolution: {integrity: sha512-gQKmfQng17+jOsX5tmDanvJkm0f9XLqWVvXsD7NGd1SlneT+U1j/HjslDUXQz6cqwLnVDRc6xF2lj6rre+eeeQ==}
+  rollup-plugin-serve@3.0.0:
+    resolution: {integrity: sha512-DjVRhbwC0OgP1Q1sj8Lvx12ee60UTZM767kkjT61sYKHw/wLpANAw3VZN5ZMa5NlvO8bYpfTaqiUrW+icAjXFg==}
 
   rollup@4.24.3:
     resolution: {integrity: sha512-HBW896xR5HGmoksbi3JBDtmVzWiPAYqp7wip50hjQ67JbDz61nyoMPdqu1DvVW9asYb2M65Z20ZHsyJCMqMyDg==}
@@ -3733,10 +3738,10 @@ snapshots:
       - prettier
       - supports-color
 
-  '@ownclouders/extension-sdk@0.0.7(sass@1.80.5)(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))':
+  '@ownclouders/extension-sdk@11.0.2(sass@1.80.5)(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))':
     dependencies:
-      '@vitejs/plugin-vue': 4.6.2(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
-      rollup-plugin-serve: 2.0.3
+      '@vitejs/plugin-vue': 5.1.4(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))
+      rollup-plugin-serve: 3.0.0
       sass: 1.80.5
       vite: 5.4.8(@types/node@22.8.2)(sass@1.80.5)
     transitivePeerDependencies:
@@ -4348,7 +4353,7 @@ snapshots:
       '@uppy/utils': https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-utils.tgz
       preact: 10.24.3
 
-  '@vitejs/plugin-vue@4.6.2(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))':
+  '@vitejs/plugin-vue@5.1.4(vite@5.4.8(@types/node@22.8.2)(sass@1.80.5))(vue@3.5.12(typescript@5.6.3))':
     dependencies:
       vite: 5.4.8(@types/node@22.8.2)(sass@1.80.5)
       vue: 3.5.12(typescript@5.6.3)
@@ -5428,6 +5433,8 @@ snapshots:
 
   mime@3.0.0: {}
 
+  mime@4.0.4: {}
+
   minimatch@3.1.2:
     dependencies:
       brace-expansion: 1.1.11
@@ -5789,9 +5796,9 @@ snapshots:
 
   reusify@1.0.4: {}
 
-  rollup-plugin-serve@2.0.3:
+  rollup-plugin-serve@3.0.0:
     dependencies:
-      mime: 3.0.0
+      mime: 4.0.4
       opener: 1.5.2
 
   rollup@4.24.3:
