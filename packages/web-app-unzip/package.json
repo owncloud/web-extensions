@@ -19,7 +19,7 @@
     "@ownclouders/web-pkg": "^11.0.0",
     "@uppy/core": "^3.3.0",
     "p-queue": "^6.6.2",
-    "uuid": "^9.0.1",
+    "uuid": "^11.0.0",
     "vue": "^3.4.21",
     "vue3-gettext": "^2.4.0"
   }
