@@ -174,8 +174,8 @@ importers:
   packages/web-app-json-viewer:
     dependencies:
       vanilla-jsoneditor:
-        specifier: ^1.0.0
-        version: 1.1.2(@lezer/common@1.2.3)
+        specifier: ^2.0.0
+        version: 2.0.2(@lezer/common@1.2.3)
     devDependencies:
       '@ownclouders/web-client':
         specifier: ^11.0.0
@@ -2697,8 +2697,8 @@ packages:
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
-  vanilla-jsoneditor@1.1.2:
-    resolution: {integrity: sha512-IQ8pFTThwgcW1ArkOjPnW0/TD2azw5lv7ut+kQx2tH6AnDthcIFAR8knH1kR4rXGnL+J2oy9FgT49u5jvL5TbQ==}
+  vanilla-jsoneditor@2.0.2:
+    resolution: {integrity: sha512-/qsSp2B/sQsyW7SO8wq7vvEeq4Wqs5JT1j5SSfqlID7CPB9S95+vhzUjrKMpUk0YtxsySlxDecAcXK5Lzg22Sw==}
 
   vanilla-picker@2.12.3:
     resolution: {integrity: sha512-qVkT1E7yMbUsB2mmJNFmaXMWE2hF8ffqzMMwe9zdAikd8u2VfnsVY2HQcOUi2F38bgbxzlJBEdS1UUhOXdF9GQ==}
@@ -5462,7 +5462,7 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  vanilla-jsoneditor@1.1.2(@lezer/common@1.2.3):
+  vanilla-jsoneditor@2.0.2(@lezer/common@1.2.3):
     dependencies:
       '@codemirror/autocomplete': 6.18.3(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.2)(@lezer/common@1.2.3)
       '@codemirror/commands': 6.7.1
