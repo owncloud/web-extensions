@@ -11,5 +11,8 @@ export default defineConfig({
         entryFileNames: 'draw-io.js'
       }
     }
+  },
+  test: {
+    exclude: ['**/e2e/**']
   }
 })
