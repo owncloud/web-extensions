@@ -1,6 +1,8 @@
 OC_CI_NODEJS = "owncloudci/nodejs:18"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
+PLUGINS_S3 = "plugins/s3:1.4.0"
+OC_UBUNTU = "owncloud/ubuntu:20.04"
 
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
@@ -14,6 +16,12 @@ APPS = [
     "progress-bars",
     "unzip",
 ]
+
+E2E_COVERED_APPS = [
+    "draw-io",
+]
+
+OCIS_URL = "https://ocis:9200"
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -81,7 +89,7 @@ def beforePipelines(ctx):
     return checkStarlark()
 
 def stagePipelines(ctx):
-    return checks(ctx) + unitTests(ctx)
+    return checks(ctx) + unitTests(ctx) + e2eTests(ctx)
 
 def afterPipelines(ctx):
     return appBuilds(ctx)
@@ -312,4 +320,164 @@ def appBuilds(ctx):
                 "refs/pull/**",
             ],
         },
+    }]
+
+def ocisService():
+    environment = {
+        "OCIS_URL": OCIS_URL,
+        "OCIS_INSECURE": "true",
+        "OCIS_LOG_LEVEL": "error",
+        "IDM_ADMIN_PASSWORD": "admin",
+        "PROXY_ENABLE_BASIC_AUTH": True,
+        "WEB_ASSET_APPS_PATH": "/apps",
+        "WEB_UI_CONFIG_FILE": "/drone/src/support/drone/ocis.web.config.json",
+    }
+
+    app_build_steps = [
+        {
+            "name": "build-web-apps",
+            "image": OC_CI_NODEJS,
+            "commands": [
+                "pnpm build",
+                "mkdir -p /apps",
+                "mv packages/web-app-draw-io/dist /apps/draw-io",
+            ],
+            "volumes": [
+                {
+                    "name": "apps",
+                    "path": "/apps",
+                },
+            ],
+        },
+    ]
+
+    ocis_service = [
+        {
+            "name": "ocis",
+            "image": "owncloud/ocis-rolling:master",
+            "detach": True,
+            "environment": environment,
+            "commands": [
+                "cp dev/docker/ocis.apps.yaml /var/lib/ocis/apps.yaml",
+                "ocis init || true && ocis server",
+            ],
+            "volumes": [
+                {
+                    "name": "apps",
+                    "path": "/apps",
+                },
+            ],
+        },
+    ]
+
+    wait_for_ocis = [
+        {
+            "name": "wait-for-ocis",
+            "image": OC_CI_ALPINE,
+            "commands": [
+                "timeout 200 bash -c 'while [ $(curl -sk -uadmin:admin " +
+                "%s/graph/v1.0/users/admin " % OCIS_URL +
+                "-w %{http_code} -o /dev/null) != 200 ]; do sleep 1; done'",
+            ],
+        },
+    ]
+
+    return app_build_steps + ocis_service + wait_for_ocis
+
+def uploadTracingResult(ctx):
+    return [{
+        "name": "upload-tracing-result",
+        "image": PLUGINS_S3,
+        "pull": "if-not-exists",
+        "settings": {
+            "bucket": {
+                "from_secret": "cache_public_s3_bucket",
+            },
+            "endpoint": {
+                "from_secret": "cache_public_s3_server",
+            },
+            "path_style": True,
+            "source": "test-results/**/*",
+            "strip_prefix": "test-results",
+            "target": "/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing",
+        },
+        "environment": {
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_public_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_public_s3_secret_key",
+            },
+        },
+        "when": {
+            "status": ["failure"],
+        },
+    }]
+
+def logTracingResult(ctx):
+    return [{
+        "name": "log-tracing-result",
+        "image": OC_UBUNTU,
+        "commands": [
+            "cd test-results/",
+            'echo "To see the trace, please open the following link in the console"',
+            'for f in */; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f"trace.zip" \n"; done',
+        ],
+        "when": {
+            "status": ["failure"],
+        },
+    }]
+
+def e2eTests(ctx):
+    e2e_test_steps = [{
+        "name": "install-browser",
+        "image": OC_CI_NODEJS,
+        "commands": [
+            "pnpm exec playwright install chromium",
+        ],
+        "volumes": [
+            {
+                "name": "playwright-cache",
+                "path": "/root/.cache/ms-playwright",
+            },
+        ],
+    }]
+    for app in E2E_COVERED_APPS:
+        e2e_test_steps.append({
+            "name": app,
+            "image": OC_CI_NODEJS,
+            "commands": [
+                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s-chromium'" % (OCIS_URL, app),
+            ],
+            "volumes": [
+                {
+                    "name": "playwright-cache",
+                    "path": "/root/.cache/ms-playwright",
+                },
+            ],
+        })
+
+    return [{
+        "kind": "pipeline",
+        "type": "docker",
+        "name": "e2e-tests",
+        "steps": installPnpm() + ocisService() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
+        "trigger": {
+            "ref": [
+                "refs/heads/main",
+                "refs/heads/stable-*",
+                "refs/tags/**",
+                "refs/pull/**",
+            ],
+        },
+        "volumes": [
+            {
+                "name": "apps",
+                "temp": {},
+            },
+            {
+                "name": "playwright-cache",
+                "temp": {},
+            },
+        ],
     }]
