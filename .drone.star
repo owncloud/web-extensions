@@ -17,9 +17,11 @@ APPS = [
     "unzip",
 ]
 
-APPS_COVERED_E2E = [
+E2E_COVERED_APPS = [
     "draw-io",
 ]
+
+OCIS_URL = "https://ocis:9200"
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -322,13 +324,13 @@ def appBuilds(ctx):
 
 def ocisService():
     environment = {
-        "OCIS_URL": "https://ocis:9200",
+        "OCIS_URL": OCIS_URL,
         "OCIS_INSECURE": "true",
         "OCIS_LOG_LEVEL": "error",
         "IDM_ADMIN_PASSWORD": "admin",
         "PROXY_ENABLE_BASIC_AUTH": True,
-        "WEB_ASSET_APPS_PATH": "/var/lib/ocis/web/apps",
-        "WEB_UI_CONFIG_FILE": "/var/lib/ocis/web/config.json",
+        "WEB_ASSET_APPS_PATH": "/apps",
+        "WEB_UI_CONFIG_FILE": "/drone/src/support/drone/ocis.web.config.json",
     }
 
     app_build_steps = [
@@ -356,10 +358,7 @@ def ocisService():
             "detach": True,
             "environment": environment,
             "commands": [
-                "mkdir -p /var/lib/ocis/web/apps",
-                "cp support/drone/ocis.web.config.json /var/lib/ocis/web/config.json",
                 "cp dev/docker/ocis.apps.yaml /var/lib/ocis/apps.yaml",
-                "cp -r /apps/* /var/lib/ocis/web/apps/",
                 "ocis init || true && ocis server",
             ],
             "volumes": [
@@ -377,7 +376,7 @@ def ocisService():
             "image": OC_CI_ALPINE,
             "commands": [
                 "timeout 200 bash -c 'while [ $(curl -sk -uadmin:admin " +
-                "%s/graph/v1.0/users/admin " % environment["OCIS_URL"] +
+                "%s/graph/v1.0/users/admin " % OCIS_URL +
                 "-w %{http_code} -o /dev/null) != 200 ]; do sleep 1; done'",
             ],
         },
@@ -430,15 +429,31 @@ def logTracingResult(ctx):
     }]
 
 def e2eTests(ctx):
-    e2e_test_steps = []
-
-    for app in APPS_COVERED_E2E:
+    e2e_test_steps = [{
+        "name": "install-browser",
+        "image": OC_CI_NODEJS,
+        "commands": [
+            "pnpm exec playwright install chromium",
+        ],
+        "volumes": [
+            {
+                "name": "playwright-cache",
+                "path": "/root/.cache/ms-playwright",
+            },
+        ],
+    }]
+    for app in E2E_COVERED_APPS:
         e2e_test_steps.append({
             "name": app,
             "image": OC_CI_NODEJS,
             "commands": [
-                "pnpm exec playwright install chromium",
-                "BASE_URL_OCIS=https://ocis:9200 pnpm test:e2e --project='%s-chromium'" % app,
+                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s-chromium'" % (OCIS_URL, app),
+            ],
+            "volumes": [
+                {
+                    "name": "playwright-cache",
+                    "path": "/root/.cache/ms-playwright",
+                },
             ],
         })
 
@@ -460,12 +475,9 @@ def e2eTests(ctx):
                 "name": "apps",
                 "temp": {},
             },
+            {
+                "name": "playwright-cache",
+                "temp": {},
+            },
         ],
     }]
-
-volumes = [
-    {
-        "name": "apps",
-        "path": "/apps",
-    },
-]
