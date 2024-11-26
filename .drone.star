@@ -335,7 +335,7 @@ def ocisService():
 
     app_build_steps = [
         {
-            "name": "build-web",
+            "name": "build-web-apps",
             "image": OC_CI_NODEJS,
             "commands": [
                 "pnpm build",
