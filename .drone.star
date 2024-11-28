@@ -342,6 +342,7 @@ def ocisService():
                 "pnpm build",
                 "mkdir -p /apps",
                 "mv packages/web-app-draw-io/dist /apps/draw-io",
+                "mv packages/web-app-unzip/dist /apps/unzip",
             ],
             "volumes": [
                 {
