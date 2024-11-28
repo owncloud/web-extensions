@@ -48,21 +48,21 @@ export default defineConfig({
       testDir: './packages/web-app-draw-io/tests/e2e',
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
     },
-    // {
-    //   name: 'unzip-chromium',
-    //   testDir: './packages/web-app-unzip/tests/e2e',
-    //   use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
-    // },
-    // {
-    //   name: 'unzip-firefox',
-    //   testDir: './packages/web-app-unzip/tests/e2e',
-    //   use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
-    // },
-    // {
-    //   name: 'unzip-webkit',
-    //   testDir: './packages/web-app-unzip/tests/e2e',
-    //   use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
-    // },
+    {
+      name: 'unzip-chromium',
+      testDir: './packages/web-app-unzip/tests/e2e',
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'unzip-firefox',
+      testDir: './packages/web-app-unzip/tests/e2e',
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'unzip-webkit',
+      testDir: './packages/web-app-unzip/tests/e2e',
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+    },
 
     /* Test against mobile viewports. */
     // {

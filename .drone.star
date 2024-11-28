@@ -19,6 +19,7 @@ APPS = [
 
 E2E_COVERED_APPS = [
     "draw-io",
+    "unzip",
 ]
 
 OCIS_URL = "https://ocis:9200"
