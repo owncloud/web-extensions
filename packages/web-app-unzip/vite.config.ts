@@ -11,5 +11,8 @@ export default defineConfig({
         entryFileNames: 'unzip.js'
       }
     }
+  },
+  test: {
+    exclude: ['**/e2e/**']
   }
 })
