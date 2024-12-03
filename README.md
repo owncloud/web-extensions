@@ -21,7 +21,13 @@ Extensions are provided by apps. These are the apps, that are provided by this r
 
 ## Installing apps in oCIS
 
-Please refer to [the Web app docs](https://owncloud.dev/services/web/#loading-applications) to learn how to install apps in oCIS.
+There are two ways installing these examples:
+
+* You can enable the web apps in our deployment example with minimal effort.\
+  For the source how it got implemented, see the [ocis_full](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full) deployment example.\
+  For a detailed installation instruction using `ocis_full` see the [admin docs, Local Production Setup](https://doc.owncloud.com/ocis/next/depl-examples/ubuntu-compose/ubuntu-compose-prod.html).\
+  (Before you start, select the ocis version in the admin docs you want to use this example for.)
+* On a general level, refer to the [Web app docs](https://owncloud.dev/services/web/#loading-applications) to learn how to install apps in oCIS.
 
 ## Adding a new app to this repository
 
