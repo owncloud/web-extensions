@@ -54,5 +54,5 @@
       "@uppy/xhr-upload": "https://github.com/owncloud/uppy/releases/download/v3.12.13-owncloud/uppy-xhr-upload.tgz"
     }
   },
-  "packageManager": "pnpm@9.14.4"
+  "packageManager": "pnpm@9.15.0"
 }
