@@ -190,6 +190,33 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
 
+  packages/web-app-password-protected-folders:
+    devDependencies:
+      '@ownclouders/web-client':
+        specifier: ^11.0.4
+        version: 11.0.4
+      '@ownclouders/web-pkg':
+        specifier: ^11.0.0
+        version: 11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
+      '@ownclouders/web-test-helpers':
+        specifier: ^11.0.0
+        version: 11.0.4(@ownclouders/web-pkg@11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(@vue/compiler-sfc@3.5.13)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@2.1.5(@types/node@22.9.1)(happy-dom@15.11.6)(sass@1.80.7))(vue@3.5.13(typescript@5.6.3))
+      '@vue/test-utils':
+        specifier: ^2.4.6
+        version: 2.4.6
+      uuid:
+        specifier: ^11.0.0
+        version: 11.0.3
+      vitest-mock-extended:
+        specifier: 2.0.2
+        version: 2.0.2(typescript@5.6.3)(vitest@2.1.5(@types/node@22.9.1)(happy-dom@15.11.6)(sass@1.80.7))
+      vue:
+        specifier: ^3.4.21
+        version: 3.5.13(typescript@5.6.3)
+      vue3-gettext:
+        specifier: ^2.4.0
+        version: 2.4.0(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
+
   packages/web-app-progress-bars:
     devDependencies:
       '@ownclouders/web-pkg':
