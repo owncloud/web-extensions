@@ -10,9 +10,9 @@ export default defineConfig({
       output: {
         entryFileNames: 'progress-bars.js'
       }
-    },
-    test: {
-      exclude: ['**/e2e/**']
     }
+  },
+  test: {
+    exclude: ['**/e2e/**']
   }
 })

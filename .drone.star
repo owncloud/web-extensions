@@ -344,7 +344,7 @@ def ocisService():
                 "mkdir -p /apps",
                 "mv packages/web-app-draw-io/dist /apps/draw-io",
                 "mv packages/web-app-unzip/dist /apps/unzip",
-                "mv packages/web-app-progress-bars/dist /apps/unzip",
+                "mv packages/web-app-progress-bars/dist /apps/progress-bars",
             ],
             "volumes": [
                 {

@@ -64,17 +64,17 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
     },
     {
-      name: 'progressBar-chromium',
+      name: 'progress-bars-chromium',
       testDir: './packages/web-app-progress-bars/tests/e2e',
       use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
     },
     {
-      name: 'progressBar-firefox',
+      name: 'progress-bars-firefox',
       testDir: './packages/web-app-progress-bars/tests/e2e',
       use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
     },
     {
-      name: 'progressBar-webkit',
+      name: 'progress-bars-webkit',
       testDir: './packages/web-app-progress-bars/tests/e2e',
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
     },
