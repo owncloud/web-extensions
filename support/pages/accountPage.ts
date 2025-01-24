@@ -13,8 +13,8 @@ export class AccountPage {
         this.accountMenuBtn = this.page.locator('.oc-topbar-avatar')
         this.accountManageBtn = this.page.locator('#oc-topbar-account-manage')
 
-        this.progressBarSelector = this.page.locator('.account-page-extensions .extension-preference .vs__search')
-        this.progressBarCurrent = this.page.locator('.account-page-extensions .extension-preference .vs__selected span')
+        this.progressBarSelector = this.page.locator('.extension-preference .vs__search')
+        this.progressBarCurrent = this.page.locator('.extension-preference .vs__selected span')
         this.progressBarOption = this.page.getByText('Nyan Cat progress bar')
     }
 
@@ -23,7 +23,7 @@ export class AccountPage {
         await this.accountManageBtn.click()
     }
 
-    async selectProgressBarExtension(name: string){
+    async selectProgressBarExtension(){
         await this.progressBarSelector.waitFor()
         await this.progressBarSelector.click()
         await this.progressBarOption.click()
