@@ -13,10 +13,10 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('select the progressBarOption on the account page', async () => {
+test('select NyanCat progressBarOption on the account page', async () => {
   const accountPage = new AccountPage(adminPage)
   await accountPage.goToAccountPage()
-  await accountPage.selectProgressBarExtension()
+  await accountPage.selectNyanCatProgressBarExtension()
 
   const progressBarCurrent = await accountPage.progressBarCurrent.textContent()
   expect(progressBarCurrent).toEqual('Nyan Cat progress bar')

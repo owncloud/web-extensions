@@ -6,7 +6,7 @@ export class AccountPage {
     readonly accountManageBtn: Locator
     readonly progressBarSelector: Locator
     readonly progressBarCurrent: Locator
-    readonly progressBarOption: Locator
+    readonly nyanCatProgressBarOption: Locator
 
     constructor(page: Page) {
         this.page = page
@@ -15,7 +15,7 @@ export class AccountPage {
 
         this.progressBarSelector = this.page.locator('.extension-preference .vs__search')
         this.progressBarCurrent = this.page.locator('.extension-preference .vs__selected span')
-        this.progressBarOption = this.page.getByText('Nyan Cat progress bar')
+        this.nyanCatProgressBarOption = this.page.getByText('Nyan Cat progress bar')
     }
 
     async goToAccountPage() {
@@ -23,9 +23,8 @@ export class AccountPage {
         await this.accountManageBtn.click()
     }
 
-    async selectProgressBarExtension(){
-        await this.progressBarSelector.waitFor()
+    async selectNyanCatProgressBarExtension(){
         await this.progressBarSelector.click()
-        await this.progressBarOption.click()
+        await this.nyanCatProgressBarOption.click()
     }
 }
