@@ -11,5 +11,8 @@ export default defineConfig({
         entryFileNames: 'progress-bars.js'
       }
     }
+  },
+  test: {
+    exclude: ['**/e2e/**']
   }
 })

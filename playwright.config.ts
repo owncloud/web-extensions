@@ -63,6 +63,21 @@ export default defineConfig({
       testDir: './packages/web-app-unzip/tests/e2e',
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
     },
+    {
+      name: 'progress-bars-chromium',
+      testDir: './packages/web-app-progress-bars/tests/e2e',
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'progress-bars-firefox',
+      testDir: './packages/web-app-progress-bars/tests/e2e',
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'progress-bars-webkit',
+      testDir: './packages/web-app-progress-bars/tests/e2e',
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+    },
 
     /* Test against mobile viewports. */
     // {
