@@ -2,15 +2,15 @@ import { Locator, Page } from '@playwright/test'
 
 export class FilesPage {
   readonly page: Page
-  readonly uploadBtn: Locator
   readonly extractHereBtnBtn: Locator
   readonly selectAllCheckbox: Locator
-
+  readonly deleteButton: Locator
 
   constructor(page: Page) {
     this.page = page
     this.extractHereBtnBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
     this.selectAllCheckbox = this.page.getByLabel('Select all')
+    this.deleteButton = this.page.locator('.oc-files-actions-delete-trigger')
   }
 
   getResourceNameSelector(resource: string): Locator {
@@ -33,8 +33,8 @@ export class FilesPage {
 
   async deleteAllFromPersonal() {
     await this.page.getByRole('link', { name: 'Navigate to personal files' }).click();
-    await this.selectAllCheckbox.check();
-    await this.page.getByRole('button', { name: 'Delete' }).click()
+    await this.selectAllCheckbox.check()
+    await this.deleteButton.click()
   }
 
   async openFolder(folder: string) {
