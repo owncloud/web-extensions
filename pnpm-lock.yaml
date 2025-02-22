@@ -57,8 +57,8 @@ importers:
         specifier: 3.0.5
         version: 3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)
       vitest-mock-extended:
-        specifier: 2.0.2
-        version: 2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))
+        specifier: 3.0.1
+        version: 3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))
       vue-tsc:
         specifier: 2.1.10
         version: 2.1.10(typescript@5.6.3)
@@ -2777,6 +2777,12 @@ packages:
     peerDependencies:
       typescript: 3.x || 4.x || 5.x
       vitest: '>=2.0.0'
+
+  vitest-mock-extended@3.0.1:
+    resolution: {integrity: sha512-VI7CRRvIi+MbAsqdGTxp3K+eiY7BR1zrVflZ5DBrFUXPjRZRgxXajlYdNyIu3v1bb5ZfdLANXwZ9i/RfVMfS6A==}
+    peerDependencies:
+      typescript: 3.x || 4.x || 5.x
+      vitest: '>=3.0.0'
 
   vitest@3.0.5:
     resolution: {integrity: sha512-4dof+HvqONw9bvsYxtkfUp2uHsTN9bV2CZIi1pWgoFpL1Lld8LA1ka9q/ONSsoScAKG7NVGf2stJTI7XRkXb2Q==}
@@ -5618,6 +5624,12 @@ snapshots:
       sass: 1.80.7
 
   vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)):
+    dependencies:
+      ts-essentials: 10.0.3(typescript@5.6.3)
+      typescript: 5.6.3
+      vitest: 3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)
+
+  vitest-mock-extended@3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)):
     dependencies:
       ts-essentials: 10.0.3(typescript@5.6.3)
       typescript: 5.6.3
