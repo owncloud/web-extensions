@@ -2,15 +2,17 @@ import { Locator, Page } from '@playwright/test'
 
 export class FilesPage {
   readonly page: Page
-  readonly uploadBtn: Locator
-  readonly extractHereBtnBtn: Locator
+  readonly extractHereBtn: Locator
   readonly selectAllCheckbox: Locator
-
+  readonly deleteBtn: Locator
+  readonly owncloudLogo: Locator
 
   constructor(page: Page) {
     this.page = page
-    this.extractHereBtnBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
+    this.extractHereBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
     this.selectAllCheckbox = this.page.getByLabel('Select all')
+    this.deleteBtn = this.page.locator('.oc-files-actions-delete-trigger')
+    this.owncloudLogo = this.page.locator('.oc-logo-image')
   }
 
   getResourceNameSelector(resource: string): Locator {
@@ -27,14 +29,14 @@ export class FilesPage {
           resp.status() === 201 &&
           resp.request().method() === 'MKCOL'
       ),
-      this.extractHereBtnBtn.click()
+      this.extractHereBtn.click()
     ])
   }
 
   async deleteAllFromPersonal() {
-    await this.page.getByRole('link', { name: 'Navigate to personal files' }).click();
-    await this.selectAllCheckbox.check();
-    await this.page.getByRole('button', { name: 'Delete' }).click()
+    await this.owncloudLogo.click()
+    await this.selectAllCheckbox.check()
+    await this.deleteBtn.click()
   }
 
   async openFolder(folder: string) {
