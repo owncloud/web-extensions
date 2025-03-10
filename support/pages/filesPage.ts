@@ -2,15 +2,20 @@ import { Locator, Page } from '@playwright/test'
 
 export class FilesPage {
   readonly page: Page
-  readonly uploadBtn: Locator
-  readonly extractHereBtnBtn: Locator
+  readonly extractHereBtn: Locator
   readonly selectAllCheckbox: Locator
+  readonly jsonViewerBtn: Locator
+  readonly resourceActionDropDownBtn: Locator
+  readonly jsonViewerSelector: Locator
 
 
   constructor(page: Page) {
     this.page = page
-    this.extractHereBtnBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
+    this.extractHereBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
     this.selectAllCheckbox = this.page.getByLabel('Select all')
+    this.jsonViewerBtn = this.page.locator('.oc-files-actions-json-viewer-trigger')
+    this.resourceActionDropDownBtn = this.page.locator('.resource-table-btn-action-dropdown')
+    this.jsonViewerSelector = this.page.locator('#json-viewer')
   }
 
   getResourceNameSelector(resource: string): Locator {
@@ -27,7 +32,7 @@ export class FilesPage {
           resp.status() === 201 &&
           resp.request().method() === 'MKCOL'
       ),
-      this.extractHereBtnBtn.click()
+      this.extractHereBtn.click()
     ])
   }
 
@@ -40,5 +45,10 @@ export class FilesPage {
   async openFolder(folder: string) {
     const folderLocator = this.getResourceNameSelector(folder)
     await folderLocator.click()
+  }
+
+  async openJsonFile(){
+    await this.resourceActionDropDownBtn.click()
+    await this.jsonViewerBtn.click()
   }
 }
