@@ -1,0 +1,7 @@
+{
+  "test": "This is a dummy JSON file for e2e testing",
+  "web-app-json-viewer": {
+    "enabled": true,
+    "description": "Used for viewing JSON files in prettified way."
+  }
+}
