@@ -228,7 +228,11 @@ def publishSteps(ctx):
                 "sha256",
             ],
             "title": "%s %s" % (app, version),
-            "note": ".release_note",
+            "note": """%s-%s
+
+              ## How to use
+              Download the attached release artifact "%s-%s.zip" and extract it to your oCIS apps folder.
+              Please refer to [our documentation](https://owncloud.dev/services/web/#loading-applications) for more information.""" % (app, version, app, version),
             "overwrite": True,
         },
         "when": {
