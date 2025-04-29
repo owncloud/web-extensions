@@ -1,6 +1,15 @@
 {
   "entrypoint": "external-sites.js",
   "config": {
-    "sites": []
+    "sites": [
+      {
+        "name": "ownCloud",
+        "url": "https://www.owncloud.com",
+        "target": "external",
+        "color": "#0D856F",
+        "icon": "cloud",
+        "priority": 50
+      }
+    ]
   }
 }

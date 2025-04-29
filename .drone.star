@@ -22,6 +22,7 @@ E2E_COVERED_APPS = [
     "unzip",
     "progress-bars",
     "json-viewer",
+    "external-sites",
 ]
 
 OCIS_URL = "https://ocis:9200"
@@ -351,6 +352,7 @@ def ocisService():
                 "mv packages/web-app-unzip/dist /apps/unzip",
                 "mv packages/web-app-progress-bars/dist /apps/progress-bars",
                 "mv packages/web-app-json-viewer/dist /apps/json-viewer",
+                "mv packages/web-app-external-sites/dist /apps/web-app-external-sites",
             ],
             "volumes": [
                 {

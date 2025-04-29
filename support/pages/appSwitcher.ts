@@ -26,4 +26,9 @@ export class AppSwitcher {
       this.drawIoBtn.click()
     ])
   }
+
+  async openExternalSites( externalSitesName: string ) {
+    await this.clickAppSwitcher()
+    this.page.locator(`[data-test-id="external-sites-${externalSitesName}"]`).click();
+  }
 }
