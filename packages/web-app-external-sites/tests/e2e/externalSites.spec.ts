@@ -21,3 +21,9 @@ test('open external sites named "Wikipedia" in new tab', async () => {
   await newTab.waitForLoadState()
   await expect(newTab).toHaveURL('https://www.wikipedia.org')
 })
+
+test('open external sites named "ownCloud" in embedded view', async () => {
+  const appSwitcher = new AppSwitcher(adminPage)
+  await appSwitcher.openExternalSites('ownCloud')
+  await expect(adminPage).toHaveURL(/.*external-sites\/owncloud/)
+})

@@ -17,7 +17,6 @@ directives:
     - 'https://embed.diagrams.net/'
     # This is needed for the external-sites web extension when embedding sites
     - 'https://owncloud.dev/'
-    - 'https://www.wikipedia.org'
   img-src:
     - "'self'"
     - 'data:'
