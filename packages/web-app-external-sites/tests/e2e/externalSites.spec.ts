@@ -13,11 +13,11 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('open external sites named "ownCloud" in new tab', async () => {
+test('open external sites named "Wikipedia" in new tab', async () => {
   const appSwitcher = new AppSwitcher(adminPage)
-  await appSwitcher.openExternalSites('ownCloud')
+  await appSwitcher.openExternalSites('Wikipedia')
   const pagePromise = adminPage.waitForEvent('popup')
   const newTab = await pagePromise
   await newTab.waitForLoadState()
-  await expect(newTab).toHaveURL('https://owncloud.com/')
+  await expect(newTab).toHaveURL('https://www.wikipedia.org')
 })
