@@ -13,17 +13,19 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('open external sites named "Wikipedia" in new tab', async () => {
+test('open external sites named "Owncloud External" in new tab', async () => {
   const appSwitcher = new AppSwitcher(adminPage)
-  await appSwitcher.openExternalSites('Wikipedia')
+  await appSwitcher.openExternalSites('Owncloud External', 'external')
   const pagePromise = adminPage.waitForEvent('popup')
   const newTab = await pagePromise
   await newTab.waitForLoadState()
-  await expect(newTab).toHaveURL('https://www.wikipedia.org')
+  await expect(newTab).toHaveURL('https://owncloud.dev')
+  const response = await newTab.request.get('https://owncloud.dev')
+  expect(response.status()).toBe(200)
 })
 
-test('open external sites named "ownCloud" in embedded view', async () => {
+test('open external sites named "Owncloud Embedded" in embedded view', async () => {
   const appSwitcher = new AppSwitcher(adminPage)
-  await appSwitcher.openExternalSites('ownCloud')
-  await expect(adminPage).toHaveURL(/.*external-sites\/owncloud/)
+  await appSwitcher.openExternalSites('Owncloud Embedded', 'embedded')
+  await expect(adminPage).toHaveURL(/.*external-sites\/owncloud%20embedded$/)
 })

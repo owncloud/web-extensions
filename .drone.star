@@ -339,6 +339,7 @@ def ocisService():
         "PROXY_ENABLE_BASIC_AUTH": True,
         "WEB_ASSET_APPS_PATH": "/apps",
         "WEB_UI_CONFIG_FILE": "/drone/src/support/drone/ocis.web.config.json",
+        "PROXY_CSP_CONFIG_FILE_LOCATION": "/drone/src/dev/docker/csp.yaml",
     }
 
     app_build_steps = [

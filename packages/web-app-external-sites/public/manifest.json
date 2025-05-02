@@ -3,7 +3,7 @@
   "config": {
     "sites": [
       {
-        "name": "ownCloud",
+        "name": "Owncloud Embedded",
         "url": "https://owncloud.dev",
         "target": "embedded",
         "color": "#0D856F",
@@ -11,11 +11,11 @@
         "priority": 50
       },
       {
-        "name": "Wikipedia",
-        "url": "https://www.wikipedia.org",
+        "name": "Owncloud External",
+        "url": "https://owncloud.dev",
         "target": "external",
         "color": "#0D856F",
-        "icon": "book",
+        "icon": "cloud",
         "priority": 51
       }
     ]

@@ -27,8 +27,23 @@ export class AppSwitcher {
     ])
   }
 
-  async openExternalSites( externalSitesName: string ) {
+  async openExternalSites( externalSitesName: string, mode: 'embedded' | 'external' ) {
+    const externalSites = this.page.locator(`[data-test-id="external-sites-${externalSitesName}"]`)
     await this.clickAppSwitcher()
-    this.page.locator(`[data-test-id="external-sites-${externalSitesName}"]`).click();
+    if (mode == 'embedded')
+    {
+      await Promise.all([
+        this.page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith('dev/') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+        ),
+        externalSites.click()
+      ])
+    }
+    else{
+      externalSites.click()
+    }
   }
 }
