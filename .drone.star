@@ -354,6 +354,7 @@ def ocisService():
                 "mv packages/web-app-progress-bars/dist /apps/progress-bars",
                 "mv packages/web-app-json-viewer/dist /apps/json-viewer",
                 "mv packages/web-app-external-sites/dist /apps/web-app-external-sites",
+                "cp packages/web-app-external-sites/tests/config/manifest.json /apps/web-app-external-sites/manifest.json",
             ],
             "volumes": [
                 {

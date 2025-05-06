@@ -31,6 +31,7 @@ services:
       - ./packages/web-app-cast/dist:/web/apps/cast
       - ./packages/web-app-draw-io/dist:/web/apps/draw-io
       - ./packages/web-app-external-sites/dist:/web/apps/external-sites
+      - ./packages/web-app-external-sites/tests/config/manifest.json:/web/apps/external-sites/manifest.json
       - ./packages/web-app-importer/dist:/web/apps/importer
       - ./packages/web-app-json-viewer/dist:/web/apps/json-viewer
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
