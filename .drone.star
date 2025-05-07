@@ -22,6 +22,7 @@ E2E_COVERED_APPS = [
     "unzip",
     "progress-bars",
     "json-viewer",
+    "external-sites",
 ]
 
 OCIS_URL = "https://ocis:9200"
@@ -338,6 +339,7 @@ def ocisService():
         "PROXY_ENABLE_BASIC_AUTH": True,
         "WEB_ASSET_APPS_PATH": "/apps",
         "WEB_UI_CONFIG_FILE": "/drone/src/support/drone/ocis.web.config.json",
+        "PROXY_CSP_CONFIG_FILE_LOCATION": "/drone/src/dev/docker/csp.yaml",
     }
 
     app_build_steps = [
@@ -351,6 +353,8 @@ def ocisService():
                 "mv packages/web-app-unzip/dist /apps/unzip",
                 "mv packages/web-app-progress-bars/dist /apps/progress-bars",
                 "mv packages/web-app-json-viewer/dist /apps/json-viewer",
+                "mv packages/web-app-external-sites/dist /apps/web-app-external-sites",
+                "cp packages/web-app-external-sites/tests/config/manifest.json /apps/web-app-external-sites/manifest.json",
             ],
             "volumes": [
                 {

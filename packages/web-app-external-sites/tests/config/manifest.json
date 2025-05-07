@@ -1,0 +1,24 @@
+{
+    "entrypoint": "external-sites.js",
+    "config": {
+      "sites": [
+        {
+          "name": "Owncloud Embedded",
+          "url": "https://owncloud.dev",
+          "target": "embedded",
+          "color": "#0D856F",
+          "icon": "cloud",
+          "priority": 50
+        },
+        {
+          "name": "Owncloud External",
+          "url": "https://owncloud.dev",
+          "target": "external",
+          "color": "#0D856F",
+          "icon": "cloud",
+          "priority": 51
+        }
+      ]
+    }
+  }
+  

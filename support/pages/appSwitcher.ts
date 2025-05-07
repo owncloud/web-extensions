@@ -26,4 +26,24 @@ export class AppSwitcher {
       this.drawIoBtn.click()
     ])
   }
+
+  async openExternalSites( externalSitesName: string, mode: 'embedded' | 'external' ) {
+    const externalSites = this.page.locator(`[data-test-id="external-sites-${externalSitesName}"]`)
+    await this.clickAppSwitcher()
+    if (mode == 'embedded')
+    {
+      await Promise.all([
+        this.page.waitForResponse(
+          (resp) =>
+            resp.url().endsWith('dev/') &&
+            resp.status() === 200 &&
+            resp.request().method() === 'GET'
+        ),
+        externalSites.click()
+      ])
+    }
+    else{
+      externalSites.click()
+    }
+  }
 }
