@@ -23,6 +23,7 @@ E2E_COVERED_APPS = [
     "progress-bars",
     "json-viewer",
     "external-sites",
+    "cast",
 ]
 
 OCIS_URL = "https://ocis:9200"
