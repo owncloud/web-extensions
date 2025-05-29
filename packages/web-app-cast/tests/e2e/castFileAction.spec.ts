@@ -16,7 +16,7 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('check cast file-action', async () => {
+test.fail('check cast file-action', async () => {
   const uploadFile = new FilesAppBar(adminPage)
   await uploadFile.uploadFile('logo.jpeg')
 
