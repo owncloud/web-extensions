@@ -29,6 +29,7 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    headless: true
   },
 
   /* Configure projects for major browsers */
@@ -108,7 +109,21 @@ export default defineConfig({
       testDir: './packages/web-app-external-sites/tests/e2e',
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
     },
-
+    {
+      name: 'cast-chromium',
+      testDir: './packages/web-app-cast/tests/e2e',
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'cast-firefox',
+      testDir: './packages/web-app-cast/tests/e2e',
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+    },
+    {
+      name: 'cast-webkit',
+      testDir: './packages/web-app-cast/tests/e2e',
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+    }
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
