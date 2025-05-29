@@ -16,6 +16,9 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
+// Issue with firefox, webkit and headless browsers
+// https://github.com/owncloud/web-extensions/issues/187
+// TODO: remove 'fail' when the issue is fixed
 test.fail('check cast file-action', async () => {
   const uploadFile = new FilesAppBar(adminPage)
   await uploadFile.uploadFile('logo.jpeg')
