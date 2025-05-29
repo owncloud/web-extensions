@@ -11,5 +11,8 @@ export default defineConfig({
         entryFileNames: 'cast.js'
       }
     }
+  },
+  test: {
+    exclude: ['**/e2e/**']
   }
 })
