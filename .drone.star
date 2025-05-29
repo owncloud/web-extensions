@@ -1,11 +1,16 @@
-OC_CI_NODEJS = "owncloudci/nodejs:20"
-OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
+MINIO_MC_IMAGE = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
-PLUGINS_S3 = "plugins/s3:1.4.0"
+OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
+OC_CI_NODEJS = "owncloudci/nodejs:20"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
-
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
+PLUGINS_S3 = "plugins/s3:1.4.0"
+
+path = {
+    "base": "/drone/src",
+    "pwBrowsersArchive": "playwright-browsers.tar.gz",
+}
 
 APPS = [
     "cast",
@@ -26,7 +31,20 @@ BROWSERS = [
 OCIS_URL = "https://ocis:9200"
 
 S3_CACHE_SERVER = "https://cache.owncloud.com"
+S3_CACHE_BUCKET = "cache"
 S3_PUBLIC_CACHE_BUCKET = "public"
+
+# minio environment variables
+MINIO_ENV = {
+    "CACHE_BUCKET": S3_CACHE_BUCKET,
+    "MC_HOST": S3_CACHE_SERVER,
+    "AWS_ACCESS_KEY_ID": {
+        "from_secret": "cache_s3_access_key",
+    },
+    "AWS_SECRET_ACCESS_KEY": {
+        "from_secret": "cache_s3_secret_key",
+    },
+}
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -441,16 +459,6 @@ def logTracingResult(ctx):
 
 def e2eTests(ctx):
     depends_on = []
-    e2e_test_steps = [{
-        "name": "install-browser",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        },
-        "commands": [
-            "pnpm exec playwright install",
-        ],
-    }]
     for idx, browser in enumerate(BROWSERS):
         status = ["success"]
         if idx > 0:
@@ -479,7 +487,7 @@ def e2eTests(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-tests",
-        "steps": installPnpm() + ocisService() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
+        "steps": installPnpm() + ocisService() + installBrowsers() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
@@ -495,3 +503,52 @@ def e2eTests(ctx):
             },
         ],
     }]
+
+def installBrowsers():
+    return [{
+        "name": "install-browsers",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
+        "commands": [
+            "pnpm exec playwright install --with-deps",
+            "tar -czvf %s .playwright" % path["pwBrowsersArchive"],
+        ],
+    }]
+
+def cacheBrowsers():
+    return [
+        {
+            "name": "upload-browsers-cache",
+            "image": MINIO_MC_IMAGE,
+            "environment": MINIO_ENV,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a %s/%s s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/$playwright_version/" % (path["base"], path["pwBrowsersArchive"]),
+                "mc ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO",
+            ],
+        },
+    ]
+
+def restoreBrowsersCache():
+    return [
+        {
+            "name": "restore-browsers-cache",
+            "image": MINIO_MC_IMAGE,
+            "environment": MINIO_ENV,
+            "commands": [
+                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
+                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+                "mc cp -r -a s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/$playwright_version/%s %s" % (path["pwBrowsersArchive"], path["base"]),
+            ],
+        },
+        {
+            "name": "unzip-browsers-cache",
+            "image": OC_UBUNTU_IMAGE,
+            "commands": [
+                "tar -xvf %s -C ." % path["pwBrowsersArchive"],
+            ],
+        },
+    ]
