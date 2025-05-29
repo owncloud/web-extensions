@@ -456,10 +456,10 @@ def e2eTests(ctx):
     }]
     for browser in BROWSERS:
         e2e_test_steps.append({
-            "name": app,
+            "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
             "commands": [
-                "BASE_URL_OCIS=%s pnpm test:e2e --project='e2e-%s'" % (OCIS_URL, browser),
+                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s'" % (OCIS_URL, browser),
             ],
             "volumes": [
                 {
