@@ -11,7 +11,7 @@
     "build": "pnpm -r build",
     "build:w": "pnpm -r build:w",
     "check:types": "pnpm -r check:types",
-    "lint": "eslint 'packages/**/*.{js,ts,vue}' --color",
+    "lint": "eslint '{packages,support}/**/*.{js,ts,vue}' '*.{ts,js}' --color",
     "test:unit": "pnpm -r test:unit --watch=false",
     "test:e2e": "pnpm playwright test"
   },
