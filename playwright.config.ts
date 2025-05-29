@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 /**
  * Read environment variables from file.
@@ -37,92 +37,92 @@ export default defineConfig({
     {
       name: 'draw-io-chromium',
       testDir: './packages/web-app-draw-io/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'drawIO-firefox',
       testDir: './packages/web-app-draw-io/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'drawIO-webkit',
       testDir: './packages/web-app-draw-io/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     },
     {
       name: 'unzip-chromium',
       testDir: './packages/web-app-unzip/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'unzip-firefox',
       testDir: './packages/web-app-unzip/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'unzip-webkit',
       testDir: './packages/web-app-unzip/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     },
     {
       name: 'progress-bars-chromium',
       testDir: './packages/web-app-progress-bars/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'progress-bars-firefox',
       testDir: './packages/web-app-progress-bars/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'progress-bars-webkit',
       testDir: './packages/web-app-progress-bars/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     },
     {
       name: 'json-viewer-chromium',
       testDir: './packages/web-app-json-viewer/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'json-viewer-firefox',
       testDir: './packages/web-app-json-viewer/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'json-viewer-webkit',
       testDir: './packages/web-app-json-viewer/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     },
     {
       name: 'external-sites-chromium',
       testDir: './packages/web-app-external-sites/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'external-sites-firefox',
       testDir: './packages/web-app-external-sites/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'external-sites-webkit',
       testDir: './packages/web-app-external-sites/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     },
     {
       name: 'cast-chromium',
       testDir: './packages/web-app-cast/tests/e2e',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'cast-firefox',
       testDir: './packages/web-app-cast/tests/e2e',
-      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'cast-webkit',
       testDir: './packages/web-app-cast/tests/e2e',
-      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true },
+      use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     }
     /* Test against mobile viewports. */
     // {
@@ -143,7 +143,7 @@ export default defineConfig({
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-  ],
+  ]
 
   /* Run your local dev server before starting the tests */
   // webServer: {
@@ -151,4 +151,4 @@ export default defineConfig({
   //   url: 'http://127.0.0.1:3000',
   //   reuseExistingServer: !process.env.CI,
   // },
-});
+})
