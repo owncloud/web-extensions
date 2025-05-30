@@ -45,9 +45,7 @@ export class FilesPage {
 
     await Promise.all([
       this.page.waitForResponse(
-        (resp) =>
-          resp.status() === 201 &&
-          resp.request().method() === 'MKCOL'
+        (resp) => resp.status() === 201 && resp.request().method() === 'MKCOL'
       ),
       this.extractHereBtn.click()
     ])

@@ -27,11 +27,10 @@ export class AppSwitcher {
     ])
   }
 
-  async openExternalSites( externalSitesName: string, mode: 'embedded' | 'external' ) {
+  async openExternalSites(externalSitesName: string, mode: 'embedded' | 'external') {
     const externalSites = this.page.locator(`[data-test-id="external-sites-${externalSitesName}"]`)
     await this.clickAppSwitcher()
-    if (mode == 'embedded')
-    {
+    if (mode == 'embedded') {
       await Promise.all([
         this.page.waitForResponse(
           (resp) =>
@@ -41,8 +40,7 @@ export class AppSwitcher {
         ),
         externalSites.click()
       ])
-    }
-    else{
+    } else {
       externalSites.click()
     }
   }
