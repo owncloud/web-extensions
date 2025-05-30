@@ -21,12 +21,11 @@ web-extensions/
 ## Playwright Test Configuration
 This Playwright configuration defines multiple projects for testing web applications in different browsers. Each project is assigned its own set of browsers, and the configuration includes settings for parallel test execution, retries, and reporting.
 
-### Example Projects
+### Available Test Projects
 
- **Draw-IO Tests**:
- - **Chromium**: Tests for Draw-IO app using the Chromium browser.
- - **Firefox**: Tests for Draw-IO app using the Firefox browser.
- - **WebKit**: Tests for Draw-IO app using the Safari WebKit browser.
+ - **chrome**: Run e2e tests using the Chrome browser.
+ - **firefox**: Run e2e tests using the Firefox browser.
+ - **webKit**: Run e2e tests using the Safari WebKit browser.
 
 
 ## Running Tests
@@ -41,17 +40,17 @@ This Playwright configuration defines multiple projects for testing web applicat
 $ pnpm test:e2e
 ```
 
-### running all tests in project draw-io using chromium
+### running all tests using chrome
 ```shell
-$ pnpm test:e2e --project="draw-io-chromium"
+$ pnpm test:e2e --project="chrome"
 ```
 
 ### to see browser please disable headless Mode
 ```shell
-$ pnpm test:e2e --project="draw-io-chromium" packages/web-app-draw-io --headed
+$ pnpm test:e2e --project="chrome" packages/web-app-draw-io --headed
 ```
 
-### running certain test in project draw-io
+### running specific test
 ```shell
-$ pnpm test:e2e --project="draw-io-chromium" packages/web-app-draw-io/tests/e2e/createDrawIo.spec.ts
+$ pnpm test:e2e --project="chrome" packages/web-app-draw-io/tests/e2e/createDrawIo.spec.ts
 ```

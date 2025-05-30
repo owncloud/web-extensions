@@ -1,30 +1,21 @@
-import { Locator, Page } from '@playwright/test'
+import { Locator, FrameLocator, Page } from '@playwright/test'
 
 export class DrawIoPage {
   readonly page: Page
   readonly saveBtn: Locator
   readonly closeBtn: Locator
+  readonly frameLocator: FrameLocator
 
   constructor(page: Page) {
     this.page = page
-    this.saveBtn = this.page
-      .locator('iframe[title="Draw\\.io editor"]')
-      .contentFrame()
-      .getByRole('button', { name: 'Save' })
+    this.frameLocator = this.page.locator('iframe[title="Draw\\.io editor"]').contentFrame()
+    this.saveBtn = this.frameLocator.getByRole('button', { name: 'Save' })
     this.closeBtn = this.page.getByLabel('Close')
   }
 
   async addContent() {
-    await this.page
-      .locator('iframe[title="Draw\\.io editor"]')
-      .contentFrame()
-      .locator('.geSidebar > a:nth-child(5)')
-      .click()
-    await this.page
-      .locator('iframe[title="Draw\\.io editor"]')
-      .contentFrame()
-      .locator('.geDiagramContainer > svg')
-      .click()
+    await this.frameLocator.locator('.geSidebar > a.geItem').first().click()
+    await this.frameLocator.locator('.geDiagramContainer > svg').click()
   }
 
   async save() {

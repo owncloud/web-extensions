@@ -17,13 +17,10 @@ APPS = [
     "unzip",
 ]
 
-E2E_COVERED_APPS = [
-    "draw-io",
-    "unzip",
-    "progress-bars",
-    "json-viewer",
-    "external-sites",
-    "cast",
+BROWSERS = [
+    "chrome",
+    "firefox",
+    "webkit",
 ]
 
 OCIS_URL = "https://ocis:9200"
@@ -448,7 +445,7 @@ def e2eTests(ctx):
         "name": "install-browser",
         "image": OC_CI_NODEJS,
         "commands": [
-            "pnpm exec playwright install chromium",
+            "pnpm exec playwright install",
         ],
         "volumes": [
             {
@@ -457,12 +454,17 @@ def e2eTests(ctx):
             },
         ],
     }]
-    for app in E2E_COVERED_APPS:
+    for idx, browser in enumerate(BROWSERS):
+        status = ["success"]
+        if idx > 0:
+            # allow other browsers step to run even if one fails
+            status.append("failure")
+
         e2e_test_steps.append({
-            "name": app,
+            "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
             "commands": [
-                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s-chromium'" % (OCIS_URL, app),
+                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s'" % (OCIS_URL, browser),
             ],
             "volumes": [
                 {
@@ -470,6 +472,9 @@ def e2eTests(ctx):
                     "path": "/root/.cache/ms-playwright",
                 },
             ],
+            "when": {
+                "status": status,
+            },
         })
 
     return [{

@@ -7,7 +7,6 @@ export class FilesPage {
   readonly deleteBtn: Locator
   readonly owncloudLogo: Locator
   readonly jsonViewerBtn: Locator
-  readonly resourceActionDropDownBtn: Locator
   readonly jsonViewerSelector: Locator
   readonly castFileActionBtn: Locator
 
@@ -18,7 +17,6 @@ export class FilesPage {
     this.deleteBtn = this.page.locator('.oc-files-actions-delete-trigger')
     this.owncloudLogo = this.page.locator('.oc-logo-image')
     this.jsonViewerBtn = this.page.locator('.oc-files-actions-json-viewer-trigger')
-    this.resourceActionDropDownBtn = this.page.locator('.resource-table-btn-action-dropdown')
     this.jsonViewerSelector = this.page.locator('#json-viewer')
     this.castFileActionBtn = this.page.locator('[data-testid="action-label"] :text-is("Cast")')
   }
@@ -27,11 +25,7 @@ export class FilesPage {
     return this.page.locator(`.oc-resource-link [data-test-resource-name="${resource}"]`)
   }
 
-  async openFileContextMenu(resource: string = '') {
-    if (!resource) {
-      await this.resourceActionDropDownBtn.click()
-      return
-    }
+  async openFileContextMenu(resource: string) {
     const resourceLocator = this.getResourceNameSelector(resource)
     const rowLocator = this.page
       .locator('.has-item-context-menu tr')
@@ -40,8 +34,7 @@ export class FilesPage {
   }
 
   async extractZip(file: string) {
-    const fileLocator = this.getResourceNameSelector(file)
-    await fileLocator.click({ button: 'right' })
+    await this.openFileContextMenu(file)
 
     await Promise.all([
       this.page.waitForResponse(
