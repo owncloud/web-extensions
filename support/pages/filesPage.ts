@@ -9,7 +9,7 @@ export class FilesPage {
   readonly jsonViewerBtn: Locator
   readonly resourceActionDropDownBtn: Locator
   readonly jsonViewerSelector: Locator
-
+  readonly castFileActionBtn: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -20,10 +20,23 @@ export class FilesPage {
     this.jsonViewerBtn = this.page.locator('.oc-files-actions-json-viewer-trigger')
     this.resourceActionDropDownBtn = this.page.locator('.resource-table-btn-action-dropdown')
     this.jsonViewerSelector = this.page.locator('#json-viewer')
+    this.castFileActionBtn = this.page.locator('[data-testid="action-label"] :text-is("Cast")')
   }
 
   getResourceNameSelector(resource: string): Locator {
-    return this.page.locator(`#files-space-table [data-test-resource-name="${resource}"]`);
+    return this.page.locator(`.oc-resource-link [data-test-resource-name="${resource}"]`)
+  }
+
+  async openFileContextMenu(resource: string = '') {
+    if (!resource) {
+      await this.resourceActionDropDownBtn.click()
+      return
+    }
+    const resourceLocator = this.getResourceNameSelector(resource)
+    const rowLocator = this.page
+      .locator('.has-item-context-menu tr')
+      .filter({ has: resourceLocator })
+    await rowLocator.locator('.resource-table-btn-action-dropdown').click()
   }
 
   async extractZip(file: string) {
@@ -51,8 +64,8 @@ export class FilesPage {
     await folderLocator.click()
   }
 
-  async openJsonFile(){
-    await this.resourceActionDropDownBtn.click()
+  async openJsonFile(jsonFIle: string) {
+    await this.openFileContextMenu(jsonFIle)
     await this.jsonViewerBtn.click()
   }
 }

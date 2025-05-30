@@ -1,7 +1,7 @@
 import { test, Page, expect } from '@playwright/test'
 import { FilesAppBar } from '../../../../support/pages/filesAppBarActions'
-import { FilesPage } from '../../../../support/pages/filesPage'
 import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
+import { FilesPage } from '../../../../support/pages/filesPage'
 
 let adminPage: Page
 
@@ -11,16 +11,19 @@ test.beforeEach(async ({ browser }) => {
 })
 
 test.afterEach(async () => {
-  const file = new FilesPage(adminPage)
-  await file.deleteAllFromPersonal()
+  const filesPage = new FilesPage(adminPage)
+  await filesPage.deleteAllFromPersonal()
   await logout(adminPage)
 })
 
-test('open json file', async () => {
+// Issue with firefox, webkit and headless browsers
+// https://github.com/owncloud/web-extensions/issues/187
+// TODO: remove 'fail' when the issue is fixed
+test.fail('check cast file-action', async () => {
   const uploadFile = new FilesAppBar(adminPage)
-  await uploadFile.uploadFile('jsonFile.json')
+  await uploadFile.uploadFile('logo.jpeg')
 
   const filePage = new FilesPage(adminPage)
-  await filePage.openJsonFile('jsonFile.json')
-  await expect(filePage.jsonViewerSelector).toBeVisible()
+  await filePage.openFileContextMenu('logo.jpeg')
+  await expect(filePage.castFileActionBtn).toBeVisible()
 })
