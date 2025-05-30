@@ -454,7 +454,12 @@ def e2eTests(ctx):
             },
         ],
     }]
-    for browser in BROWSERS:
+    for idx, browser in enumerate(BROWSERS):
+        status = ["success"]
+        if idx > 0:
+            # allow other browsers step to run even if one fails
+            status.append("failure")
+
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
@@ -467,6 +472,9 @@ def e2eTests(ctx):
                     "path": "/root/.cache/ms-playwright",
                 },
             ],
+            "when": {
+                "status": status,
+            },
         })
 
     return [{
