@@ -9,7 +9,6 @@ PLUGINS_S3 = "plugins/s3:1.4.0"
 
 path = {
     "base": "/drone/src",
-    "pwBrowsersArchive": "playwright-browsers.tar.gz",
 }
 
 APPS = [
@@ -459,14 +458,12 @@ def logTracingResult(ctx):
     }]
 
 def e2eTests(ctx):
-    depends_on = []
     e2e_test_steps = []
     for idx, browser in enumerate(BROWSERS):
         status = ["success"]
         if idx > 0:
             # allow other browsers step to run even if one fails
             status.append("failure")
-            depends_on.append("e2e-%s" % BROWSERS[idx - 1])
 
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
@@ -477,7 +474,6 @@ def e2eTests(ctx):
             },
             "commands": [
                 # webkit requires additional dependencies
-                "pnpm exec playwright install --with-deps" if browser == "webkit" else "",
                 "pnpm test:e2e --project='%s'" % browser,
             ],
             "when": {
@@ -522,48 +518,22 @@ def installBrowsers():
         "name": "install-browsers",
         "image": OC_CI_NODEJS,
         "environment": {
+            "CACHE_BUCKET": S3_CACHE_BUCKET,
+            "MC_HOST": S3_CACHE_SERVER,
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_s3_secret_key",
+            },
+            "MC_CMD": "./mc",
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "./mc --help",
-            "ls none",
-            "pnpm exec playwright install --with-deps",
-            "tar -czvf %s .playwright" % path["pwBrowsersArchive"],
+            "$MC_CMD alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/",
+            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/",
+            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/1.52.0/",
+            "bash %s/drone/install_browsers.sh" % path["base"],
         ],
     }]
-
-def cacheBrowsers():
-    return [
-        {
-            "name": "upload-browsers-cache",
-            "image": MINIO_MC,
-            "environment": MINIO_ENV,
-            "commands": [
-                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
-                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-                "mc cp -r -a %s/%s s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/$playwright_version/" % (path["base"], path["pwBrowsersArchive"]),
-                "mc ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO",
-            ],
-        },
-    ]
-
-def restoreBrowsersCache():
-    return [
-        {
-            "name": "restore-browsers-cache",
-            "image": MINIO_MC,
-            "environment": MINIO_ENV,
-            "commands": [
-                "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
-                "mc alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-                "mc cp -r -a s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/$playwright_version/%s %s" % (path["pwBrowsersArchive"], path["base"]),
-            ],
-        },
-        {
-            "name": "unzip-browsers-cache",
-            "image": OC_UBUNTU,
-            "commands": [
-                "tar -xvf %s -C ." % path["pwBrowsersArchive"],
-            ],
-        },
-    ]
