@@ -1,4 +1,4 @@
-OC_CI_NODEJS = "owncloudci/nodejs:18"
+OC_CI_NODEJS = "owncloudci/nodejs:20"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 PLUGINS_S3 = "plugins/s3:1.4.0"
@@ -17,16 +17,16 @@ APPS = [
     "unzip",
 ]
 
-E2E_COVERED_APPS = [
-    "draw-io",
-    "unzip",
-    "progress-bars",
-    "json-viewer",
-    "external-sites",
-    "cast",
+BROWSERS = [
+    "chromium",
+    "firefox",
+    "webkit",
 ]
 
 OCIS_URL = "https://ocis:9200"
+
+S3_CACHE_SERVER = "https://cache.owncloud.com"
+S3_PUBLIC_CACHE_BUCKET = "public"
 
 def main(ctx):
     before = beforePipelines(ctx)
@@ -405,12 +405,8 @@ def uploadTracingResult(ctx):
         "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
+            "bucket": S3_PUBLIC_CACHE_BUCKET,
+            "endpoint": S3_CACHE_SERVER,
             "path_style": True,
             "source": "test-results/**/*",
             "strip_prefix": "test-results",
@@ -436,7 +432,7 @@ def logTracingResult(ctx):
         "commands": [
             "cd test-results/",
             'echo "To see the trace, please open the following link in the console"',
-            'for f in */; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f"trace.zip" \n"; done',
+            'for f in */; do echo "npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f"trace.zip" \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
         ],
         "when": {
             "status": ["failure"],
@@ -444,32 +440,39 @@ def logTracingResult(ctx):
     }]
 
 def e2eTests(ctx):
+    depends_on = []
     e2e_test_steps = [{
         "name": "install-browser",
         "image": OC_CI_NODEJS,
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
         "commands": [
-            "pnpm exec playwright install chromium",
-        ],
-        "volumes": [
-            {
-                "name": "playwright-cache",
-                "path": "/root/.cache/ms-playwright",
-            },
+            "pnpm exec playwright install",
         ],
     }]
-    for app in E2E_COVERED_APPS:
+    for idx, browser in enumerate(BROWSERS):
+        status = ["success"]
+        if idx > 0:
+            # allow other browsers step to run even if one fails
+            status.append("failure")
+            depends_on.append("e2e-%s" % BROWSERS[idx - 1])
+
         e2e_test_steps.append({
-            "name": app,
+            "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
+            "environment": {
+                "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                "BASE_URL_OCIS": OCIS_URL,
+            },
             "commands": [
-                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s-chromium'" % (OCIS_URL, app),
+                # webkit requires additional dependencies
+                "pnpm exec playwright install --with-deps" if browser == "webkit" else "",
+                "pnpm test:e2e --project='%s'" % browser,
             ],
-            "volumes": [
-                {
-                    "name": "playwright-cache",
-                    "path": "/root/.cache/ms-playwright",
-                },
-            ],
+            "when": {
+                "status": status,
+            },
         })
 
     return [{
@@ -488,10 +491,6 @@ def e2eTests(ctx):
         "volumes": [
             {
                 "name": "apps",
-                "temp": {},
-            },
-            {
-                "name": "playwright-cache",
                 "temp": {},
             },
         ],
