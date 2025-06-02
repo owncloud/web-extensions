@@ -1,4 +1,4 @@
-OC_CI_NODEJS = "owncloudci/nodejs:18"
+OC_CI_NODEJS = "owncloudci/nodejs:20"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 PLUGINS_S3 = "plugins/s3:1.4.0"
@@ -445,7 +445,7 @@ def e2eTests(ctx):
         "name": "install-browser",
         "image": OC_CI_NODEJS,
         "commands": [
-            "pnpm exec playwright install",
+            "pnpm exec playwright install --with-deps",
         ],
         "volumes": [
             {
@@ -454,11 +454,13 @@ def e2eTests(ctx):
             },
         ],
     }]
+    depends_on = []
     for idx, browser in enumerate(BROWSERS):
         status = ["success"]
         if idx > 0:
             # allow other browsers step to run even if one fails
             status.append("failure")
+            depends_on.append("e2e-%s" % BROWSERS[idx - 1])
 
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
