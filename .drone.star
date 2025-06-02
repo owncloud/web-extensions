@@ -440,6 +440,7 @@ def logTracingResult(ctx):
     }]
 
 def e2eTests(ctx):
+    depends_on = []
     e2e_test_steps = [{
         "name": "install-browser",
         "image": OC_CI_NODEJS,
@@ -447,10 +448,9 @@ def e2eTests(ctx):
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
-            "pnpm exec playwright install --with-deps",
+            "pnpm exec playwright install",
         ],
     }]
-    depends_on = []
     for idx, browser in enumerate(BROWSERS):
         status = ["success"]
         if idx > 0:
@@ -466,7 +466,8 @@ def e2eTests(ctx):
                 "BASE_URL_OCIS": OCIS_URL,
             },
             "commands": [
-                "apt update && apt install libxslt1.1 -y" if browser == "webkit" else "",
+                # webkit requires additional dependencies
+                "pnpm exec playwright install --with-deps" if browser == "webkit" else "",
                 "pnpm test:e2e --project='%s'" % browser,
             ],
             "when": {
