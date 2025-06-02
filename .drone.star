@@ -18,7 +18,7 @@ APPS = [
 ]
 
 BROWSERS = [
-    "chrome",
+    "chromium",
     "firefox",
     "webkit",
 ]
@@ -432,7 +432,7 @@ def logTracingResult(ctx):
         "commands": [
             "cd test-results/",
             'echo "To see the trace, please open the following link in the console"',
-            'for f in */; do echo "npx playwright show-trace https://cache.owncloud.com/public/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f"trace.zip" \n"; done',
+            'for f in */; do echo "npx playwright show-trace %s/%s/${DRONE_REPO}/${DRONE_BUILD_NUMBER}/tracing/$f"trace.zip" \n"; done' % (S3_CACHE_SERVER, S3_PUBLIC_CACHE_BUCKET),
         ],
         "when": {
             "status": ["failure"],
@@ -443,14 +443,11 @@ def e2eTests(ctx):
     e2e_test_steps = [{
         "name": "install-browser",
         "image": OC_CI_NODEJS,
+        "environment": {
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
         "commands": [
             "pnpm exec playwright install --with-deps",
-        ],
-        "volumes": [
-            {
-                "name": "playwright-cache",
-                "path": "/root/.cache/ms-playwright",
-            },
         ],
     }]
     depends_on = []
@@ -464,14 +461,13 @@ def e2eTests(ctx):
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
+            "environment": {
+                "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+                "BASE_URL_OCIS": OCIS_URL,
+            },
             "commands": [
-                "BASE_URL_OCIS=%s pnpm test:e2e --project='%s'" % (OCIS_URL, browser),
-            ],
-            "volumes": [
-                {
-                    "name": "playwright-cache",
-                    "path": "/root/.cache/ms-playwright",
-                },
+                "apt update && apt install libxslt1.1 -y" if browser == "webkit" else "",
+                "pnpm test:e2e --project='%s'" % browser,
             ],
             "when": {
                 "status": status,
@@ -494,10 +490,6 @@ def e2eTests(ctx):
         "volumes": [
             {
                 "name": "apps",
-                "temp": {},
-            },
-            {
-                "name": "playwright-cache",
                 "temp": {},
             },
         ],
