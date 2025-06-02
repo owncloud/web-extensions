@@ -1,4 +1,4 @@
-MINIO_MC_IMAGE = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
+MINIO_MC = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
 OC_CI_NODEJS = "owncloudci/nodejs:20"
@@ -47,6 +47,7 @@ MINIO_ENV = {
 }
 
 def main(ctx):
+    return e2eTests(ctx)
     before = beforePipelines(ctx)
 
     stages = pipelinesDependsOn(stagePipelines(ctx), before)
@@ -459,6 +460,7 @@ def logTracingResult(ctx):
 
 def e2eTests(ctx):
     depends_on = []
+    e2e_test_steps = []
     for idx, browser in enumerate(BROWSERS):
         status = ["success"]
         if idx > 0:
@@ -487,7 +489,7 @@ def e2eTests(ctx):
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-tests",
-        "steps": installPnpm() + ocisService() + installBrowsers() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
+        "steps": installPnpm() + ocisService() + installMinioClient() + installBrowsers() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
@@ -504,6 +506,17 @@ def e2eTests(ctx):
         ],
     }]
 
+def installMinioClient():
+    return [
+        {
+            "name": "install-minio-client",
+            "image": MINIO_MC,
+            "commands": [
+                "mv /usr/bin/mc %s/mc" % path["base"],
+            ],
+        },
+    ]
+
 def installBrowsers():
     return [{
         "name": "install-browsers",
@@ -512,6 +525,8 @@ def installBrowsers():
             "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
         },
         "commands": [
+            "./mc --help",
+            "ls none",
             "pnpm exec playwright install --with-deps",
             "tar -czvf %s .playwright" % path["pwBrowsersArchive"],
         ],
@@ -521,7 +536,7 @@ def cacheBrowsers():
     return [
         {
             "name": "upload-browsers-cache",
-            "image": MINIO_MC_IMAGE,
+            "image": MINIO_MC,
             "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
@@ -536,7 +551,7 @@ def restoreBrowsersCache():
     return [
         {
             "name": "restore-browsers-cache",
-            "image": MINIO_MC_IMAGE,
+            "image": MINIO_MC,
             "environment": MINIO_ENV,
             "commands": [
                 "playwright_version=$(bash tests/drone/script.sh get_playwright_version)",
@@ -546,7 +561,7 @@ def restoreBrowsersCache():
         },
         {
             "name": "unzip-browsers-cache",
-            "image": OC_UBUNTU_IMAGE,
+            "image": OC_UBUNTU,
             "commands": [
                 "tar -xvf %s -C ." % path["pwBrowsersArchive"],
             ],
