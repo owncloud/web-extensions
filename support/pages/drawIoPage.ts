@@ -8,7 +8,7 @@ export class DrawIoPage {
 
   constructor(page: Page) {
     this.page = page
-    this.frameLocator = this.page.locator('iframe[title="Draw\\.io editor"]').contentFrame()
+    this.frameLocator = this.page.frameLocator('iframe[title="Draw\\.io editor"]')
     this.saveBtn = this.frameLocator.getByRole('button', { name: 'Save' })
     this.closeBtn = this.page.getByLabel('Close')
   }

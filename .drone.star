@@ -25,6 +25,9 @@ BROWSERS = [
 
 OCIS_URL = "https://ocis:9200"
 
+S3_CACHE_SERVER = "https://cache.owncloud.com"
+S3_PUBLIC_CACHE_BUCKET = "public"
+
 def main(ctx):
     before = beforePipelines(ctx)
 
@@ -402,12 +405,8 @@ def uploadTracingResult(ctx):
         "image": PLUGINS_S3,
         "pull": "if-not-exists",
         "settings": {
-            "bucket": {
-                "from_secret": "cache_public_s3_bucket",
-            },
-            "endpoint": {
-                "from_secret": "cache_public_s3_server",
-            },
+            "bucket": S3_PUBLIC_CACHE_BUCKET,
+            "endpoint": S3_CACHE_SERVER,
             "path_style": True,
             "source": "test-results/**/*",
             "strip_prefix": "test-results",

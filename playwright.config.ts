@@ -37,7 +37,7 @@ export default defineConfig({
     {
       name: 'chrome',
       testMatch: '**/e2e/*.spec.ts',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome', ignoreHTTPSErrors: true }
+      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
     },
     {
       name: 'firefox',
