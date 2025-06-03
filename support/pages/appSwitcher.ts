@@ -25,6 +25,7 @@ export class AppSwitcher {
       ),
       this.drawIoBtn.click()
     ])
+    await this.page.locator('lol').waitFor({ timeout: 2000 })
   }
 
   async openExternalSites(externalSitesName: string, mode: 'embedded' | 'external') {
