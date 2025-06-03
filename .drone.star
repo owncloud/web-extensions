@@ -33,20 +33,7 @@ S3_CACHE_SERVER = "https://cache.owncloud.com"
 S3_CACHE_BUCKET = "cache"
 S3_PUBLIC_CACHE_BUCKET = "public"
 
-# minio environment variables
-MINIO_ENV = {
-    "CACHE_BUCKET": S3_CACHE_BUCKET,
-    "MC_HOST": S3_CACHE_SERVER,
-    "AWS_ACCESS_KEY_ID": {
-        "from_secret": "cache_s3_access_key",
-    },
-    "AWS_SECRET_ACCESS_KEY": {
-        "from_secret": "cache_s3_secret_key",
-    },
-}
-
 def main(ctx):
-    return e2eTests(ctx)
     before = beforePipelines(ctx)
 
     stages = pipelinesDependsOn(stagePipelines(ctx), before)
@@ -460,11 +447,6 @@ def logTracingResult(ctx):
 def e2eTests(ctx):
     e2e_test_steps = []
     for idx, browser in enumerate(BROWSERS):
-        status = ["success"]
-        if idx > 0:
-            # allow other browsers step to run even if one fails
-            status.append("failure")
-
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
@@ -473,12 +455,10 @@ def e2eTests(ctx):
                 "BASE_URL_OCIS": OCIS_URL,
             },
             "commands": [
-                # webkit requires additional dependencies
+                # webkit requires to install system dependencies again
+                "pnpm exec playwright install --with-deps" if browser == "webkit" else "",
                 "pnpm test:e2e --project='%s'" % browser,
             ],
-            "when": {
-                "status": status,
-            },
         })
 
     return [{
@@ -531,9 +511,7 @@ def installBrowsers():
         },
         "commands": [
             "$MC_CMD alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
-            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/",
-            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/",
-            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO/browsers-cache/1.52.0/",
+            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO_NAME",
             "bash %s/drone/install_browsers.sh" % path["base"],
         ],
     }]
