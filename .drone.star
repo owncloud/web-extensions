@@ -1,11 +1,15 @@
-OC_CI_NODEJS = "owncloudci/nodejs:20"
-OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
+MINIO_MC = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
-PLUGINS_S3 = "plugins/s3:1.4.0"
+OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
+OC_CI_NODEJS = "owncloudci/nodejs:20"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
-
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
+PLUGINS_S3 = "plugins/s3:1.4.0"
+
+path = {
+    "base": "/drone/src",
+}
 
 APPS = [
     "cast",
@@ -26,6 +30,7 @@ BROWSERS = [
 OCIS_URL = "https://ocis:9200"
 
 S3_CACHE_SERVER = "https://cache.owncloud.com"
+S3_CACHE_BUCKET = "cache"
 S3_PUBLIC_CACHE_BUCKET = "public"
 
 def main(ctx):
@@ -440,24 +445,8 @@ def logTracingResult(ctx):
     }]
 
 def e2eTests(ctx):
-    depends_on = []
-    e2e_test_steps = [{
-        "name": "install-browser",
-        "image": OC_CI_NODEJS,
-        "environment": {
-            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
-        },
-        "commands": [
-            "pnpm exec playwright install",
-        ],
-    }]
+    e2e_test_steps = []
     for idx, browser in enumerate(BROWSERS):
-        status = ["success"]
-        if idx > 0:
-            # allow other browsers step to run even if one fails
-            status.append("failure")
-            depends_on.append("e2e-%s" % BROWSERS[idx - 1])
-
         e2e_test_steps.append({
             "name": "e2e-%s" % browser,
             "image": OC_CI_NODEJS,
@@ -466,20 +455,17 @@ def e2eTests(ctx):
                 "BASE_URL_OCIS": OCIS_URL,
             },
             "commands": [
-                # webkit requires additional dependencies
+                # webkit requires to install system dependencies again
                 "pnpm exec playwright install --with-deps" if browser == "webkit" else "",
                 "pnpm test:e2e --project='%s'" % browser,
             ],
-            "when": {
-                "status": status,
-            },
         })
 
     return [{
         "kind": "pipeline",
         "type": "docker",
         "name": "e2e-tests",
-        "steps": installPnpm() + ocisService() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
+        "steps": installPnpm() + ocisService() + installMinioClient() + installBrowsers() + e2e_test_steps + uploadTracingResult(ctx) + logTracingResult(ctx),
         "trigger": {
             "ref": [
                 "refs/heads/main",
@@ -493,5 +479,39 @@ def e2eTests(ctx):
                 "name": "apps",
                 "temp": {},
             },
+        ],
+    }]
+
+def installMinioClient():
+    return [
+        {
+            "name": "install-minio-client",
+            "image": MINIO_MC,
+            "commands": [
+                "mv /usr/bin/mc %s/mc" % path["base"],
+            ],
+        },
+    ]
+
+def installBrowsers():
+    return [{
+        "name": "install-browsers",
+        "image": OC_CI_NODEJS,
+        "environment": {
+            "CACHE_BUCKET": S3_CACHE_BUCKET,
+            "MC_HOST": S3_CACHE_SERVER,
+            "AWS_ACCESS_KEY_ID": {
+                "from_secret": "cache_s3_access_key",
+            },
+            "AWS_SECRET_ACCESS_KEY": {
+                "from_secret": "cache_s3_secret_key",
+            },
+            "MC_CMD": "./mc",
+            "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
+        },
+        "commands": [
+            "$MC_CMD alias set s3 $MC_HOST $AWS_ACCESS_KEY_ID $AWS_SECRET_ACCESS_KEY",
+            "$MC_CMD ls --recursive s3/$CACHE_BUCKET/$DRONE_REPO_NAME",
+            "bash %s/drone/install_browsers.sh" % path["base"],
         ],
     }]
