@@ -14,6 +14,15 @@ export class DrawIoPage {
   }
 
   async addContent() {
+    // toggle sidebar
+    await this.frameLocator.locator('.geToolbar > a.geButton').first().click()
+    const meuItemLocator = this.frameLocator.locator('tr.mxPopupMenuItem :text-is("Shapes")')
+    if (!(await meuItemLocator.locator('div').isVisible())) {
+      await meuItemLocator.click()
+    } else {
+      // close the menu
+      await this.frameLocator.locator('.geToolbar > a.geButton').first().click()
+    }
     await this.frameLocator.locator('.geSidebar > a.geItem').first().click()
     await this.frameLocator.locator('.geDiagramContainer > svg').click()
   }
