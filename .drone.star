@@ -22,7 +22,7 @@ APPS = [
 ]
 
 BROWSERS = [
-    "chromium",
+    "chrome",
     "firefox",
     "webkit",
 ]

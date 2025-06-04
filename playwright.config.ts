@@ -35,9 +35,9 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'chrome',
       testMatch: '**/e2e/*.spec.ts',
-      use: { ...devices['Desktop Chrome'], browserName: 'chromium', ignoreHTTPSErrors: true }
+      use: { ...devices['Desktop Chrome'], channel: 'chrome', ignoreHTTPSErrors: true }
     },
     {
       name: 'firefox',
