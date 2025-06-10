@@ -25,7 +25,7 @@ importers:
         version: 0.0.6
       '@ownclouders/web-test-helpers':
         specifier: ^11.0.0
-        version: 11.0.4(@ownclouders/web-pkg@11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(@vue/compiler-sfc@3.5.13)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))(vue@3.5.13(typescript@5.6.3))
+        version: 11.0.4(@ownclouders/web-pkg@11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(@vue/compiler-sfc@3.5.13)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7))(vue@3.5.13(typescript@5.6.3))
       '@playwright/test':
         specifier: 1.52.0
         version: 1.52.0
@@ -39,8 +39,8 @@ importers:
         specifier: 9.15.0
         version: 9.15.0
       happy-dom:
-        specifier: ^17.0.0
-        version: 17.1.0
+        specifier: ^18.0.0
+        version: 18.0.1
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -55,10 +55,10 @@ importers:
         version: 6.1.6(@types/node@22.9.1)(sass@1.80.7)
       vitest:
         specifier: 3.0.5
-        version: 3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)
+        version: 3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7)
       vitest-mock-extended:
         specifier: 3.0.1
-        version: 3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))
+        version: 3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7))
       vue-tsc:
         specifier: 2.1.10
         version: 2.1.10(typescript@5.6.3)
@@ -977,6 +977,9 @@ packages:
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
 
+  '@types/node@20.19.0':
+    resolution: {integrity: sha512-hfrc+1tud1xcdVTABC2JiomZJEklMcXYNTVtZLAeqTVWD+qL5jkHKT+1lOtqDdGxt+mB53DTtiz673vfjU8D1Q==}
+
   '@types/node@22.9.1':
     resolution: {integrity: sha512-p8Yy/8sw1caA8CdRIQBG5tiLHmxtQKObCijiAa9Ez+d4+PRffM4054xbju0msf+cvhJpnFEeNjxmVT/0ipktrg==}
 
@@ -997,6 +1000,9 @@ packages:
 
   '@types/web-bluetooth@0.0.21':
     resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
+
+  '@types/whatwg-mimetype@3.0.2':
+    resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
 
   '@typescript-eslint/eslint-plugin@8.15.0':
     resolution: {integrity: sha512-+zkm9AR1Ds9uLWN3fkoeXgFppaQ+uEVtfOV62dDmsy9QCNqlRHWNEck4yarvRNrvRcHQLGfqBNui3cimoz8XAg==}
@@ -1912,9 +1918,9 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  happy-dom@17.1.0:
-    resolution: {integrity: sha512-9tUhXyePCjzUMycaHS/IzrIpF69xiq/laAT7golk4MtZ6t8ft5+Rv7U3lfrs2b4NMH0JTL3EhZzjfahrPmOnaQ==}
-    engines: {node: '>=18.0.0'}
+  happy-dom@18.0.1:
+    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+    engines: {node: '>=20.0.0'}
 
   has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
@@ -2713,6 +2719,9 @@ packages:
   undici-types@6.19.8:
     resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
     hasBin: true
@@ -2913,10 +2922,6 @@ packages:
 
   webfontloader@1.6.28:
     resolution: {integrity: sha512-Egb0oFEga6f+nSgasH3E0M405Pzn6y3/9tOVanv/DLfa1YBIgcv90L18YyWnvXkRbIM17v5Kv6IT2N6g1x5tvQ==}
-
-  webidl-conversions@7.0.0:
-    resolution: {integrity: sha512-VwddBukDzu71offAQR975unBIGqfKZpM+8ZX6ySk8nYhVoo5CYaZyzt3YBvYtRtO+aoGlqxPg/B87NGVZ/fu6g==}
-    engines: {node: '>=12'}
 
   whatwg-mimetype@3.0.0:
     resolution: {integrity: sha512-nt+N2dzIutVRxARx1nghPKGv1xHikU7HKdfafKkLNLindmPU/ch3U31NOCGGA/dmPcmb1VlofO0vnKAcsm0o/Q==}
@@ -3496,7 +3501,7 @@ snapshots:
       - typescript
       - vue
 
-  '@ownclouders/web-test-helpers@11.0.4(@ownclouders/web-pkg@11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(@vue/compiler-sfc@3.5.13)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))(vue@3.5.13(typescript@5.6.3))':
+  '@ownclouders/web-test-helpers@11.0.4(@ownclouders/web-pkg@11.0.4(@vue/compiler-sfc@3.5.13)(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3)))(@vue/compiler-sfc@3.5.13)(@vue/test-utils@2.4.6)(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7))(vue@3.5.13(typescript@5.6.3))':
     dependencies:
       '@casl/ability': 6.7.2
       '@casl/vue': 2.2.2(@casl/ability@6.7.2)(vue@3.5.13(typescript@5.6.3))
@@ -3507,7 +3512,7 @@ snapshots:
       '@vue/test-utils': 2.4.6
       axios: 1.7.7
       pinia: 2.2.6(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
-      vitest-mock-extended: 2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7))
+      vitest-mock-extended: 2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7))
       vue: 3.5.13(typescript@5.6.3)
       vue-router: 4.2.5(vue@3.5.13(typescript@5.6.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.13)(vue@3.5.13(typescript@5.6.3))
@@ -3782,6 +3787,10 @@ snapshots:
 
   '@types/minimatch@5.1.2': {}
 
+  '@types/node@20.19.0':
+    dependencies:
+      undici-types: 6.21.0
+
   '@types/node@22.9.1':
     dependencies:
       undici-types: 6.19.8
@@ -3798,6 +3807,8 @@ snapshots:
   '@types/web-bluetooth@0.0.20': {}
 
   '@types/web-bluetooth@0.0.21': {}
+
+  '@types/whatwg-mimetype@3.0.2': {}
 
   '@typescript-eslint/eslint-plugin@8.15.0(@typescript-eslint/parser@8.15.0(eslint@9.15.0)(typescript@5.6.3))(eslint@9.15.0)(typescript@5.6.3)':
     dependencies:
@@ -4844,9 +4855,10 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  happy-dom@17.1.0:
+  happy-dom@18.0.1:
     dependencies:
-      webidl-conversions: 7.0.0
+      '@types/node': 20.19.0
+      '@types/whatwg-mimetype': 3.0.2
       whatwg-mimetype: 3.0.0
 
   has-flag@4.0.0: {}
@@ -5560,6 +5572,8 @@ snapshots:
 
   undici-types@6.19.8: {}
 
+  undici-types@6.21.0: {}
+
   update-browserslist-db@1.1.3(browserslist@4.24.4):
     dependencies:
       browserslist: 4.24.4
@@ -5647,19 +5661,19 @@ snapshots:
       fsevents: 2.3.3
       sass: 1.80.7
 
-  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)):
+  vitest-mock-extended@2.0.2(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7)):
     dependencies:
       ts-essentials: 10.0.3(typescript@5.6.3)
       typescript: 5.6.3
-      vitest: 3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)
+      vitest: 3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7)
 
-  vitest-mock-extended@3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)):
+  vitest-mock-extended@3.0.1(typescript@5.6.3)(vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7)):
     dependencies:
       ts-essentials: 10.0.3(typescript@5.6.3)
       typescript: 5.6.3
-      vitest: 3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7)
+      vitest: 3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7)
 
-  vitest@3.0.5(@types/node@22.9.1)(happy-dom@17.1.0)(sass@1.80.7):
+  vitest@3.0.5(@types/node@22.9.1)(happy-dom@18.0.1)(sass@1.80.7):
     dependencies:
       '@vitest/expect': 3.0.5
       '@vitest/mocker': 3.0.5(vite@6.1.6(@types/node@22.9.1)(sass@1.80.7))
@@ -5683,7 +5697,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.9.1
-      happy-dom: 17.1.0
+      happy-dom: 18.0.1
     transitivePeerDependencies:
       - jiti
       - less
@@ -5795,8 +5809,6 @@ snapshots:
       url-parse: 1.5.10
 
   webfontloader@1.6.28: {}
-
-  webidl-conversions@7.0.0: {}
 
   whatwg-mimetype@3.0.0: {}
 
