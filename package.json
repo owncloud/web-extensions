@@ -16,7 +16,7 @@
     "test:e2e": "pnpm playwright test"
   },
   "devDependencies": {
-    "@ownclouders/eslint-config": "^11.0.0",
+    "@ownclouders/eslint-config": "^12.0.0",
     "@ownclouders/extension-sdk": "^11.0.0",
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
