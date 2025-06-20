@@ -13,7 +13,7 @@ export class FilesAppBar {
     this.page = page
     this.uploadBtn = this.page.locator('#upload-menu-btn')
     this.uploadFileBtn = this.page.locator('#files-file-upload-input')
-    this.closeUploadDialogBtn = this.page.locator('#close-upload-info-btn')
+    this.closeUploadDialogBtn = this.page.locator('#close-upload-bar-btn')
     this.newResourceContextMenu = this.page.locator('#upload-menu-drop')
     this.uploadResourceContextMenu = this.page.locator('#new-file-menu-drop')
   }
