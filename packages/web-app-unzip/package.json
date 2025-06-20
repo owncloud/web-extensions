@@ -12,11 +12,13 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
+    "@ownclouders/web-client": "^12.0.3",
+    "@ownclouders/web-pkg": "^12.0.3",
     "@zip.js/zip.js": "2.7.62"
   },
   "devDependencies": {
-    "@ownclouders/web-client": "^12.0.0",
-    "@ownclouders/web-pkg": "^11.0.0",
+    "@ownclouders/extension-sdk": "^12.0.3",
+    "@ownclouders/web-test-helpers": "^12.0.3",
     "@uppy/core": "^4.0.0",
     "p-queue": "^8.0.0",
     "uuid": "^11.0.0",

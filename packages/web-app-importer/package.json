@@ -12,16 +12,18 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@uppy/dashboard": "4.1.3",
-    "@uppy/google-drive": "4.2.0",
-    "@uppy/onedrive": "4.1.2",
-    "@uppy/webdav": "0.1.0"
+    "@ownclouders/web-client": "^12.0.3",
+    "@ownclouders/web-pkg": "^12.0.3",
+    "@uppy/dashboard": "^4.3.4",
+    "@uppy/google-drive": "^4.3.3",
+    "@uppy/onedrive": "^4.2.4",
+    "@uppy/webdav": "0.3.3",
+    "pinia": "^3.0.3"
   },
   "devDependencies": {
-    "@ownclouders/web-client": "^12.0.0",
-    "@ownclouders/web-pkg": "^11.0.0",
-    "@uppy/core": "^3.3.0",
-    "pinia": "^2.2.6",
+    "@ownclouders/extension-sdk": "^12.0.3",
+    "@ownclouders/web-test-helpers": "^12.0.3",
+    "@uppy/core": "^4.4.6",
     "vue": "^3.4.21",
     "vue3-gettext": "^2.4.0"
   }
