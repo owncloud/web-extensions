@@ -1,6 +1,5 @@
 {
   "name": "web-extensions",
-  "version": "0.0.0",
   "description": "Collection of ownCloud Web Extensions",
   "license": "AGPL-3.0",
   "author": "ownCloud",
