@@ -234,8 +234,8 @@ importers:
         specifier: ^12.0.3
         version: 12.0.3(@vue/compiler-sfc@3.5.17)(typescript@5.8.3)(vue@3.5.17(typescript@5.8.3))
       '@zip.js/zip.js':
-        specifier: 2.7.64
-        version: 2.7.64
+        specifier: 2.7.68
+        version: 2.7.68
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.0.3
@@ -1534,8 +1534,8 @@ packages:
     peerDependencies:
       vue: ^3.5.0
 
-  '@zip.js/zip.js@2.7.64':
-    resolution: {integrity: sha512-x6BDiDTKeZWbeHgHlVzV1sqReGuz4b1R4cVStUDua8OSq4bRreZeiJKPFFlvJs67FvCnetq33aYb/XH73EQhdA==}
+  '@zip.js/zip.js@2.7.68':
+    resolution: {integrity: sha512-HkabH6ThvDh1btwLbJiLFXzUW4fNN0leoYiopCg03OWg394j8NSb/Mro4i5J0S9ZLTwbBUpFrx86TzDXQRlT4Q==}
     engines: {bun: '>=0.7.0', deno: '>=1.0.0', node: '>=16.5.0'}
 
   abbrev@2.0.0:
@@ -5265,7 +5265,7 @@ snapshots:
     dependencies:
       vue: 3.5.17(typescript@5.8.3)
 
-  '@zip.js/zip.js@2.7.64': {}
+  '@zip.js/zip.js@2.7.68': {}
 
   abbrev@2.0.0: {}
 
