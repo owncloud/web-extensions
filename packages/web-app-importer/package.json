@@ -17,7 +17,7 @@
     "@uppy/dashboard": "^4.3.4",
     "@uppy/google-drive": "^4.3.3",
     "@uppy/onedrive": "^4.2.4",
-    "@uppy/webdav": "0.3.3",
+    "@uppy/webdav": "0.4.2",
     "pinia": "^3.0.3"
   },
   "devDependencies": {
