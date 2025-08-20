@@ -8,7 +8,7 @@ describe('external sites app', () => {
     const { wrapper } = createWrapper({ name, url })
 
     expect(wrapper.find('iFrame').attributes('title')).equal(name)
-    expect(wrapper.find('iFrame').attributes('src').startsWith(url)).toBeTruthy()
+    expect(new URL(wrapper.find('iFrame').attributes('src')).host).toEqual(new URL(url).host)
   })
 })
 

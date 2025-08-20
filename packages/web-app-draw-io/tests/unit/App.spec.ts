@@ -8,7 +8,8 @@ describe('Draw.io app', () => {
   it('uses the url from the app config as base iFrame url', () => {
     const url = 'https://foo.bar'
     const { wrapper } = createWrapper({ url })
-    expect(wrapper.find('iFrame').attributes('src').startsWith(url)).toBeTruthy()
+    const src = wrapper.find('iFrame').attributes('src');
+    expect(new URL(src).host).toBe(new URL(url).host);
   })
 })
 
