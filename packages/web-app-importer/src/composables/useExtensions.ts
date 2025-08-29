@@ -9,7 +9,7 @@ import {
   useThemeStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import '@uppy/dashboard/dist/style.min.css'
+import '@uppy/dashboard/css/style.min.css'
 import Webdav from '@uppy/webdav'
 import { storeToRefs } from 'pinia'
 import { useGettext } from 'vue3-gettext'
