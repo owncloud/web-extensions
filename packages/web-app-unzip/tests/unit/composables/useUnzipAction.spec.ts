@@ -75,9 +75,13 @@ describe('unzip action', () => {
     it('shows an error message if extraction fails', () => {
       const zipEntry = mock<zip.Entry>({
         encrypted: false,
-        filename: 'filename',
+        filename: 'filename'
+      })
+      const zipWriterMock = mock<zip.BlobWriter>({
         getData: () => Promise.reject()
       })
+
+      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
 
       getWrapper({
         zipEntries: [zipEntry],
@@ -94,9 +98,13 @@ describe('unzip action', () => {
       const zipBlob = new Blob()
       const zipEntry = mock<zip.Entry>({
         encrypted: false,
-        filename: 'filename',
-        getData: () => Promise.resolve<any>(zipBlob)
+        filename: 'filename'
       })
+      const zipWriterMock = mock<zip.BlobWriter>({
+        getData: () => Promise.resolve(zipBlob)
+      })
+
+      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
 
       getWrapper({
         zipEntries: [zipEntry],
