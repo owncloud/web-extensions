@@ -32,7 +32,7 @@
     "vue-tsc": "3.0.6",
     "vue3-gettext": "^2.4.0"
   },
-  "packageManager": "pnpm@10.15.1",
+  "packageManager": "pnpm@10.16.1",
   "pnpm": {
     "overrides": {
       "jsonpath-plus": "10.3.0"
