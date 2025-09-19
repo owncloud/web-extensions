@@ -91,7 +91,7 @@ export const useUnzipAction = () => {
         .map<Promise<OcUppyFile | void>>((result) => {
           const writer = new zip.BlobWriter()
           return queue.add(() =>
-            writer.getData().then((data) => {
+            (result as zip.FileEntry).getData(writer).then((data) => {
               const path = dirname(result.filename)
               const name =
                 path === '.' ? result.filename : result.filename.substring(path.length + 1)
