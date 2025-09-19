@@ -148,16 +148,16 @@ importers:
         version: 12.0.3(@vue/compiler-sfc@3.5.21)(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
       '@uppy/dashboard':
         specifier: ^5.0.0
-        version: 5.0.1(@uppy/core@5.0.2)
+        version: 5.0.2(@uppy/core@5.0.2)
       '@uppy/google-drive':
         specifier: ^5.0.0
-        version: 5.0.0(@uppy/core@5.0.2)
+        version: 5.0.1(@uppy/core@5.0.2)
       '@uppy/onedrive':
         specifier: ^5.0.0
-        version: 5.0.0(@uppy/core@5.0.2)
+        version: 5.0.1(@uppy/core@5.0.2)
       '@uppy/webdav':
-        specifier: 1.0.0
-        version: 1.0.0(@uppy/core@5.0.2)
+        specifier: 1.0.1
+        version: 1.0.1(@uppy/core@5.0.2)
       pinia:
         specifier: ^3.0.3
         version: 3.0.3(typescript@5.9.2)(vue@3.5.21(typescript@5.9.2))
@@ -1345,10 +1345,10 @@ packages:
     peerDependencies:
       '@uppy/core': ^4.5.2
 
-  '@uppy/companion-client@5.0.0':
-    resolution: {integrity: sha512-sI8AP5+mhi2HRuXFUGt2tJoIZqzHmznrPn8AdI2B/ny81upLvb5/Zo0BszlleK5iD7Wyxcn0hkBn/HQI73mcjA==}
+  '@uppy/companion-client@5.0.1':
+    resolution: {integrity: sha512-Gy4NCoj5JXQqm6Gr0T6VTeKVhrf8OvnFP1Ddz35dHUsy4GkXuvcc1FMzzKpxKWONtXWz6iQZocnhslgVIZvZwQ==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
   '@uppy/core@4.4.6':
     resolution: {integrity: sha512-EH5C5TSwY3tXp/gl4SPTpcxzEjBz8Ntt1o1s/v03bw8AUTl7X0lGUWRepbCh/XIUJyBTMJ1O+4Uv4/164WQSLg==}
@@ -1356,30 +1356,30 @@ packages:
   '@uppy/core@5.0.2':
     resolution: {integrity: sha512-HY1IIr5Xff6P67MMSlG8JIgK099zFGksTnS8oBdFOGt+42ge7b6RXPH1zMerpteTLGqVfVT1kOrJLoJyTvT+NA==}
 
-  '@uppy/dashboard@5.0.1':
-    resolution: {integrity: sha512-AamgqwlLakPA4I2V51OOiwkv35B6SGXmg/++oVr1JS3IiWXDVHTznzqARxd9npvrcxE0tq4cA5bCEooXmQC8Cw==}
+  '@uppy/dashboard@5.0.2':
+    resolution: {integrity: sha512-mW/bl4w1W3AUFpNHup0jJG+rAdavROyvVdLjXIr3az1Q2Hzu2IN0HgCpeVD4YEUhdLB6ToRYY4z91gyoRSZdQg==}
     peerDependencies:
-      '@uppy/core': ^5.0.1
+      '@uppy/core': ^5.0.2
 
   '@uppy/drop-target@3.1.1':
     resolution: {integrity: sha512-/2jnQ3DqfcWGjgoasLBLvwJ3fozavwSXFVULenDmPUI8YPjuxmEtOu61XnZ/OLhRnZo6Qm+kltSd+YUS0P/LNA==}
     peerDependencies:
       '@uppy/core': ^4.4.1
 
-  '@uppy/google-drive@5.0.0':
-    resolution: {integrity: sha512-KwusGTS4NvkwLDQ685fcfCosNsXeAdAq2TPOJJGSoHaMcRaYvbfciOoX5i5iRTK7NWch1AL6lx09xEFdxc7y6g==}
+  '@uppy/google-drive@5.0.1':
+    resolution: {integrity: sha512-UkX322Z6V8P2/F+NH+v2APzEAtJJNH5bMBgTzk4v2oyAMFTL1wxkOm+/K8HGhwEOLiU3ta5JvXwuvVlC2uU49A==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
-  '@uppy/onedrive@5.0.0':
-    resolution: {integrity: sha512-HT21O7rwenaMt+2Wrqs811k8tANKUYiuHkgeY/TvIbs2J2q51LWmPOxNUvToOxx01TT2y9mvUjvydapm/7O/+w==}
+  '@uppy/onedrive@5.0.1':
+    resolution: {integrity: sha512-jvTy7CE+M2SMRDH/b8RYB4vQb+BMloIdC1vEw3tNh9UyKpPWJjKCwSUk2sqCu1cT9Qv5bNgvU0/GOKxsZkv2tA==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
-  '@uppy/provider-views@5.0.1':
-    resolution: {integrity: sha512-kwOjJgQUFr+cCZkKRpkAeql2fiVZKWYj/9FgbvF7abtwm9tVp9r80P10jyYLUpbCZyvAwvvomLEXBKm2Qdf+Dw==}
+  '@uppy/provider-views@5.0.2':
+    resolution: {integrity: sha512-RaO/Gfq8kLA95s9n2kxAthiBcmLXocR+YiOhQ8H8DG1rA4aM2GllK7+b4KL1OLlg2tMHohs++qzaInCtb7br9g==}
     peerDependencies:
-      '@uppy/core': ^5.0.1
+      '@uppy/core': ^5.0.2
 
   '@uppy/store-default@4.3.2':
     resolution: {integrity: sha512-dnY9R2o8fwmO1bF89D0b5jijD7DGED2qVST5hI/j18JreLWzLKH7u6HuNmOvzok8msrQ/qWzQd5Gx4LDQKhBbw==}
@@ -1387,10 +1387,10 @@ packages:
   '@uppy/store-default@5.0.0':
     resolution: {integrity: sha512-hQtCSQ1yGiaval/wVYUWquYGDJ+bpQ7e4FhUUAsRQz1x1K+o7NBtjfp63O9I4Ks1WRoKunpkarZ+as09l02cPw==}
 
-  '@uppy/thumbnail-generator@5.0.0':
-    resolution: {integrity: sha512-dqnsVOpGR+QtpBKwXYEgiIy1cEl+wfiwm/411gwsAiaYITtEGePsXfTiYNFN/dkCVfrDqWw+r/MFTxRNXZKm9A==}
+  '@uppy/thumbnail-generator@5.0.1':
+    resolution: {integrity: sha512-kmRpZKGS+xCdXU66weLHZ30F8UYEW3U5amtZE8l/ZoDJf/mVevae0RBE8qQsEPXjs6IFH3MCgb4fZ/s/itc3QA==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
   '@uppy/tus@4.2.2':
     resolution: {integrity: sha512-fauUHqoLDtyRXwoaIyWM8ctuJ+SAXdjuM2eyoPYcGtpVaEGa+AS7IQkJkWz2RrWSdLCHL9O+fk6jKr+0PIDEpQ==}
@@ -1406,10 +1406,10 @@ packages:
   '@uppy/utils@7.0.2':
     resolution: {integrity: sha512-2fdtgwNTkLgh7yMmHN3ZztHaP/o/iXDSt5VAbvGG4tFFkRxaaDmSKAljglEle1+m1OamKQLjm8fIxfOqu/szng==}
 
-  '@uppy/webdav@1.0.0':
-    resolution: {integrity: sha512-SUGfvQ//UGsOd4Zw9wMm3uvk6x3bDzODilV4GoWyQtZrzs9uiA5pJiBFDNwtJIr/ssHfxo9w1itiNt0BIpgEdg==}
+  '@uppy/webdav@1.0.1':
+    resolution: {integrity: sha512-44E/nZ9JWayCcHqIzjWpbdPHcir49lT7LKCb6MJp+TvHaw904auwjCLqVoLqk7CdFnHktr8fi7uLojWKF6ouvQ==}
     peerDependencies:
-      '@uppy/core': ^5.0.0
+      '@uppy/core': ^5.0.2
 
   '@uppy/xhr-upload@4.3.3':
     resolution: {integrity: sha512-I7RVppwTvLRlVfoW5piMxcZKzWF42E6CwYFQ42d2LzizrkG4tVLQkQrTZlw85za3nhcSrX3o/d1eNx3pzLmsdw==}
@@ -4982,7 +4982,7 @@ snapshots:
       namespace-emitter: 2.0.1
       p-retry: 6.2.1
 
-  '@uppy/companion-client@5.0.0(@uppy/core@5.0.2)':
+  '@uppy/companion-client@5.0.1(@uppy/core@5.0.2)':
     dependencies:
       '@uppy/core': 5.0.2
       '@uppy/utils': 7.0.2
@@ -5011,12 +5011,12 @@ snapshots:
       nanoid: 5.1.5
       preact: 10.27.2
 
-  '@uppy/dashboard@5.0.1(@uppy/core@5.0.2)':
+  '@uppy/dashboard@5.0.2(@uppy/core@5.0.2)':
     dependencies:
       '@transloadit/prettier-bytes': 0.3.5
       '@uppy/core': 5.0.2
-      '@uppy/provider-views': 5.0.1(@uppy/core@5.0.2)
-      '@uppy/thumbnail-generator': 5.0.0(@uppy/core@5.0.2)
+      '@uppy/provider-views': 5.0.2(@uppy/core@5.0.2)
+      '@uppy/thumbnail-generator': 5.0.1(@uppy/core@5.0.2)
       '@uppy/utils': 7.0.2
       classnames: 2.5.1
       lodash: 4.17.21
@@ -5029,23 +5029,23 @@ snapshots:
       '@uppy/core': 4.4.6
       '@uppy/utils': 6.2.2
 
-  '@uppy/google-drive@5.0.0(@uppy/core@5.0.2)':
+  '@uppy/google-drive@5.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/companion-client': 5.0.0(@uppy/core@5.0.2)
+      '@uppy/companion-client': 5.0.1(@uppy/core@5.0.2)
       '@uppy/core': 5.0.2
-      '@uppy/provider-views': 5.0.1(@uppy/core@5.0.2)
+      '@uppy/provider-views': 5.0.2(@uppy/core@5.0.2)
       '@uppy/utils': 7.0.2
       preact: 10.27.2
 
-  '@uppy/onedrive@5.0.0(@uppy/core@5.0.2)':
+  '@uppy/onedrive@5.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/companion-client': 5.0.0(@uppy/core@5.0.2)
+      '@uppy/companion-client': 5.0.1(@uppy/core@5.0.2)
       '@uppy/core': 5.0.2
-      '@uppy/provider-views': 5.0.1(@uppy/core@5.0.2)
+      '@uppy/provider-views': 5.0.2(@uppy/core@5.0.2)
       '@uppy/utils': 7.0.2
       preact: 10.27.2
 
-  '@uppy/provider-views@5.0.1(@uppy/core@5.0.2)':
+  '@uppy/provider-views@5.0.2(@uppy/core@5.0.2)':
     dependencies:
       '@uppy/core': 5.0.2
       '@uppy/utils': 7.0.2
@@ -5058,7 +5058,7 @@ snapshots:
 
   '@uppy/store-default@5.0.0': {}
 
-  '@uppy/thumbnail-generator@5.0.0(@uppy/core@5.0.2)':
+  '@uppy/thumbnail-generator@5.0.1(@uppy/core@5.0.2)':
     dependencies:
       '@uppy/core': 5.0.2
       '@uppy/utils': 7.0.2
@@ -5086,11 +5086,11 @@ snapshots:
       lodash: 4.17.21
       preact: 10.27.2
 
-  '@uppy/webdav@1.0.0(@uppy/core@5.0.2)':
+  '@uppy/webdav@1.0.1(@uppy/core@5.0.2)':
     dependencies:
-      '@uppy/companion-client': 5.0.0(@uppy/core@5.0.2)
+      '@uppy/companion-client': 5.0.1(@uppy/core@5.0.2)
       '@uppy/core': 5.0.2
-      '@uppy/provider-views': 5.0.1(@uppy/core@5.0.2)
+      '@uppy/provider-views': 5.0.2(@uppy/core@5.0.2)
       '@uppy/utils': 7.0.2
       preact: 10.27.2
 
