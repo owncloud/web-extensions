@@ -60,58 +60,88 @@ describe('unzip action', () => {
     })
   })
   describe('handler', () => {
-    it('shows an error message if an entry is encrypted', () => {
-      getWrapper({
-        zipEntries: [mock<zip.Entry>({ encrypted: true })],
-        setup: async (action) => {
-          const resource = mock<Resource>({ name: '' })
-          await unref(action).handler({ space, resources: [resource] })
+    it('shows an error message if an entry is encrypted', async () => {
+      await new Promise<void>((resolve, reject) => {
+        try {
+          getWrapper({
+            zipEntries: [mock<zip.Entry>({ encrypted: true })],
+            setup: async (action) => {
+              const resource = mock<Resource>({ name: '' })
+              await unref(action).handler({ space, resources: [resource] })
 
-          const { showErrorMessage } = useMessages()
-          expect(showErrorMessage).toHaveBeenCalledTimes(1)
+              const { showErrorMessage } = useMessages()
+              expect(showErrorMessage).toHaveBeenCalledTimes(1)
+              resolve()
+            }
+          })
+        } catch (error) {
+          reject(error)
         }
       })
     })
-    it('shows an error message if extraction fails', () => {
+    it('shows an error message if extraction fails', async () => {
       const zipEntry = mock<zip.Entry>({
         encrypted: false,
         filename: 'filename',
-        getData: () => Promise.reject()
+        getData: vi.fn().mockRejectedValue(new Error())
       })
+      const zipWriterMock = mock<zip.BlobWriter>()
 
-      getWrapper({
-        zipEntries: [zipEntry],
-        setup: async (action) => {
-          const resource = mock<Resource>({ name: '' })
-          await unref(action).handler({ space, resources: [resource] })
+      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
 
-          const { showErrorMessage } = useMessages()
-          expect(showErrorMessage).toHaveBeenCalledTimes(1)
-        }
+      await new Promise<void>((resolve, reject) => {
+        getWrapper({
+          zipEntries: [zipEntry],
+          setup: async (action) => {
+            try {
+              const resource = mock<Resource>({ name: '' })
+              await unref(action).handler({ space, resources: [resource] })
+
+              const { showErrorMessage } = useMessages()
+              expect(showErrorMessage).toHaveBeenCalledTimes(1)
+              resolve()
+            } catch (error) {
+              reject(error)
+            }
+          }
+        })
       })
     })
-    it('adds extracted files to the uppy upload queue and closes the zip reader eventually', () => {
+    it('adds extracted files to the uppy upload queue and closes the zip reader eventually', async () => {
       const zipBlob = new Blob()
       const zipEntry = mock<zip.Entry>({
         encrypted: false,
         filename: 'filename',
-        getData: () => Promise.resolve<any>(zipBlob)
+        getData: vi.fn().mockResolvedValue(zipBlob)
       })
+      const zipWriterMock = mock<zip.BlobWriter>({})
 
-      getWrapper({
-        zipEntries: [zipEntry],
-        setup: async (action, { $clientService, $uppyService, zipReaderMock }) => {
-          const resource = mock<Resource>({ name: '' })
-          const rootFolder = { path: '' } as Resource
-          $clientService.webdav.createFolder.mockResolvedValue(rootFolder)
-          await unref(action).handler({ space, resources: [resource] })
+      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
 
-          expect($uppyService.addFiles).toHaveBeenCalledWith([
-            expect.objectContaining({ data: zipBlob, name: zipEntry.filename })
-          ])
-          expect($uppyService.setUploadFolder).toHaveBeenCalledWith(expect.anything(), rootFolder)
-          expect(zipReaderMock.close).toHaveBeenCalledTimes(1)
-        }
+      await new Promise<void>((resolve, reject) => {
+        getWrapper({
+          zipEntries: [zipEntry],
+          setup: async (action, { $clientService, $uppyService, zipReaderMock }) => {
+            try {
+              const resource = mock<Resource>({ name: '' })
+              const rootFolder = { path: '' } as Resource
+              $clientService.webdav.createFolder.mockResolvedValue(rootFolder)
+              await unref(action).handler({ space, resources: [resource] })
+
+              expect($uppyService.addFiles).toHaveBeenCalledWith([
+                expect.objectContaining({ data: zipBlob, name: zipEntry.filename })
+              ])
+              expect($uppyService.setUploadFolder).toHaveBeenCalledWith(
+                expect.anything(),
+                rootFolder
+              )
+              expect(zipReaderMock.close).toHaveBeenCalledTimes(1)
+              resolve()
+            } catch (error) {
+              reject(error)
+            }
+          }
+        })
       })
     })
   })
