@@ -83,7 +83,6 @@ export const useExtensions = ({ applicationConfig }: ApplicationSetupOptions) =>
     await nextTick()
 
     uppyService.addPlugin(Dashboard, {
-      uppyService,
       inline: true,
       target: '.oc-modal-body',
       disableLocalFiles: true,
@@ -101,21 +100,18 @@ export const useExtensions = ({ applicationConfig }: ApplicationSetupOptions) =>
 
     if (supportedClouds.includes('OneDrive')) {
       uppyService.addPlugin(OneDrive, {
-        target: Dashboard,
         companionUrl
       })
     }
 
     if (supportedClouds.includes('GoogleDrive')) {
       uppyService.addPlugin(GoogleDrive, {
-        target: Dashboard,
         companionUrl
       })
     }
 
     if (supportedClouds.includes('WebdavPublicLink')) {
       uppyService.addPlugin(Webdav, {
-        target: Dashboard,
         id: 'WebdavPublicLink',
         companionUrl,
         ...(webdavCloudType && { cloudType: webdavCloudType })
