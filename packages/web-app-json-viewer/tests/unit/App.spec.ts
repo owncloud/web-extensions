@@ -41,7 +41,11 @@ function createWrapper({
         isReadOnly: false
       },
       global: {
-        plugins: [...defaultPlugins({ piniaOptions: { themeState: { currentTheme: { isDark } } } })]
+        plugins: [
+          ...defaultPlugins({
+            piniaOptions: { themeState: { currentTheme: { isDark, name: 'json-viewer' } } }
+          })
+        ]
       }
     })
   }
