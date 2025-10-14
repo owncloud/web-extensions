@@ -64,7 +64,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -89,7 +89,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -114,7 +114,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -136,13 +136,13 @@ importers:
         version: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
       zod:
         specifier: ^4.0.0
-        version: 4.1.11
+        version: 4.1.12
 
   packages/web-app-importer:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -182,7 +182,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -232,7 +232,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.0
+        version: 12.1.1
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -845,8 +845,8 @@ packages:
   '@ownclouders/tsconfig@0.0.6':
     resolution: {integrity: sha512-60BM0Syi8uHD0C+PmLFcS2e4upuOEL02itPw9wayznfOuu07sUasADSzkL0ud0zcr6je9TKQZR8hPLxZF1OTbQ==}
 
-  '@ownclouders/web-client@12.1.0':
-    resolution: {integrity: sha512-5TKCv8yFH7oS41NBJ2Eipc3joJwAYn3DERhxnzfnFYZxpWe/3ZQW2YMileSIfMyXXKxCoESbblqPZ/YJYA29Zw==}
+  '@ownclouders/web-client@12.1.1':
+    resolution: {integrity: sha512-jvqySMmEYHodD2vmeYyf4axWy5Fu2NfueZIpVZ5JrRnjoajSStOLQ+oh2NIwacWFKXmScRWu/GE5Tr7d0feZew==}
 
   '@ownclouders/web-pkg@12.1.0':
     resolution: {integrity: sha512-InnfhMvNg3MDYDwJ95PqkaOMNMbzysFaFGI2snJaHMQMZiZphSn+rlWAIpgEC1n1Kx9s1GbWJmKdtWmPj8G9Vw==}
@@ -1640,8 +1640,8 @@ packages:
     resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
     engines: {node: '>= 0.6.0'}
 
-  baseline-browser-mapping@2.8.12:
-    resolution: {integrity: sha512-vAPMQdnyKCBtkmQA6FMCBvU9qFIppS3nzyXnEM+Lo2IAhG4Mpjv9cCxMudhgV3YdNNJv6TNqXy97dfRVL2LmaQ==}
+  baseline-browser-mapping@2.8.15:
+    resolution: {integrity: sha512-qsJ8/X+UypqxHXN75M7dF88jNK37dLBRW7LeUzCPz+TNs37G8cfWy9nWzS+LS//g600zrt2le9KuXt0rWfDz5Q==}
     hasBin: true
 
   birpc@2.6.1:
@@ -1693,8 +1693,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  caniuse-lite@1.0.30001748:
-    resolution: {integrity: sha512-5P5UgAr0+aBmNiplks08JLw+AW/XG/SurlgZLgB1dDLfAw7EfRGxIwzPHxdSCGY/BTKDqIVyJL87cCN6s0ZR0w==}
+  caniuse-lite@1.0.30001749:
+    resolution: {integrity: sha512-0rw2fJOmLfnzCRbkm8EyHL8SvI2Apu5UbnQuTsJ0ClgrH8hcwFooJ1s5R0EP8o8aVrFu8++ae29Kt9/gZAZp/Q==}
 
   chai@5.3.3:
     resolution: {integrity: sha512-4zNhdJD/iOjSH0A05ea+Ke6MU5mmpQcbQsSOkgdaUMJ9zTlDTD/GYlwohmIE2u0gaxHYiVHEn1Fw9mZ/ktJWgw==}
@@ -2056,8 +2056,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  electron-to-chromium@1.5.230:
-    resolution: {integrity: sha512-A6A6Fd3+gMdaed9wX83CvHYJb4UuapPD5X5SLq72VZJzxHSY0/LUweGXRWmQlh2ln7KV7iw7jnwXK7dlPoOnHQ==}
+  electron-to-chromium@1.5.234:
+    resolution: {integrity: sha512-RXfEp2x+VRYn8jbKfQlRImzoJU01kyDvVPBmG39eU2iuRVhuS6vQNocB8J0/8GrIMLnPzgz4eW6WiRnJkTuNWg==}
 
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
@@ -3814,8 +3814,8 @@ packages:
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
-  zod@4.1.11:
-    resolution: {integrity: sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==}
+  zod@4.1.12:
+    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
 
 snapshots:
 
@@ -4597,7 +4597,7 @@ snapshots:
 
   '@ownclouders/tsconfig@0.0.6': {}
 
-  '@ownclouders/web-client@12.1.0':
+  '@ownclouders/web-client@12.1.1':
     dependencies:
       '@casl/ability': 6.7.3
       '@microsoft/fetch-event-source': 2.0.1
@@ -4608,7 +4608,7 @@ snapshots:
       uuid: 13.0.0
       webdav: 5.8.0
       xml-js: 1.6.11
-      zod: 4.1.11
+      zod: 4.1.12
     transitivePeerDependencies:
       - debug
 
@@ -4619,7 +4619,7 @@ snapshots:
       '@chevrotain/regexp-to-ast': 11.0.3
       '@microsoft/fetch-event-source': 2.0.1
       '@ownclouders/design-system': 12.1.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      '@ownclouders/web-client': 12.1.0
+      '@ownclouders/web-client': 12.1.1
       '@pdf-lib/fontkit': 1.1.1
       '@sentry/vue': 10.17.0(pinia@3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))
       '@uppy/core': 5.0.2
@@ -4659,7 +4659,7 @@ snapshots:
       vue-concurrency: 5.0.3(vue@3.5.22(typescript@5.9.3))
       vue-router: 4.5.1(vue@3.5.22(typescript@5.9.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      zod: 4.1.11
+      zod: 4.1.12
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
       - debug
@@ -4672,7 +4672,7 @@ snapshots:
       '@casl/ability': 6.7.3
       '@casl/vue': 2.2.2(@casl/ability@6.7.3)(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/design-system': 12.1.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      '@ownclouders/web-client': 12.1.0
+      '@ownclouders/web-client': 12.1.1
       '@ownclouders/web-pkg': 12.1.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       '@pinia/testing': 1.0.2(pinia@3.0.3(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
       '@vue/test-utils': 2.4.6
@@ -5527,7 +5527,7 @@ snapshots:
 
   base64-arraybuffer@1.0.2: {}
 
-  baseline-browser-mapping@2.8.12: {}
+  baseline-browser-mapping@2.8.15: {}
 
   birpc@2.6.1: {}
 
@@ -5548,9 +5548,9 @@ snapshots:
 
   browserslist@4.26.3:
     dependencies:
-      baseline-browser-mapping: 2.8.12
-      caniuse-lite: 1.0.30001748
-      electron-to-chromium: 1.5.230
+      baseline-browser-mapping: 2.8.15
+      caniuse-lite: 1.0.30001749
+      electron-to-chromium: 1.5.234
       node-releases: 2.0.23
       update-browserslist-db: 1.1.3(browserslist@4.26.3)
 
@@ -5576,7 +5576,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  caniuse-lite@1.0.30001748: {}
+  caniuse-lite@1.0.30001749: {}
 
   chai@5.3.3:
     dependencies:
@@ -5955,7 +5955,7 @@ snapshots:
       minimatch: 9.0.1
       semver: 7.7.2
 
-  electron-to-chromium@1.5.230: {}
+  electron-to-chromium@1.5.234: {}
 
   emoji-mart@5.6.0: {}
 
@@ -7697,4 +7697,4 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod@4.1.11: {}
+  zod@4.1.12: {}
