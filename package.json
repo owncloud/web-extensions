@@ -19,7 +19,7 @@
     "@ownclouders/prettier-config": "0.0.1",
     "@ownclouders/tsconfig": "0.0.6",
     "@playwright/test": "1.55.1",
-    "@types/node": "22.18.8",
+    "@types/node": "24.10.0",
     "@vue/test-utils": "^2.4.6",
     "eslint": "9.37.0",
     "happy-dom": "^20.0.0",
