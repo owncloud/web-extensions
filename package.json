@@ -35,8 +35,7 @@
   "packageManager": "pnpm@10.26.0",
   "pnpm": {
     "overrides": {
-      "jsonpath-plus": "10.3.0",
-      "glob": "^10.5.0"
+      "jsonpath-plus": "10.3.0"
     }
   }
 }
