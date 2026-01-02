@@ -102,7 +102,7 @@ importers:
         version: 12.1.0(@ownclouders/web-pkg@12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@3.2.4(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
       qs:
         specifier: ^6.11.2
-        version: 6.14.0
+        version: 6.14.1
       vue:
         specifier: ^3.4.21
         version: 3.5.22(typescript@5.9.3)
@@ -3137,8 +3137,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
+  qs@6.14.1:
+    resolution: {integrity: sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==}
     engines: {node: '>=0.6'}
 
   quansync@0.2.11:
@@ -4686,7 +4686,7 @@ snapshots:
       portal-vue: 3.0.0(vue@3.5.22(typescript@5.9.3))
       prettier: 3.6.2
       prismjs: 1.30.0
-      qs: 6.14.0
+      qs: 6.14.1
       screenfull: 6.0.2
       uuid: 13.0.0
       vue-concurrency: 5.0.3(vue@3.5.22(typescript@5.9.3))
@@ -7052,7 +7052,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  qs@6.14.0:
+  qs@6.14.1:
     dependencies:
       side-channel: 1.1.0
 
