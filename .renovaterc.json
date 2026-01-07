@@ -1,6 +1,18 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["github>owncloud-ops/renovate-presets:docker"],
-    "prConcurrentLimit": 15,
-    "postUpdateOptions": ["pnpmDedupe"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["github>owncloud-ops/renovate-presets:docker"],
+  "prConcurrentLimit": 15,
+  "postUpdateOptions": ["pnpmDedupe"],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "@ownclouders/extension-sdk",
+        "@ownclouders/web-test-helpers",
+        "@ownclouders/web-client",
+        "@ownclouders/web-pkg",
+        "@ownclouders/eslint-config"
+      ],
+      "groupName": "ownCloud Web monorepo"
+    }
+  ]
 }
