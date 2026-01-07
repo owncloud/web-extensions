@@ -27,7 +27,7 @@
     "ts-node": "^10.9.2",
     "typescript": "5.9.3",
     "vite": "7.1.11",
-    "vitest": "3.2.4",
+    "vitest": "4.0.16",
     "vitest-mock-extended": "3.1.0",
     "vue-tsc": "3.1.0",
     "vue3-gettext": "^2.4.0"

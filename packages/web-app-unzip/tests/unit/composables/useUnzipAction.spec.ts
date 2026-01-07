@@ -87,7 +87,9 @@ describe('unzip action', () => {
       })
       const zipWriterMock = mock<zip.BlobWriter>()
 
-      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
+      vi.mocked(zip.BlobWriter).mockImplementation(function () {
+        return zipWriterMock
+      })
 
       await new Promise<void>((resolve, reject) => {
         getWrapper({
@@ -116,7 +118,9 @@ describe('unzip action', () => {
       })
       const zipWriterMock = mock<zip.BlobWriter>({})
 
-      vi.mocked(zip.BlobWriter).mockReturnValue(zipWriterMock)
+      vi.mocked(zip.BlobWriter).mockImplementation(function () {
+        return zipWriterMock
+      })
 
       await new Promise<void>((resolve, reject) => {
         getWrapper({
@@ -163,7 +167,9 @@ function getWrapper({
 }) {
   const getEntries = vi.fn().mockResolvedValue(zipEntries)
   const zipReaderMock = mock<zip.ZipReader<zip.BlobReader>>({ getEntries })
-  vi.mocked(zip.ZipReader).mockReturnValue(zipReaderMock)
+  vi.mocked(zip.ZipReader).mockImplementation(function () {
+    return zipReaderMock
+  })
 
   const mocks = { ...defaultComponentMocks(), zipReaderMock }
   mocks.$clientService.webdav.getFileContents.mockResolvedValue(
