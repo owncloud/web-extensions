@@ -35,7 +35,8 @@
   "packageManager": "pnpm@10.27.0",
   "pnpm": {
     "overrides": {
-      "jsonpath-plus": "10.3.0"
+      "jsonpath-plus": "10.3.0",
+      "@uppy/core": "5.2.0"
     }
   }
 }
