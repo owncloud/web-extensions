@@ -64,7 +64,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -89,7 +89,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -114,7 +114,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -136,13 +136,13 @@ importers:
         version: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
       zod:
         specifier: ^4.0.0
-        version: 4.1.12
+        version: 4.3.5
 
   packages/web-app-importer:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -182,7 +182,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -232,7 +232,7 @@ importers:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.0.3
-        version: 12.1.1
+        version: 12.1.2
       '@ownclouders/web-pkg':
         specifier: ^12.0.3
         version: 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -353,8 +353,8 @@ packages:
   '@buttercup/fetch@0.2.1':
     resolution: {integrity: sha512-sCgECOx8wiqY8NN1xN22BqqKzXYIG2AicNLlakOAI4f0WgyLVUbAigMf8CZhBtJxdudTcB1gD5lciqi44jwJvg==}
 
-  '@casl/ability@6.7.3':
-    resolution: {integrity: sha512-A4L28Ko+phJAsTDhRjzCOZWECQWN2jzZnJPnROWWHjJpyMq1h7h9ZqjwS2WbIUa3Z474X1ZPSgW0f1PboZGC0A==}
+  '@casl/ability@6.7.5':
+    resolution: {integrity: sha512-NaOHPi9JMn8Kesh+GRkjNKAYkl4q8qMFAlqw7w2yrE+cBQZSbV9GkBGKvgzs3CdzEc5Yl1cn3JwDxxbBN5gjog==}
 
   '@casl/vue@2.2.2':
     resolution: {integrity: sha512-xWy4i5+3+WuBgENVesPalRTKpSJZ2cEMXtbqjWjqj7FDvoeso7jT1pBVk9ujKlIRhgfVWGdCRb7XzeISi2VLcA==}
@@ -845,8 +845,8 @@ packages:
   '@ownclouders/tsconfig@0.0.6':
     resolution: {integrity: sha512-60BM0Syi8uHD0C+PmLFcS2e4upuOEL02itPw9wayznfOuu07sUasADSzkL0ud0zcr6je9TKQZR8hPLxZF1OTbQ==}
 
-  '@ownclouders/web-client@12.1.1':
-    resolution: {integrity: sha512-jvqySMmEYHodD2vmeYyf4axWy5Fu2NfueZIpVZ5JrRnjoajSStOLQ+oh2NIwacWFKXmScRWu/GE5Tr7d0feZew==}
+  '@ownclouders/web-client@12.1.2':
+    resolution: {integrity: sha512-Tq9Vqj8C/J3d033S6Vr7E1CugQ5OIMxk77FzxHytIFM7vpNEXGz/tZL9T1HSHNwQYJXkO55YhyCf95KN0I3feA==}
 
   '@ownclouders/web-pkg@12.1.1':
     resolution: {integrity: sha512-vyGwSBb76RwfPm5MOGxcp4uSJ24sXwjRD2jFAd7sRFcq8gEYgXwxs8Go2Xm5a8kRrZ8dpjaFtDKRWlnV4J8PpA==}
@@ -1645,6 +1645,9 @@ packages:
   axios@1.12.2:
     resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
 
+  axios@1.13.2:
+    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
+
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
@@ -2306,8 +2309,8 @@ packages:
     resolution: {integrity: sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==}
     hasBin: true
 
-  fast-xml-parser@5.3.0:
-    resolution: {integrity: sha512-gkWGshjYcQCF+6qtlrqBqELqNqnt4CxruY6UVAWWnqb3DQ6qaNFEIKqzYep1XzHLM/QtrHVCxyPOtTk4LTQ7Aw==}
+  fast-xml-parser@5.3.3:
+    resolution: {integrity: sha512-2O3dkPAAC6JavuMm8+4+pgTk+5hoAs+CjZ+sWcQLkX9+/tHRuTkQh/Oaifr8qDmZ8iEHb771Ea6G8CdwkrgvYA==}
     hasBin: true
 
   fastq@1.19.1:
@@ -2375,8 +2378,8 @@ packages:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
-  form-data@4.0.4:
-    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+  form-data@4.0.5:
+    resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -2843,8 +2846,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  minimatch@10.0.3:
-    resolution: {integrity: sha512-IPZ167aShDZZUMdRk66cyQAW3qr0WzbHkPdMYa8bzZhlHhO3jALbKdxcaak7W9FfT2rZNpQuUu4Od7ILEpXSaw==}
+  minimatch@10.1.1:
+    resolution: {integrity: sha512-enIvLvRAFZYXJzkCYG5RKmPfrFArdLv+R+lbQ53BmIMLIry74bjKzX6iHAm8WYamJkhSSEabrWN5D97XnKObjQ==}
     engines: {node: 20 || >=22}
 
   minimatch@3.1.2:
@@ -3323,8 +3326,8 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  sax@1.4.1:
-    resolution: {integrity: sha512-+aWOz7yVScEGoKNd4PA10LZ8sk0A/z5+nXQG5giUO5rprX9jgYsTdov9qCchZiPIZezbZH+jRut8nPodFAX4Jg==}
+  sax@1.4.3:
+    resolution: {integrity: sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==}
 
   screenfull@6.0.2:
     resolution: {integrity: sha512-AQdy8s4WhNvUZ6P8F6PB21tSPIYKniic+Ogx0AacBMjKP1GUHN2E9URxQHtCusiwxudnCKkdy4GrHXPPJSkCCw==}
@@ -3416,8 +3419,8 @@ packages:
   strnum@1.1.2:
     resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
 
-  strnum@2.1.1:
-    resolution: {integrity: sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==}
+  strnum@2.1.2:
+    resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
 
   style-mod@4.1.3:
     resolution: {integrity: sha512-i/n8VsZydrugj3Iuzll8+x/00GH2vnYsk1eomD8QiRrSAeW6ItbCQDtfXCeJHd0iwiNagqjQkvpvREEPtW3IoQ==}
@@ -3847,8 +3850,8 @@ packages:
   zimmerframe@1.1.4:
     resolution: {integrity: sha512-B58NGBEoc8Y9MWWCQGl/gq9xBCe4IiKM0a2x7GZdQKOW5Exr8S1W24J6OgM1njK8xCRGvAJIL/MxXHf6SkmQKQ==}
 
-  zod@4.1.12:
-    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+  zod@4.3.5:
+    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
 snapshots:
 
@@ -3975,13 +3978,13 @@ snapshots:
     optionalDependencies:
       node-fetch: 3.3.2
 
-  '@casl/ability@6.7.3':
+  '@casl/ability@6.7.5':
     dependencies:
       '@ucast/mongo2js': 1.4.0
 
-  '@casl/vue@2.2.2(@casl/ability@6.7.3)(vue@3.5.22(typescript@5.9.3))':
+  '@casl/vue@2.2.2(@casl/ability@6.7.5)(vue@3.5.22(typescript@5.9.3))':
     dependencies:
-      '@casl/ability': 6.7.3
+      '@casl/ability': 6.7.5
       vue: 3.5.22(typescript@5.9.3)
 
   '@chevrotain/cst-dts-gen@11.0.3':
@@ -4630,29 +4633,29 @@ snapshots:
 
   '@ownclouders/tsconfig@0.0.6': {}
 
-  '@ownclouders/web-client@12.1.1':
+  '@ownclouders/web-client@12.1.2':
     dependencies:
-      '@casl/ability': 6.7.3
+      '@casl/ability': 6.7.5
       '@microsoft/fetch-event-source': 2.0.1
-      axios: 1.12.2
-      fast-xml-parser: 5.3.0
+      axios: 1.13.2
+      fast-xml-parser: 5.3.3
       lodash-es: 4.17.22
       luxon: 3.7.2
       uuid: 13.0.0
       webdav: 5.8.0
       xml-js: 1.6.11
-      zod: 4.1.12
+      zod: 4.3.5
     transitivePeerDependencies:
       - debug
 
   '@ownclouders/web-pkg@12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))':
     dependencies:
-      '@casl/ability': 6.7.3
-      '@casl/vue': 2.2.2(@casl/ability@6.7.3)(vue@3.5.22(typescript@5.9.3))
+      '@casl/ability': 6.7.5
+      '@casl/vue': 2.2.2(@casl/ability@6.7.5)(vue@3.5.22(typescript@5.9.3))
       '@chevrotain/regexp-to-ast': 11.0.3
       '@microsoft/fetch-event-source': 2.0.1
       '@ownclouders/design-system': 12.1.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      '@ownclouders/web-client': 12.1.1
+      '@ownclouders/web-client': 12.1.2
       '@pdf-lib/fontkit': 1.1.1
       '@sentry/vue': 10.17.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))
       '@uppy/core': 5.0.2
@@ -4663,7 +4666,7 @@ snapshots:
       '@vavt/cm-extension': 1.11.1
       '@vue/shared': 3.5.22
       '@vueuse/core': 13.9.0(vue@3.5.22(typescript@5.9.3))
-      axios: 1.12.2
+      axios: 1.13.2
       deepmerge: 4.3.1
       dompurify: 3.3.0
       emoji-regex: 10.6.0
@@ -4692,7 +4695,7 @@ snapshots:
       vue-concurrency: 5.0.3(vue@3.5.22(typescript@5.9.3))
       vue-router: 4.6.0(vue@3.5.22(typescript@5.9.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      zod: 4.1.12
+      zod: 4.3.5
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
       - debug
@@ -4702,10 +4705,10 @@ snapshots:
 
   '@ownclouders/web-test-helpers@12.1.0(@ownclouders/web-pkg@12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@3.2.4(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))':
     dependencies:
-      '@casl/ability': 6.7.3
-      '@casl/vue': 2.2.2(@casl/ability@6.7.3)(vue@3.5.22(typescript@5.9.3))
+      '@casl/ability': 6.7.5
+      '@casl/vue': 2.2.2(@casl/ability@6.7.5)(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/design-system': 12.1.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      '@ownclouders/web-client': 12.1.1
+      '@ownclouders/web-client': 12.1.2
       '@ownclouders/web-pkg': 12.1.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       '@pinia/testing': 1.0.2(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
       '@vue/test-utils': 2.4.6
@@ -5095,7 +5098,7 @@ snapshots:
 
   '@types/minimatch@6.0.0':
     dependencies:
-      minimatch: 10.0.3
+      minimatch: 10.1.1
 
   '@types/node@20.19.25':
     dependencies:
@@ -5579,7 +5582,15 @@ snapshots:
   axios@1.12.2:
     dependencies:
       follow-redirects: 1.15.11
-      form-data: 4.0.4
+      form-data: 4.0.5
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.13.2:
+    dependencies:
+      follow-redirects: 1.15.11
+      form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -6286,9 +6297,9 @@ snapshots:
     dependencies:
       strnum: 1.1.2
 
-  fast-xml-parser@5.3.0:
+  fast-xml-parser@5.3.3:
     dependencies:
-      strnum: 2.1.1
+      strnum: 2.1.2
 
   fastq@1.19.1:
     dependencies:
@@ -6345,7 +6356,7 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  form-data@4.0.4:
+  form-data@4.0.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
@@ -6799,7 +6810,7 @@ snapshots:
 
   mime@4.1.0: {}
 
-  minimatch@10.0.3:
+  minimatch@10.1.1:
     dependencies:
       '@isaacs/brace-expansion': 5.0.0
 
@@ -7232,7 +7243,7 @@ snapshots:
       '@parcel/watcher': 2.5.1
     optional: true
 
-  sax@1.4.1: {}
+  sax@1.4.3: {}
 
   screenfull@6.0.2: {}
 
@@ -7318,7 +7329,7 @@ snapshots:
 
   strnum@1.1.2: {}
 
-  strnum@2.1.1: {}
+  strnum@2.1.2: {}
 
   style-mod@4.1.3: {}
 
@@ -7838,7 +7849,7 @@ snapshots:
 
   xml-js@1.6.11:
     dependencies:
-      sax: 1.4.1
+      sax: 1.4.3
 
   xml-name-validator@4.0.0: {}
 
@@ -7857,4 +7868,4 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod@4.1.12: {}
+  zod@4.3.5: {}
