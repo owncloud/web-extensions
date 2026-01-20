@@ -117,7 +117,13 @@
               <div
                 v-if="subGroup.photos.length === 1"
                 class="photo-item"
+                role="button"
+                tabindex="0"
+                :aria-label="subGroup.photos[0].name"
+                :ref="(el) => observePhoto(el as HTMLElement, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name)"
                 @click="openPhoto(subGroup.photos[0])"
+                @keydown.enter="openPhoto(subGroup.photos[0])"
+                @keydown.space.prevent="openPhoto(subGroup.photos[0])"
               >
                 <img
                   :src="getPhotoUrl(subGroup.photos[0])"
@@ -132,6 +138,7 @@
               <!-- Multiple photos: stack -->
               <PhotoStack
                 v-else
+                :ref="(el) => { if (el?.$el) observePhoto(el.$el as HTMLElement, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name) }"
                 :photos="subGroup.photos"
                 :get-photo-url="getPhotoUrl"
                 @click="openStack(subGroup)"
@@ -186,7 +193,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, shallowRef, triggerRef } from 'vue'
 import { useClientService, useSpacesStore, useConfigStore } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import PhotoLightbox from '../components/PhotoLightbox.vue'
@@ -325,6 +332,49 @@ function zoomOut() {
   }
 }
 
+// Reset zoom to default (month view)
+function resetZoom() {
+  if (groupMode.value !== 'month') {
+    groupMode.value = 'month'
+    showZoomFeedback()
+  }
+}
+
+/**
+ * Keyboard handler for zoom shortcuts (accessibility alternative to pinch).
+ * - '+' or '=' : Zoom in (more detail)
+ * - '-' : Zoom out (less detail)
+ * - '0' : Reset to default (month view)
+ */
+function handleZoomKeydown(event: KeyboardEvent) {
+  // Don't intercept if user is typing in an input field
+  const target = event.target as HTMLElement
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+    return
+  }
+
+  // Only handle zoom keys in calendar view (not map view)
+  if (viewType.value !== 'calendar') {
+    return
+  }
+
+  switch (event.key) {
+    case '+':
+    case '=':
+      event.preventDefault()
+      zoomIn()
+      break
+    case '-':
+      event.preventDefault()
+      zoomOut()
+      break
+    case '0':
+      event.preventDefault()
+      resetZoom()
+      break
+  }
+}
+
 /**
  * Pinch gesture handlers for zoom control (calendar view only).
  *
@@ -405,7 +455,7 @@ const mapPhotos = ref<PhotoWithDate[]>([])  // Separate data for map view (all p
 const mapPhotosLoaded = ref(false)  // Track if map photos have been fetched
 const mapVisibleCount = ref(0)  // Photos visible in current map viewport
 const mapTotalCount = ref(0)  // Total photos with GPS
-const thumbnailVersion = ref(0)  // Tracks thumbnail updates for efficient reactivity
+// Removed thumbnailVersion - was causing cascade re-renders of all photos
 const loading = ref(true)
 const loadingMore = ref(false)
 const error = ref<string | null>(null)
@@ -1688,60 +1738,152 @@ async function loadMorePhotos() {
 }
 
 // Cache for blob URLs to avoid refetching (with LRU eviction)
-const blobUrlCache = new Map<string, string>()
-const MAX_THUMBNAIL_CACHE = 200 // Keep 200 thumbnails in memory
+// Using shallowRef for efficient reactivity - only triggers when we call triggerRef
+const blobUrlCache = shallowRef(new Map<string, string>())
+const MAX_THUMBNAIL_CACHE = 500 // Keep 500 thumbnails in memory (~25MB)
 
 // Evict oldest entries when cache exceeds max size
 function evictOldestThumbnails() {
-  while (blobUrlCache.size > MAX_THUMBNAIL_CACHE) {
-    const firstKey = blobUrlCache.keys().next().value
+  const cache = blobUrlCache.value
+  while (cache.size > MAX_THUMBNAIL_CACHE) {
+    const firstKey = cache.keys().next().value
     if (firstKey) {
-      const blobUrl = blobUrlCache.get(firstKey)
+      const blobUrl = cache.get(firstKey)
       if (blobUrl?.startsWith('blob:')) {
         URL.revokeObjectURL(blobUrl)
       }
-      blobUrlCache.delete(firstKey)
+      cache.delete(firstKey)
     }
   }
 }
 
 // Request queue to limit concurrent fetches
 const MAX_CONCURRENT_FETCHES = 4
-const MAX_QUEUE_SIZE = 50  // Limit queue to prevent memory exhaustion on fast scroll
+const MAX_QUEUE_SIZE = 30  // Reduced queue size - only need visible items
 let activeFetches = 0
 const fetchQueue: Array<{ photo: PhotoWithDate, cacheKey: string }> = []
 const pendingFetches = new Set<string>()
 
+// Track visible photo elements for viewport-based loading
+const visiblePhotoIds = new Set<string>()
+let thumbnailObserver: IntersectionObserver | null = null
+
+/**
+ * Clear the fetch queue - called when view changes to prevent stale fetches.
+ */
+function clearFetchQueue() {
+  fetchQueue.length = 0
+  pendingFetches.clear()
+  visiblePhotoIds.clear()
+}
+
+/**
+ * Initialize IntersectionObserver for viewport-based thumbnail loading.
+ * Only loads thumbnails for photos that are actually visible on screen.
+ */
+function initThumbnailObserver() {
+  if (thumbnailObserver) return
+
+  thumbnailObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        const photoId = (entry.target as HTMLElement).dataset.photoId
+        if (!photoId) continue
+
+        if (entry.isIntersecting) {
+          // Photo became visible - mark it and trigger fetch
+          visiblePhotoIds.add(photoId)
+
+          // If not cached, queue the fetch
+          if (!blobUrlCache.value.has(photoId) && !pendingFetches.has(photoId)) {
+            // Find the photo in allPhotos to get full data
+            const photo = allPhotos.value.find(p => {
+              const key = p.id || p.fileId || p.name
+              return key === photoId
+            })
+            if (photo) {
+              queuePhotoFetch(photo, photoId)
+            }
+          }
+        } else {
+          // Photo left viewport - remove from visible set
+          visiblePhotoIds.delete(photoId)
+        }
+      }
+    },
+    {
+      // Load 2 extra rows worth of content (500px ≈ 2-3 rows of thumbnails)
+      // This ensures enough content loads to enable scrollbar for infinite scroll
+      rootMargin: '500px 0px',
+      threshold: 0
+    }
+  )
+}
+
+/**
+ * Observe a photo element for visibility-based loading.
+ * Call this on each photo img element via ref callback.
+ */
+function observePhoto(el: HTMLElement | null, photoId: string) {
+  if (!el || !thumbnailObserver) return
+
+  // Set data attribute for identification in observer callback
+  el.dataset.photoId = photoId
+  thumbnailObserver.observe(el)
+}
+
+/**
+ * Stop observing a photo element.
+ */
+function unobservePhoto(el: HTMLElement | null) {
+  if (!el || !thumbnailObserver) return
+  thumbnailObserver.unobserve(el)
+}
+
+/**
+ * Get photo URL - returns cached blob URL or placeholder.
+ * Does NOT automatically queue fetches - use queuePhotoFetch for that.
+ * This prevents fetching off-screen photos during Vue re-renders.
+ */
 function getPhotoUrl(photo: Resource): string {
-  // Force Vue to track this dependency for reactivity updates
-  const _ = thumbnailVersion.value
+  // Access shallowRef to track dependency - Vue will re-render when triggerRef is called
+  const cache = blobUrlCache.value
 
   const p = photo as PhotoWithDate
 
   // Check if we already have a blob URL cached
   const cacheKey = p.id || p.fileId || p.name
-  if (blobUrlCache.has(cacheKey)) {
-    return blobUrlCache.get(cacheKey)!
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey)!
   }
 
-  // Queue the fetch if not already pending
-  if (!pendingFetches.has(cacheKey)) {
-    // Limit queue size - drop oldest (stale) requests if full
-    // This prevents memory exhaustion when user scrolls quickly
-    while (fetchQueue.length >= MAX_QUEUE_SIZE) {
-      const dropped = fetchQueue.shift()
-      if (dropped) {
-        pendingFetches.delete(dropped.cacheKey)
-      }
-    }
-
-    pendingFetches.add(cacheKey)
-    fetchQueue.push({ photo: p, cacheKey })
-    processQueue()
+  // Only queue fetch if this photo is marked as visible by IntersectionObserver
+  if (visiblePhotoIds.has(cacheKey) && !pendingFetches.has(cacheKey)) {
+    queuePhotoFetch(p, cacheKey)
   }
 
   // Return a placeholder while loading
   return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23f0f0f0" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23999" font-size="10">Loading...</text></svg>'
+}
+
+/**
+ * Queue a photo for fetching. Called by IntersectionObserver when photo becomes visible.
+ */
+function queuePhotoFetch(photo: PhotoWithDate, cacheKey: string) {
+  if (pendingFetches.has(cacheKey)) return
+  if (blobUrlCache.value.has(cacheKey)) return
+
+  // Limit queue size - drop oldest (stale) requests if full
+  while (fetchQueue.length >= MAX_QUEUE_SIZE) {
+    const dropped = fetchQueue.shift()
+    if (dropped) {
+      pendingFetches.delete(dropped.cacheKey)
+    }
+  }
+
+  pendingFetches.add(cacheKey)
+  fetchQueue.push({ photo, cacheKey })
+  processQueue()
 }
 
 // Process the fetch queue
@@ -1779,7 +1921,8 @@ function createPlaceholderSvg(filename: string): string {
 
 // Fetch image with authentication and cache as blob URL
 async function doFetch(photo: PhotoWithDate, cacheKey: string) {
-  if (blobUrlCache.has(cacheKey)) return
+  const cache = blobUrlCache.value
+  if (cache.has(cacheKey)) return
 
   const serverUrl = (configStore.serverUrl || '').replace(/\/$/, '')
   if (!personalSpace) return
@@ -1798,19 +1941,19 @@ async function doFetch(photo: PhotoWithDate, cacheKey: string) {
 
     const blob = response.data as Blob
     const blobUrl = URL.createObjectURL(blob)
-    blobUrlCache.set(cacheKey, blobUrl)
+    cache.set(cacheKey, blobUrl)
     evictOldestThumbnails()
 
-    // Trigger reactivity update efficiently (don't recreate array!)
-    thumbnailVersion.value++
+    // Trigger reactivity update for components using this cache
+    triggerRef(blobUrlCache)
   } catch {
     // Cache a nice placeholder showing file type
     const filename = photo.name || photoPath.split('/').pop() || 'unknown'
-    blobUrlCache.set(cacheKey, createPlaceholderSvg(filename))
+    cache.set(cacheKey, createPlaceholderSvg(filename))
     evictOldestThumbnails()
 
-    // Trigger reactivity update efficiently
-    thumbnailVersion.value++
+    // Trigger reactivity update
+    triggerRef(blobUrlCache)
   }
 }
 
@@ -1907,7 +2050,7 @@ async function handleContextAction(action: string, photo: PhotoWithDate) {
 
 async function downloadPhoto(photo: PhotoWithDate) {
   const cacheKey = photo.id || (photo as any).fileId || photo.name
-  let url = blobUrlCache.get(cacheKey)
+  let url = blobUrlCache.value.get(cacheKey)
 
   if (!url || url.startsWith('data:')) {
     // Fetch full image if not cached or is placeholder
@@ -2008,12 +2151,13 @@ async function confirmAndDelete(photo: PhotoWithDate) {
     loadedPhotoIds.value.delete(photoKey)
 
     // Clean up blob cache
-    if (blobUrlCache.has(photoKey)) {
-      const cachedUrl = blobUrlCache.get(photoKey)
+    const cache = blobUrlCache.value
+    if (cache.has(photoKey)) {
+      const cachedUrl = cache.get(photoKey)
       if (cachedUrl && cachedUrl.startsWith('blob:')) {
         URL.revokeObjectURL(cachedUrl)
       }
-      blobUrlCache.delete(photoKey)
+      cache.delete(photoKey)
     }
 
     // Handle lightbox state after deletion
@@ -2773,6 +2917,9 @@ function injectStyles() {
 
 // Save settings to localStorage on change
 watch(groupMode, (newVal) => {
+  // Clear fetch queue when view changes to prevent stale fetches
+  clearFetchQueue()
+
   try {
     localStorage.setItem(STORAGE_KEY_GROUP_MODE, newVal)
   } catch (e) {
@@ -2805,10 +2952,23 @@ watch(viewType, (newVal) => {
 
 onMounted(() => {
   injectStyles()
+  initThumbnailObserver()
   loadPhotos()
+  // Add keyboard listener for zoom shortcuts (+, -, 0)
+  document.addEventListener('keydown', handleZoomKeydown)
 })
 
 onUnmounted(() => {
+  // Remove keyboard listener for zoom shortcuts
+  document.removeEventListener('keydown', handleZoomKeydown)
+
+  // Clean up IntersectionObserver
+  if (thumbnailObserver) {
+    thumbnailObserver.disconnect()
+    thumbnailObserver = null
+  }
+  visiblePhotoIds.clear()
+
   // Clean up zoom indicator timeout to prevent memory leak
   if (zoomIndicatorTimeout !== null) {
     clearTimeout(zoomIndicatorTimeout)
@@ -2816,12 +2976,13 @@ onUnmounted(() => {
   }
 
   // Clean up blob URLs from thumbnail cache
-  for (const [, blobUrl] of blobUrlCache) {
+  const cache = blobUrlCache.value
+  for (const [, blobUrl] of cache) {
     if (blobUrl?.startsWith('blob:')) {
       URL.revokeObjectURL(blobUrl)
     }
   }
-  blobUrlCache.clear()
+  cache.clear()
 })
 </script>
 

@@ -1,7 +1,13 @@
 <template>
   <div class="photo-map-wrapper">
     <div class="photo-map-container">
-      <div ref="mapContainer" class="map-element"></div>
+      <div
+        ref="mapContainer"
+        class="map-element"
+        tabindex="0"
+        role="application"
+        :aria-label="t('map.ariaLabel')"
+      ></div>
       <div v-if="photosWithGps === 0" class="no-gps-overlay">
         <span class="icon">📍</span>
         <p>{{ t('empty.noGpsPhotos') }}</p>
@@ -14,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'  // Bundle CSS instead of CDN (CSP blocks external stylesheets)
 import type { GeoCoordinates, PhotoWithDate } from '../types'
@@ -655,6 +661,57 @@ watch(() => props.photos, () => {
   }
 }, { deep: true })
 
+/**
+ * Keyboard handler for map navigation (accessibility).
+ * - '+' or '=' : Zoom in
+ * - '-' : Zoom out
+ * - Arrow keys : Pan the map
+ * - '0' : Reset to default zoom
+ */
+function handleMapKeydown(event: KeyboardEvent) {
+  if (!map) return
+
+  // Don't intercept if user is typing in an input field
+  const target = event.target as HTMLElement
+  if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+    return
+  }
+
+  const PAN_AMOUNT = 100 // pixels to pan per key press
+
+  switch (event.key) {
+    case '+':
+    case '=':
+      event.preventDefault()
+      map.zoomIn()
+      break
+    case '-':
+      event.preventDefault()
+      map.zoomOut()
+      break
+    case '0':
+      event.preventDefault()
+      map.setZoom(props.defaultZoom)
+      break
+    case 'ArrowUp':
+      event.preventDefault()
+      map.panBy([0, -PAN_AMOUNT])
+      break
+    case 'ArrowDown':
+      event.preventDefault()
+      map.panBy([0, PAN_AMOUNT])
+      break
+    case 'ArrowLeft':
+      event.preventDefault()
+      map.panBy([-PAN_AMOUNT, 0])
+      break
+    case 'ArrowRight':
+      event.preventDefault()
+      map.panBy([PAN_AMOUNT, 0])
+      break
+  }
+}
+
 onMounted(() => {
   injectTileFixCSS()
   // Small delay for CSS to apply
@@ -669,9 +726,15 @@ onMounted(() => {
     })
     resizeObserver.observe(mapContainer.value)
   }
+
+  // Add keyboard listener for map navigation (+, -, arrows, 0)
+  document.addEventListener('keydown', handleMapKeydown)
 })
 
 onUnmounted(() => {
+  // Remove keyboard listener
+  document.removeEventListener('keydown', handleMapKeydown)
+
   if (resizeObserver) {
     resizeObserver.disconnect()
     resizeObserver = null
