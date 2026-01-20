@@ -49,6 +49,7 @@ export interface TranslationKeys {
   'lightbox.photoCounter': string
 
   // Metadata labels
+  'metadata.sectionLabel': string
   'metadata.dateTaken': string
   'metadata.camera': string
   'metadata.aperture': string
@@ -96,6 +97,7 @@ export interface TranslationKeys {
   // Map
   'map.photosInView': string
   'map.photos': string
+  'map.ariaLabel': string
 
   // Months (for dropdowns)
   'month.january': string
@@ -185,6 +187,7 @@ const en: TranslationKeys = {
   'lightbox.photoCounter': 'Photo {current} of {total}',
 
   // Metadata labels
+  'metadata.sectionLabel': 'Photo metadata',
   'metadata.dateTaken': 'Date Taken',
   'metadata.camera': 'Camera',
   'metadata.aperture': 'Aperture',
@@ -232,6 +235,7 @@ const en: TranslationKeys = {
   // Map
   'map.photosInView': '{visible} of {total} photos in view',
   'map.photos': '{count} photos',
+  'map.ariaLabel': 'Photo locations map. Use arrow keys to pan, plus and minus to zoom.',
 
   // Months
   'month.january': 'January',
