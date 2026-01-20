@@ -1,39 +1,48 @@
 <template>
   <div class="search-stats">
-    <div class="stats-header" @click="toggleExpanded">
-      <span class="stats-icon">{{ expanded ? '▼' : '▶' }}</span>
+    <div
+      class="stats-header"
+      role="button"
+      tabindex="0"
+      :aria-expanded="expanded"
+      aria-controls="search-stats-content"
+      @click="toggleExpanded"
+      @keydown.enter="toggleExpanded"
+      @keydown.space.prevent="toggleExpanded"
+    >
+      <span class="stats-icon" aria-hidden="true">{{ expanded ? '▼' : '▶' }}</span>
       <h4>{{ $gettext('Search Status') }}</h4>
-      <span v-if="loading" class="loading-indicator">{{ $gettext('Loading...') }}</span>
+      <span v-if="loading" class="loading-indicator" aria-live="polite">{{ $gettext('Loading...') }}</span>
     </div>
 
-    <div v-if="expanded" class="stats-content">
+    <div v-if="expanded" id="search-stats-content" class="stats-content">
       <!-- Index Status -->
-      <div class="stats-section">
-        <h5>{{ $gettext('Index Status') }}</h5>
+      <div class="stats-section" role="region" :aria-label="$gettext('Index Status')">
+        <h5 tabindex="0">{{ $gettext('Index Status') }}</h5>
         <div class="stats-grid">
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Full-Text Search') }}</span>
             <span :class="['stat-value', stats.fullTextEnabled ? 'enabled' : 'disabled']">
               {{ stats.fullTextEnabled ? $gettext('Enabled') : $gettext('Disabled') }}
             </span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Tika Extraction') }}</span>
             <span :class="['stat-value', stats.tikaEnabled ? 'enabled' : 'disabled']">
               {{ stats.tikaEnabled ? $gettext('Enabled') : $gettext('Disabled') }}
             </span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('OCR (Image Text)') }}</span>
             <span :class="['stat-value', stats.ocrEnabled ? 'enabled' : 'disabled']">
               {{ stats.ocrEnabled ? $gettext('Enabled') : $gettext('Disabled') }}
             </span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Index Engine') }}</span>
             <span class="stat-value">{{ stats.indexEngine }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Total Indexed Files') }}</span>
             <span class="stat-value">{{ stats.totalIndexedFiles !== null ? stats.totalIndexedFiles.toLocaleString() : $gettext('Counting...') }}</span>
           </div>
@@ -41,21 +50,21 @@
       </div>
 
       <!-- Space Stats -->
-      <div class="stats-section">
-        <h5>{{ $gettext('Available Spaces') }}</h5>
-        <div class="stats-grid">
-          <div class="stat-item">
+      <div class="stats-section" role="region" :aria-label="$gettext('Available Spaces')">
+        <h5 tabindex="0">{{ $gettext('Available Spaces') }}</h5>
+        <div class="stats-grid" role="list">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Total Spaces') }}</span>
             <span class="stat-value">{{ stats.totalSpaces }}</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Personal Space') }}</span>
             <span class="stat-value">{{ stats.personalSpaceName || $gettext('N/A') }}</span>
           </div>
         </div>
-        <div v-if="stats.spaces && stats.spaces.length > 0" class="spaces-list">
-          <div v-for="space in stats.spaces" :key="space.id" class="space-item">
-            <span class="space-icon">{{ getSpaceIcon(space.driveType) }}</span>
+        <div v-if="stats.spaces && stats.spaces.length > 0" class="spaces-list" role="list" :aria-label="$gettext('Space list')">
+          <div v-for="space in stats.spaces" :key="space.id" class="space-item" tabindex="0" role="listitem">
+            <span class="space-icon" aria-hidden="true">{{ getSpaceIcon(space.driveType) }}</span>
             <span class="space-name">{{ space.name }}</span>
             <span class="space-type">{{ space.driveType }}</span>
             <span v-if="space.used" class="space-used">{{ formatBytes(space.used) }} {{ $gettext('used') }}</span>
@@ -64,14 +73,14 @@
       </div>
 
       <!-- Server Info -->
-      <div class="stats-section">
-        <h5>{{ $gettext('Server Information') }}</h5>
-        <div class="stats-grid">
-          <div class="stat-item">
+      <div class="stats-section" role="region" :aria-label="$gettext('Server Information')">
+        <h5 tabindex="0">{{ $gettext('Server Information') }}</h5>
+        <div class="stats-grid" role="list">
+          <div class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('Server URL') }}</span>
             <span class="stat-value path">{{ stats.serverUrl }}</span>
           </div>
-          <div v-if="stats.version" class="stat-item">
+          <div v-if="stats.version" class="stat-item" tabindex="0" role="listitem">
             <span class="stat-label">{{ $gettext('oCIS Version') }}</span>
             <span class="stat-value">{{ stats.version }}</span>
           </div>

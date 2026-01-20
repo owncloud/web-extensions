@@ -167,19 +167,29 @@
     <div v-if="showSavedQueries" class="saved-queries-panel">
       <div class="panel-header">
         <h3>{{ $gettext('Saved Searches') }}</h3>
-        <button class="close-btn" @click="showSavedQueries = false">×</button>
+        <button
+          ref="savedQueriesCloseBtn"
+          class="close-btn"
+          :aria-label="$gettext('Close saved searches')"
+          @click="showSavedQueries = false"
+        >×</button>
       </div>
       <div v-if="savedQueries.length === 0" class="no-saved">
         <p>{{ $gettext('No saved searches yet') }}</p>
         <p class="hint">{{ $gettext('Create a search and click "Save Search" to save it.') }}</p>
       </div>
-      <ul v-else class="saved-list">
+      <ul v-else class="saved-list" role="list">
         <li
-          v-for="query in savedQueries"
+          v-for="(query, index) in savedQueries"
           :key="query.id"
           class="saved-item"
+          role="listitem"
         >
-          <button class="saved-name" @click="loadSavedQuery(query)">
+          <button
+            :ref="el => { if (index === 0) firstSavedQueryBtn = el as HTMLButtonElement }"
+            class="saved-name"
+            @click="loadSavedQuery(query)"
+          >
             {{ query.name }}
           </button>
           <span class="saved-date">{{ formatDate(query.savedAt) }}</span>
@@ -189,13 +199,23 @@
     </div>
 
     <!-- Save dialog -->
-    <div v-if="showSaveDialog" class="modal-overlay" @click.self="showSaveDialog = false">
+    <div
+      v-if="showSaveDialog"
+      class="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      :aria-label="$gettext('Save Search')"
+      @click.self="showSaveDialog = false"
+      @keydown.escape="showSaveDialog = false"
+    >
       <div class="modal-dialog">
         <h3>{{ $gettext('Save Search') }}</h3>
         <input
+          ref="saveQueryInput"
           type="text"
           v-model="saveQueryName"
           :placeholder="$gettext('Enter a name for this search')"
+          :aria-label="$gettext('Search name')"
           class="save-input"
           @keyup.enter="handleSaveQuery"
         />
@@ -226,7 +246,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useAdvancedSearch } from '../composables/useAdvancedSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import { useTranslations } from '../composables/useTranslations'
@@ -277,6 +297,11 @@ const showFilters = ref(true)
 const showSavedQueries = ref(false)
 const showSaveDialog = ref(false)
 const saveQueryName = ref('')
+
+// Refs for focus management (accessibility)
+const firstSavedQueryBtn = ref<HTMLButtonElement | null>(null)
+const savedQueriesCloseBtn = ref<HTMLButtonElement | null>(null)
+const saveQueryInput = ref<HTMLInputElement | null>(null)
 
 // Context menu state
 const contextMenuVisible = ref(false)
@@ -548,6 +573,30 @@ onMounted(() => {
     if (query) {
       loadSavedQuery(query)
     }
+  }
+})
+
+// Focus management: when Saved Searches panel opens, focus the first item or close button
+watch(showSavedQueries, (isOpen) => {
+  if (isOpen) {
+    nextTick(() => {
+      if (firstSavedQueryBtn.value) {
+        firstSavedQueryBtn.value.focus()
+      } else if (savedQueriesCloseBtn.value) {
+        savedQueriesCloseBtn.value.focus()
+      }
+    })
+  }
+})
+
+// Focus management: when Save dialog opens, focus the input field
+watch(showSaveDialog, (isOpen) => {
+  if (isOpen) {
+    nextTick(() => {
+      if (saveQueryInput.value) {
+        saveQueryInput.value.focus()
+      }
+    })
   }
 })
 </script>
