@@ -1,16 +1,18 @@
 <template>
   <div
     v-if="photo"
+    ref="lightboxRef"
     class="lightbox-overlay"
     role="dialog"
     aria-modal="true"
     aria-labelledby="lightbox-title"
     @click.self="closeIfNoMenu"
     @keydown.escape="close"
+    @keydown.tab="handleTabKey"
   >
     <!-- Context Menu (inside overlay for proper stacking) -->
-    <div v-if="menuVisible" :style="menuStyle" role="menu" :aria-label="t('lightbox.photoOptions')" @click.stop>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'">
+    <div v-if="menuVisible" :style="menuStyle" role="menu" :aria-label="t('lightbox.photoOptions')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
+      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">↓</span>
         <span>{{ t('menu.download') }}</span>
       </button>
@@ -42,7 +44,7 @@
         >
           <span aria-hidden="true">⋮</span>
         </button>
-        <button class="lightbox-close" @click="close" :aria-label="t('lightbox.close')">
+        <button ref="closeButtonRef" class="lightbox-close" @click="close" :aria-label="t('lightbox.close')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -120,10 +122,10 @@
         </div>
 
         <!-- EXIF Metadata section -->
-        <div class="lightbox-metadata">
-          <div class="metadata-grid">
+        <div class="lightbox-metadata" role="region" :aria-label="t('metadata.sectionLabel')">
+          <div class="metadata-grid" role="list">
             <!-- Date Taken (with source indicator) -->
-            <div v-if="displayDate" class="metadata-item">
+            <div v-if="displayDate" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.dateTaken') }}</span>
               <span class="metadata-value date-with-source">
                 {{ displayDate }}
@@ -134,43 +136,43 @@
             </div>
 
             <!-- EXIF: Camera -->
-            <div v-if="exifData.cameraMake || exifData.cameraModel" class="metadata-item">
+            <div v-if="exifData.cameraMake || exifData.cameraModel" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.camera') }}</span>
               <span class="metadata-value">{{ [exifData.cameraMake, exifData.cameraModel].filter(Boolean).join(' ') }}</span>
             </div>
 
             <!-- EXIF: Aperture -->
-            <div v-if="exifData.fNumber" class="metadata-item">
+            <div v-if="exifData.fNumber" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.aperture') }}</span>
               <span class="metadata-value">f/{{ exifData.fNumber }}</span>
             </div>
 
             <!-- EXIF: Focal Length -->
-            <div v-if="exifData.focalLength" class="metadata-item">
+            <div v-if="exifData.focalLength" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.focalLength') }}</span>
               <span class="metadata-value">{{ exifData.focalLength }}mm</span>
             </div>
 
             <!-- EXIF: ISO -->
-            <div v-if="exifData.iso" class="metadata-item">
+            <div v-if="exifData.iso" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.iso') }}</span>
               <span class="metadata-value">{{ exifData.iso }}</span>
             </div>
 
             <!-- EXIF: Exposure -->
-            <div v-if="exifData.exposureNumerator && exifData.exposureDenominator" class="metadata-item">
+            <div v-if="exifData.exposureNumerator && exifData.exposureDenominator" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.exposure') }}</span>
               <span class="metadata-value">{{ exifData.exposureNumerator }}/{{ exifData.exposureDenominator }}s</span>
             </div>
 
             <!-- EXIF: Orientation -->
-            <div v-if="exifData.orientation" class="metadata-item">
+            <div v-if="exifData.orientation" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.orientation') }}</span>
               <span class="metadata-value">{{ getOrientationLabel(exifData.orientation) }}</span>
             </div>
 
             <!-- EXIF: Location (Lat/Long) -->
-            <div v-if="exifData.location?.latitude != null && exifData.location?.longitude != null" class="metadata-item metadata-location">
+            <div v-if="exifData.location?.latitude != null && exifData.location?.longitude != null" class="metadata-item metadata-location" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.location') }}</span>
               <span class="metadata-value">
                 {{ formatCoordinate(exifData.location.latitude, 'lat') }}, {{ formatCoordinate(exifData.location.longitude, 'lon') }}
@@ -187,18 +189,18 @@
             </div>
 
             <!-- EXIF: Altitude -->
-            <div v-if="exifData.location?.altitude != null" class="metadata-item">
+            <div v-if="exifData.location?.altitude != null" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.altitude') }}</span>
               <span class="metadata-value">{{ exifData.location.altitude.toFixed(1) }}m</span>
             </div>
 
             <!-- File info -->
-            <div v-if="photo.size" class="metadata-item">
+            <div v-if="photo.size" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.fileSize') }}</span>
               <span class="metadata-value">{{ formatSize(Number(photo.size)) }}</span>
             </div>
 
-            <div v-if="photo.mimeType" class="metadata-item">
+            <div v-if="photo.mimeType" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ t('metadata.type') }}</span>
               <span class="metadata-value">{{ photo.mimeType }}</span>
             </div>
@@ -210,7 +212,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useClientService, useConfigStore } from '@ownclouders/web-pkg'
 import type { Resource } from '@ownclouders/web-client'
 import { usePhotos } from '../composables/usePhotos'
@@ -248,6 +250,11 @@ const menuVisible = ref(false)
 const menuTop = ref('0px')
 const menuLeft = ref('0px')
 const menuButtonRef = ref<HTMLButtonElement | null>(null)
+
+// Focus management refs
+const lightboxRef = ref<HTMLElement | null>(null)
+const closeButtonRef = ref<HTMLButtonElement | null>(null)
+const firstMenuItemRef = ref<HTMLButtonElement | null>(null)
 
 // Computed style for menu positioning
 const menuStyle = computed(() => ({
@@ -521,6 +528,13 @@ watch(() => props.photo, async (newPhoto, oldPhoto) => {
     }
 
     await loadCurrentImage(newPhoto as PhotoWithDate)
+
+    // Focus close button when lightbox opens (for keyboard accessibility)
+    if (!oldPhoto) {
+      nextTick(() => {
+        closeButtonRef.value?.focus()
+      })
+    }
   }
 }, { immediate: true })
 
@@ -758,11 +772,22 @@ function toggleMenu(event: MouseEvent) {
     menuTop.value = `${rect.bottom + 8}px`
     menuLeft.value = `${Math.max(8, left)}px`
     menuVisible.value = true
+    // Focus first menu item when menu opens
+    nextTick(() => {
+      firstMenuItemRef.value?.focus()
+    })
   }
 }
 
 function closeMenu() {
   menuVisible.value = false
+}
+
+function closeMenuAndFocusButton() {
+  menuVisible.value = false
+  nextTick(() => {
+    menuButtonRef.value?.focus()
+  })
 }
 
 function closeIfNoMenu(event: MouseEvent) {
@@ -788,6 +813,41 @@ function handleKeydown(event: KeyboardEvent) {
     navigate('prev')
   } else if (event.key === 'ArrowRight' && canNavigateNext.value) {
     navigate('next')
+  }
+}
+
+/**
+ * Focus trap handler - keeps Tab navigation within the lightbox.
+ * When Tab reaches the last focusable element, wraps to first.
+ * When Shift+Tab reaches the first element, wraps to last.
+ */
+function handleTabKey(event: KeyboardEvent) {
+  if (!lightboxRef.value) return
+
+  // Get all focusable elements within the lightbox
+  const focusableSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  const focusableElements = Array.from(
+    lightboxRef.value.querySelectorAll<HTMLElement>(focusableSelectors)
+  ).filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null)
+
+  if (focusableElements.length === 0) return
+
+  const firstElement = focusableElements[0]
+  const lastElement = focusableElements[focusableElements.length - 1]
+  const activeElement = document.activeElement as HTMLElement
+
+  if (event.shiftKey) {
+    // Shift+Tab: if on first element, wrap to last
+    if (activeElement === firstElement || !lightboxRef.value.contains(activeElement)) {
+      event.preventDefault()
+      lastElement.focus()
+    }
+  } else {
+    // Tab: if on last element, wrap to first
+    if (activeElement === lastElement) {
+      event.preventDefault()
+      firstElement.focus()
+    }
   }
 }
 
