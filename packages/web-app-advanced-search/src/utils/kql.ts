@@ -212,9 +212,11 @@ export function buildStandardKQL(standard: SearchFilters['standard'], term: stri
   if (standard.tags) {
     const tagList = standard.tags.split(',').map(t => t.trim()).filter(Boolean)
     if (tagList.length === 1) {
-      parts.push(`tags:${wrapForSearch(tagList[0], false)}`)
+      // Quote tag values to preserve special characters like colons (e.g., "exif:make:HP")
+      // Escaping colons breaks oCIS tag search
+      parts.push(`tags:"${tagList[0]}"`)
     } else if (tagList.length > 1) {
-      const tagQuery = tagList.map(t => `tags:${wrapForSearch(t, false)}`).join(' OR ')
+      const tagQuery = tagList.map(t => `tags:"${t}"`).join(' OR ')
       parts.push(`(${tagQuery})`)
     }
   }

@@ -175,7 +175,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .context-menu {
   position: fixed;
   background: var(--oc-color-background-default, #fff);

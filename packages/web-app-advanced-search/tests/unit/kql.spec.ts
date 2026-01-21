@@ -193,18 +193,23 @@ describe('buildStandardKQL', () => {
     expect(buildStandardKQL({ mediaType: 'image/*' }, '')).toEqual(['mediatype:image\\/*'])
   })
 
-  it('builds single tag filter', () => {
-    expect(buildStandardKQL({ tags: 'important' }, '')).toEqual(['tags:important'])
+  it('builds single tag filter (quoted)', () => {
+    expect(buildStandardKQL({ tags: 'important' }, '')).toEqual(['tags:"important"'])
   })
 
-  it('builds multiple tags with OR', () => {
+  it('builds multiple tags with OR (quoted)', () => {
     expect(buildStandardKQL({ tags: 'vacation, photos' }, ''))
-      .toEqual(['(tags:vacation OR tags:photos)'])
+      .toEqual(['(tags:"vacation" OR tags:"photos")'])
   })
 
   it('builds tag filter with spaces (quoted)', () => {
     expect(buildStandardKQL({ tags: 'my tag' }, ''))
       .toEqual(['tags:"my tag"'])
+  })
+
+  it('builds tag filter with colons (quoted to preserve special chars)', () => {
+    expect(buildStandardKQL({ tags: 'exif:make:HP' }, ''))
+      .toEqual(['tags:"exif:make:HP"'])
   })
 
   it('builds content filter for single word', () => {
