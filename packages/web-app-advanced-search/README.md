@@ -1,4 +1,4 @@
-# web-app-advanced-search
+# Advanced Search
 
 An advanced search extension for ownCloud Infinite Scale with comprehensive filter support, including photo EXIF metadata search.
 
@@ -18,6 +18,20 @@ An advanced search extension for ownCloud Infinite Scale with comprehensive filt
 - For photo metadata search: oCIS with photo metadata indexing enabled (see [owncloud/ocis#11912](https://github.com/owncloud/ocis/pull/11912))
 
 ## Installation
+
+### Using ocis_full Deployment Example
+
+This extension is included in the oCIS `ocis_full` deployment example. To enable it:
+
+1. Edit `.env` and uncomment:
+   ```bash
+   EXTENSIONS=:web_extensions/extensions.yml
+   ADVANCEDSEARCH=:web_extensions/advanced-search.yml
+   ```
+
+2. Rebuild: `docker compose up -d`
+
+See the [oCIS deployment documentation](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full) for full details.
 
 ### From Release
 
