@@ -19,6 +19,22 @@ A photo gallery extension for ownCloud Infinite Scale with timeline view, EXIF m
 
 ## Installation
 
+### Using ocis_full Deployment Example
+
+This extension is included in the oCIS `ocis_full` deployment example. To enable it:
+
+1. Edit `.env` and uncomment:
+   ```bash
+   EXTENSIONS=:web_extensions/extensions.yml
+   PHOTOADDON=:web_extensions/photo-addon.yml
+   ```
+
+2. Rebuild: `docker compose up -d`
+
+The CSP configuration for OpenStreetMap tiles is automatically included. See the [oCIS deployment documentation](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full) for full details.
+
+### Manual Installation
+
 1. Download the latest release from the [releases page](https://github.com/owncloud/web-extensions/releases)
 2. Extract to your oCIS web assets directory:
    ```bash
@@ -98,4 +114,4 @@ pnpm test:unit
 
 ## License
 
-AGPL-3.0 - see [LICENSE](./LICENSE) for details.
+AGPL-3.0 - see [LICENSE](../../LICENSE) for details.
