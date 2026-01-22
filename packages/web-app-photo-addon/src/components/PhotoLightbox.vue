@@ -964,7 +964,7 @@ function getMapUrl(lat: number, lon: number): string {
 }
 </script>
 
-<style>
+<style scoped>
 .lightbox-overlay {
   position: fixed;
   top: 0;
