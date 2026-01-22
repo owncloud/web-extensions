@@ -1256,6 +1256,8 @@ function getMapUrl(lat: number, lon: number): string {
   background: var(--oc-color-background-muted, #f5f5f5);
   border-radius: 4px;
   padding: 0.75rem;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .metadata-grid {
