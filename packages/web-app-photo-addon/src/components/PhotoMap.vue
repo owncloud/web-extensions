@@ -20,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'  // Bundle CSS instead of CDN (CSP blocks external stylesheets)
-import type { GeoCoordinates, PhotoWithDate } from '../types'
+import type { PhotoWithDate } from '../types'
 import { useI18n } from '../composables/useI18n'
 
 // Initialize i18n
@@ -35,9 +35,11 @@ type PhotoWithLocation = PhotoWithDate
 const props = withDefaults(defineProps<{
   photos: PhotoWithLocation[]
   getThumbnailUrl: (photo: PhotoWithLocation) => string
+  prefetchThumbnails?: (photos: PhotoWithLocation[]) => void
   defaultCenter?: [number, number]
   defaultZoom?: number
 }>(), {
+  prefetchThumbnails: undefined,
   defaultCenter: () => [56, -96],  // Canada default (configurable via props)
   defaultZoom: 4
 })
@@ -83,20 +85,6 @@ const visiblePhotosInView = ref<PhotoWithLocation[]>([])
 const STORAGE_KEY_MAP_CENTER = 'photo-addon:map-center'
 const STORAGE_KEY_MAP_ZOOM = 'photo-addon:map-zoom'
 
-/**
- * Cluster radius for geographic grouping (in meters).
- *
- * 1000m (1km) chosen because:
- * - Large enough to group photos from same location (park, neighborhood, venue)
- * - Small enough to distinguish nearby but separate locations
- * - Matches typical GPS accuracy (5-15m) with comfortable margin
- * - Good visual density on map at common zoom levels (10-15)
- *
- * Adjust higher (2000m) for sparser photo collections,
- * or lower (500m) for dense urban photography.
- */
-const CLUSTER_RADIUS_METERS = 1000
-
 // Get stored map position
 function getStoredMapPosition(): { center: [number, number], zoom: number } | null {
   try {
@@ -109,7 +97,7 @@ function getStoredMapPosition(): { center: [number, number], zoom: number } | nu
         return { center, zoom }
       }
     }
-  } catch (e) {
+  } catch {
     // ignore
   }
   return null
@@ -123,7 +111,7 @@ function saveMapPosition() {
     const zoom = map.getZoom()
     localStorage.setItem(STORAGE_KEY_MAP_CENTER, JSON.stringify([center.lat, center.lng]))
     localStorage.setItem(STORAGE_KEY_MAP_ZOOM, String(zoom))
-  } catch (e) {
+  } catch {
     // ignore
   }
 }
@@ -482,14 +470,16 @@ function initMap() {
     wheelPxPerZoomLevel: 120, // Require more scroll for zoom
   })
 
-  // Save position and update visible photos when map moves or zooms
+  // Save position, update visible photos, and prefetch thumbnails when map moves or zooms
   map.on('moveend', () => {
     saveMapPosition()
     updateVisiblePhotos()
+    prefetchVisibleClusters()
   })
   map.on('zoomend', () => {
     saveMapPosition()
     updateVisiblePhotos()
+    prefetchVisibleClusters()
   })
 
   // Add OpenStreetMap tile layer
@@ -510,18 +500,37 @@ function initMap() {
   }, 100)
 }
 
+// Store clusters for viewport-based prefetching
+let allClusters: PhotoCluster[] = []
+
+/**
+ * Prefetch thumbnails only for clusters visible in the current viewport.
+ * This avoids loading all 48+ thumbnails when only 5 are visible on screen.
+ */
+function prefetchVisibleClusters() {
+  if (!map || !props.prefetchThumbnails || allClusters.length === 0) return
+
+  const mapBounds = map.getBounds()
+  const visibleRepresentatives = allClusters
+    .filter(c => mapBounds.contains([c.centerLat, c.centerLng]))
+    .map(c => c.representativePhoto)
+
+  if (visibleRepresentatives.length > 0) {
+    props.prefetchThumbnails(visibleRepresentatives)
+  }
+}
+
 function addPhotoMarkers() {
   if (!map) return
 
   // Cluster photos by geographic proximity
   const clusters = clusterPhotos(props.photos)
+  allClusters = clusters  // Store for viewport-based prefetching
 
   if (clusters.length === 0) return
 
-  // Pre-fetch thumbnails for representative photos (the ones shown in tooltips)
-  for (const cluster of clusters) {
-    props.getThumbnailUrl(cluster.representativePhoto)
-  }
+  // Initial prefetch for visible clusters only
+  prefetchVisibleClusters()
 
   const bounds = L.latLngBounds([])
 
@@ -569,7 +578,7 @@ function addPhotoMarkers() {
 
     // Show tooltip based on quadrant - opposite corner from mouse
     const gap = 15
-    marker.on('mouseover', (e: L.LeafletMouseEvent) => {
+    marker.on('mouseover', () => {
       // Remove any existing tooltip using ref
       if (activeTooltip) {
         activeTooltip.remove()

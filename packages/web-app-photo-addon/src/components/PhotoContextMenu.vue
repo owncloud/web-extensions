@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div v-if="visible" class="context-menu" :style="menuPosition" ref="menuRef">
+    <div v-if="visible" ref="menuRef" class="context-menu" :style="menuPosition">
       <button class="menu-item" @click="handleAction('download')">
         <span class="menu-icon">&#x2B07;</span>
         <span>{{ t('menu.download') }}</span>

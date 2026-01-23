@@ -1,8 +1,10 @@
 <template>
+  <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <div
     v-if="photo"
     ref="lightboxRef"
     class="lightbox-overlay"
+    tabindex="-1"
     role="dialog"
     aria-modal="true"
     aria-labelledby="lightbox-title"
@@ -11,21 +13,21 @@
     @keydown.tab="handleTabKey"
   >
     <!-- Context Menu (inside overlay for proper stacking) -->
-    <div v-if="menuVisible" :style="menuStyle" role="menu" :aria-label="t('lightbox.photoOptions')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
-      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'">
+    <div v-if="menuVisible" :style="menuStyle" role="menu" tabindex="-1" :aria-label="t('lightbox.photoOptions')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
+      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">↓</span>
         <span>{{ t('menu.download') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'">
+      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">→</span>
         <span>{{ t('menu.openInFiles') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'">
+      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">⎘</span>
         <span>{{ t('menu.copyLink') }}</span>
       </button>
       <div role="separator" style="height: 1px; background: #eee; margin: 6px 0;"></div>
-      <button role="menuitem" :style="menuItemDangerStyle" @click="handleMenuAction('delete')" @mouseenter="$event.target.style.background='#fff0f0'" @mouseleave="$event.target.style.background='none'">
+      <button role="menuitem" :style="menuItemDangerStyle" @click="handleMenuAction('delete')" @mouseenter="$event.target.style.background='#fff0f0'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#fff0f0'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">✕</span>
         <span>{{ t('menu.delete') }}</span>
       </button>
@@ -39,12 +41,12 @@
           class="lightbox-menu-btn"
           aria-haspopup="menu"
           :aria-expanded="menuVisible"
-          @click.stop="toggleMenu($event)"
           :aria-label="t('lightbox.photoOptions')"
+          @click.stop="toggleMenu($event)"
         >
           <span aria-hidden="true">⋮</span>
         </button>
-        <button ref="closeButtonRef" class="lightbox-close" @click="close" :aria-label="t('lightbox.close')">
+        <button ref="closeButtonRef" class="lightbox-close" :aria-label="t('lightbox.close')" @click="close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -62,10 +64,14 @@
       </div>
 
       <!-- Main image with navigation inside - fixed size frame -->
+      <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
       <div
         class="lightbox-image-container"
+        role="img"
+        :aria-label="photo?.name || 'Photo'"
         :style="{ width: frameWidth + 'px', height: frameHeight + 'px' }"
         @click="closeMenu"
+        @keydown.enter="closeMenu"
         @touchstart="handleTouchStart"
         @touchmove="handleTouchMove"
         @touchend="handleTouchEnd"
@@ -74,26 +80,18 @@
         <button
           v-if="canNavigatePrev"
           class="lightbox-nav lightbox-nav-prev"
-          @click.stop="navigate('prev')"
           :aria-label="t('lightbox.previous')"
+          @click.stop="navigate('prev')"
         >
           <span class="nav-arrow" aria-hidden="true">&#8249;</span>
         </button>
 
-        <!-- Loading spinner while waiting for preview -->
-        <div v-if="!thumbnailUrl && !fullSizeUrl" class="lightbox-loading">
+        <!-- Loading spinner while waiting for full-size image -->
+        <div v-if="!fullSizeUrl" class="lightbox-loading">
           <span class="loading-spinner large"></span>
         </div>
 
-        <!-- Preview image (shown until full-size loads) -->
-        <img
-          v-if="thumbnailUrl && !fullSizeUrl"
-          :src="thumbnailUrl"
-          :alt="photo.name || 'Photo'"
-          class="lightbox-image"
-        />
-
-        <!-- Full-size image (replaces preview when ready) -->
+        <!-- Full-size image -->
         <img
           v-if="fullSizeUrl"
           :src="fullSizeUrl"
@@ -105,8 +103,8 @@
         <button
           v-if="canNavigateNext"
           class="lightbox-nav lightbox-nav-next"
-          @click.stop="navigate('next')"
           :aria-label="t('lightbox.next')"
+          @click.stop="navigate('next')"
         >
           <span class="nav-arrow" aria-hidden="true">&#8250;</span>
         </button>
@@ -217,7 +215,7 @@ import { useClientService, useConfigStore } from '@ownclouders/web-pkg'
 import type { Resource } from '@ownclouders/web-client'
 import { usePhotos } from '../composables/usePhotos'
 import { useI18n } from '../composables/useI18n'
-import type { GeoCoordinates, GraphPhoto, PhotoWithDate } from '../types'
+import type { GraphPhoto, PhotoWithDate } from '../types'
 
 // Initialize composable for shared utility functions
 const { formatSize } = usePhotos()
@@ -306,24 +304,19 @@ const imageLoading = ref(true)
  * LRU (Least Recently Used) cache configuration for image blob URLs.
  *
  * Cache sizes are tuned based on:
- * - Memory usage: Full-size images are 2-8MB each; previews ~100-500KB
+ * - Memory usage: Full-size images are 2-8MB each
  * - Navigation patterns: Users typically view 10-20 images per session
  * - Device constraints: Mobile devices have limited memory
  *
  * 15 full-size images ≈ 30-120MB memory (acceptable for modern devices)
- * 30 previews ≈ 3-15MB memory (previews are much smaller)
  *
  * Adjust lower for memory-constrained environments (mobile),
  * or higher for desktop with more RAM.
  */
 const MAX_FULL_SIZE_CACHE = 15
-const MAX_PREVIEW_CACHE = 30
 
 // Cache for loaded images (full-size) with LRU eviction
 const imageCache = ref<Map<string, string>>(new Map())
-
-// Cache for lightbox previews (larger than grid thumbnails, same aspect ratio as full)
-const previewCache = ref<Map<string, string>>(new Map())
 
 /**
  * Evict oldest entries when cache exceeds max size (LRU eviction).
@@ -407,8 +400,8 @@ const frameHeight = ref(600)
  */
 function calculateFrameSize(photos: PhotoWithDate[]) {
   const maxWidth = Math.min(1200, Math.round(window.innerWidth * 0.9))
-  // Reserve ~200px for the metadata panel below the image
-  const panelHeight = 200
+  // Reserve space for the metadata panel below the image (panel + padding + border)
+  const panelHeight = 270
   const maxHeight = Math.min(700, Math.round(window.innerHeight * 0.9) - panelHeight)
 
   // Analyze orientation distribution in the stack
@@ -458,14 +451,6 @@ let touchMoved = false
 // Cast to PhotoWithDate for accessing graphPhoto
 const photoWithDate = computed(() => props.photo as PhotoWithDate | null)
 
-// Get preview URL from lightbox preview cache (larger preview matching frame aspect ratio)
-const thumbnailUrl = computed(() => {
-  if (!props.photo) return ''
-  const photoId = props.photo.id || (props.photo as any).fileId || props.photo.name
-  if (!photoId) return ''
-  return previewCache.value.get(photoId) || ''
-})
-
 // Get full-size image URL from local cache
 const fullSizeUrl = computed(() => {
   if (!props.photo) return ''
@@ -473,9 +458,6 @@ const fullSizeUrl = computed(() => {
   if (!photoId) return ''
   return imageCache.value.get(photoId) || ''
 })
-
-// Combined URL for download link (prefer full-size)
-const downloadUrl = computed(() => fullSizeUrl.value || thumbnailUrl.value)
 
 // Extract EXIF data from graphPhoto
 const exifData = computed<GraphPhoto>(() => {
@@ -590,7 +572,7 @@ function getPhotoUrl(photo: PhotoWithDate, preview = false): string | null {
   return baseUrl
 }
 
-// Load the current image: preview and full-size in parallel for speed
+// Load the full-size image for the lightbox
 async function loadCurrentImage(photo: PhotoWithDate) {
   if (!photo.id) {
     imageLoading.value = false
@@ -605,31 +587,9 @@ async function loadCurrentImage(photo: PhotoWithDate) {
 
   imageLoading.value = true
 
-  // Load preview and full-size in parallel (50% faster than sequential)
-  const previewPromise = (async () => {
-    if (previewCache.value.has(photo.id!)) return
-
-    const previewUrl = getPhotoUrl(photo, true)
-    if (!previewUrl) return
-
-    try {
-      const response = await clientService.httpAuthenticated.get(previewUrl, {
-        responseType: 'blob'
-      } as any)
-      const blob = response.data as Blob
-      const blobUrl = URL.createObjectURL(blob)
-      previewCache.value.set(photo.id!, blobUrl)
-      evictOldestFromCache(previewCache.value, MAX_PREVIEW_CACHE)
-    } catch {
-      const filename = photo.name || 'unknown'
-      previewCache.value.set(photo.id!, createPlaceholderSvg(filename, true))
-    }
-  })()
-
-  const fullSizePromise = (async () => {
-    const fullUrl = getPhotoUrl(photo, false)
-    if (!fullUrl) return
-
+  // Load full-size image
+  const fullUrl = getPhotoUrl(photo, false)
+  if (fullUrl) {
     try {
       const response = await clientService.httpAuthenticated.get(fullUrl, {
         responseType: 'blob'
@@ -644,10 +604,8 @@ async function loadCurrentImage(photo: PhotoWithDate) {
         imageCache.value.set(photo.id, createPlaceholderSvg(filename, true))
       }
     }
-  })()
+  }
 
-  // Wait for both to complete
-  await Promise.all([previewPromise, fullSizePromise])
   imageLoading.value = false
 }
 
@@ -676,7 +634,7 @@ async function loadCurrentImage(photo: PhotoWithDate) {
  * - New requests wait for slots when all are busy
  * - Failed preloads don't block others
  */
-async function preloadNearbyImages(photos: PhotoWithDate[], currentIdx: number) {
+function preloadNearbyImages(photos: PhotoWithDate[], currentIdx: number) {
   const PRELOAD_AHEAD = 2
   const PRELOAD_BACK = 1
   const MAX_CONCURRENT = 2
@@ -732,7 +690,7 @@ async function preloadNearbyImages(photos: PhotoWithDate[], currentIdx: number) 
         const blob = response.data as Blob
         const blobUrl = URL.createObjectURL(blob)
         imageCache.value.set(photo.id, blobUrl)
-      } catch (err) {
+      } catch {
         // Silent failure for background preloads - don't disrupt user experience
       }
     }
@@ -750,7 +708,6 @@ async function preloadNearbyImages(photos: PhotoWithDate[], currentIdx: number) 
 function close() {
   // Clean up all cached blob URLs using shared helper
   clearBlobCache(imageCache.value)
-  clearBlobCache(previewCache.value)
 
   emit('close')
 }
@@ -790,7 +747,7 @@ function closeMenuAndFocusButton() {
   })
 }
 
-function closeIfNoMenu(event: MouseEvent) {
+function closeIfNoMenu() {
   if (menuVisible.value) {
     menuVisible.value = false
   } else {
@@ -920,7 +877,6 @@ onUnmounted(() => {
   document.documentElement.style.overflow = ''
   // Clean up all cached blob URLs using shared helper
   clearBlobCache(imageCache.value)
-  clearBlobCache(previewCache.value)
 })
 
 // formatSize is imported from usePhotos composable
@@ -1152,7 +1108,8 @@ function getMapUrl(lat: number, lon: number): string {
   position: relative;
   background: #000;
   overflow: hidden;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 200px;  /* Minimum image height before scrolling panel */
 }
 
 .lightbox-loading {

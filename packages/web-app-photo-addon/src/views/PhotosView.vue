@@ -1,9 +1,9 @@
 <template>
   <div
+    ref="scrollContainer"
     class="photos-app"
     role="main"
     :aria-label="t('app.title')"
-    ref="scrollContainer"
     @scroll="handleScroll"
     @touchstart="handlePinchStart"
     @touchmove="handlePinchMove"
@@ -16,26 +16,26 @@
         <div class="header-controls">
           <!-- Date filter (hidden in map view) -->
           <div v-if="viewType !== 'map'" class="date-filter" role="group" :aria-label="t('filter.jumpTo')">
-            <span class="control-label" id="date-filter-label">{{ t('filter.jumpTo') }}</span>
+            <span id="date-filter-label" class="control-label">{{ t('filter.jumpTo') }}</span>
             <select
               id="filter-year"
               v-model="filterYear"
-              @change="onDateFilterChange"
               class="date-select"
               :aria-label="t('filter.year')"
+              @change="onDateFilterChange"
             >
               <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
             </select>
             <select
               id="filter-month"
               v-model="filterMonth"
-              @change="onDateFilterChange"
               class="date-select"
               :aria-label="t('filter.month')"
+              @change="onDateFilterChange"
             >
               <option v-for="(name, index) in monthNames" :key="index" :value="index">{{ name }}</option>
             </select>
-            <button v-if="!isCurrentMonth" @click="jumpToToday" class="today-btn" :title="t('filter.today')">
+            <button v-if="!isCurrentMonth" class="today-btn" :title="t('filter.today')" @click="jumpToToday">
               {{ t('filter.today') }}
             </button>
           </div>
@@ -58,7 +58,7 @@
           </div>
           <!-- EXIF only toggle (hidden in map view) -->
           <label v-if="viewType !== 'map'" class="exif-toggle" for="exif-only-toggle">
-            <input type="checkbox" id="exif-only-toggle" v-model="exifOnly" />
+            <input id="exif-only-toggle" v-model="exifOnly" type="checkbox" />
             <span class="toggle-label">{{ t('filter.exifOnly') }}</span>
           </label>
         </div>
@@ -84,13 +84,13 @@
       </div>
       <h2 class="error-title">{{ errorTitle }}</h2>
       <p class="error-message">{{ error }}</p>
-      <div class="error-suggestions" v-if="errorSuggestions.length > 0">
+      <div v-if="errorSuggestions.length > 0" class="error-suggestions">
         <p class="suggestions-label">{{ t('error.thingsToTry') }}</p>
         <ul>
           <li v-for="(suggestion, index) in errorSuggestions" :key="index">{{ suggestion }}</li>
         </ul>
       </div>
-      <button @click="retryLoad" class="retry-button">
+      <button class="retry-button" @click="retryLoad">
         <span class="retry-icon" aria-hidden="true">↻</span>
         {{ t('error.tryAgain') }}
       </button>
@@ -116,11 +116,11 @@
               <!-- Single photo: regular item -->
               <div
                 v-if="subGroup.photos.length === 1"
+                :ref="(el) => observePhoto(el as HTMLElement, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name)"
                 class="photo-item"
                 role="button"
                 tabindex="0"
                 :aria-label="subGroup.photos[0].name"
-                :ref="(el) => observePhoto(el as HTMLElement, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name)"
                 @click="openPhoto(subGroup.photos[0])"
                 @keydown.enter="openPhoto(subGroup.photos[0])"
                 @keydown.space.prevent="openPhoto(subGroup.photos[0])"
@@ -138,7 +138,7 @@
               <!-- Multiple photos: stack -->
               <PhotoStack
                 v-else
-                :ref="(el) => { if (el?.$el) observePhoto(el.$el as HTMLElement, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name) }"
+                :ref="(el) => { if (el && '$el' in el) observePhoto((el as { $el: HTMLElement }).$el, subGroup.photos[0].id || subGroup.photos[0].fileId || subGroup.photos[0].name) }"
                 :photos="subGroup.photos"
                 :get-photo-url="getPhotoUrl"
                 @click="openStack(subGroup)"
@@ -158,6 +158,7 @@
       <PhotoMap
         :photos="mapPhotos"
         :get-thumbnail-url="getPhotoUrl"
+        :prefetch-thumbnails="queueMapThumbnails"
         @photo-click="openPhotoFromMap"
         @visible-count-change="onMapVisibleCountChange"
       />
@@ -210,13 +211,11 @@ import type {
   GroupMode,
   ViewType
 } from '../types'
-import { IMAGE_EXTENSIONS } from '../types'
 
 // Initialize composable for shared utility functions
 const {
   getISOWeek,
   calculateDistance,
-  formatSize,
   formatDate: formatDateYMD
 } = usePhotos()
 
@@ -226,14 +225,6 @@ const { t, getMonthNames } = useI18n()
 const clientService = useClientService()
 const spacesStore = useSpacesStore()
 const configStore = useConfigStore()
-
-// Group mode options (labels are computed for i18n reactivity)
-const groupModes = computed(() => [
-  { value: 'day' as GroupMode, label: t('groupMode.day') },
-  { value: 'week' as GroupMode, label: t('groupMode.week') },
-  { value: 'month' as GroupMode, label: t('groupMode.month') },
-  { value: 'year' as GroupMode, label: t('groupMode.year') }
-])
 
 // LocalStorage keys for persistent settings
 const STORAGE_KEY_GROUP_MODE = 'photo-addon:groupMode'
@@ -247,14 +238,14 @@ function getStoredGroupMode(): GroupMode {
     if (saved && ['day', 'week', 'month', 'year'].includes(saved)) {
       return saved as GroupMode
     }
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
   return 'day'
 }
 
 function getStoredExifOnly(): boolean {
   try {
     return localStorage.getItem(STORAGE_KEY_EXIF_ONLY) === 'true'
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
   return false
 }
 
@@ -264,7 +255,7 @@ function getStoredViewType(): ViewType {
     if (saved && ['calendar', 'map'].includes(saved)) {
       return saved as ViewType
     }
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
   return 'calendar'
 }
 
@@ -516,51 +507,9 @@ let personalSpace: SpaceResource | null = null
  * - Ensures the grid doesn't look empty on first render
  * - ~2-3 rows on desktop, enough to fill most mobile screens
  * - If fewer photos exist in the date range, loading continues backward
- *
- * DAYS_PER_BATCH (7):
- * - Days to search per scroll-triggered load
- * - 1 week balances search performance vs. load frequency
- * - Smaller values = more API calls; larger = wasted bandwidth
- * - Works well with typical photo density (a few photos per day)
- *
- * MAX_DAYS_BACK (3650 = 10 years):
- * - Safety limit to prevent infinite backward loading
- * - Most users don't have photos > 10 years in one storage
- * - Prevents runaway API calls if user has very sparse photos
  */
 const SCROLL_THRESHOLD = 500
 const MIN_PHOTOS_ON_SCREEN = 20
-const DAYS_PER_BATCH = 7
-const MAX_DAYS_BACK = 365 * 10
-
-/**
- * Check if a resource is an actual image file (not sidecar metadata)
- */
-function isImageFile(resource: Resource): boolean {
-  const name = (resource.name || '').toLowerCase()
-
-  // Explicitly exclude metadata/sidecar files
-  if (name.includes('.json') || name.includes('.xml') || name.includes('.txt')) {
-    return false
-  }
-
-  // Check MIME type first (most reliable)
-  if (resource.mimeType) {
-    const mime = resource.mimeType.toLowerCase()
-    if (!mime.startsWith('image/')) {
-      return false
-    }
-    // Exclude SVG and icons (not photos)
-    if (mime.includes('svg') || mime.includes('icon')) {
-      return false
-    }
-    return true
-  }
-
-  // Fallback: check file extension
-  const ext = name.split('.').pop() || ''
-  return IMAGE_EXTENSIONS.has(ext)
-}
 
 // Filter photos based on EXIF toggle and folder selection
 const displayedPhotos = computed(() => {
@@ -916,11 +865,6 @@ function formatDateHeader(dateKey: string): string {
   return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
 
-// Change group mode and potentially reload
-function changeGroupMode(newMode: GroupMode) {
-  groupMode.value = newMode
-}
-
 // Handle date filter change - reload photos starting from selected month
 function onDateFilterChange() {
   loadPhotosFromFilter()
@@ -950,132 +894,6 @@ function handleScroll() {
   if (distanceFromBottom < SCROLL_THRESHOLD) {
     loadMorePhotos()
   }
-}
-
-// Use formatDateYMD from usePhotos composable (imported above)
-
-/**
- * Extract EXIF creation date from a resource with multi-source fallback.
- *
- * Data Source Priority (highest to lowest):
- *
- * 1. photo-taken-date-time (WebDAV property)
- *    - Source: Custom oCIS patch exposing Tika-extracted EXIF via WebDAV PROPFIND
- *    - Format: ISO 8601 string "2024-01-15T10:30:00Z"
- *    - Available: Only with patched oCIS backend
- *
- * 2. photo.takenDateTime (Graph API / SDK field)
- *    - Source: Official oCIS photo metadata from Tika EXIF extraction
- *    - Format: ISO 8601 string
- *    - Available: oCIS 3.0+ with Tika extractor enabled
- *
- * 3. Legacy EXIF fields (various property names)
- *    - Source: Older Tika configurations, different WebDAV implementations
- *    - Names: exif.creationdate, exifDateTimeOriginal, dateTimeOriginal, etc.
- *    - Available: Varies by server configuration
- *
- * 4. mdate (file modification time)
- *    - Source: Filesystem metadata
- *    - Available: Always, but reflects upload time not photo time
- *    - Warning: May be inaccurate for photos moved/copied between devices
- *
- * The 'source' field in the return value indicates which source was used,
- * useful for debugging and for UI to indicate data reliability (EXIF vs mdate).
- *
- * @param resource - oCIS Resource object from WebDAV or Graph API
- * @returns Object with date, time, timestamp, and source; or null if no date found
- */
-function extractExifDateTime(resource: Resource): { date: string, time: string, timestamp: number, source: string } | null {
-  const r = resource as any
-
-  // PRIMARY: Check for photo-taken-date-time WebDAV property (from our patched oCIS)
-  const photoTakenDateTime = r['photo-taken-date-time'] || r['oc:photo-taken-date-time'] ||
-    r.photoTakenDateTime || r.extraProps?.['oc:photo-taken-date-time']
-  if (photoTakenDateTime) {
-    const parsed = parseExifDate(photoTakenDateTime)
-    if (parsed) {
-      return { ...parsed, source: 'photo-taken-date-time' }
-    }
-  }
-
-  // SECONDARY: Check official oCIS SDK photo.takenDateTime field
-  if (r.photo?.takenDateTime) {
-    const parsed = parseExifDate(r.photo.takenDateTime)
-    if (parsed) {
-      return { ...parsed, source: 'photo.takenDateTime' }
-    }
-  }
-
-  // TERTIARY: Try legacy EXIF fields (from older Tika configurations)
-  const legacyFields = [
-    { name: 'exif.creationdate', value: r['exif.creationdate'] },
-    { name: 'exif.datetimeoriginal', value: r['exif.datetimeoriginal'] },
-    { name: 'exifCreationDate', value: r.exifCreationDate },
-    { name: 'exifDateTimeOriginal', value: r.exifDateTimeOriginal },
-    { name: 'creationDate', value: r.creationDate },
-    { name: 'dateTimeOriginal', value: r.dateTimeOriginal }
-  ]
-
-  for (const field of legacyFields) {
-    if (field.value) {
-      const parsed = parseExifDate(field.value)
-      if (parsed) {
-        return { ...parsed, source: field.name }
-      }
-    }
-  }
-
-  // FALLBACK: Use file modification date
-  const mdate = r.mdate || r.mtime
-  if (mdate) {
-    const d = new Date(mdate)
-    if (!isNaN(d.getTime())) {
-      return {
-        date: formatDateYMD(d),
-        time: `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`,
-        timestamp: d.getTime(),
-        source: 'mdate'
-      }
-    }
-  }
-
-  return null
-}
-
-/**
- * Parse EXIF date string in various formats
- * Supports: YYYY-MM-DD, YYYY:MM:DD HH:MM:SS, ISO 8601
- */
-function parseExifDate(dateStr: string): { date: string, time: string, timestamp: number } | null {
-  if (!dateStr || typeof dateStr !== 'string') return null
-
-  try {
-    // EXIF format: "YYYY:MM:DD HH:MM:SS"
-    const exifMatch = dateStr.match(/^(\d{4}):(\d{2}):(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/)
-    if (exifMatch) {
-      const [, year, month, day, hour, min, sec] = exifMatch
-      const d = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(min), parseInt(sec))
-      return {
-        date: `${year}-${month}-${day}`,
-        time: `${hour}:${min}:${sec}`,
-        timestamp: d.getTime()
-      }
-    }
-
-    // ISO 8601 or standard date format
-    const d = new Date(dateStr)
-    if (!isNaN(d.getTime())) {
-      return {
-        date: formatDateYMD(d),
-        time: `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`,
-        timestamp: d.getTime()
-      }
-    }
-  } catch {
-    // Ignore parse errors
-  }
-
-  return null
 }
 
 /**
@@ -1520,7 +1338,7 @@ let mapPhotosLoadingPromise: Promise<void> | null = null
 /**
  * Load photos for the map view (with true mutex to prevent concurrent requests)
  */
-async function loadMapPhotos() {
+function loadMapPhotos() {
   // Already loaded successfully
   if (mapPhotosLoaded.value) return
 
@@ -1563,16 +1381,6 @@ const loadedRanges = ref<Array<{ start: string, end: string }>>([])
 
 // Flag to indicate if we've fallen back to non-date-filtered search
 let useFallbackSearch = false
-
-/**
- * Get the oldest date we've loaded so far
- */
-function getOldestLoadedDate(): string | null {
-  if (allPhotos.value.length === 0) return null
-  // Photos are sorted newest first, so last item is oldest
-  const oldest = allPhotos.value[allPhotos.value.length - 1]
-  return oldest.exifDate || null
-}
 
 /**
  * Check if screen needs more photos (not enough to fill visible area + buffer)
@@ -1723,10 +1531,7 @@ async function loadMorePhotos() {
     // But don't mark fully loaded yet - let user keep scrolling
     if (photos.length === 0 && loadedRanges.value.length > 5) {
       // After 5 empty batches (15 months), assume we're done
-      const emptyBatches = loadedRanges.value.slice(-5).filter((_, i, arr) => {
-        // Check if consecutive empty
-        return true
-      })
+      const emptyBatches = loadedRanges.value.slice(-5)
       if (emptyBatches.length >= 5) {
         isFullyLoaded.value = true
       }
@@ -1759,7 +1564,7 @@ function evictOldestThumbnails() {
 
 // Request queue to limit concurrent fetches
 const MAX_CONCURRENT_FETCHES = 4
-const MAX_QUEUE_SIZE = 30  // Reduced queue size - only need visible items
+const MAX_QUEUE_SIZE = 100  // Sized for map view which loads all visible markers at once
 let activeFetches = 0
 const fetchQueue: Array<{ photo: PhotoWithDate, cacheKey: string }> = []
 const pendingFetches = new Set<string>()
@@ -1833,14 +1638,6 @@ function observePhoto(el: HTMLElement | null, photoId: string) {
 }
 
 /**
- * Stop observing a photo element.
- */
-function unobservePhoto(el: HTMLElement | null) {
-  if (!el || !thumbnailObserver) return
-  thumbnailObserver.unobserve(el)
-}
-
-/**
  * Get photo URL - returns cached blob URL or placeholder.
  * Does NOT automatically queue fetches - use queuePhotoFetch for that.
  * This prevents fetching off-screen photos during Vue re-renders.
@@ -1864,6 +1661,20 @@ function getPhotoUrl(photo: Resource): string {
 
   // Return a placeholder while loading
   return 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23f0f0f0" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23999" font-size="10">Loading...</text></svg>'
+}
+
+/**
+ * Queue thumbnails for map view photos using the shared fetch queue.
+ * Map photos bypass IntersectionObserver (they're in Leaflet's DOM, not Vue's),
+ * so we call queuePhotoFetch directly instead of relying on visiblePhotoIds.
+ */
+function queueMapThumbnails(photos: PhotoWithDate[]) {
+  for (const photo of photos) {
+    const cacheKey = photo.id || photo.fileId || photo.name
+    if (!blobUrlCache.value.has(cacheKey) && !pendingFetches.has(cacheKey)) {
+      queuePhotoFetch(photo, cacheKey)
+    }
+  }
 }
 
 /**
@@ -1922,17 +1733,23 @@ function createPlaceholderSvg(filename: string): string {
 // Fetch image with authentication and cache as blob URL
 async function doFetch(photo: PhotoWithDate, cacheKey: string) {
   const cache = blobUrlCache.value
-  if (cache.has(cacheKey)) return
+  if (cache.has(cacheKey)) {
+    return
+  }
 
   const serverUrl = (configStore.serverUrl || '').replace(/\/$/, '')
-  if (!personalSpace) return
+  if (!personalSpace) {
+    return
+  }
 
   const spaceId = personalSpace.id
   const photoPath = photo.filePath || photo.name || ''
-  if (!photoPath) return
+  if (!photoPath) {
+    return
+  }
 
   const encodedPath = photoPath.split('/').map(segment => encodeURIComponent(segment)).join('/')
-  const url = `${serverUrl}/dav/spaces/${encodeURIComponent(spaceId)}${encodedPath}?preview=1&x=256&y=256&a=1`
+  const url = `${serverUrl}/dav/spaces/${spaceId}${encodedPath}?preview=1&x=256&y=256&a=1`
 
   try {
     const response = await clientService.httpAuthenticated.get(url, {
@@ -2014,14 +1831,6 @@ function handleImageError(event: Event) {
 }
 
 // Context menu functions
-function openContextMenu(event: MouseEvent, photo: PhotoWithDate) {
-  event.preventDefault()
-  event.stopPropagation()
-  contextMenuPhoto.value = photo
-  contextMenuPosition.value = { x: event.clientX, y: event.clientY }
-  contextMenuVisible.value = true
-}
-
 function closeContextMenu() {
   contextMenuVisible.value = false
   contextMenuPhoto.value = null
@@ -2922,7 +2731,7 @@ watch(groupMode, (newVal) => {
 
   try {
     localStorage.setItem(STORAGE_KEY_GROUP_MODE, newVal)
-  } catch (e) {
+  } catch {
     // ignore
   }
 })
@@ -2930,7 +2739,7 @@ watch(groupMode, (newVal) => {
 watch(exifOnly, (newVal) => {
   try {
     localStorage.setItem(STORAGE_KEY_EXIF_ONLY, String(newVal))
-  } catch (e) {
+  } catch {
     // ignore
   }
   // Reload photos with new filter when toggle changes

@@ -4,11 +4,11 @@
       v-for="photo in photos"
       :key="photo.id"
       class="photo-item"
-      @click="handleClick(photo)"
-      @keydown.enter="handleClick(photo)"
       tabindex="0"
       role="button"
       :aria-label="photo.name || 'Photo'"
+      @click="handleClick(photo)"
+      @keydown.enter="handleClick(photo)"
     >
       <img
         :src="getThumbnailUrl(photo)"
