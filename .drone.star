@@ -1,7 +1,7 @@
 MINIO_MC = "minio/mc:RELEASE.2025-04-16T18-13-26Z"
 OC_CI_ALPINE = "owncloudci/alpine:latest"
 OC_CI_BAZEL_BUILDIFIER = "owncloudci/bazel-buildifier"
-OC_CI_NODEJS = "owncloudci/nodejs:20"
+OC_CI_NODEJS = "owncloudci/nodejs:22"
 OC_UBUNTU = "owncloud/ubuntu:20.04"
 PLUGINS_DOCKER = "plugins/docker:20.14"
 PLUGINS_GITHUB_RELEASE = "plugins/github-release:1"
