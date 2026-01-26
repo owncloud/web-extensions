@@ -4,7 +4,6 @@ import type { Resource } from '@ownclouders/web-client'
 
 // Helper to create mock resources for testing
 // Uses 'as any' to allow partial mocks with flexible types in tests
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockResource = (props: Record<string, any>): Resource =>
   ({ path: '', ...props } as Resource)
 
