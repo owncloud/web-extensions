@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 FAILED=0
 
 echo "=========================================="
-echo "  Photo-Addon Test and Commit Script"
+echo "  Web Extensions Test and Commit Script"
 echo "=========================================="
 echo ""
 
@@ -44,8 +44,26 @@ fi
 echo ""
 
 # Step 3: Linter (with --max-warnings=0 to fail on warnings)
-echo -e "${YELLOW}[3/5] Running linter on photo-addon (no warnings allowed)...${NC}"
+echo -e "${YELLOW}[3/5] Running linter (no warnings allowed)...${NC}"
+LINT_FAILED=0
+
+# Lint photo-addon
 if pnpm eslint 'packages/web-app-photo-addon/**/*.{js,ts,vue}' --color --max-warnings=0; then
+    echo -e "${GREEN}  ✓ photo-addon linter passed${NC}"
+else
+    echo -e "${RED}  ✗ photo-addon linter failed${NC}"
+    LINT_FAILED=1
+fi
+
+# Lint advanced-search
+if pnpm eslint 'packages/web-app-advanced-search/**/*.{js,ts,vue}' --color --max-warnings=0; then
+    echo -e "${GREEN}  ✓ advanced-search linter passed${NC}"
+else
+    echo -e "${RED}  ✗ advanced-search linter failed${NC}"
+    LINT_FAILED=1
+fi
+
+if [ $LINT_FAILED -eq 0 ]; then
     echo -e "${GREEN}✓ Linter passed (no warnings)${NC}"
 else
     echo -e "${RED}✗ Linter failed or has warnings${NC}"
@@ -63,17 +81,29 @@ else
 fi
 echo ""
 
-# Step 5: E2E tests (skip if none exist)
+# Step 5: E2E tests (skip if credentials not set or browsers not available)
 echo -e "${YELLOW}[5/5] Checking for E2E tests...${NC}"
-if [ -d "tests/e2e" ] || [ -d "packages/web-app-photo-addon/tests/e2e" ]; then
-    if pnpm test:e2e; then
-        echo -e "${GREEN}✓ E2E tests passed${NC}"
-    else
-        echo -e "${RED}✗ E2E tests failed${NC}"
-        FAILED=1
-    fi
+
+# Check if E2E can run
+E2E_SKIP_REASON=""
+if [ -z "$OCIS_PASSWORD" ]; then
+    E2E_SKIP_REASON="OCIS_PASSWORD not set"
+fi
+
+if [ -n "$E2E_SKIP_REASON" ]; then
+    echo -e "${YELLOW}⊘ E2E tests skipped ($E2E_SKIP_REASON)${NC}"
+    echo "  Set OCIS_PASSWORD environment variable to run E2E tests"
 else
-    echo -e "${GREEN}✓ No E2E tests to run (skipped)${NC}"
+    if [ -d "packages/web-app-photo-addon/tests/e2e" ] || [ -d "packages/web-app-advanced-search/tests/e2e" ]; then
+        if pnpm test:e2e --project=photo-addon --project=advanced-search; then
+            echo -e "${GREEN}✓ E2E tests passed${NC}"
+        else
+            echo -e "${RED}✗ E2E tests failed${NC}"
+            FAILED=1
+        fi
+    else
+        echo -e "${GREEN}✓ No E2E tests to run (skipped)${NC}"
+    fi
 fi
 echo ""
 
@@ -100,11 +130,15 @@ if [ $FAILED -eq 0 ]; then
     echo ""
     echo "Staging changes..."
     git add -A packages/web-app-photo-addon/
+    git add -A packages/web-app-advanced-search/
 
     echo "Creating commit..."
-    git commit -m "$COMMIT_MSG
+    git commit -m "$(cat <<EOF
+$COMMIT_MSG
 
-Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+EOF
+)"
 
     echo -e "${GREEN}✓ Commit created successfully${NC}"
     echo ""
