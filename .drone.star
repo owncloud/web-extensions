@@ -17,6 +17,7 @@ APPS = [
     "external-sites",
     "importer",
     "json-viewer",
+    "photo-addon",
     "progress-bars",
     "unzip",
 ]
@@ -359,6 +360,7 @@ def ocisService():
                 "mv packages/web-app-unzip/dist /apps/unzip",
                 "mv packages/web-app-progress-bars/dist /apps/progress-bars",
                 "mv packages/web-app-json-viewer/dist /apps/json-viewer",
+                "mv packages/web-app-photo-addon/dist /apps/photo-addon",
                 "mv packages/web-app-external-sites/dist /apps/web-app-external-sites",
                 "cp packages/web-app-external-sites/tests/config/manifest.json /apps/web-app-external-sites/manifest.json",
             ],
