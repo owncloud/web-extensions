@@ -21,3 +21,11 @@ docker-compose.override.yml
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# E2E test auth state (contains session tokens)
+**/.auth/
+
+# Claude Code
+CLAUDE.md
+.claude/
+scripts/
