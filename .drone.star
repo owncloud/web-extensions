@@ -12,6 +12,7 @@ path = {
 }
 
 APPS = [
+    "advanced-search",
     "cast",
     "draw-io",
     "external-sites",
