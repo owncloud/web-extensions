@@ -12,6 +12,7 @@ path = {
 }
 
 APPS = [
+    "advanced-search",
     "cast",
     "draw-io",
     "external-sites",
@@ -355,6 +356,7 @@ def ocisService():
             "commands": [
                 "pnpm build",
                 "mkdir -p /apps",
+                "mv packages/web-app-advanced-search/dist /apps/advanced-search",
                 "mv packages/web-app-draw-io/dist /apps/draw-io",
                 "mv packages/web-app-unzip/dist /apps/unzip",
                 "mv packages/web-app-progress-bars/dist /apps/progress-bars",
