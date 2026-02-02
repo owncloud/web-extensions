@@ -11,6 +11,7 @@ This repository contains a collection of [ownCloud Web](https://github.com/owncl
 
 Extensions are provided by apps. These are the apps, that are provided by this repository.
 
+- [web-app-photo-addon](./packages/web-app-photo-addon/)
 - [web-app-cast](./packages/web-app-cast/)
 - [web-app-draw-io](./packages/web-app-draw-io/)
 - [web-app-external-sites](./packages/web-app-external-sites/)
