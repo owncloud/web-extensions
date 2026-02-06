@@ -571,17 +571,17 @@ export function useAdvancedSearch() {
    * TODO: WebDAV doesn't return photo-camera-make property in responses,
    * so dynamic discovery requires a different approach (faceted search or probing)
    */
-  async function fetchCameraMakes(): Promise<string[]> {
+  function fetchCameraMakes(): Promise<string[]> {
     // Static list is used from KNOWN_CAMERA_MAKES in types.ts
-    return []
+    return Promise.resolve([])
   }
 
   /**
    * Fetch camera models - returns empty, no static list available
    * TODO: WebDAV doesn't return photo-camera-model property in responses
    */
-  async function fetchCameraModels(): Promise<string[]> {
-    return []
+  function fetchCameraModels(): Promise<string[]> {
+    return Promise.resolve([])
   }
 
   /**

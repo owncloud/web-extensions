@@ -178,12 +178,11 @@
         <p>{{ $gettext('No saved searches yet') }}</p>
         <p class="hint">{{ $gettext('Create a search and click "Save Search" to save it.') }}</p>
       </div>
-      <ul v-else class="saved-list" role="list">
+      <ul v-else class="saved-list">
         <li
           v-for="(query, index) in savedQueries"
           :key="query.id"
           class="saved-item"
-          role="listitem"
         >
           <button
             :ref="el => { if (index === 0) firstSavedQueryBtn = el as HTMLButtonElement }"
@@ -199,16 +198,19 @@
     </div>
 
     <!-- Save dialog -->
+    <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
     <div
       v-if="showSaveDialog"
       class="modal-overlay"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="$gettext('Save Search')"
       @click.self="showSaveDialog = false"
-      @keydown.escape="showSaveDialog = false"
     >
-      <div class="modal-dialog">
+      <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        :aria-label="$gettext('Save Search')"
+        @keydown.escape="showSaveDialog = false"
+      >
         <h3>{{ $gettext('Save Search') }}</h3>
         <input
           ref="saveQueryInput"
@@ -357,7 +359,7 @@ function retrySearch(): void {
   executeSearch()
 }
 
-function handleItemClick(_item: SearchResource): void {
+function handleItemClick(): void {
   // File navigation handled via context menu actions (Open in Files)
 }
 
