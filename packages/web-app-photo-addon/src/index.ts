@@ -11,15 +11,19 @@ import {
 } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
 import { computed } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import PhotosView from './views/PhotosView.vue'
+import translations from '../l10n/translations.json'
 
 const appId = 'photo-addon'
 
 export default defineWebApplication({
   setup() {
+    const { $gettext } = useGettext()
+
     const appInfo = {
       id: appId,
-      name: 'Photos',
+      name: $gettext('Photos'),
       icon: 'image',
       color: '#339900'
     }
@@ -55,7 +59,8 @@ export default defineWebApplication({
     return {
       appInfo,
       routes,
-      extensions: menuItems
+      extensions: menuItems,
+      translations
     }
   }
 })

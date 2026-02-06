@@ -4,7 +4,7 @@
     class="photo-stack"
     role="button"
     tabindex="0"
-    :aria-label="photos.length > 1 ? t('stack.ariaLabel', { name: topPhoto.name, count: photos.length }) : topPhoto.name"
+    :aria-label="photos.length > 1 ? $gettext('%{name}, stack of %{count} photos').replace('%{name}', topPhoto.name).replace('%{count}', String(photos.length)) : topPhoto.name"
     @click="$emit('click')"
     @keydown.enter="$emit('click')"
     @keydown.space.prevent="$emit('click')"
@@ -43,7 +43,7 @@
     <div class="stack-overlay">
       <span class="stack-name">{{ topPhoto.name }}</span>
       <span v-if="photos.length > 1" class="stack-count">
-        {{ t('stack.morePhotos', { count: photos.length - 1 }) }}
+        {{ $gettext('+%{count} more').replace('%{count}', String(photos.length - 1)) }}
       </span>
     </div>
   </div>
@@ -52,7 +52,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Resource } from '@ownclouders/web-client'
-import { useI18n } from '../composables/useI18n'
+import { useTranslations } from '../composables/useTranslations'
 import type { PhotoWithDate } from '../types'
 
 const props = defineProps<{
@@ -64,7 +64,7 @@ defineEmits<{
   (e: 'click'): void
 }>()
 
-const { t } = useI18n()
+const { $gettext } = useTranslations()
 
 // Top photo is the first one (most recent in the group)
 const topPhoto = computed(() => props.photos[0])

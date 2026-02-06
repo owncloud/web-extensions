@@ -3,7 +3,7 @@
     ref="scrollContainer"
     class="photos-app"
     role="main"
-    :aria-label="t('app.title')"
+    :aria-label="$gettext('Photos')"
     @scroll="handleScroll"
     @touchstart="handlePinchStart"
     @touchmove="handlePinchMove"
@@ -12,16 +12,16 @@
   >
     <div class="photos-header">
       <div class="header-top">
-        <h1>{{ t('app.title') }} ({{ viewType === 'map' ? t('app.photosInView', { visible: mapVisibleCount, total: mapTotalCount }) : photoCount }})</h1>
+        <h1>{{ $gettext('Photos') }} ({{ viewType === 'map' ? $gettext('%{visible} of %{total} in view').replace('%{visible}', String(mapVisibleCount)).replace('%{total}', String(mapTotalCount)) : photoCount }})</h1>
         <div class="header-controls">
           <!-- Date filter (hidden in map view) -->
-          <div v-if="viewType !== 'map'" class="date-filter" role="group" :aria-label="t('filter.jumpTo')">
-            <span id="date-filter-label" class="control-label">{{ t('filter.jumpTo') }}</span>
+          <div v-if="viewType !== 'map'" class="date-filter" role="group" :aria-label="$gettext('Jump to:')">
+            <span id="date-filter-label" class="control-label">{{ $gettext('Jump to:') }}</span>
             <select
               id="filter-year"
               v-model="filterYear"
               class="date-select"
-              :aria-label="t('filter.year')"
+              :aria-label="$gettext('Select year')"
               @change="onDateFilterChange"
             >
               <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
@@ -30,46 +30,46 @@
               id="filter-month"
               v-model="filterMonth"
               class="date-select"
-              :aria-label="t('filter.month')"
+              :aria-label="$gettext('Select month')"
               @change="onDateFilterChange"
             >
               <option v-for="(name, index) in monthNames" :key="index" :value="index">{{ name }}</option>
             </select>
-            <button v-if="!isCurrentMonth" class="today-btn" :title="t('filter.today')" @click="jumpToToday">
-              {{ t('filter.today') }}
+            <button v-if="!isCurrentMonth" class="today-btn" :title="$gettext('Today')" @click="jumpToToday">
+              {{ $gettext('Today') }}
             </button>
           </div>
           <!-- View type selector (Calendar / Map) -->
-          <div class="view-selector" role="group" :aria-label="t('view.selector')">
+          <div class="view-selector" role="group" :aria-label="$gettext('View mode')">
             <button
               :class="['view-btn', { active: viewType === 'calendar' }]"
               :aria-pressed="viewType === 'calendar'"
               @click="viewType = 'calendar'"
             >
-              {{ t('view.calendar') }}
+              {{ $gettext('Calendar') }}
             </button>
             <button
               :class="['view-btn', { active: viewType === 'map' }]"
               :aria-pressed="viewType === 'map'"
               @click="viewType = 'map'"
             >
-              {{ t('view.map') }}
+              {{ $gettext('Map') }}
             </button>
           </div>
           <!-- EXIF only toggle (hidden in map view) -->
           <label v-if="viewType !== 'map'" class="exif-toggle" for="exif-only-toggle">
             <input id="exif-only-toggle" v-model="exifOnly" type="checkbox" />
-            <span class="toggle-label">{{ t('filter.exifOnly') }}</span>
+            <span class="toggle-label">{{ $gettext('EXIF only') }}</span>
           </label>
         </div>
       </div>
 
       <p v-if="loading && !error" class="loading-status" role="status" aria-live="polite">
         <span class="spinner" aria-hidden="true"></span>
-        {{ t('loading.status', { range: currentDateRange, count: photoCount }) }}
+        {{ $gettext('Loading %{range}... %{count} photos').replace('%{range}', currentDateRange).replace('%{count}', String(photoCount)) }}
       </p>
       <p v-else-if="viewType !== 'map' && !error" class="photo-count" role="status" aria-live="polite">
-        <span v-if="isFullyLoaded" class="complete-hint">{{ t('app.allPhotosLoaded') }}</span>
+        <span v-if="isFullyLoaded" class="complete-hint">{{ $gettext('All photos loaded') }}</span>
       </p>
     </div>
 
@@ -85,14 +85,14 @@
       <h2 class="error-title">{{ errorTitle }}</h2>
       <p class="error-message">{{ error }}</p>
       <div v-if="errorSuggestions.length > 0" class="error-suggestions">
-        <p class="suggestions-label">{{ t('error.thingsToTry') }}</p>
+        <p class="suggestions-label">{{ $gettext('Things to try:') }}</p>
         <ul>
           <li v-for="(suggestion, index) in errorSuggestions" :key="index">{{ suggestion }}</li>
         </ul>
       </div>
       <button class="retry-button" @click="retryLoad">
         <span class="retry-icon" aria-hidden="true">↻</span>
-        {{ t('error.tryAgain') }}
+        {{ $gettext('Try Again') }}
       </button>
     </div>
 
@@ -100,8 +100,8 @@
     <div v-if="!error && viewType === 'calendar'" class="photos-content">
       <div v-if="!loading && photoCount === 0" class="empty-state">
         <span class="empty-icon">📷</span>
-        <p>{{ t('empty.noPhotos') }}</p>
-        <p class="empty-hint">{{ t('empty.hint') }}</p>
+        <p>{{ $gettext('No photos found') }}</p>
+        <p class="empty-hint">{{ $gettext('Photos will appear here after EXIF tags are synced') }}</p>
       </div>
 
       <div v-else class="photo-groups">
@@ -148,7 +148,7 @@
         </div>
 
         <div v-if="loadingMore" class="loading-more">
-          {{ t('loading.more') }}
+          {{ $gettext('Loading more photos...') }}
         </div>
       </div>
     </div>
@@ -202,7 +202,7 @@ import PhotoStack from '../components/PhotoStack.vue'
 import PhotoContextMenu from '../components/PhotoContextMenu.vue'
 import PhotoMap from '../components/PhotoMap.vue'
 import { usePhotos } from '../composables/usePhotos'
-import { useI18n } from '../composables/useI18n'
+import { useTranslations } from '../composables/useTranslations'
 import type {
   GeoCoordinates,
   GraphPhoto,
@@ -219,8 +219,8 @@ const {
   formatDate: formatDateYMD
 } = usePhotos()
 
-// Initialize i18n
-const { t, getMonthNames } = useI18n()
+// Initialize translations
+const { $gettext, getMonthNames } = useTranslations()
 
 const clientService = useClientService()
 const spacesStore = useSpacesStore()
@@ -277,10 +277,10 @@ const zoomLevels: GroupMode[] = ['day', 'week', 'month', 'year']
 // Zoom indicator text
 const zoomIndicatorText = computed(() => {
   switch (groupMode.value) {
-    case 'day': return t('groupMode.day')
-    case 'week': return t('groupMode.week')
-    case 'month': return t('groupMode.month')
-    case 'year': return t('groupMode.year')
+    case 'day': return $gettext('Day')
+    case 'week': return $gettext('Week')
+    case 'month': return $gettext('Month')
+    case 'year': return $gettext('Year')
     default: return ''
   }
 })
@@ -529,52 +529,52 @@ const photoCount = computed(() => displayedPhotos.value.length)
 const errorTitle = computed(() => {
   const err = error.value || ''
   if (err.includes('search service') || err.includes('503') || err.includes('Service Unavailable')) {
-    return t('error.searchUnavailable')
+    return $gettext('Search Service Unavailable')
   }
   if (err.includes('network') || err.includes('Network') || err.includes('ECONNREFUSED')) {
-    return t('error.connection')
+    return $gettext('Connection Error')
   }
   if (err.includes('personal space')) {
-    return t('error.storageNotFound')
+    return $gettext('Storage Not Found')
   }
   if (err.includes('401') || err.includes('Unauthorized')) {
-    return t('error.authentication')
+    return $gettext('Authentication Error')
   }
-  return t('error.unableToLoad')
+  return $gettext('Unable to Load Photos')
 })
 
 const errorSuggestions = computed(() => {
   const err = error.value || ''
   if (err.includes('search service') || err.includes('503') || err.includes('Service Unavailable')) {
     return [
-      t('error.searchRestarting'),
-      t('error.waitAndRetry'),
-      t('error.contactAdmin')
+      $gettext('The search service may be restarting or under maintenance'),
+      $gettext('Wait a moment and try again'),
+      $gettext('Contact your administrator if this persists')
     ]
   }
   if (err.includes('network') || err.includes('Network') || err.includes('ECONNREFUSED')) {
     return [
-      t('error.checkConnection'),
-      t('error.serverUnavailable'),
-      t('error.refreshPage')
+      $gettext('Check your internet connection'),
+      $gettext('The server may be temporarily unavailable'),
+      $gettext('Try refreshing the page')
     ]
   }
   if (err.includes('personal space')) {
     return [
-      t('error.storageNotFoundHint'),
-      t('error.logOutAndIn'),
-      t('error.contactAdmin')
+      $gettext('Your personal storage space could not be found'),
+      $gettext('Try logging out and back in'),
+      $gettext('Contact your administrator if this persists')
     ]
   }
   if (err.includes('401') || err.includes('Unauthorized')) {
     return [
-      t('error.sessionExpired'),
-      t('error.logOutAndIn')
+      $gettext('Your session may have expired'),
+      $gettext('Try logging out and back in')
     ]
   }
   return [
-    t('error.refreshPage'),
-    t('error.waitAndRetry')
+    $gettext('Try refreshing the page'),
+    $gettext('Wait a moment and try again')
   ]
 })
 
@@ -859,8 +859,8 @@ function formatDateHeader(dateKey: string): string {
   // Full date: 2026-01-11
   const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
 
-  if (date.toDateString() === today.toDateString()) return t('date.today')
-  if (date.toDateString() === yesterday.toDateString()) return t('date.yesterday')
+  if (date.toDateString() === today.toDateString()) return $gettext('Today')
+  if (date.toDateString() === yesterday.toDateString()) return $gettext('Yesterday')
 
   return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
@@ -1439,14 +1439,14 @@ async function loadPhotos() {
     oldestLoadedDate.value = new Date(endDate)
     oldestLoadedDate.value.setDate(oldestLoadedDate.value.getDate() + 1)
 
-    currentDateRange.value = t('loading.recentPhotos')
+    currentDateRange.value = $gettext('Loading recent photos...')
 
     // Load initial batch (3 months)
     await loadMorePhotos()
 
     // If no photos found with date filter, try fallback search
     if (allPhotos.value.length === 0 && !useFallbackSearch) {
-      currentDateRange.value = t('loading.searchingAll')
+      currentDateRange.value = $gettext('Searching all photos...')
       useFallbackSearch = true
       const photos = await fetchAllImagesViaSearch(personalSpace.id)
 

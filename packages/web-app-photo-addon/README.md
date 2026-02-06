@@ -112,3 +112,6 @@ pnpm check:types
 pnpm test:unit
 ```
 
+## License
+
+AGPL-3.0 - see [LICENSE](../../LICENSE) for details.

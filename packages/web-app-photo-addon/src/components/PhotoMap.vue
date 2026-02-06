@@ -6,14 +6,14 @@
         class="map-element"
         tabindex="0"
         role="application"
-        :aria-label="t('map.ariaLabel')"
+        :aria-label="$gettext('Photo locations map. Use arrow keys to pan, plus and minus to zoom.')"
       ></div>
       <div v-if="photosWithGps === 0" class="no-gps-overlay">
         <span class="icon">📍</span>
-        <p>{{ t('empty.noGpsPhotos') }}</p>
+        <p>{{ $gettext('No photos with GPS data found') }}</p>
       </div>
       <div class="map-stats">
-        {{ t('map.photosInView', { visible: visiblePhotosInView.length, total: photosWithGps }) }}
+        {{ $gettext('%{visible} of %{total} photos in view').replace('%{visible}', String(visiblePhotosInView.length)).replace('%{total}', String(photosWithGps)) }}
       </div>
     </div>
   </div>
@@ -24,10 +24,10 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'  // Bundle CSS instead of CDN (CSP blocks external stylesheets)
 import type { PhotoWithDate } from '../types'
-import { useI18n } from '../composables/useI18n'
+import { useTranslations } from '../composables/useTranslations'
 
-// Initialize i18n
-const { t } = useI18n()
+// Initialize translations
+const { $gettext } = useTranslations()
 
 // Use PhotoWithDate from types (aliased for clarity in this component)
 type PhotoWithLocation = PhotoWithDate

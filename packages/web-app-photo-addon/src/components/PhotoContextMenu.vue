@@ -3,20 +3,20 @@
     <div v-if="visible" ref="menuRef" class="context-menu" :style="menuPosition">
       <button class="menu-item" @click="handleAction('download')">
         <span class="menu-icon">&#x2B07;</span>
-        <span>{{ t('menu.download') }}</span>
+        <span>{{ $gettext('Download') }}</span>
       </button>
       <button class="menu-item" @click="handleAction('openInFiles')">
         <span class="menu-icon">&#x1F4C1;</span>
-        <span>{{ t('menu.openInFiles') }}</span>
+        <span>{{ $gettext('Open in Files') }}</span>
       </button>
       <button class="menu-item" @click="handleAction('copyLink')">
         <span class="menu-icon">&#x1F517;</span>
-        <span>{{ t('menu.copyLink') }}</span>
+        <span>{{ $gettext('Copy Link') }}</span>
       </button>
       <div class="menu-divider"></div>
       <button class="menu-item menu-item-danger" @click="handleAction('delete')">
         <span class="menu-icon">&#x1F5D1;</span>
-        <span>{{ t('menu.delete') }}</span>
+        <span>{{ $gettext('Delete') }}</span>
       </button>
     </div>
   </Teleport>
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import { useI18n } from '../composables/useI18n'
+import { useTranslations } from '../composables/useTranslations'
 
 interface Props {
   visible: boolean
@@ -38,7 +38,7 @@ const emit = defineEmits<{
   (e: 'action', action: string, photo: any): void
 }>()
 
-const { t } = useI18n()
+const { $gettext } = useTranslations()
 
 const menuRef = ref<HTMLElement | null>(null)
 const canClose = ref(false)
