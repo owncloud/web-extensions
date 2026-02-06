@@ -61,7 +61,7 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
 
-  packages/web-advanced-search:
+  packages/web-app-advanced-search:
     dependencies:
       '@ownclouders/web-client':
         specifier: ^12.2.0
