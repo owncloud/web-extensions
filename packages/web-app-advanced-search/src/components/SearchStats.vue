@@ -89,7 +89,7 @@
 
       <!-- Refresh Button -->
       <div class="stats-actions">
-        <button class="refresh-btn" @click="loadStats" :disabled="loading">
+        <button class="refresh-btn" :disabled="loading" @click="loadStats">
           {{ loading ? $gettext('Loading...') : $gettext('Refresh Stats') }}
         </button>
       </div>

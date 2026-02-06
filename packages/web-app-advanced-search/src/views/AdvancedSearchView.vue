@@ -26,14 +26,14 @@
       <div class="search-input-wrapper">
         <input
           id="advanced-search-input"
-          type="text"
           v-model="searchTerm"
+          type="text"
           class="search-input"
           :placeholder="$gettext('Search files... (or use filters below)')"
           :aria-label="$gettext('Search files')"
           @keyup.enter="handleSearch"
         />
-        <button class="search-btn" @click="handleSearch" :disabled="loading">
+        <button class="search-btn" :disabled="loading" @click="handleSearch">
           <span aria-hidden="true">{{ loading ? '⏳' : '🔍' }}</span> {{ $gettext('Search') }}
         </button>
       </div>
@@ -85,22 +85,22 @@
         <div class="view-controls">
           <button
             :class="['view-btn', { active: state.viewMode === 'list' }]"
-            @click="setViewMode('list')"
             :title="$gettext('List view')"
+            @click="setViewMode('list')"
           >
             ☰
           </button>
           <button
             :class="['view-btn', { active: state.viewMode === 'grid' }]"
-            @click="setViewMode('grid')"
             :title="$gettext('Grid view')"
+            @click="setViewMode('grid')"
           >
             ⊞
           </button>
           <button
             :class="['view-btn', { active: state.viewMode === 'table' }]"
-            @click="setViewMode('table')"
             :title="$gettext('Table view')"
+            @click="setViewMode('table')"
           >
             ▦
           </button>
@@ -124,13 +124,13 @@
         </div>
         <h2 class="error-title">{{ errorTitle }}</h2>
         <p class="error-message">{{ state.error }}</p>
-        <div class="error-suggestions" v-if="errorSuggestions.length > 0">
+        <div v-if="errorSuggestions.length > 0" class="error-suggestions">
           <p class="suggestions-label">{{ $gettext('Things to try:') }}</p>
           <ul>
             <li v-for="(suggestion, index) in errorSuggestions" :key="index">{{ suggestion }}</li>
           </ul>
         </div>
-        <button @click="retrySearch" class="retry-button">
+        <button class="retry-button" @click="retrySearch">
           <span class="retry-icon">↻</span>
           {{ $gettext('Try Again') }}
         </button>
@@ -154,7 +154,7 @@
 
       <!-- Load more -->
       <div v-if="state.results?.hasMore" class="load-more">
-        <button class="btn btn-secondary" @click="loadMore" :disabled="loading">
+        <button class="btn btn-secondary" :disabled="loading" @click="loadMore">
           {{ $gettext('Load More') }}
         </button>
       </div>
@@ -198,24 +198,24 @@
     </div>
 
     <!-- Save dialog -->
-    <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
     <div
       v-if="showSaveDialog"
       class="modal-overlay"
+      role="presentation"
       @click.self="showSaveDialog = false"
+      @keydown.escape="showSaveDialog = false"
     >
       <div
         class="modal-dialog"
         role="dialog"
         aria-modal="true"
         :aria-label="$gettext('Save Search')"
-        @keydown.escape="showSaveDialog = false"
       >
         <h3>{{ $gettext('Save Search') }}</h3>
         <input
           ref="saveQueryInput"
-          type="text"
           v-model="saveQueryName"
+          type="text"
           :placeholder="$gettext('Enter a name for this search')"
           :aria-label="$gettext('Search name')"
           class="save-input"
@@ -227,8 +227,8 @@
           </button>
           <button
             class="btn btn-primary"
-            @click="handleSaveQuery"
             :disabled="!saveQueryName.trim()"
+            @click="handleSaveQuery"
           >
             {{ $gettext('Save') }}
           </button>

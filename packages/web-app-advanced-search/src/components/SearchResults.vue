@@ -34,9 +34,9 @@
         <span class="item-date">{{ formatDate(item.mdate) }}</span>
         <button
           class="item-menu-btn"
-          @click.stop="emit('context-menu', $event, item)"
           :title="$gettext('More actions')"
           :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
+          @click.stop="emit('context-menu', $event, item)"
         >
           ⋮
         </button>
@@ -59,9 +59,9 @@
           <span class="grid-icon">{{ getIcon(item) }}</span>
           <button
             class="grid-menu-btn"
-            @click.stop="emit('context-menu', $event, item)"
             :title="$gettext('More actions')"
             :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
+            @click.stop="emit('context-menu', $event, item)"
           >
             ⋮
           </button>
@@ -104,9 +104,9 @@
           <td class="cell-actions">
             <button
               class="item-menu-btn"
-              @click.stop="emit('context-menu', $event, item)"
               :title="$gettext('More actions')"
               :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
+              @click.stop="emit('context-menu', $event, item)"
             >
               ⋮
             </button>

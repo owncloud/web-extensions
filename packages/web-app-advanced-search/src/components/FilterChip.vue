@@ -4,8 +4,8 @@
     <span class="chip-value">{{ filter.value }}</span>
     <button
       class="chip-remove"
-      @click="emit('remove')"
       :aria-label="$gettext('Remove filter') + ': ' + filter.label + ' ' + filter.value"
+      @click="emit('remove')"
     >
       <span aria-hidden="true">×</span>
     </button>
