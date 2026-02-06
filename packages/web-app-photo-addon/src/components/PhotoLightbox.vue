@@ -13,23 +13,23 @@
     @keydown.tab="handleTabKey"
   >
     <!-- Context Menu (inside overlay for proper stacking) -->
-    <div v-if="menuVisible" :style="menuStyle" role="menu" tabindex="-1" :aria-label="t('lightbox.photoOptions')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
+    <div v-if="menuVisible" :style="menuStyle" role="menu" tabindex="-1" :aria-label="$gettext('Photo options')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
       <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">↓</span>
-        <span>{{ t('menu.download') }}</span>
+        <span>{{ $gettext('Download') }}</span>
       </button>
       <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">→</span>
-        <span>{{ t('menu.openInFiles') }}</span>
+        <span>{{ $gettext('Open in Files') }}</span>
       </button>
       <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">⎘</span>
-        <span>{{ t('menu.copyLink') }}</span>
+        <span>{{ $gettext('Copy Link') }}</span>
       </button>
       <div role="separator" style="height: 1px; background: #eee; margin: 6px 0;"></div>
       <button role="menuitem" :style="menuItemDangerStyle" @click="handleMenuAction('delete')" @mouseenter="$event.target.style.background='#fff0f0'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#fff0f0'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">✕</span>
-        <span>{{ t('menu.delete') }}</span>
+        <span>{{ $gettext('Delete') }}</span>
       </button>
     </div>
 
@@ -41,12 +41,12 @@
           class="lightbox-menu-btn"
           aria-haspopup="menu"
           :aria-expanded="menuVisible"
-          :aria-label="t('lightbox.photoOptions')"
+          :aria-label="$gettext('Photo options')"
           @click.stop="toggleMenu($event)"
         >
           <span aria-hidden="true">⋮</span>
         </button>
-        <button ref="closeButtonRef" class="lightbox-close" :aria-label="t('lightbox.close')" @click="close">
+        <button ref="closeButtonRef" class="lightbox-close" :aria-label="$gettext('Close')" @click="close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -58,7 +58,7 @@
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        :aria-label="t('lightbox.photoCounter', { current: currentIndex + 1, total: groupPhotos.length })"
+        :aria-label="$gettext('Photo %{current} of %{total}').replace('%{current}', String(currentIndex + 1)).replace('%{total}', String(groupPhotos.length))"
       >
         {{ currentIndex + 1 }} / {{ groupPhotos.length }}
       </div>
@@ -80,7 +80,7 @@
         <button
           v-if="canNavigatePrev"
           class="lightbox-nav lightbox-nav-prev"
-          :aria-label="t('lightbox.previous')"
+          :aria-label="$gettext('Previous photo')"
           @click.stop="navigate('prev')"
         >
           <span class="nav-arrow" aria-hidden="true">&#8249;</span>
@@ -103,7 +103,7 @@
         <button
           v-if="canNavigateNext"
           class="lightbox-nav lightbox-nav-next"
-          :aria-label="t('lightbox.next')"
+          :aria-label="$gettext('Next photo')"
           @click.stop="navigate('next')"
         >
           <span class="nav-arrow" aria-hidden="true">&#8250;</span>
@@ -114,64 +114,64 @@
       <div class="lightbox-panel">
         <div class="lightbox-header">
           <div class="lightbox-title-group">
-            <h3 id="lightbox-title" class="lightbox-title">{{ photo.name || t('fallback.untitled') }}</h3>
+            <h3 id="lightbox-title" class="lightbox-title">{{ photo.name || $gettext('Untitled') }}</h3>
             <span v-if="folderPath" class="lightbox-path">{{ folderPath }}</span>
           </div>
         </div>
 
         <!-- EXIF Metadata section -->
-        <div class="lightbox-metadata" role="region" :aria-label="t('metadata.sectionLabel')">
+        <div class="lightbox-metadata" role="region" :aria-label="$gettext('Photo metadata')">
           <div class="metadata-grid" role="list">
             <!-- Date Taken (with source indicator) -->
             <div v-if="displayDate" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.dateTaken') }}</span>
+              <span class="metadata-label">{{ $gettext('Date Taken') }}</span>
               <span class="metadata-value date-with-source">
                 {{ displayDate }}
                 <span :class="['date-source-badge', isExifDate ? 'badge-exif' : 'badge-upload']">
-                  {{ isExifDate ? t('date.exifBadge') : t('date.modTimeBadge') }}
+                  {{ isExifDate ? $gettext('(EXIF)') : $gettext('(Mod time)') }}
                 </span>
               </span>
             </div>
 
             <!-- EXIF: Camera -->
             <div v-if="exifData.cameraMake || exifData.cameraModel" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.camera') }}</span>
+              <span class="metadata-label">{{ $gettext('Camera') }}</span>
               <span class="metadata-value">{{ [exifData.cameraMake, exifData.cameraModel].filter(Boolean).join(' ') }}</span>
             </div>
 
             <!-- EXIF: Aperture -->
             <div v-if="exifData.fNumber" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.aperture') }}</span>
+              <span class="metadata-label">{{ $gettext('Aperture') }}</span>
               <span class="metadata-value">f/{{ exifData.fNumber }}</span>
             </div>
 
             <!-- EXIF: Focal Length -->
             <div v-if="exifData.focalLength" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.focalLength') }}</span>
+              <span class="metadata-label">{{ $gettext('Focal Length') }}</span>
               <span class="metadata-value">{{ exifData.focalLength }}mm</span>
             </div>
 
             <!-- EXIF: ISO -->
             <div v-if="exifData.iso" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.iso') }}</span>
+              <span class="metadata-label">{{ $gettext('ISO') }}</span>
               <span class="metadata-value">{{ exifData.iso }}</span>
             </div>
 
             <!-- EXIF: Exposure -->
             <div v-if="exifData.exposureNumerator && exifData.exposureDenominator" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.exposure') }}</span>
+              <span class="metadata-label">{{ $gettext('Exposure') }}</span>
               <span class="metadata-value">{{ exifData.exposureNumerator }}/{{ exifData.exposureDenominator }}s</span>
             </div>
 
             <!-- EXIF: Orientation -->
             <div v-if="exifData.orientation" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.orientation') }}</span>
+              <span class="metadata-label">{{ $gettext('Orientation') }}</span>
               <span class="metadata-value">{{ getOrientationLabel(exifData.orientation) }}</span>
             </div>
 
             <!-- EXIF: Location (Lat/Long) -->
             <div v-if="exifData.location?.latitude != null && exifData.location?.longitude != null" class="metadata-item metadata-location" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.location') }}</span>
+              <span class="metadata-label">{{ $gettext('Location') }}</span>
               <span class="metadata-value">
                 {{ formatCoordinate(exifData.location.latitude, 'lat') }}, {{ formatCoordinate(exifData.location.longitude, 'lon') }}
                 <a
@@ -181,25 +181,25 @@
                   class="map-link"
                   @click.stop
                 >
-                  {{ t('menu.viewOnMap') }}
+                  {{ $gettext('View on Map') }}
                 </a>
               </span>
             </div>
 
             <!-- EXIF: Altitude -->
             <div v-if="exifData.location?.altitude != null" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.altitude') }}</span>
+              <span class="metadata-label">{{ $gettext('Altitude') }}</span>
               <span class="metadata-value">{{ exifData.location.altitude.toFixed(1) }}m</span>
             </div>
 
             <!-- File info -->
             <div v-if="photo.size" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.fileSize') }}</span>
+              <span class="metadata-label">{{ $gettext('File Size') }}</span>
               <span class="metadata-value">{{ formatSize(Number(photo.size)) }}</span>
             </div>
 
             <div v-if="photo.mimeType" class="metadata-item" role="listitem" tabindex="0">
-              <span class="metadata-label">{{ t('metadata.type') }}</span>
+              <span class="metadata-label">{{ $gettext('Type') }}</span>
               <span class="metadata-value">{{ photo.mimeType }}</span>
             </div>
           </div>
@@ -214,14 +214,14 @@ import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useClientService, useConfigStore } from '@ownclouders/web-pkg'
 import type { Resource } from '@ownclouders/web-client'
 import { usePhotos } from '../composables/usePhotos'
-import { useI18n } from '../composables/useI18n'
+import { useTranslations } from '../composables/useTranslations'
 import type { GraphPhoto, PhotoWithDate } from '../types'
 
 // Initialize composable for shared utility functions
 const { formatSize } = usePhotos()
 
-// Initialize i18n
-const { t, getOrientationLabel } = useI18n()
+// Initialize translations
+const { $gettext, getOrientationLabel } = useTranslations()
 
 const props = withDefaults(defineProps<{
   photo: Resource | null
@@ -896,7 +896,7 @@ function formatExifDate(dateStr: string): string {
   }
 }
 
-// getOrientationLabel is now provided by useI18n composable
+// getOrientationLabel is now provided by useTranslations composable
 
 function formatCoordinate(value: number, type: 'lat' | 'lon'): string {
   const absolute = Math.abs(value)
