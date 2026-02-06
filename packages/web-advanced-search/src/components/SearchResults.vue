@@ -20,7 +20,10 @@
         :key="item.id"
         v-memo="[item.id, item.name, item.size, item.mdate]"
         class="list-item"
+        role="button"
+        tabindex="0"
         @click="emit('item-click', item)"
+        @keydown.enter="emit('item-click', item)"
       >
         <span class="item-icon">{{ getIcon(item) }}</span>
         <div class="item-details">
@@ -47,7 +50,10 @@
         :key="item.id"
         v-memo="[item.id, item.name, item.mimeType]"
         class="grid-item"
+        role="button"
+        tabindex="0"
         @click="emit('item-click', item)"
+        @keydown.enter="emit('item-click', item)"
       >
         <div class="grid-thumbnail">
           <span class="grid-icon">{{ getIcon(item) }}</span>

@@ -395,7 +395,7 @@ const cameraMakes = computed(() => {
 
 // Camera models (only from search, no static list)
 const cameraModels = computed(() => {
-  return discoveredCameraModels.value.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  return [...discoveredCameraModels.value].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
 })
 
 const mediaTypes = COMMON_MEDIA_TYPES
