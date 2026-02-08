@@ -64,9 +64,9 @@
             <input
               id="filter-size-min"
               type="number"
+              min="0"
               :value="filters.standard.sizeRange?.min || ''"
               :placeholder="$gettext('Min (bytes)')"
-              min="0"
               @input="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -74,10 +74,10 @@
             <input
               id="filter-size-max"
               type="number"
+              min="0"
               :value="filters.standard.sizeRange?.max || ''"
               :placeholder="$gettext('Max (bytes)')"
               :aria-label="$gettext('Size maximum')"
-              min="0"
               @input="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -162,9 +162,9 @@
           <input
             id="filter-camera-make"
             type="text"
+            list="camera-makes"
             :value="filters.photo.cameraMake || ''"
             :placeholder="$gettext('e.g., Canon, Nikon, samsung')"
-            list="camera-makes"
             @input="emit('update:photo', { ...filters.photo, cameraMake: ($event.target as HTMLInputElement).value || undefined })"
             @keyup.enter="emit('search')"
           />
@@ -179,9 +179,9 @@
           <input
             id="filter-camera-model"
             type="text"
+            list="camera-models"
             :value="filters.photo.cameraModel || ''"
             :placeholder="$gettext('e.g., EOS R5, SM-G998B')"
-            list="camera-models"
             @input="emit('update:photo', { ...filters.photo, cameraModel: ($event.target as HTMLInputElement).value || undefined })"
             @keyup.enter="emit('search')"
           />
@@ -220,9 +220,9 @@
             <input
               id="filter-iso-min"
               type="number"
+              min="0"
               :value="filters.photo.isoRange?.min || ''"
               :placeholder="$gettext('Min')"
-              min="0"
               @input="updateIsoRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -230,10 +230,10 @@
             <input
               id="filter-iso-max"
               type="number"
+              min="0"
               :value="filters.photo.isoRange?.max || ''"
               :placeholder="$gettext('Max')"
               :aria-label="$gettext('ISO maximum')"
-              min="0"
               @input="updateIsoRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -248,9 +248,9 @@
               id="filter-aperture-min"
               type="number"
               step="0.1"
+              min="0"
               :value="filters.photo.fNumberRange?.min || ''"
               :placeholder="$gettext('Min')"
-              min="0"
               @input="updateFNumberRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -259,10 +259,10 @@
               id="filter-aperture-max"
               type="number"
               step="0.1"
+              min="0"
               :value="filters.photo.fNumberRange?.max || ''"
               :placeholder="$gettext('Max')"
               :aria-label="$gettext('Aperture maximum')"
-              min="0"
               @input="updateFNumberRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -276,9 +276,9 @@
             <input
               id="filter-focal-length-min"
               type="number"
+              min="0"
               :value="filters.photo.focalLengthRange?.min || ''"
               :placeholder="$gettext('Min')"
-              min="0"
               @input="updateFocalLengthRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -286,10 +286,10 @@
             <input
               id="filter-focal-length-max"
               type="number"
+              min="0"
               :value="filters.photo.focalLengthRange?.max || ''"
               :placeholder="$gettext('Max')"
               :aria-label="$gettext('Focal length maximum')"
-              min="0"
               @input="updateFocalLengthRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
