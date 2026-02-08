@@ -44,10 +44,10 @@ async function globalSetup(_config?: FullConfig): Promise<void> {
 
   const baseUrl = process.env.BASE_URL_OCIS || process.env.OCIS_URL || 'https://cloud.faure.ca'
   const username = process.env.OCIS_USER || 'admin'
-  const password = process.env.OCIS_PASSWORD
+  const password = process.env.OCIS_PASSWORD || 'admin'
 
-  if (!password) {
-    throw new Error('OCIS_PASSWORD environment variable is required for E2E tests')
+  if (!process.env.OCIS_PASSWORD) {
+    console.log('[Global Setup] OCIS_PASSWORD not set, using default "admin"')
   }
 
   // Ensure auth directory exists

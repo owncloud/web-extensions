@@ -455,6 +455,7 @@ def e2eTests(ctx):
             "environment": {
                 "PLAYWRIGHT_BROWSERS_PATH": ".playwright",
                 "BASE_URL_OCIS": OCIS_URL,
+                "OCIS_PASSWORD": "admin",
             },
             "commands": [
                 # webkit requires to install system dependencies again
