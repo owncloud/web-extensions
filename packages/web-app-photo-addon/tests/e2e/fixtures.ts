@@ -43,7 +43,7 @@ export async function navigateToPhotoView(page: Page): Promise<void> {
   await page.goto(baseUrl)
 
   // Wait for the page to be fully loaded
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   // Click the app switcher button
   const appSwitcher = page.locator('#_appSwitcherButton')
@@ -56,7 +56,7 @@ export async function navigateToPhotoView(page: Page): Promise<void> {
   await photoApp.click()
 
   // Wait for the photo view to load
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 }
 
 /**
@@ -86,7 +86,7 @@ export async function waitForPhotosLoaded(page: Page): Promise<void> {
  * Wait for any page to be ready (loaded and authenticated)
  */
 export async function waitForPageReady(page: Page): Promise<void> {
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   // Wait for authentication to be confirmed (user menu visible)
   const userMenu = page.locator('#_userMenuButton, [data-testid="user-menu"]')
