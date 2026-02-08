@@ -37,7 +37,7 @@ export { expect }
  * Wait for page to be ready (loaded and authenticated)
  */
 export async function waitForPageReady(page: Page): Promise<void> {
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   // Wait for authentication to be confirmed (user menu visible)
   const userMenu = page.locator('#_userMenuButton, [data-testid="user-menu"]')
@@ -52,7 +52,7 @@ export async function navigateToAdvancedSearch(page: Page): Promise<void> {
 
   // Navigate to the base URL first
   await page.goto(baseUrl)
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 
   // Click the app switcher button
   const appSwitcher = page.locator('#_appSwitcherButton')
@@ -65,7 +65,7 @@ export async function navigateToAdvancedSearch(page: Page): Promise<void> {
   await searchApp.click()
 
   // Wait for the search page to load
-  await page.waitForLoadState('networkidle')
+  await page.waitForLoadState('domcontentloaded')
 }
 
 /**

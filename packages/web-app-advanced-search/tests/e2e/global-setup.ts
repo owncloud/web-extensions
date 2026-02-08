@@ -66,7 +66,7 @@ async function globalSetup(_config?: FullConfig): Promise<void> {
   try {
     // Navigate to oCIS
     await page.goto(baseUrl)
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('domcontentloaded')
 
     // Use the shared LoginPage for authentication
     const loginPage = new LoginPage(page)
