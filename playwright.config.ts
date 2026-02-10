@@ -25,7 +25,7 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: process.env.BASE_URL_OCIS ?? process.env.OCIS_URL ?? 'https://host.docker.internal:9200',
+    baseURL: process.env.BASE_URL_OCIS ?? 'https://host.docker.internal:9200',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -34,42 +34,19 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    // Photo Addon E2E tests
-    {
-      name: 'photo-addon',
-      testMatch: '**/*.spec.ts',
-      testDir: './packages/web-app-photo-addon/tests/e2e',
-      use: { ...devices['Desktop Chrome'], ignoreHTTPSErrors: true }
-    },
-
-    // Advanced Search E2E tests
-    //{
-    //  name: 'advanced-search',
-    //  testMatch: '**/*.spec.ts',
-    //  testDir: './packages/web-app-advanced-search/tests/e2e',
-    //  use: { ...devices['Desktop Chrome'], ignoreHTTPSErrors: true }
-    //},
-
-    // Generic browser tests (for other packages)
     {
       name: 'chrome',
       testMatch: '**/e2e/*.spec.ts',
-      testIgnore: ['**/packages/web-app-photo-addon/**'],
-      //testIgnore: ['**/packages/web-app-photo-addon/**', '**/packages/web-app-advanced-search/**'],
       use: { ...devices['Desktop Chrome'], channel: 'chrome', ignoreHTTPSErrors: true }
     },
     {
       name: 'firefox',
       testMatch: '**/e2e/*.spec.ts',
-      testIgnore: ['**/packages/web-app-photo-addon/**'],
-      //testIgnore: ['**/packages/web-app-photo-addon/**', '**/packages/web-app-advanced-search/**'],
       use: { ...devices['Desktop Firefox'], browserName: 'firefox', ignoreHTTPSErrors: true }
     },
     {
       name: 'webkit',
       testMatch: '**/e2e/*.spec.ts',
-      testIgnore: ['**/packages/web-app-photo-addon/**'],
-      //testIgnore: ['**/packages/web-app-photo-addon/**', '**/packages/web-app-advanced-search/**'],
       use: { ...devices['Desktop Safari'], browserName: 'webkit', ignoreHTTPSErrors: true }
     }
 
