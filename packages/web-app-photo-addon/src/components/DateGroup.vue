@@ -9,6 +9,9 @@
 import { computed } from 'vue'
 import type { Resource } from '@ownclouders/web-client'
 import PhotoGrid from './PhotoGrid.vue'
+import { useTranslations } from '../composables/useTranslations'
+
+const { getUserLocale } = useTranslations()
 
 const props = defineProps<{
   date: string
@@ -37,7 +40,7 @@ const formattedDate = computed(() => {
   }
 
   // Otherwise format as full date
-  return dateObj.toLocaleDateString(undefined, {
+  return dateObj.toLocaleDateString(getUserLocale(), {
     weekday: 'long',
     year: 'numeric',
     month: 'long',

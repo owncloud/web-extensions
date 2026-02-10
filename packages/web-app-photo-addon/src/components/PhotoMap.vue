@@ -27,7 +27,7 @@ import type { PhotoWithDate } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 
 // Initialize translations
-const { $gettext } = useTranslations()
+const { $gettext, getUserLocale } = useTranslations()
 
 // Use PhotoWithDate from types (aliased for clarity in this component)
 type PhotoWithLocation = PhotoWithDate
@@ -554,7 +554,7 @@ function addPhotoMarkers() {
     // Use representative photo (most recent) for tooltip
     const photo = representativePhoto
     const dateStr = photo.graphPhoto?.takenDateTime
-      ? new Date(photo.graphPhoto.takenDateTime).toLocaleDateString()
+      ? new Date(photo.graphPhoto.takenDateTime).toLocaleDateString(getUserLocale())
       : ''
 
     // Escape content for safe HTML rendering

@@ -221,7 +221,7 @@ import type { GraphPhoto, PhotoWithDate } from '../types'
 const { formatSize } = usePhotos()
 
 // Initialize translations
-const { $gettext, getOrientationLabel } = useTranslations()
+const { $gettext, getUserLocale, getOrientationLabel } = useTranslations()
 
 const props = withDefaults(defineProps<{
   photo: Resource | null
@@ -884,7 +884,7 @@ onUnmounted(() => {
 function formatExifDate(dateStr: string): string {
   try {
     const d = new Date(dateStr)
-    return d.toLocaleDateString(undefined, {
+    return d.toLocaleDateString(getUserLocale(), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
