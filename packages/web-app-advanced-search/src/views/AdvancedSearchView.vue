@@ -191,7 +191,7 @@
           >
             {{ query.name }}
           </button>
-          <span class="saved-date">{{ formatDate(query.savedAt) }}</span>
+          <span class="saved-date">{{ formatDate(query.savedAt, undefined, getUserLocale()) }}</span>
           <button class="delete-btn" @click="deleteQuery(query.id)">🗑️</button>
         </li>
       </ul>
@@ -261,7 +261,7 @@ import SearchStats from '../components/SearchStats.vue'
 import ResultContextMenu from '../components/ResultContextMenu.vue'
 
 // Translations
-const { $gettext, $ngettext } = useTranslations()
+const { $gettext, $ngettext, getUserLocale } = useTranslations()
 
 // Props (for saved query route)
 const props = defineProps<{

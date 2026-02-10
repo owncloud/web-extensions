@@ -34,14 +34,15 @@ export function formatDate(
     year: 'numeric',
     month: 'short',
     day: 'numeric'
-  }
+  },
+  locale?: string
 ): string {
   if (!dateStr) return '—'
 
   try {
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return '—'
-    return date.toLocaleDateString(undefined, options)
+    return date.toLocaleDateString(locale, options)
   } catch {
     return '—'
   }

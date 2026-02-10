@@ -31,7 +31,7 @@
           <span class="item-path">{{ getPath(item) }}</span>
         </div>
         <span class="item-size">{{ formatBytes(item.size) }}</span>
-        <span class="item-date">{{ formatDate(item.mdate) }}</span>
+        <span class="item-date">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</span>
         <button
           class="item-menu-btn"
           :title="$gettext('More actions')"
@@ -98,7 +98,7 @@
           <td class="cell-path">{{ getPath(item) }}</td>
           <td>{{ item.mimeType || $gettext('folder') }}</td>
           <td>{{ formatBytes(item.size) }}</td>
-          <td>{{ formatDate(item.mdate) }}</td>
+          <td>{{ formatDate(item.mdate, undefined, getUserLocale()) }}</td>
           <td v-if="hasPhotoItems">{{ getCameraInfo(item) }}</td>
           <td v-if="hasPhotoItems">{{ getPhotoDate(item) }}</td>
           <td class="cell-actions">
@@ -123,7 +123,7 @@ import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
 
-const { $gettext } = useTranslations()
+const { $gettext, getUserLocale } = useTranslations()
 
 const props = defineProps<{
   items: SearchResource[]
@@ -187,7 +187,7 @@ function getCameraInfo(item: SearchResource): string {
 
 function getPhotoDate(item: SearchResource): string {
   if (!item.photo?.takenDateTime) return '—'
-  return formatDate(item.photo.takenDateTime)
+  return formatDate(item.photo.takenDateTime, undefined, getUserLocale())
 }
 </script>
 
