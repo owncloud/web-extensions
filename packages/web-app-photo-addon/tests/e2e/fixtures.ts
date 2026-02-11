@@ -50,8 +50,8 @@ export async function navigateToPhotoView(page: Page): Promise<void> {
   await appSwitcher.waitFor({ state: 'visible', timeout: 30000 })
   await appSwitcher.click()
 
-  // Find and click the Photo Gallery app
-  const photoApp = page.locator('text=Photo Gallery')
+  // Find and click the Photos app
+  const photoApp = page.locator('text=Photos')
   await photoApp.waitFor({ state: 'visible', timeout: 10000 })
   await photoApp.click()
 
