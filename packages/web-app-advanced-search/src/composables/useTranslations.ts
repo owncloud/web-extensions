@@ -21,7 +21,7 @@ export function useTranslations() {
     $gettext = gettext.$gettext
     $ngettext = gettext.$ngettext
     $pgettext = gettext.$pgettext
-    gettextLanguage = gettext.current
+    gettextLanguage = (gettext as unknown as { current: string }).current
   } catch {
     // Fallback for testing or when gettext is not initialized
     $gettext = (msg: string) => msg
