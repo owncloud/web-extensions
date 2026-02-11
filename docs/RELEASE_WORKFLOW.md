@@ -2,6 +2,27 @@
 
 This guide explains how to release multiple app versions in the web-extensions monorepo using the multi-tag approach.
 
+   * [Overview](#overview)
+   * [Step-by-Step Release Process](#step-by-step-release-process)
+      * [1. Create a Feature Branch for Version Bumps](#1-create-a-feature-branch-for-version-bumps)
+      * [2. Update Package Versions](#2-update-package-versions)
+      * [3. Commit and Push the Changes](#3-commit-and-push-the-changes)
+      * [4. Create a Pull Request](#4-create-a-pull-request)
+      * [5. Get the Merge Commit Hash](#5-get-the-merge-commit-hash)
+      * [6. Create Tags on the Merge Commit](#6-create-tags-on-the-merge-commit)
+      * [7. Push Tags to Trigger CI](#7-push-tags-to-trigger-ci)
+      * [8. Monitor CI Builds](#8-monitor-ci-builds)
+      * [9. Verify Releases](#9-verify-releases)
+   * [Technical Details](#technical-details)
+      * [Tag Naming Convention](#tag-naming-convention)
+   * [Troubleshooting](#troubleshooting)
+      * [Wrong Commit Tagged](#wrong-commit-tagged)
+   * [Quick Reference](#quick-reference)
+   * [Files Modified in Each Release](#files-modified-in-each-release)
+   * [Docker Hub](#docker-hub)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+
 ## Overview
 
 The web-extensions repository uses a **per-app versioning** system where:
@@ -37,7 +58,7 @@ packages/web-app-unzip/package.json
 # ... repeat for other apps that need updates
 ```
 
-**Apps in the repository:**
+**Apps in this Repository:**
 
 - `packages/web-app-cast/`
 - `packages/web-app-draw-io/`
@@ -214,3 +235,8 @@ You do **not** need to manually:
 - Create GitHub releases (done by `.drone.star`)
 - Build `.zip` files (done by Drone)
 - Upload artifacts (done by Drone)
+
+
+## Docker Hub
+
+After successfully creating a new version, the relevant app image is made downloadable on [Docker Hub](https://hub.docker.com/r/owncloud/web-extensions/tags).
