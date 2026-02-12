@@ -1,5 +1,6 @@
 # web-extensions
 
+[![Matrix](https://img.shields.io/matrix/ocis%3Amatrix.org?logo=matrix)](https://app.element.io/#/room/#ocis:matrix.org)
 [![Build Status](https://drone.owncloud.com/api/badges/owncloud/web-extensions/status.svg)](https://drone.owncloud.com/owncloud/web-extensions)
 [![web-extensions docker image](https://img.shields.io/docker/v/owncloud/web-extensions?label=web-extensions&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web-extensions)
 [![License](https://img.shields.io/badge/License-AGPL%203-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
