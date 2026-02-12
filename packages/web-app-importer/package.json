@@ -12,8 +12,8 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.2.0",
-    "@ownclouders/web-pkg": "^12.2.0",
+    "@ownclouders/web-client": "^12.3.0",
+    "@ownclouders/web-pkg": "^12.3.0",
     "@uppy/dashboard": "^5.1.0",
     "@uppy/google-drive": "^5.1.0",
     "@uppy/onedrive": "^5.1.0",
@@ -21,8 +21,8 @@
     "pinia": "^3.0.3"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.2.0",
-    "@ownclouders/web-test-helpers": "^12.2.0",
+    "@ownclouders/extension-sdk": "^12.3.0",
+    "@ownclouders/web-test-helpers": "^12.3.0",
     "@uppy/core": "^5.2.0",
     "vue": "^3.4.21",
     "vue3-gettext": "^2.4.0"
