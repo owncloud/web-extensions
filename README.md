@@ -23,6 +23,7 @@ The following extension examples are provided as apps to be used with the Infini
 - [web-app-external-sites](./packages/web-app-external-sites/)
 - [web-app-importer](./packages/web-app-importer/)
 - [web-app-json-viewer](./packages/web-app-json-viewer/)
+- [web-app-photo-addon](./packages/web-app-photo-addon/)
 - [web-app-progress-bars](./packages/web-app-progress-bars/)
 - [web-app-unzip](./packages/web-app-unzip/)
 
