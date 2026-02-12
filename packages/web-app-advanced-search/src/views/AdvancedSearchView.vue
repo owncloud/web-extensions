@@ -252,6 +252,7 @@ import { ref, computed, onMounted, watch, nextTick } from 'vue'
 import { useAdvancedSearch } from '../composables/useAdvancedSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import { useTranslations } from '../composables/useTranslations'
+import { useThemeStore } from '@ownclouders/web-pkg'
 import type { SavedQuery, SearchResource } from '../types'
 import { formatDate, classifyError, debounce } from '../utils/format'
 import SearchFilters from '../components/SearchFilters.vue'
@@ -262,6 +263,10 @@ import ResultContextMenu from '../components/ResultContextMenu.vue'
 
 // Translations
 const { $gettext, $ngettext, getUserLocale } = useTranslations()
+
+// Theme detection for native controls (color-scheme)
+const themeStore = useThemeStore()
+const isDark = computed(() => themeStore.currentTheme?.isDark ?? false)
 
 // Props (for saved query route)
 const props = defineProps<{
@@ -550,25 +555,14 @@ function applyKqlToFilters(): void {
   searchTerm.value = state.filters.term || ''
 }
 
-// App identifier - must match the directory name in oCIS assets path
-const APP_ID = 'advanced-search'
-
-// Inject CSS stylesheet (oCIS doesn't auto-load external app CSS)
-// Path follows oCIS convention: /assets/apps/{app-id}/style.css
-function injectStylesheet() {
-  const styleId = `${APP_ID}-styles`
-  if (document.getElementById(styleId)) return
-
-  const link = document.createElement('link')
-  link.id = styleId
-  link.rel = 'stylesheet'
-  link.href = `/assets/apps/${APP_ID}/style.css`
-  document.head.appendChild(link)
+// Sync color-scheme on document root so browser-native popups (datalist, select) respect dark mode
+function syncColorScheme() {
+  document.documentElement.style.setProperty('color-scheme', isDark.value ? 'dark' : 'light')
 }
 
 // Load saved query if route param present
 onMounted(() => {
-  injectStylesheet()
+  syncColorScheme()
 
   if (props.queryId) {
     const query = getQuery(props.queryId)
@@ -577,6 +571,9 @@ onMounted(() => {
     }
   }
 })
+
+// Update color-scheme when theme changes
+watch(isDark, syncColorScheme)
 
 // Focus management: when Saved Searches panel opens, focus the first item or close button
 watch(showSavedQueries, (isOpen) => {
@@ -610,6 +607,7 @@ watch(showSaveDialog, (isOpen) => {
   height: 100%;
   padding: 1rem;
   background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
   overflow: auto;
 }
 
@@ -652,6 +650,8 @@ watch(showSaveDialog, (isOpen) => {
   border: 1px solid var(--oc-color-border, #ddd);
   border-radius: 4px 0 0 4px;
   outline: none;
+  background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
 }
 
 .search-input:focus {
@@ -853,7 +853,7 @@ watch(showSaveDialog, (isOpen) => {
   display: inline-block;
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid #ddd;
+  border: 2px solid var(--oc-color-border, #ddd);
   border-top-color: var(--oc-color-primary, #0066cc);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -878,7 +878,8 @@ watch(showSaveDialog, (isOpen) => {
   top: 0;
   bottom: 0;
   width: 320px;
-  background: white;
+  background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
   box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
   z-index: 1000;
   display: flex;
@@ -890,7 +891,7 @@ watch(showSaveDialog, (isOpen) => {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--oc-color-border, #ddd);
 }
 
 .panel-header h3 {
@@ -904,13 +905,13 @@ watch(showSaveDialog, (isOpen) => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .no-saved {
   padding: 2rem;
   text-align: center;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .hint {
@@ -930,7 +931,7 @@ watch(showSaveDialog, (isOpen) => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--oc-color-border, #eee);
 }
 
 .saved-name {
@@ -949,7 +950,7 @@ watch(showSaveDialog, (isOpen) => {
 
 .saved-date {
   font-size: 0.75rem;
-  color: #999;
+  color: var(--oc-color-text-muted, #999);
 }
 
 .delete-btn {
@@ -975,7 +976,8 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .modal-dialog {
-  background: white;
+  background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
   padding: 1.5rem;
   border-radius: 8px;
   width: 320px;
@@ -989,11 +991,13 @@ watch(showSaveDialog, (isOpen) => {
 .save-input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--oc-color-border, #ddd);
   border-radius: 4px;
   font-size: 1rem;
   margin-bottom: 1rem;
   box-sizing: border-box;
+  background: var(--oc-color-background-default, Canvas);
+  color: var(--oc-color-text-default, CanvasText);
 }
 
 .modal-actions {
@@ -1032,11 +1036,24 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .btn-secondary:hover {
-  background: #e9e9e9;
+  background: var(--oc-color-background-hover, #e9e9e9);
 }
 
 .btn-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+</style>
+
+<!-- Unscoped: -webkit-autofill overrides must not have Vue scoped attribute selectors -->
+<style>
+.advanced-search-app input:-webkit-autofill,
+.advanced-search-app input:-webkit-autofill:hover,
+.advanced-search-app input:-webkit-autofill:focus,
+.advanced-search-app input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--oc-color-text-default, #333) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--oc-color-background-default, #fff) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
 </style>

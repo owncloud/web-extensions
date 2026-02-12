@@ -159,35 +159,27 @@
         <!-- Camera Make -->
         <div class="filter-row">
           <label for="filter-camera-make">{{ $gettext('Camera Make') }}</label>
-          <input
+          <select
             id="filter-camera-make"
-            type="text"
-            list="camera-makes"
             :value="filters.photo.cameraMake || ''"
-            :placeholder="$gettext('e.g., Canon, Nikon, samsung')"
-            @input="emit('update:photo', { ...filters.photo, cameraMake: ($event.target as HTMLInputElement).value || undefined })"
-            @keyup.enter="emit('search')"
-          />
-          <datalist id="camera-makes">
-            <option v-for="make in cameraMakes" :key="make" :value="make" />
-          </datalist>
+            @change="emit('update:photo', { ...filters.photo, cameraMake: ($event.target as HTMLSelectElement).value || undefined })"
+          >
+            <option value="">{{ $gettext('Any') }}</option>
+            <option v-for="make in cameraMakes" :key="make" :value="make">{{ make }}</option>
+          </select>
         </div>
 
         <!-- Camera Model -->
         <div class="filter-row">
           <label for="filter-camera-model">{{ $gettext('Camera Model') }}</label>
-          <input
+          <select
             id="filter-camera-model"
-            type="text"
-            list="camera-models"
             :value="filters.photo.cameraModel || ''"
-            :placeholder="$gettext('e.g., EOS R5, SM-G998B')"
-            @input="emit('update:photo', { ...filters.photo, cameraModel: ($event.target as HTMLInputElement).value || undefined })"
-            @keyup.enter="emit('search')"
-          />
-          <datalist id="camera-models">
-            <option v-for="model in cameraModels" :key="model" :value="model" />
-          </datalist>
+            @change="emit('update:photo', { ...filters.photo, cameraModel: ($event.target as HTMLSelectElement).value || undefined })"
+          >
+            <option value="">{{ $gettext('Any') }}</option>
+            <option v-for="model in cameraModels" :key="model" :value="model">{{ model }}</option>
+          </select>
         </div>
 
         <!-- Date Taken -->
@@ -530,7 +522,7 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 }
 
 .filter-section {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--oc-color-border, #e0e0e0);
   padding-bottom: 1rem;
 }
 
@@ -543,7 +535,7 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   margin: 0 0 0.75rem 0;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #333;
+  color: var(--oc-color-text-default, #333);
   cursor: pointer;
   user-select: none;
 }
@@ -567,15 +559,24 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 .filter-row label {
   font-size: 0.8125rem;
   font-weight: 500;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .filter-row input,
 .filter-row select {
   padding: 0.5rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--oc-color-border, #ddd);
+  color: inherit;
   border-radius: 4px;
   font-size: 0.875rem;
+}
+
+.filter-row input {
+  background: var(--oc-color-background-default, #fff);
+}
+
+.filter-row select {
+  background: var(--oc-color-background-default, #fff);
 }
 
 .filter-row input:focus,
@@ -596,7 +597,7 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 }
 
 .range-inputs span {
-  color: #999;
+  color: var(--oc-color-text-muted, #999);
   font-size: 0.8125rem;
 }
 
@@ -617,8 +618,10 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   padding: 0.5rem 0.75rem;
   font-family: monospace;
   font-size: 0.875rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--oc-color-border, #ddd);
   border-radius: 4px;
+  background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
 }
 
 .kql-input:focus {
@@ -644,7 +647,7 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 .kql-hint {
   margin: 0;
   font-size: 0.75rem;
-  color: #888;
+  color: var(--oc-color-text-muted, #888);
 }
 
 .photo-data-error {
@@ -655,5 +658,18 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   border-radius: 4px;
   color: #856404;
   font-size: 0.8125rem;
+}
+
+</style>
+
+<!-- Unscoped: -webkit-autofill overrides must not have Vue scoped attribute selectors -->
+<style>
+.search-filters input:-webkit-autofill,
+.search-filters input:-webkit-autofill:hover,
+.search-filters input:-webkit-autofill:focus,
+.search-filters input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--oc-color-text-default, #333) !important;
+  -webkit-box-shadow: 0 0 0px 1000px var(--oc-color-background-default, #fff) inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
 }
 </style>

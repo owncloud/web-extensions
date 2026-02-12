@@ -391,7 +391,7 @@ async function loadStats(): Promise<void> {
 
 .stats-icon {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .loading-indicator {
@@ -412,7 +412,7 @@ async function loadStats(): Promise<void> {
   margin: 0 0 0.5rem;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -428,21 +428,21 @@ async function loadStats(): Promise<void> {
   flex-direction: column;
   gap: 0.25rem;
   padding: 0.5rem;
-  background: white;
+  background: var(--oc-color-background-default, #fff);
   border-radius: 4px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--oc-color-border, #e0e0e0);
 }
 
 .stat-label {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--oc-color-text-muted, #888);
   font-weight: 500;
 }
 
 .stat-value {
   font-size: 0.9375rem;
   font-weight: 600;
-  color: #333;
+  color: var(--oc-color-text-default, #333);
 }
 
 .stat-value.enabled {
@@ -461,9 +461,9 @@ async function loadStats(): Promise<void> {
 
 .spaces-list {
   margin-top: 0.5rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--oc-color-border, #e0e0e0);
   border-radius: 4px;
-  background: white;
+  background: var(--oc-color-background-default, #fff);
   max-height: 200px;
   overflow-y: auto;
 }
@@ -473,7 +473,7 @@ async function loadStats(): Promise<void> {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--oc-color-border, #f0f0f0);
   font-size: 0.875rem;
 }
 
@@ -492,15 +492,15 @@ async function loadStats(): Promise<void> {
 
 .space-type {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--oc-color-text-muted, #888);
   padding: 0.125rem 0.5rem;
-  background: #f0f0f0;
+  background: var(--oc-color-background-muted, #f0f0f0);
   border-radius: 10px;
 }
 
 .space-used {
   font-size: 0.75rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .stats-actions {
@@ -527,4 +527,5 @@ async function loadStats(): Promise<void> {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
 </style>

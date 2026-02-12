@@ -208,12 +208,12 @@ function getPhotoDate(item: SearchResource): string {
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--oc-color-border, #eee);
   cursor: pointer;
 }
 
 .list-item:hover {
-  background: #f5f5f5;
+  background: var(--oc-color-background-hover, #f5f5f5);
 }
 
 .item-icon {
@@ -236,7 +236,7 @@ function getPhotoDate(item: SearchResource): string {
 
 .item-path {
   font-size: 0.75rem;
-  color: #888;
+  color: var(--oc-color-text-muted, #888);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -245,7 +245,7 @@ function getPhotoDate(item: SearchResource): string {
 .item-size,
 .item-date {
   font-size: 0.8125rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
   white-space: nowrap;
 }
 
@@ -277,7 +277,7 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 .grid-item:hover {
-  background: #f5f5f5;
+  background: var(--oc-color-background-hover, #f5f5f5);
 }
 
 .grid-thumbnail {
@@ -286,7 +286,7 @@ function getPhotoDate(item: SearchResource): string {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f0;
+  background: var(--oc-color-background-muted, #f0f0f0);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -321,14 +321,14 @@ function getPhotoDate(item: SearchResource): string {
 .results-table td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--oc-color-border, #eee);
 }
 
 .results-table th {
-  background: #f9f9f9;
+  background: var(--oc-color-background-muted, #f9f9f9);
   font-weight: 600;
   font-size: 0.8125rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
   position: sticky;
   top: 0;
 }
@@ -338,7 +338,7 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 .results-table tr:hover {
-  background: #f5f5f5;
+  background: var(--oc-color-background-hover, #f5f5f5);
 }
 
 .cell-name {
@@ -353,7 +353,7 @@ function getPhotoDate(item: SearchResource): string {
 
 .cell-path {
   font-size: 0.8125rem;
-  color: #888;
+  color: var(--oc-color-text-muted, #888);
   max-width: 250px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -372,7 +372,7 @@ function getPhotoDate(item: SearchResource): string {
   border-radius: 4px;
   cursor: pointer;
   font-size: 1.25rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s, background 0.15s;
 }
@@ -384,7 +384,7 @@ function getPhotoDate(item: SearchResource): string {
 
 .item-menu-btn:hover {
   background: var(--oc-color-background-muted, #e0e0e0);
-  color: #333;
+  color: var(--oc-color-text-default, #333);
 }
 
 /* Grid menu button */
@@ -401,12 +401,12 @@ function getPhotoDate(item: SearchResource): string {
   justify-content: center;
   width: 1.75rem;
   height: 1.75rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--oc-color-background-default, rgba(255, 255, 255, 0.9));
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -417,8 +417,8 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 .grid-menu-btn:hover {
-  background: #fff;
-  color: #333;
+  background: var(--oc-color-background-default, #fff);
+  color: var(--oc-color-text-default, #333);
 }
 
 /* Table actions column */
@@ -430,4 +430,5 @@ function getPhotoDate(item: SearchResource): string {
   width: 48px;
   text-align: center;
 }
+
 </style>

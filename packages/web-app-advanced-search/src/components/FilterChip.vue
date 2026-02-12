@@ -38,22 +38,22 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
   padding: 0.25rem 0.5rem;
   border-radius: 16px;
   font-size: 0.8125rem;
-  background: #e8e8e8;
-  color: #333;
+  background: var(--oc-color-background-muted, #e8e8e8);
+  color: var(--oc-color-text-default, #333);
 }
 
 .chip-standard {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: rgba(25, 118, 210, 0.15);
+  color: var(--oc-color-swatch-primary-default, #1565c0);
 }
 
 .chip-photo {
-  background: #f3e5f5;
-  color: #7b1fa2;
+  background: rgba(156, 39, 176, 0.15);
+  color: #9c27b0;
 }
 
 .chip-text {
-  background: #e8f5e9;
+  background: rgba(46, 125, 50, 0.15);
   color: #2e7d32;
 }
 
@@ -89,4 +89,5 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
   background: rgba(0, 0, 0, 0.1);
   opacity: 1;
 }
+
 </style>
