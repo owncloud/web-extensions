@@ -12,8 +12,8 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.2.0",
-    "@ownclouders/web-pkg": "^12.2.0",
+    "@ownclouders/web-client": "^12.3.0",
+    "@ownclouders/web-pkg": "^12.3.0",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {
