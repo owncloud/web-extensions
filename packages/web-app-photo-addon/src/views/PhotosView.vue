@@ -195,7 +195,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, shallowRef, triggerRef } from 'vue'
-import { useClientService, useSpacesStore, useConfigStore } from '@ownclouders/web-pkg'
+import { useClientService, useSpacesStore, useConfigStore, useThemeStore } from '@ownclouders/web-pkg'
 import { Resource, SpaceResource } from '@ownclouders/web-client'
 import PhotoLightbox from '../components/PhotoLightbox.vue'
 import PhotoStack from '../components/PhotoStack.vue'
@@ -225,6 +225,15 @@ const { $gettext, getMonthNames } = useTranslations()
 const clientService = useClientService()
 const spacesStore = useSpacesStore()
 const configStore = useConfigStore()
+
+// Theme detection for native controls (color-scheme)
+const themeStore = useThemeStore()
+const isDark = computed(() => themeStore.currentTheme?.isDark ?? false)
+
+// Sync color-scheme on document root so browser-native popups (datalist, select) respect dark mode
+function syncColorScheme() {
+  document.documentElement.style.setProperty('color-scheme', isDark.value ? 'dark' : 'light')
+}
 
 // LocalStorage keys for persistent settings
 const STORAGE_KEY_GROUP_MODE = 'photo-addon:groupMode'
@@ -2760,12 +2769,16 @@ watch(viewType, (newVal) => {
 }, { immediate: true })  // Run immediately to handle initial value
 
 onMounted(() => {
+  syncColorScheme()
   injectStyles()
   initThumbnailObserver()
   loadPhotos()
   // Add keyboard listener for zoom shortcuts (+, -, 0)
   document.addEventListener('keydown', handleZoomKeydown)
 })
+
+// Update color-scheme when theme changes
+watch(isDark, syncColorScheme)
 
 onUnmounted(() => {
   // Remove keyboard listener for zoom shortcuts

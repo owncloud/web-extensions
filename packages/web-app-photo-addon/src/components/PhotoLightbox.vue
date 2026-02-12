@@ -14,19 +14,19 @@
   >
     <!-- Context Menu (inside overlay for proper stacking) -->
     <div v-if="menuVisible" :style="menuStyle" role="menu" tabindex="-1" :aria-label="$gettext('Photo options')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
-      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
+      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">↓</span>
         <span>{{ $gettext('Download') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
+      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">→</span>
         <span>{{ $gettext('Open in Files') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
+      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='var(--oc-color-background-muted, #f5f5f5)'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">⎘</span>
         <span>{{ $gettext('Copy Link') }}</span>
       </button>
-      <div role="separator" style="height: 1px; background: #eee; margin: 6px 0;"></div>
+      <div role="separator" style="height: 1px; background: var(--oc-color-border, #eee); margin: 6px 0;"></div>
       <button role="menuitem" :style="menuItemDangerStyle" @click="handleMenuAction('delete')" @mouseenter="$event.target.style.background='#fff0f0'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#fff0f0'" @focusout="$event.target.style.background='none'">
         <span aria-hidden="true" style="width: 18px; opacity: 0.7;">✕</span>
         <span>{{ $gettext('Delete') }}</span>
@@ -262,7 +262,7 @@ const menuStyle = computed(() => ({
   top: menuTop.value,
   left: menuLeft.value,
   zIndex: 10001,
-  background: '#fff',
+  background: 'var(--oc-color-background-default, #fff)',
   borderRadius: '8px',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
   minWidth: '160px',
@@ -281,7 +281,7 @@ const menuItemStyle = computed(() => ({
   background: 'none',
   cursor: 'pointer',
   fontSize: '14px',
-  color: '#333',
+  color: 'var(--oc-color-text-default, #333)',
   textAlign: 'left' as const,
   fontFamily: 'inherit',
   WebkitAppearance: 'none' as const,
@@ -294,7 +294,7 @@ const menuItemStyle = computed(() => ({
 // Computed style for danger menu item
 const menuItemDangerStyle = computed(() => ({
   ...menuItemStyle.value,
-  color: '#dc3545'
+  color: 'var(--oc-color-swatch-danger-default, #dc3545)'
 }))
 
 // Image loading state
@@ -943,7 +943,7 @@ function getMapUrl(lat: number, lon: number): string {
   position: fixed;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--oc-color-background-default, #fff);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   min-width: 160px;
@@ -962,7 +962,7 @@ function getMapUrl(lat: number, lon: number): string {
   background: none;
   cursor: pointer;
   font-size: 14px;
-  color: #333;
+  color: var(--oc-color-text-default, #333);
   text-align: left;
   transition: background 0.15s;
   font-family: inherit;
@@ -974,11 +974,11 @@ function getMapUrl(lat: number, lon: number): string {
 }
 
 .lbmenu-item:hover {
-  background: #f5f5f5;
+  background: var(--oc-color-background-muted, #f5f5f5);
 }
 
 .lbmenu-item-danger {
-  color: #dc3545;
+  color: var(--oc-color-swatch-danger-default, #dc3545);
 }
 
 .lbmenu-item-danger:hover {
@@ -993,7 +993,7 @@ function getMapUrl(lat: number, lon: number): string {
 
 .lbmenu-divider {
   height: 1px;
-  background: #eee;
+  background: var(--oc-color-border, #eee);
   margin: 6px 0;
 }
 

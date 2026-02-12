@@ -377,7 +377,7 @@ function injectTileFixCSS() {
       display: none !important;
     }
     .map-photo-tooltip {
-      background: #fff;
+      background: var(--oc-color-background-default, #fff);
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       overflow: hidden;
@@ -389,7 +389,7 @@ function injectTileFixCSS() {
       height: 100px;
       object-fit: cover;
       display: block;
-      background: #f0f0f0;
+      background: var(--oc-color-background-muted, #f0f0f0);
     }
     .map-photo-tooltip .tooltip-info {
       padding: 8px;
@@ -399,7 +399,7 @@ function injectTileFixCSS() {
       display: block;
       font-size: 12px;
       font-weight: 500;
-      color: #333;
+      color: var(--oc-color-text-default, #333);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -407,7 +407,7 @@ function injectTileFixCSS() {
     .map-photo-tooltip .tooltip-date {
       display: block;
       font-size: 11px;
-      color: #666;
+      color: var(--oc-color-text-muted, #666);
       margin-top: 2px;
     }
     .map-photo-tooltip .tooltip-count {
@@ -772,7 +772,7 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   overflow: hidden;
-  background: #e0e0e0;
+  background: var(--oc-color-background-muted, #e0e0e0);
 }
 
 /* Inner container - positioning context for the map */
@@ -797,7 +797,7 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--oc-color-background-default, rgba(255,255,255,0.95));
   padding: 2rem 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -812,18 +812,18 @@ onUnmounted(() => {
 
 .no-gps-overlay p {
   margin: 0;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .map-stats {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--oc-color-background-default, rgba(255,255,255,0.95));
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.85rem;
-  color: #333;
+  color: var(--oc-color-text-default, #333);
   z-index: 450;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
