@@ -210,21 +210,21 @@ importers:
   packages/web-app-photo-addon:
     dependencies:
       '@ownclouders/web-client':
-        specifier: ^12.3.0
-        version: 12.3.0
+        specifier: ^12.3.1
+        version: 12.3.1
       '@ownclouders/web-pkg':
-        specifier: ^12.3.0
-        version: 12.3.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
+        specifier: ^12.3.1
+        version: 12.3.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       leaflet:
         specifier: ^1.9.4
         version: 1.9.4
     devDependencies:
       '@ownclouders/extension-sdk':
-        specifier: ^12.3.0
-        version: 12.3.0(vite@7.1.11(@types/node@24.10.1)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
+        specifier: ^12.3.1
+        version: 12.3.1(vite@7.1.11(@types/node@24.10.1)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
-        specifier: ^12.3.0
-        version: 12.3.0(@ownclouders/web-pkg@12.3.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
+        specifier: ^12.3.1
+        version: 12.3.1(@ownclouders/web-pkg@12.3.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
       '@types/leaflet':
         specifier: ^1.9.21
         version: 1.9.21
@@ -865,6 +865,11 @@ packages:
     peerDependencies:
       vue: ^3.5.26
 
+  '@ownclouders/design-system@12.3.1':
+    resolution: {integrity: sha512-988dZK5vCIJJufbk57hWFOAgmNewvVHHdaQuJf27oYwVXONnI9s28/ndMiBBA3pGnMn0UThd8a6e0t4ZverKZw==}
+    peerDependencies:
+      vue: ^3.5.26
+
   '@ownclouders/eslint-config@12.3.0':
     resolution: {integrity: sha512-ePVEKRplCZ1E7yuV+OtNk0H5qRUM8bkcUmbVr9UX8c69aQgL3Sk+IAsIxO69R3mQw+rlZUw/SiYfh8ph2sIwzw==}
     peerDependencies:
@@ -872,6 +877,11 @@ packages:
 
   '@ownclouders/extension-sdk@12.3.0':
     resolution: {integrity: sha512-m2qxNMhbuiqtMa/d/nQGLF9SOaTBWDXn9urVTEKZ+1XKdRDzrygt8+ODkBLOZ1hZujuk8U95YE+ZMXPtRokUQA==}
+    peerDependencies:
+      vite: ^5 || ^6.0.0 || ^7.0.0
+
+  '@ownclouders/extension-sdk@12.3.1':
+    resolution: {integrity: sha512-ef5bgSCSTaDrZr8fFHpglxjMWk4+CGP0LuyhWqjucYiTRk+iWyBfJ+VPwCHFLPOSeBrxmIiwKFyM/iTSbJR3mA==}
     peerDependencies:
       vite: ^5 || ^6.0.0 || ^7.0.0
 
@@ -884,13 +894,26 @@ packages:
   '@ownclouders/web-client@12.3.0':
     resolution: {integrity: sha512-fMHwBonyiZCjfNCAdlac4q4tO7is0u43PxQoNMhkKXPPePHf9ucqfGkCX3TzVmykCWr4LhR/7XEAXxhYwB29tw==}
 
+  '@ownclouders/web-client@12.3.1':
+    resolution: {integrity: sha512-koIADXD9tIbcFj/+EnhY325KJzKhA0AUT9sqSz8SXh9RTuF+QG9D53ZBNBzPmevSTF7X5RH9JhA4t/sjCKTyDg==}
+
   '@ownclouders/web-pkg@12.3.0':
     resolution: {integrity: sha512-mH5/3gY42NEAU7ls9kaR+fiB7ciT7OY+BF7Dnld7g+rK8Rro9XrLX8ewVPUI4X4wY6Z+Ceq2hbzzU6I+1BkXJg==}
+
+  '@ownclouders/web-pkg@12.3.1':
+    resolution: {integrity: sha512-yL9elRB7qTPo3DhRtUuSCu1Fi12LiOhsdfPN2RABCgHg+44xv8auwXwWAV8/YSKVSLzTZ/2hPt2ZSunHTDIxBg==}
 
   '@ownclouders/web-test-helpers@12.3.0':
     resolution: {integrity: sha512-BMV6J/rkKI2nAx52I2nXeECr3ti2GUPQDWou/4SMzsoKr+w+piI29N1L46t6qDBGzCvIq9ICsM+eJG1VLAt3Cw==}
     peerDependencies:
       '@ownclouders/web-pkg': ^12.3.0
+      '@vue/test-utils': ^2.4.6
+      vue: ^3.5.26
+
+  '@ownclouders/web-test-helpers@12.3.1':
+    resolution: {integrity: sha512-+GTo0EJGsy0cTOfLlV9sDFpVGMyAH1Y0aPtkjd69JCUeiSgtrgAdYAparg7LH9s0asgCpxtAJVaSQEqqQRkykw==}
+    peerDependencies:
+      '@ownclouders/web-pkg': ^12.3.1
       '@vue/test-utils': ^2.4.6
       vue: ^3.5.26
 
@@ -1694,6 +1717,9 @@ packages:
   axios@1.13.2:
     resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
 
+  axios@1.13.5:
+    resolution: {integrity: sha512-cz4ur7Vb0xS4/KUN0tPWe44eqxrIu31me+fbang3ijiNscE129POzipJJA6zniq2C/Z6sJCjMimjS8Lc/GAs8Q==}
+
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
@@ -2343,6 +2369,10 @@ packages:
     resolution: {integrity: sha512-2O3dkPAAC6JavuMm8+4+pgTk+5hoAs+CjZ+sWcQLkX9+/tHRuTkQh/Oaifr8qDmZ8iEHb771Ea6G8CdwkrgvYA==}
     hasBin: true
 
+  fast-xml-parser@5.3.5:
+    resolution: {integrity: sha512-JeaA2Vm9ffQKp9VjvfzObuMCjUYAp5WDYhRYL5LrBPY/jUDlUtOvDfot0vKSkB9tuX885BDHjtw4fZadD95wnA==}
+    hasBin: true
+
   fdir@6.5.0:
     resolution: {integrity: sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg==}
     engines: {node: '>=12.0.0'}
@@ -2407,6 +2437,10 @@ packages:
 
   form-data@4.0.4:
     resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+    engines: {node: '>= 6'}
+
+  form-data@4.0.5:
+    resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
 
   formdata-polyfill@4.0.10:
@@ -3444,6 +3478,9 @@ packages:
   strnum@2.1.1:
     resolution: {integrity: sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==}
 
+  strnum@2.1.2:
+    resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
+
   style-mod@4.1.2:
     resolution: {integrity: sha512-wnD1HyVqpJUI2+eKZ+eo1UwghftP6yuFheBqqe+bWCotBjC2K1YnteJILRMs3SM4V/0dLEW1SC27MWP5y+mwmw==}
 
@@ -3798,6 +3835,10 @@ packages:
 
   webdav@5.8.0:
     resolution: {integrity: sha512-iuFG7NamJ41Oshg4930iQgfIpRrUiatPWIekeznYgEf2EOraTRcDPTjy7gIOMtkdpKTaqPk1E68NO5PAGtJahA==}
+    engines: {node: '>=14'}
+
+  webdav@5.9.0:
+    resolution: {integrity: sha512-OMJ6wtK1WvCO++aOLoQgE96S8KT4e5aaClWHmHXfFU369r4eyELN569B7EqT4OOUb99mmO58GkyuiCv/Ag6J0Q==}
     engines: {node: '>=14'}
 
   webfontloader@1.6.28:
@@ -4614,6 +4655,27 @@ snapshots:
     transitivePeerDependencies:
       - '@vue/compiler-sfc'
 
+  '@ownclouders/design-system@12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@emoji-mart/data': 1.2.1
+      '@popperjs/core': 2.11.8
+      deepmerge: 4.3.1
+      emoji-mart: 5.6.0
+      focus-trap: 7.8.0
+      focus-trap-vue: 4.1.0(focus-trap@7.8.0)(vue@3.5.22(typescript@5.9.3))
+      fuse.js: 7.1.0
+      lodash-es: 4.17.23
+      luxon: 3.7.2
+      tippy.js: 6.3.7
+      vue: 3.5.22(typescript@5.9.3)
+      vue-inline-svg: 4.0.1(vue@3.5.22(typescript@5.9.3))
+      vue-router: 4.6.4(vue@3.5.22(typescript@5.9.3))
+      vue-select: 4.0.0-beta.6(vue@3.5.22(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      webfontloader: 1.6.28
+    transitivePeerDependencies:
+      - '@vue/compiler-sfc'
+
   '@ownclouders/eslint-config@12.3.0(@babel/core@7.28.4)(@typescript-eslint/eslint-plugin@8.55.0(@typescript-eslint/parser@8.55.0(eslint@9.37.0)(typescript@5.9.3))(eslint@9.37.0)(typescript@5.9.3))(eslint@9.37.0)(vue-eslint-parser@9.4.3(eslint@9.37.0))':
     dependencies:
       '@babel/eslint-parser': 7.28.6(@babel/core@7.28.4)(eslint@9.37.0)
@@ -4643,6 +4705,14 @@ snapshots:
     transitivePeerDependencies:
       - vue
 
+  '@ownclouders/extension-sdk@12.3.1(vite@7.1.11(@types/node@24.10.1)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@vitejs/plugin-vue': 6.0.3(vite@7.1.11(@types/node@24.10.1)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))
+      rollup-plugin-serve: 3.0.0
+      vite: 7.1.11(@types/node@24.10.1)(sass-embedded@1.93.2)(sass@1.93.2)
+    transitivePeerDependencies:
+      - vue
+
   '@ownclouders/prettier-config@0.0.1':
     dependencies:
       prettier: 2.8.8
@@ -4659,6 +4729,21 @@ snapshots:
       luxon: 3.7.2
       uuid: 13.0.0
       webdav: 5.8.0
+      xml-js: 1.6.11
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - debug
+
+  '@ownclouders/web-client@12.3.1':
+    dependencies:
+      '@casl/ability': 6.8.0
+      '@microsoft/fetch-event-source': 2.0.1
+      axios: 1.13.5
+      fast-xml-parser: 5.3.5
+      lodash-es: 4.17.23
+      luxon: 3.7.2
+      uuid: 13.0.0
+      webdav: 5.9.0
       xml-js: 1.6.11
       zod: 4.3.6
     transitivePeerDependencies:
@@ -4720,6 +4805,62 @@ snapshots:
       - typescript
       - vue
 
+  '@ownclouders/web-pkg@12.3.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@casl/ability': 6.8.0
+      '@casl/vue': 2.2.6(@casl/ability@6.8.0)(vue@3.5.22(typescript@5.9.3))
+      '@chevrotain/regexp-to-ast': 11.1.1
+      '@microsoft/fetch-event-source': 2.0.1
+      '@ownclouders/design-system': 12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      '@ownclouders/web-client': 12.3.1
+      '@pdf-lib/fontkit': 1.1.1
+      '@sentry/vue': 10.36.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))
+      '@uppy/core': 5.2.0
+      '@uppy/drop-target': 4.1.0(@uppy/core@5.2.0)
+      '@uppy/tus': 5.1.0(@uppy/core@5.2.0)
+      '@uppy/utils': 7.1.5
+      '@uppy/xhr-upload': 5.1.1(@uppy/core@5.2.0)
+      '@vavt/cm-extension': 1.11.2
+      '@vue/shared': 3.5.26
+      '@vueuse/core': 14.2.1(vue@3.5.22(typescript@5.9.3))
+      axios: 1.13.5
+      deepmerge: 4.3.1
+      dompurify: 3.3.1
+      emoji-regex: 10.6.0
+      filesize: 11.0.13
+      fuse.js: 7.1.0
+      highlight.js: 11.11.1
+      html2canvas: 1.4.1
+      katex: 0.16.28
+      lodash-es: 4.17.23
+      luxon: 3.7.2
+      mark.js: 8.11.1
+      marked: 17.0.1
+      md-editor-v3: 6.3.1(vue@3.5.22(typescript@5.9.3))
+      mermaid: 11.12.2
+      oidc-client-ts: 3.4.1
+      p-queue: 9.1.0
+      password-sheriff: 2.0.0
+      pdf-lib: 1.17.1
+      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
+      portal-vue: 3.0.0(vue@3.5.22(typescript@5.9.3))
+      prettier: 3.8.1
+      prismjs: 1.30.0
+      qs: 6.14.1
+      screenfull: 6.0.2
+      uuid: 13.0.0
+      vue-concurrency: 5.0.3(vue@3.5.22(typescript@5.9.3))
+      vue-router: 4.6.4(vue@3.5.22(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      zod: 4.3.6
+    transitivePeerDependencies:
+      - '@tanstack/vue-router'
+      - '@vue/compiler-sfc'
+      - debug
+      - supports-color
+      - typescript
+      - vue
+
   '@ownclouders/web-test-helpers@12.3.0(@ownclouders/web-pkg@12.3.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.0
@@ -4730,6 +4871,27 @@ snapshots:
       '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
       '@vue/test-utils': 2.4.6
       axios: 1.13.2
+      vitest-mock-extended: 3.1.0(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))
+      vue: 3.5.22(typescript@5.9.3)
+      vue-router: 4.6.4(vue@3.5.22(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+    transitivePeerDependencies:
+      - '@vue/compiler-sfc'
+      - debug
+      - pinia
+      - typescript
+      - vitest
+
+  '@ownclouders/web-test-helpers@12.3.1(@ownclouders/web-pkg@12.3.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(@vue/compiler-sfc@3.5.22)(@vue/test-utils@2.4.6)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))(vue@3.5.22(typescript@5.9.3))':
+    dependencies:
+      '@casl/ability': 6.8.0
+      '@casl/vue': 2.2.6(@casl/ability@6.8.0)(vue@3.5.22(typescript@5.9.3))
+      '@ownclouders/design-system': 12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      '@ownclouders/web-client': 12.3.1
+      '@ownclouders/web-pkg': 12.3.1(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
+      '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
+      '@vue/test-utils': 2.4.6
+      axios: 1.13.5
       vitest-mock-extended: 3.1.0(typescript@5.9.3)(vitest@4.0.16(@types/node@24.10.1)(happy-dom@20.0.2)(sass-embedded@1.93.2)(sass@1.93.2))
       vue: 3.5.22(typescript@5.9.3)
       vue-router: 4.6.4(vue@3.5.22(typescript@5.9.3))
@@ -5615,6 +5777,14 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
+  axios@1.13.5:
+    dependencies:
+      follow-redirects: 1.15.11
+      form-data: 4.0.5
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
   axobject-query@4.1.0: {}
 
   balanced-match@1.0.2: {}
@@ -5994,7 +6164,7 @@ snapshots:
   dagre-d3-es@7.0.13:
     dependencies:
       d3: 7.9.0
-      lodash-es: 4.17.21
+      lodash-es: 4.17.23
 
   data-uri-to-buffer@4.0.1: {}
 
@@ -6304,6 +6474,10 @@ snapshots:
     dependencies:
       strnum: 2.1.1
 
+  fast-xml-parser@5.3.5:
+    dependencies:
+      strnum: 2.1.2
+
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
       picomatch: 4.0.3
@@ -6357,6 +6531,14 @@ snapshots:
       signal-exit: 4.1.0
 
   form-data@4.0.4:
+    dependencies:
+      asynckit: 0.4.0
+      combined-stream: 1.0.8
+      es-set-tostringtag: 2.1.0
+      hasown: 2.0.2
+      mime-types: 2.1.35
+
+  form-data@4.0.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
@@ -7327,6 +7509,8 @@ snapshots:
 
   strnum@2.1.1: {}
 
+  strnum@2.1.2: {}
+
   style-mod@4.1.2: {}
 
   stylis@4.3.6: {}
@@ -7748,6 +7932,23 @@ snapshots:
       byte-length: 1.0.2
       entities: 6.0.1
       fast-xml-parser: 4.5.3
+      hot-patcher: 2.0.1
+      layerr: 3.0.0
+      md5: 2.3.0
+      minimatch: 9.0.5
+      nested-property: 4.0.0
+      node-fetch: 3.3.2
+      path-posix: 1.0.0
+      url-join: 5.0.0
+      url-parse: 1.5.10
+
+  webdav@5.9.0:
+    dependencies:
+      '@buttercup/fetch': 0.2.1
+      base-64: 1.0.0
+      byte-length: 1.0.2
+      entities: 6.0.1
+      fast-xml-parser: 5.3.5
       hot-patcher: 2.0.1
       layerr: 3.0.0
       md5: 2.3.0
