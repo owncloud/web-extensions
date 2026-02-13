@@ -12,12 +12,12 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.2.0",
-    "@ownclouders/web-pkg": "^12.2.0"
+    "@ownclouders/web-client": "^12.3.0",
+    "@ownclouders/web-pkg": "^12.3.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.2.0",
-    "@ownclouders/web-test-helpers": "^12.2.0",
+    "@ownclouders/extension-sdk": "^12.3.0",
+    "@ownclouders/web-test-helpers": "^12.3.0",
     "sass-embedded": "^1.93.2",
     "vue": "^3.4.21",
     "vue3-gettext": "^2.4.0"

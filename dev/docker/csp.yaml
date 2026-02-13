@@ -5,6 +5,8 @@ directives:
     - "'self'"
     - 'blob:'
     - 'https://raw.githubusercontent.com/owncloud/awesome-ocis/'
+    # Photo-addon: OpenStreetMap tile requests
+    - 'https://*.tile.openstreetmap.org'
   default-src:
     - "'none'"
   font-src:
@@ -22,6 +24,8 @@ directives:
     - 'data:'
     - 'blob:'
     - 'https://raw.githubusercontent.com/owncloud/awesome-ocis/'
+    # Photo-addon: OpenStreetMap tiles for map view
+    - 'https://*.tile.openstreetmap.org'
   manifest-src:
     - "'self'"
   media-src:
