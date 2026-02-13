@@ -7,16 +7,16 @@
 
 This repository contains a collection of [ownCloud Web](https://github.com/owncloud/web) extensions that, for various reasons, have not been added to the main repository.
 
-   * [Apps](#apps)
+   * [Existing Web-Extensions](#existing-web-extensions)
    * [Installing Apps in oCIS](#installing-apps-in-ocis)
-   * [Adding a new app to This Repository](#adding-a-new-app-to-this-repository)
+   * [Adding a New App to This Repository](#adding-a-new-app-to-this-repository)
    * [Release Workflow for Web Extensions](#release-workflow-for-web-extensions)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 
-## Apps
+## Existing Web-Extensions
 
-The following extension examples are provided as apps to be used with the Infinite Scale web frontend.
+The following extension examples are provided to be used with the Infinite Scale web frontend.
 
 - [web-app-cast](./packages/web-app-cast/)
 - [web-app-draw-io](./packages/web-app-draw-io/)
@@ -36,12 +36,9 @@ There are two ways installing these extension examples:
   (Before you start, select the ocis version in the admin docs you want to use this example for.)
 * On a general level, refer to the [Web app docs](https://owncloud.dev/services/web/#loading-applications) to learn how to install apps in oCIS.
 
-## Adding a new app to This Repository
+## Adding a New App to This Repository
 
-New apps must be placed inside the `packages` folder and be prefixed with `web-app-`. Additionally, the following changes are needed:
-
-- add the new app to the `APPS` variable in the `.drone.star` file
-- add the `dist` folder of the new app to the list of volume mounts of the docker `ocis` service
+To start developing a new web-extension or maintaining an existing one, see the [Starting Guide](docs/starting_guide.md) fdor more details.
 
 ## Release Workflow for Web Extensions
 
