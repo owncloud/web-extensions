@@ -32,6 +32,7 @@ services:
       - ./dev/docker/ocis.apps.yaml:/etc/ocis/apps.yaml
       - ./dev/docker/csp.yaml:/etc/ocis/csp.yaml
       # apps
+      - ./packages/web-app-advanced-search/dist:/web/apps/advanced-search
       - ./packages/web-app-cast/dist:/web/apps/cast
       - ./packages/web-app-draw-io/dist:/web/apps/draw-io
       - ./packages/web-app-external-sites/dist:/web/apps/external-sites

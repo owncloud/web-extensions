@@ -1,0 +1,25 @@
+{
+  "name": "advanced-search",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Advanced search extension for ownCloud with photo EXIF metadata filters",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.3.1",
+    "@ownclouders/web-pkg": "^12.3.1"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.3.1",
+    "@ownclouders/web-test-helpers": "^12.3.1",
+    "sass-embedded": "^1.93.2",
+    "vue": "^3.4.21",
+    "vue3-gettext": "^2.4.0"
+  }
+}

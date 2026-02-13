@@ -18,6 +18,7 @@ This repository contains a collection of [ownCloud Web](https://github.com/owncl
 
 The following extension examples are provided to be used with the Infinite Scale web frontend.
 
+- [web-app-advanced-search](./packages/web-app-advanced-search/)
 - [web-app-cast](./packages/web-app-cast/)
 - [web-app-draw-io](./packages/web-app-draw-io/)
 - [web-app-external-sites](./packages/web-app-external-sites/)
