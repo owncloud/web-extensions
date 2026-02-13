@@ -38,7 +38,7 @@ There are two ways installing these extension examples:
 
 ## Adding a New App to This Repository
 
-To start developing a new web-extension or maintaining an existing one, see the [Starting Guide](docs/starting_guide.md) fdor more details.
+To start developing a new web-extension or maintaining an existing one, see the [Starting Guide](docs/starting_guide.md) for more details.
 
 ## Release Workflow for Web Extensions
 
