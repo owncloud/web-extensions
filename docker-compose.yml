@@ -15,6 +15,10 @@ services:
       WEB_ASSET_APPS_PATH: /web/apps
       WEB_UI_CONFIG_FILE: /web/config.json
       PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
+      # fulltext search
+      SEARCH_EXTRACTOR_TYPE: tika
+      SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika:9998
+      FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
     labels:
       traefik.enable: true
       traefik.http.routers.ocis.tls: true
@@ -37,6 +41,13 @@ services:
       - ./packages/web-app-photo-addon/dist:/web/apps/photo-addon
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
       - ./packages/web-app-unzip/dist:/web/apps/unzip
+    depends_on:
+      - traefik
+
+  # tika is required for the photo and search extensions
+  tika:
+    image: apache/tika:latest-full
+    # release notes: https://tika.apache.org
     depends_on:
       - traefik
 
