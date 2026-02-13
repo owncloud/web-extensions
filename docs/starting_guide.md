@@ -64,13 +64,13 @@ New web-extensions must be placed inside the `packages` folder and be prefixed w
   - Texts must be translatable. Use `l10n` and `gettext` to do so.
   - Use other web-extensions as template for the `l10n` folder.
   - On merge, the resource to translate is available on [Transifex](https://app.transifex.com/owncloud-org/owncloud-web/translate/#de).\
-    Note that an account is required and you need to be promoted as translator for defined languages. You will not see the data otherwise.
+    Note that an account is required and you need to be promoted as translator for defined languages, otherwise, you will not see the data.
 - Web provides themes (light and dark). Check that the web-extension supports the themes.
 - Provide tests
 
 ## Linting and Typescript Checks
 
-During a CI run, a linter and typecheck is initiated. No other tests will be started if these do not pass.
+During a CI run, a linter and typecheck are initiated. No other tests will be started if these do not pass.
 
 For the linter, the following commonly reported issues can be avoided and fix cycles minimized:
 
