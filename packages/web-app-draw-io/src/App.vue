@@ -33,8 +33,7 @@ export default defineComponent({
     },
     applicationConfig: {
       type: Object as PropType<AppConfigObject>,
-      required: true,
-      // hack so the correct type is being used for the app config
+      required: false,
       default: (): AppConfigObject => undefined
     },
     currentContent: {
