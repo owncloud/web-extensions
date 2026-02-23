@@ -77,7 +77,7 @@ services:
       traefik.http.services.companion.loadbalancer.server.port: 3020
 
   traefik:
-    image: traefik:v3.6.8
+    image: traefik:v3.6.9
     restart: unless-stopped
     entrypoint:
       [
