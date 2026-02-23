@@ -1012,7 +1012,10 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
       if (orientationEl?.textContent) graphPhoto.orientation = parseInt(orientationEl.textContent, 10)
       if (exposureNumEl?.textContent) graphPhoto.exposureNumerator = parseInt(exposureNumEl.textContent, 10)
       if (exposureDenEl?.textContent) graphPhoto.exposureDenominator = parseInt(exposureDenEl.textContent, 10)
-      if (takenDateTimeEl?.textContent) graphPhoto.takenDateTime = takenDateTimeEl.textContent
+      // Strip trailing 'Z' from takenDateTime — oCIS stores EXIF wall-clock time
+      // (which has no timezone) as a UTC-suffixed ISO string. Removing the 'Z'
+      // lets new Date() treat it as local time, which matches the original EXIF intent.
+      if (takenDateTimeEl?.textContent) graphPhoto.takenDateTime = takenDateTimeEl.textContent.replace(/Z$/i, '')
 
       // Add location if available
       if (latitudeEl?.textContent || longitudeEl?.textContent) {
@@ -1083,10 +1086,15 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
 }
 
 /**
- * Format date as YYYY-MM-DD for KQL queries
+ * Format date as YYYY-MM-DD for KQL queries.
+ * Uses local date components to avoid UTC conversion shifting the date
+ * near midnight (e.g., 11 PM EST → next day in UTC).
  */
 function formatDateForKQL(date: Date): string {
-  return date.toISOString().split('T')[0]
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
 }
 
 /**

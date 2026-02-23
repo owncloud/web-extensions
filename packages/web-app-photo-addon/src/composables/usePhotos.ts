@@ -152,8 +152,12 @@ export function usePhotos() {
         )
       }
 
-      // Try ISO 8601 or other formats parseable by Date constructor
-      const parsed = new Date(value)
+      // Try ISO 8601 or other formats parseable by Date constructor.
+      // Strip trailing 'Z' — oCIS stores EXIF wall-clock time (no timezone)
+      // as UTC-suffixed ISO strings. Removing 'Z' lets Date() treat it as
+      // local time, matching the original EXIF intent.
+      const cleaned = value.replace(/Z$/i, '')
+      const parsed = new Date(cleaned)
       if (!isNaN(parsed.getTime())) {
         return parsed
       }
