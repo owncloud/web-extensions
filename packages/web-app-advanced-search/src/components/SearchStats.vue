@@ -128,7 +128,7 @@ interface OcsCapabilities {
   ocs?: {
     data?: {
       capabilities?: {
-        search?: { ocr?: boolean }
+        search?: { ocr?: boolean; property?: { content?: { enabled?: boolean } } }
         files?: { content_search?: { ocr?: boolean } }
       }
       version?: {
@@ -267,6 +267,10 @@ async function fetchCapabilities(serverUrl: string): Promise<void> {
       stats.ocrEnabled = caps.search.ocr === true
     } else if (caps?.files?.content_search?.ocr !== undefined) {
       stats.ocrEnabled = caps.files.content_search.ocr === true
+    } else if (caps?.search?.property?.content?.enabled === true) {
+      // oCIS doesn't expose an explicit OCR flag, but content search
+      // requires Tika which typically includes Tesseract OCR.
+      stats.ocrEnabled = true
     }
 
     const version = data?.ocs?.data?.version
