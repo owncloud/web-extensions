@@ -1162,21 +1162,21 @@ async function fetchPhotosViaSearch(driveId: string, dateRange: { start: string,
   } catch (err: any) {
     const status = err.response?.status
     if (status === 503) {
-      throw new Error('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.')
+      throw new Error($gettext('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.'))
     }
     if (status === 502) {
-      throw new Error('The search service is not responding (502 Bad Gateway). Please try again in a moment.')
+      throw new Error($gettext('The search service is not responding (502 Bad Gateway). Please try again in a moment.'))
     }
     if (status === 500) {
-      throw new Error('The search service encountered an error (500 Internal Server Error). Please try again.')
+      throw new Error($gettext('The search service encountered an error (500 Internal Server Error). Please try again.'))
     }
     if (status === 401 || status === 403) {
-      throw new Error('Authentication error (401 Unauthorized). Your session may have expired.')
+      throw new Error($gettext('Authentication error (401 Unauthorized). Your session may have expired.'))
     }
     if (err.code === 'ECONNREFUSED' || err.message?.includes('Network')) {
-      throw new Error('Unable to connect to the server. Please check your network connection.')
+      throw new Error($gettext('Unable to connect to the server. Please check your network connection.'))
     }
-    throw new Error('Failed to search photos. Please try again.')
+    throw new Error($gettext('Failed to search photos. Please try again.'))
   }
 }
 
@@ -1234,21 +1234,21 @@ async function fetchAllImagesViaSearch(driveId: string): Promise<PhotoWithDate[]
   } catch (err: any) {
     const status = err.response?.status
     if (status === 503) {
-      throw new Error('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.')
+      throw new Error($gettext('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.'))
     }
     if (status === 502) {
-      throw new Error('The search service is not responding (502 Bad Gateway). Please try again in a moment.')
+      throw new Error($gettext('The search service is not responding (502 Bad Gateway). Please try again in a moment.'))
     }
     if (status === 500) {
-      throw new Error('The search service encountered an error (500 Internal Server Error). Please try again.')
+      throw new Error($gettext('The search service encountered an error (500 Internal Server Error). Please try again.'))
     }
     if (status === 401 || status === 403) {
-      throw new Error('Authentication error (401 Unauthorized). Your session may have expired.')
+      throw new Error($gettext('Authentication error (401 Unauthorized). Your session may have expired.'))
     }
     if (err.code === 'ECONNREFUSED' || err.message?.includes('Network')) {
-      throw new Error('Unable to connect to the server. Please check your network connection.')
+      throw new Error($gettext('Unable to connect to the server. Please check your network connection.'))
     }
-    throw new Error('Failed to search photos. Please try again.')
+    throw new Error($gettext('Failed to search photos. Please try again.'))
   }
 }
 
@@ -1314,21 +1314,21 @@ async function fetchPhotosWithGPS(driveId: string): Promise<PhotoWithDate[]> {
   } catch (err: any) {
     const status = err.response?.status
     if (status === 503) {
-      throw new Error('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.')
+      throw new Error($gettext('The search service is temporarily unavailable (503 Service Unavailable). The service may be starting up or under maintenance.'))
     }
     if (status === 502) {
-      throw new Error('The search service is not responding (502 Bad Gateway). Please try again in a moment.')
+      throw new Error($gettext('The search service is not responding (502 Bad Gateway). Please try again in a moment.'))
     }
     if (status === 500) {
-      throw new Error('The search service encountered an error (500 Internal Server Error). Please try again.')
+      throw new Error($gettext('The search service encountered an error (500 Internal Server Error). Please try again.'))
     }
     if (status === 401 || status === 403) {
-      throw new Error('Authentication error (401 Unauthorized). Your session may have expired.')
+      throw new Error($gettext('Authentication error (401 Unauthorized). Your session may have expired.'))
     }
     if (err.code === 'ECONNREFUSED' || err.message?.includes('Network')) {
-      throw new Error('Unable to connect to the server. Please check your network connection.')
+      throw new Error($gettext('Unable to connect to the server. Please check your network connection.'))
     }
-    throw new Error('Failed to load map photos. Please try again.')
+    throw new Error($gettext('Failed to load map photos. Please try again.'))
   }
 }
 
@@ -1422,7 +1422,7 @@ async function loadPhotos() {
     }
 
     if (!personalSpace) {
-      throw new Error('Could not find personal space')
+      throw new Error($gettext('Could not find personal space'))
     }
 
     // Determine starting date based on filter
