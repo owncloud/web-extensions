@@ -275,6 +275,12 @@ export function buildPhotoKQL(photo: SearchFilters['photo']): string[] {
     parts.push(`objectCaption:${wrapForSearch(photo.objectCaption, false)}`)
   }
 
+  if (photo.objectLabel) {
+    // ObjectLabels uses the lowercaseKeyword analyzer (single token, exact match),
+    // so wildcards are added for partial matching unless user already included them
+    parts.push(`objectLabel:${wrapForSearch(photo.objectLabel, !photo.objectLabel.includes('*'))}`)
+  }
+
   return parts
 }
 
