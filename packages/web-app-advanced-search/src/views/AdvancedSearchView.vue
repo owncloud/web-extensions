@@ -5,18 +5,22 @@
       <h1>{{ $gettext('Advanced Search') }}</h1>
       <div class="header-actions">
         <button
-          class="btn btn-secondary"
+          type="button"
+          class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline"
           :aria-expanded="showSavedQueries"
           @click="showSavedQueries = !showSavedQueries"
         >
-          <span aria-hidden="true">📁</span> {{ $gettext('Saved Searches') }} ({{ savedQueries.length }})
+          <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.414 5H21C21.5523 5 22 5.44772 22 6V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V4C2 3.44772 2.44772 3 3 3H10.414L12.414 5Z" /></svg></span>
+          <span>{{ $gettext('Saved Searches') }} ({{ savedQueries.length }})</span>
         </button>
         <button
           v-if="activeFilters.length > 0"
-          class="btn btn-secondary"
+          type="button"
+          class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline"
           @click="showSaveDialog = true"
         >
-          <span aria-hidden="true">💾</span> {{ $gettext('Save Search') }}
+          <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M7 19V13H17V19H19V7.828L16.172 5H5V19H7ZM4 3H17L21 7V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM9 15V19H15V15H9Z" /></svg></span>
+          <span>{{ $gettext('Save Search') }}</span>
         </button>
       </div>
     </div>
@@ -33,17 +37,20 @@
           :aria-label="$gettext('Search files')"
           @keyup.enter="handleSearch"
         />
-        <button class="search-btn" :disabled="loading" @click="handleSearch">
-          <span aria-hidden="true">{{ loading ? '⏳' : '🔍' }}</span> {{ $gettext('Search') }}
+        <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled search-btn" :disabled="loading" @click="handleSearch">
+          <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2941 14.5699 18.0029 12.8204 18 11C18 7.132 14.867 4 11 4C7.132 4 4 7.132 4 11C4 14.867 7.132 18 11 18C12.8204 18.0029 14.5699 17.2941 15.875 16.025L16.025 15.875Z" /></svg></span>
+          <span>{{ $gettext('Search') }}</span>
         </button>
       </div>
       <button
-        class="toggle-filters-btn"
+        type="button"
+        class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline"
         :aria-expanded="showFilters"
         aria-controls="filters-panel"
         @click="showFilters = !showFilters"
       >
-        <span aria-hidden="true">{{ showFilters ? '▼' : '▶' }}</span> {{ $gettext('Advanced') }}
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 18H14V16H10V18ZM3 6V8H21V6H3ZM6 13H18V11H6V13Z" /></svg></span>
+        <span>{{ $gettext('Advanced') }}</span>
       </button>
     </div>
 
@@ -55,8 +62,8 @@
         :filter="filter"
         @remove="removeFilter(filter.id)"
       />
-      <button class="clear-all-btn" @click="clearFilters">
-        {{ $gettext('Clear All') }}
+      <button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw clear-all-btn" @click="clearFilters">
+        <span>{{ $gettext('Clear All') }}</span>
       </button>
     </div>
 
@@ -82,34 +89,37 @@
         <span class="results-count" role="status" aria-live="polite">
           {{ $ngettext('%{count} result', '%{count} results', state.results.totalCount ?? state.results.items.length).replace('%{count}', String(state.results.totalCount ?? state.results.items.length)) }}
         </span>
-        <div class="view-controls">
+        <div class="view-controls item-inline-filter oc-flex-inline" role="group" :aria-label="$gettext('View mode')">
           <button
-            :class="['view-btn', { active: state.viewMode === 'list' }]"
+            type="button"
+            :class="['oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw item-inline-filter-option', { 'item-inline-filter-option-selected': state.viewMode === 'list' }]"
             :title="$gettext('List view')"
             @click="setViewMode('list')"
           >
-            ☰
+            <span class="oc-icon oc-icon-s" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z" /></svg></span>
           </button>
           <button
-            :class="['view-btn', { active: state.viewMode === 'grid' }]"
+            type="button"
+            :class="['oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw item-inline-filter-option', { 'item-inline-filter-option-selected': state.viewMode === 'grid' }]"
             :title="$gettext('Grid view')"
             @click="setViewMode('grid')"
           >
-            ⊞
+            <span class="oc-icon oc-icon-s" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 3H11V11H3V3ZM3 13H11V21H3V13ZM13 3H21V11H13V3ZM13 13H21V21H13V13ZM5 5V9H9V5H5ZM5 15V19H9V15H5ZM15 5V9H19V5H15ZM15 15V19H19V15H15Z" /></svg></span>
           </button>
           <button
-            :class="['view-btn', { active: state.viewMode === 'table' }]"
+            type="button"
+            :class="['oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw item-inline-filter-option', { 'item-inline-filter-option-selected': state.viewMode === 'table' }]"
             :title="$gettext('Table view')"
             @click="setViewMode('table')"
           >
-            ▦
+            <span class="oc-icon oc-icon-s" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 8H20V5H4V8ZM4 14H20V11H4V14ZM4 20H20V17H4V20ZM2 3.993C2 3.445 2.455 3 2.992 3H21.008C21.556 3 22 3.445 22 3.993V20.007C22 20.555 21.545 21 21.008 21H2.992C2.444 21 2 20.555 2 20.007V3.993Z" /></svg></span>
           </button>
         </div>
       </div>
 
       <!-- Loading state -->
       <div v-if="loading" class="loading-state">
-        <span class="spinner"></span>
+        <span class="oc-spinner oc-spinner-m"></span>
         {{ $gettext('Searching...') }}
       </div>
 
@@ -130,15 +140,15 @@
             <li v-for="(suggestion, index) in errorSuggestions" :key="index">{{ suggestion }}</li>
           </ul>
         </div>
-        <button class="retry-button" @click="retrySearch">
-          <span class="retry-icon">↻</span>
-          {{ $gettext('Try Again') }}
+        <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" @click="retrySearch">
+          <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.463 4.433A9.961 9.961 0 0 1 12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 0 0-11.196-7.328l-.341.76zm13.074 15.134A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12c0-2.136.67-4.116 1.81-5.74L7 12H4a8 8 0 0 0 11.196 7.328l.341-.76z" /></svg></span>
+          <span>{{ $gettext('Try Again') }}</span>
         </button>
       </div>
 
       <!-- Empty state -->
       <div v-else-if="state.results && state.results.items.length === 0" class="empty-state">
-        <span class="empty-icon">🔍</span>
+        <span class="empty-icon" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.031 16.617L22.314 20.899L20.899 22.314L16.617 18.031C15.0237 19.3082 13.042 20.0029 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20.0029 13.042 19.3082 15.0237 18.031 16.617ZM16.025 15.875C17.2941 14.5699 18.0029 12.8204 18 11C18 7.132 14.867 4 11 4C7.132 4 4 7.132 4 11C4 14.867 7.132 18 11 18C12.8204 18.0029 14.5699 17.2941 15.875 16.025L16.025 15.875Z" /></svg></span>
         <p>{{ $gettext('No results found') }}</p>
         <p class="empty-hint">{{ $gettext('Try adjusting your search terms or filters') }}</p>
       </div>
@@ -154,8 +164,8 @@
 
       <!-- Load more -->
       <div v-if="state.results?.hasMore" class="load-more">
-        <button class="btn btn-secondary" :disabled="loading" @click="loadMore">
-          {{ $gettext('Load More') }}
+        <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" :disabled="loading" @click="loadMore">
+          <span>{{ $gettext('Load More') }}</span>
         </button>
       </div>
     </div>
@@ -169,10 +179,10 @@
         <h3>{{ $gettext('Saved Searches') }}</h3>
         <button
           ref="savedQueriesCloseBtn"
-          class="close-btn"
+          class="oc-button-reset close-btn"
           :aria-label="$gettext('Close saved searches')"
           @click="showSavedQueries = false"
-        >×</button>
+        ><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 10.586L16.95 5.636L18.364 7.05L13.414 12L18.364 16.95L16.95 18.364L12 13.414L7.05 18.364L5.636 16.95L10.586 12L5.636 7.05L7.05 5.636L12 10.586Z" /></svg></button>
       </div>
       <div v-if="savedQueries.length === 0" class="no-saved">
         <p>{{ $gettext('No saved searches yet') }}</p>
@@ -186,13 +196,13 @@
         >
           <button
             :ref="el => { if (index === 0) firstSavedQueryBtn = el as HTMLButtonElement }"
-            class="saved-name"
+            class="oc-button-reset saved-name"
             @click="loadSavedQuery(query)"
           >
             {{ query.name }}
           </button>
           <span class="saved-date">{{ formatDate(query.savedAt, undefined, getUserLocale()) }}</span>
-          <button class="delete-btn" @click="deleteQuery(query.id)">🗑️</button>
+          <button class="oc-button-reset delete-btn" :aria-label="$gettext('Delete')" @click="deleteQuery(query.id)"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z" /></svg></button>
         </li>
       </ul>
     </div>
@@ -200,37 +210,40 @@
     <!-- Save dialog -->
     <div
       v-if="showSaveDialog"
-      class="modal-overlay"
+      class="oc-modal-background"
       role="presentation"
       @click.self="showSaveDialog = false"
       @keydown.escape="showSaveDialog = false"
     >
       <div
-        class="modal-dialog"
+        class="oc-modal oc-modal-primary"
         role="dialog"
         aria-modal="true"
         :aria-label="$gettext('Save Search')"
       >
-        <h3>{{ $gettext('Save Search') }}</h3>
-        <input
-          ref="saveQueryInput"
-          v-model="saveQueryName"
-          type="text"
-          :placeholder="$gettext('Enter a name for this search')"
-          :aria-label="$gettext('Search name')"
-          class="save-input"
-          @keyup.enter="handleSaveQuery"
-        />
-        <div class="modal-actions">
-          <button class="btn btn-secondary" @click="showSaveDialog = false">
-            {{ $gettext('Cancel') }}
+        <h2 class="oc-modal-title">{{ $gettext('Save Search') }}</h2>
+        <div class="oc-modal-body">
+          <input
+            ref="saveQueryInput"
+            v-model="saveQueryName"
+            type="text"
+            :placeholder="$gettext('Enter a name for this search')"
+            :aria-label="$gettext('Search name')"
+            class="save-input"
+            @keyup.enter="handleSaveQuery"
+          />
+        </div>
+        <div class="oc-modal-body-actions">
+          <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" @click="showSaveDialog = false">
+            <span>{{ $gettext('Cancel') }}</span>
           </button>
           <button
-            class="btn btn-primary"
+            type="button"
+            class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled"
             :disabled="!saveQueryName.trim()"
             @click="handleSaveQuery"
           >
-            {{ $gettext('Save') }}
+            <span>{{ $gettext('Save') }}</span>
           </button>
         </div>
       </div>
@@ -659,30 +672,7 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .search-btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
   border-radius: 0 4px 4px 0;
-  cursor: pointer;
-}
-
-.search-btn:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
-.search-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.toggle-filters-btn {
-  padding: 0.75rem 1rem;
-  background: var(--oc-color-background-muted, #f5f5f5);
-  border: 1px solid var(--oc-color-border, #ddd);
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 /* Active filters */
@@ -695,12 +685,7 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .clear-all-btn {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.875rem;
-  background: none;
-  border: none;
   color: var(--oc-color-text-muted, #666);
-  cursor: pointer;
   text-decoration: underline;
 }
 
@@ -742,20 +727,25 @@ watch(showSaveDialog, (isOpen) => {
   gap: 0.25rem;
 }
 
-.view-btn {
-  width: 2rem;
-  height: 2rem;
-  background: var(--oc-color-background-muted, #f5f5f5);
-  border: 1px solid var(--oc-color-border, #ddd);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
+/* Inline filter toggle */
+.item-inline-filter {
+  gap: 2px;
+  background: var(--oc-color-background-muted, #f0f0f0);
+  border-radius: 100px;
+  padding: 2px;
 }
-
-.view-btn.active {
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border-color: var(--oc-color-primary, #0066cc);
+.item-inline-filter-option {
+  border-radius: 100px !important;
+  transition: background-color 0.15s ease;
+}
+.item-inline-filter-option-selected {
+  background-color: var(--oc-color-swatch-primary-default, #0070c0) !important;
+  color: var(--oc-color-text-inverse, #fff) !important;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.item-inline-filter-option:not(.item-inline-filter-option-selected):hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
 /* States */
@@ -772,8 +762,14 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .empty-icon {
-  font-size: 3rem;
+  display: block;
   margin-bottom: 1rem;
+  color: var(--oc-color-text-muted, #666);
+}
+
+.empty-icon svg {
+  width: 3rem;
+  height: 3rem;
 }
 
 .empty-hint {
@@ -827,43 +823,6 @@ watch(showSaveDialog, (isOpen) => {
   font-size: 0.875rem;
 }
 
-.retry-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.retry-button:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
-.retry-icon {
-  font-size: 1.25rem;
-}
-
-.spinner {
-  display: inline-block;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid var(--oc-color-border, #ddd);
-  border-top-color: var(--oc-color-primary, #0066cc);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-bottom: 0.5rem;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 /* Load more */
 .load-more {
   display: flex;
@@ -901,11 +860,16 @@ watch(showSaveDialog, (isOpen) => {
 .close-btn {
   width: 2rem;
   height: 2rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: var(--oc-color-text-muted, #666);
+}
+
+.close-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .no-saved {
@@ -937,8 +901,6 @@ watch(showSaveDialog, (isOpen) => {
 .saved-name {
   flex: 1;
   text-align: left;
-  background: none;
-  border: none;
   font-size: 0.9375rem;
   cursor: pointer;
   color: var(--oc-color-primary, #0066cc);
@@ -954,38 +916,21 @@ watch(showSaveDialog, (isOpen) => {
 }
 
 .delete-btn {
-  background: none;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   opacity: 0.5;
+  color: var(--oc-color-swatch-danger-default, #c00);
+}
+
+.delete-btn svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .delete-btn:hover {
   opacity: 1;
-}
-
-/* Modal */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal-dialog {
-  background: var(--oc-color-background-default, #fff);
-  color: var(--oc-color-text-default, #333);
-  padding: 1.5rem;
-  border-radius: 8px;
-  width: 320px;
-  max-width: 90vw;
-}
-
-.modal-dialog h3 {
-  margin: 0 0 1rem 0;
 }
 
 .save-input {
@@ -1000,49 +945,6 @@ watch(showSaveDialog, (isOpen) => {
   color: var(--oc-color-text-default, CanvasText);
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-/* Buttons */
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9375rem;
-}
-
-.btn-primary {
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
-}
-
-.btn-primary:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background: var(--oc-color-background-muted, #f5f5f5);
-  border: 1px solid var(--oc-color-border, #ddd);
-  color: var(--oc-color-text-default, #333);
-}
-
-.btn-secondary:hover {
-  background: var(--oc-color-background-hover, #e9e9e9);
-}
-
-.btn-secondary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 
 </style>
 

@@ -12,7 +12,7 @@
         @keydown.enter="showStandard = !showStandard"
         @keydown.space.prevent="showStandard = !showStandard"
       >
-        <span aria-hidden="true">{{ showStandard ? '▼' : '▶' }}</span> {{ $gettext('Standard Filters') }}
+        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('Standard Filters') }}
       </h4>
       
       <div v-if="showStandard" id="standard-filters" class="filter-group">
@@ -31,30 +31,28 @@
 
         <!-- Type -->
         <div class="filter-row">
-          <label for="filter-type">{{ $gettext('Type') }}</label>
-          <select
-            id="filter-type"
-            :value="filters.standard.type || ''"
-            @change="emit('update:standard', { ...filters.standard, type: ($event.target as HTMLSelectElement).value as '' | 'file' | 'folder' })"
-          >
-            <option value="">{{ $gettext('All') }}</option>
-            <option value="file">{{ $gettext('Files only') }}</option>
-            <option value="folder">{{ $gettext('Folders only') }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.standard.type || ''"
+            :options="typeOptions"
+            :label="$gettext('Type')"
+            default-value=""
+            :aria-label="$gettext('File type filter')"
+            @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, type: (v as '' | 'file' | 'folder') })"
+          />
         </div>
 
         <!-- Media Type -->
         <div class="filter-row">
-          <label for="filter-media-type">{{ $gettext('Media Type') }}</label>
-          <select
-            id="filter-media-type"
-            :value="filters.standard.mediaType || ''"
-            @change="emit('update:standard', { ...filters.standard, mediaType: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option v-for="mt in mediaTypes" :key="mt.value" :value="mt.value">
-              {{ mt.label }}
-            </option>
-          </select>
+          <FilterSelect
+            :model-value="filters.standard.mediaType || ''"
+            :options="mediaTypeOptions"
+            :label="$gettext('Media Type')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select media type')"
+            :aria-label="$gettext('Media type filter')"
+            @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, mediaType: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Size Range -->
@@ -147,7 +145,7 @@
         @keydown.enter="showPhoto = !showPhoto"
         @keydown.space.prevent="showPhoto = !showPhoto"
       >
-        <span aria-hidden="true">{{ showPhoto ? '▼' : '▶' }}</span> {{ $gettext('Photo / EXIF Filters') }}
+        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('Photo / EXIF Filters') }}
       </h4>
 
       <div v-if="showPhoto" id="photo-filters" class="filter-group">
@@ -158,28 +156,30 @@
 
         <!-- Camera Make -->
         <div class="filter-row">
-          <label for="filter-camera-make">{{ $gettext('Camera Make') }}</label>
-          <select
-            id="filter-camera-make"
-            :value="filters.photo.cameraMake || ''"
-            @change="emit('update:photo', { ...filters.photo, cameraMake: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option value="">{{ $gettext('Any') }}</option>
-            <option v-for="make in cameraMakes" :key="make" :value="make">{{ make }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.photo.cameraMake || ''"
+            :options="cameraMakeOptions"
+            :label="$gettext('Camera Make')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select camera make')"
+            :aria-label="$gettext('Camera make filter')"
+            @update:model-value="(v: string | number) => emit('update:photo', { ...filters.photo, cameraMake: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Camera Model -->
         <div class="filter-row">
-          <label for="filter-camera-model">{{ $gettext('Camera Model') }}</label>
-          <select
-            id="filter-camera-model"
-            :value="filters.photo.cameraModel || ''"
-            @change="emit('update:photo', { ...filters.photo, cameraModel: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option value="">{{ $gettext('Any') }}</option>
-            <option v-for="model in cameraModels" :key="model" :value="model">{{ model }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.photo.cameraModel || ''"
+            :options="cameraModelOptions"
+            :label="$gettext('Camera Model')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select camera model')"
+            :aria-label="$gettext('Camera model filter')"
+            @update:model-value="(v: string | number) => emit('update:photo', { ...filters.photo, cameraModel: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Date Taken -->
@@ -302,7 +302,7 @@
         @keydown.enter="showKQL = !showKQL"
         @keydown.space.prevent="showKQL = !showKQL"
       >
-        <span aria-hidden="true">{{ showKQL ? '▼' : '▶' }}</span> {{ $gettext('KQL Query') }}
+        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('KQL Query') }}
       </h4>
 
       <div v-if="showKQL" id="kql-section" class="kql-group">
@@ -318,11 +318,12 @@
             @keyup.enter="emit('search')"
           />
           <button
-            class="kql-apply-btn"
+            type="button"
+            class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled"
             :title="$gettext('Parse KQL and populate filters')"
             @click="emit('apply-kql')"
           >
-            ↑ {{ $gettext('Apply to Filters') }}
+            <span>{{ $gettext('Apply to Filters') }}</span>
           </button>
         </div>
         <p class="kql-hint">
@@ -350,6 +351,7 @@ import { ref, computed, watch } from 'vue'
 import type { SearchFilters } from '../types'
 import { KNOWN_CAMERA_MAKES, COMMON_MEDIA_TYPES } from '../types'
 import { useTranslations } from '../composables/useTranslations'
+import FilterSelect from './FilterSelect.vue'
 
 const { $gettext } = useTranslations()
 
@@ -391,6 +393,27 @@ const cameraModels = computed(() => {
 })
 
 const mediaTypes = COMMON_MEDIA_TYPES
+
+// FilterSelect option arrays
+const typeOptions = computed(() => [
+  { value: '', label: $gettext('All') },
+  { value: 'file', label: $gettext('Files only') },
+  { value: 'folder', label: $gettext('Folders only') },
+])
+
+const mediaTypeOptions = computed(() =>
+  mediaTypes.map(mt => ({ value: mt.value, label: mt.label }))
+)
+
+const cameraMakeOptions = computed(() => [
+  { value: '', label: $gettext('Any') },
+  ...cameraMakes.value.map(make => ({ value: make, label: make })),
+])
+
+const cameraModelOptions = computed(() => [
+  { value: '', label: $gettext('Any') },
+  ...cameraModels.value.map(model => ({ value: model, label: model })),
+])
 
 // Fetch camera makes and models when photo section is expanded
 // Check loadingPhotoData to prevent duplicate concurrent requests
@@ -538,6 +561,17 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   color: var(--oc-color-text-default, #333);
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.section-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.section-toggle-icon-open {
+  transform: rotate(90deg);
 }
 
 .section-title:hover {
@@ -562,25 +596,16 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   color: var(--oc-color-text-muted, #666);
 }
 
-.filter-row input,
-.filter-row select {
+.filter-row input {
   padding: 0.5rem;
   border: 1px solid var(--oc-color-border, #ddd);
   color: inherit;
   border-radius: 4px;
   font-size: 0.875rem;
-}
-
-.filter-row input {
   background: var(--oc-color-background-default, #fff);
 }
 
-.filter-row select {
-  background: var(--oc-color-background-default, #fff);
-}
-
-.filter-row input:focus,
-.filter-row select:focus {
+.filter-row input:focus {
   outline: none;
   border-color: var(--oc-color-primary, #0066cc);
 }
@@ -629,21 +654,6 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   border-color: var(--oc-color-primary, #0066cc);
 }
 
-.kql-apply-btn {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8125rem;
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.kql-apply-btn:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
 .kql-hint {
   margin: 0;
   font-size: 0.75rem;
@@ -653,10 +663,10 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 .photo-data-error {
   grid-column: 1 / -1;
   padding: 0.5rem 0.75rem;
-  background: #fff3cd;
-  border: 1px solid #ffc107;
+  background: var(--oc-color-swatch-warning-muted, #fff3cd);
+  border: 1px solid var(--oc-color-swatch-warning-default, #ffc107);
   border-radius: 4px;
-  color: #856404;
+  color: var(--oc-color-swatch-warning-default, #856404);
   font-size: 0.8125rem;
 }
 
