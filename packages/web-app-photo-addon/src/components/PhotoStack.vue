@@ -110,7 +110,7 @@ function handleImageError(event: Event) {
   bottom: 0;
   border-radius: 8px;
   overflow: hidden;
-  background: var(--oc-color-background-muted, #e5e5e5);
+  background: var(--oc-color-background-muted, #f0f0f0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -118,7 +118,6 @@ function handleImageError(event: Event) {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: var(--oc-color-background-muted, #f0f0f0);
 }
 
 .stack-top {
@@ -127,7 +126,7 @@ function handleImageError(event: Event) {
   height: 100%;
   border-radius: 8px;
   overflow: hidden;
-  background: var(--oc-color-background-muted, #f5f5f5);
+  background: var(--oc-color-background-muted, #f0f0f0);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   z-index: 10;
   transition: transform 0.2s, box-shadow 0.2s;
@@ -142,7 +141,6 @@ function handleImageError(event: Event) {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: var(--oc-color-background-muted, #f0f0f0);
 }
 
 .stack-badge {
