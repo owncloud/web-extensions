@@ -110,6 +110,7 @@ export interface PhotoWithDate extends Resource {
   timestamp?: number      // Unix ms for sorting (Date.getTime())
   dateSource?: string     // "photo.takenDateTime" | "mdate" | etc. (debug)
   graphPhoto?: GraphPhoto & { location?: GeoCoordinates }
+  tags?: string[]         // Tags from oc:tags (comma-separated in WebDAV)
 }
 
 /**
