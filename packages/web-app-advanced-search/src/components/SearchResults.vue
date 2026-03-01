@@ -33,12 +33,13 @@
         <span class="item-size">{{ formatBytes(item.size) }}</span>
         <span class="item-date">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</span>
         <button
-          class="item-menu-btn"
+          type="button"
+          class="oc-button-reset item-menu-btn"
           :title="$gettext('More actions')"
           :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
           @click.stop="emit('context-menu', $event, item)"
         >
-          ⋮
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
         </button>
       </div>
     </div>
@@ -58,12 +59,13 @@
         <div class="grid-thumbnail">
           <span class="grid-icon">{{ getIcon(item) }}</span>
           <button
-            class="grid-menu-btn"
+            type="button"
+            class="oc-button-reset grid-menu-btn"
             :title="$gettext('More actions')"
             :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
             @click.stop="emit('context-menu', $event, item)"
           >
-            ⋮
+            <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
           </button>
         </div>
         <span class="grid-name">{{ item.name }}</span>
@@ -71,17 +73,17 @@
     </div>
 
     <!-- Table View -->
-    <table v-else-if="viewMode === 'table'" class="results-table">
+    <table v-else-if="viewMode === 'table'" class="oc-table oc-table-hover results-table">
       <thead>
         <tr>
-          <th>{{ $gettext('Name') }}</th>
-          <th>{{ $gettext('Path') }}</th>
-          <th>{{ $gettext('Type') }}</th>
-          <th>{{ $gettext('Size') }}</th>
-          <th>{{ $gettext('Modified') }}</th>
-          <th v-if="hasPhotoItems">{{ $gettext('Camera') }}</th>
-          <th v-if="hasPhotoItems">{{ $gettext('Date Taken') }}</th>
-          <th class="th-actions"></th>
+          <th class="oc-table-header-cell">{{ $gettext('Name') }}</th>
+          <th class="oc-table-header-cell">{{ $gettext('Path') }}</th>
+          <th class="oc-table-header-cell">{{ $gettext('Type') }}</th>
+          <th class="oc-table-header-cell">{{ $gettext('Size') }}</th>
+          <th class="oc-table-header-cell">{{ $gettext('Modified') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell">{{ $gettext('Camera') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell">{{ $gettext('Date Taken') }}</th>
+          <th class="oc-table-header-cell th-actions"></th>
         </tr>
       </thead>
       <tbody>
@@ -91,24 +93,25 @@
           v-memo="[item.id, item.name, item.mimeType, item.size, item.mdate, item.photo?.cameraMake, item.photo?.takenDateTime]"
           @click="emit('item-click', item)"
         >
-          <td class="cell-name">
+          <td class="oc-table-cell cell-name">
             <span class="item-icon">{{ getIcon(item) }}</span>
             {{ item.name }}
           </td>
-          <td class="cell-path">{{ getPath(item) }}</td>
-          <td>{{ item.mimeType || $gettext('folder') }}</td>
-          <td>{{ formatBytes(item.size) }}</td>
-          <td>{{ formatDate(item.mdate, undefined, getUserLocale()) }}</td>
-          <td v-if="hasPhotoItems">{{ getCameraInfo(item) }}</td>
-          <td v-if="hasPhotoItems">{{ getPhotoDate(item) }}</td>
-          <td class="cell-actions">
+          <td class="oc-table-cell cell-path">{{ getPath(item) }}</td>
+          <td class="oc-table-cell">{{ item.mimeType || $gettext('folder') }}</td>
+          <td class="oc-table-cell">{{ formatBytes(item.size) }}</td>
+          <td class="oc-table-cell">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell">{{ getCameraInfo(item) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell">{{ getPhotoDate(item) }}</td>
+          <td class="oc-table-cell cell-actions">
             <button
-              class="item-menu-btn"
+              type="button"
+              class="oc-button-reset item-menu-btn"
               :title="$gettext('More actions')"
               :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
               @click.stop="emit('context-menu', $event, item)"
             >
-              ⋮
+              <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
             </button>
           </td>
         </tr>
@@ -281,6 +284,7 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 .grid-thumbnail {
+  position: relative;
   width: 100px;
   height: 100px;
   display: flex;
@@ -312,33 +316,19 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 /* Table View */
-.results-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
 .results-table th,
 .results-table td {
   padding: 0.75rem 1rem;
   text-align: left;
-  border-bottom: 1px solid var(--oc-color-border, #eee);
 }
 
 .results-table th {
-  background: var(--oc-color-background-muted, #f9f9f9);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  color: var(--oc-color-text-muted, #666);
   position: sticky;
   top: 0;
 }
 
 .results-table tr {
   cursor: pointer;
-}
-
-.results-table tr:hover {
-  background: var(--oc-color-background-hover, #f5f5f5);
 }
 
 .cell-name {
@@ -367,14 +357,16 @@ function getPhotoDate(item: SearchResource): string {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: transparent;
-  border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1.25rem;
   color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s, background 0.15s;
+}
+
+.item-menu-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .list-item:hover .item-menu-btn,
@@ -387,11 +379,6 @@ function getPhotoDate(item: SearchResource): string {
   color: var(--oc-color-text-default, #333);
 }
 
-/* Grid menu button */
-.grid-thumbnail {
-  position: relative;
-}
-
 .grid-menu-btn {
   position: absolute;
   top: 4px;
@@ -402,14 +389,17 @@ function getPhotoDate(item: SearchResource): string {
   width: 1.75rem;
   height: 1.75rem;
   background: var(--oc-color-background-default, rgba(255, 255, 255, 0.9));
-  border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
   color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.grid-menu-btn svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .grid-item:hover .grid-menu-btn {
