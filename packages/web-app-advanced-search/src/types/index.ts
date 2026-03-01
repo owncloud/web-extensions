@@ -105,6 +105,8 @@ export interface PhotoFilters {
   orientation?: number
   /** AI-generated image caption (searched via fulltext analyzer) */
   objectCaption?: string
+  /** Object detection label (searched via lowercaseKeyword analyzer, wildcards recommended) */
+  objectLabel?: string
 }
 
 /**
