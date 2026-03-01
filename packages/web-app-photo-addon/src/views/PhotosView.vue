@@ -16,56 +16,59 @@
         <div class="header-controls">
           <!-- Date filter (hidden in map view) -->
           <div v-if="viewType !== 'map'" class="date-filter" role="group" :aria-label="$gettext('Jump to:')">
-            <span id="date-filter-label" class="control-label">{{ $gettext('Jump to:') }}</span>
-            <select
-              id="filter-year"
-              v-model="filterYear"
-              class="date-select"
+            <FilterSelect
+              :model-value="filterYear"
+              :options="yearOptions"
+              :label="$gettext('Year')"
               :aria-label="$gettext('Select year')"
-              @change="onDateFilterChange"
-            >
-              <option v-for="year in availableYears" :key="year" :value="year">{{ year }}</option>
-            </select>
-            <select
-              id="filter-month"
-              v-model="filterMonth"
-              class="date-select"
+              @update:model-value="(v: string | number) => { filterYear = v as number; onDateFilterChange() }"
+            />
+            <FilterSelect
+              :model-value="filterMonth"
+              :options="monthOptions"
+              :label="$gettext('Month')"
               :aria-label="$gettext('Select month')"
-              @change="onDateFilterChange"
-            >
-              <option v-for="(name, index) in monthNames" :key="index" :value="index">{{ name }}</option>
-            </select>
-            <button v-if="!isCurrentMonth" class="today-btn" :title="$gettext('Today')" @click="jumpToToday">
-              {{ $gettext('Today') }}
-            </button>
-          </div>
-          <!-- View type selector (Calendar / Map) -->
-          <div class="view-selector" role="group" :aria-label="$gettext('View mode')">
-            <button
-              :class="['view-btn', { active: viewType === 'calendar' }]"
-              :aria-pressed="viewType === 'calendar'"
-              @click="viewType = 'calendar'"
-            >
-              {{ $gettext('Calendar') }}
-            </button>
-            <button
-              :class="['view-btn', { active: viewType === 'map' }]"
-              :aria-pressed="viewType === 'map'"
-              @click="viewType = 'map'"
-            >
-              {{ $gettext('Map') }}
+              @update:model-value="(v: string | number) => { filterMonth = v as number; onDateFilterChange() }"
+            />
+            <button v-if="!isCurrentMonth" type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" :title="$gettext('Today')" @click="jumpToToday">
+              <span>{{ $gettext('Today') }}</span>
             </button>
           </div>
           <!-- EXIF only toggle (hidden in map view) -->
-          <label v-if="viewType !== 'map'" class="exif-toggle" for="exif-only-toggle">
-            <input id="exif-only-toggle" v-model="exifOnly" type="checkbox" />
-            <span class="toggle-label">{{ $gettext('EXIF only') }}</span>
-          </label>
+          <span v-if="viewType !== 'map'" class="oc-switch">
+            <span id="exif-only-toggle-label">{{ $gettext('EXIF only') }}</span>
+            <button
+              class="oc-switch-btn"
+              role="switch"
+              :aria-checked="String(exifOnly)"
+              aria-labelledby="exif-only-toggle-label"
+              @click="exifOnly = !exifOnly"
+            ></button>
+          </span>
+          <!-- View type selector (Calendar / Map) -->
+          <div class="view-selector item-inline-filter oc-flex-inline" role="group" :aria-label="$gettext('View mode')">
+            <button
+              type="button"
+              :class="['oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw item-inline-filter-option', { 'item-inline-filter-option-selected': viewType === 'calendar' }]"
+              :aria-pressed="viewType === 'calendar'"
+              @click="viewType = 'calendar'"
+            >
+              <span class="oc-text-truncate item-inline-filter-option-label">{{ $gettext('Calendar') }}</span>
+            </button>
+            <button
+              type="button"
+              :class="['oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw item-inline-filter-option', { 'item-inline-filter-option-selected': viewType === 'map' }]"
+              :aria-pressed="viewType === 'map'"
+              @click="viewType = 'map'"
+            >
+              <span class="oc-text-truncate item-inline-filter-option-label">{{ $gettext('Map') }}</span>
+            </button>
+          </div>
         </div>
       </div>
 
       <p v-if="loading && !error" class="loading-status" role="status" aria-live="polite">
-        <span class="spinner" aria-hidden="true"></span>
+        <span class="oc-spinner oc-spinner-s" aria-hidden="true"></span>
         {{ $gettext('Loading %{range}... %{count} photos').replace('%{range}', currentDateRange).replace('%{count}', String(photoCount)) }}
       </p>
       <p v-else-if="viewType !== 'map' && !error" class="photo-count" role="status" aria-live="polite">
@@ -90,16 +93,16 @@
           <li v-for="(suggestion, index) in errorSuggestions" :key="index">{{ suggestion }}</li>
         </ul>
       </div>
-      <button class="retry-button" @click="retryLoad">
-        <span class="retry-icon" aria-hidden="true">↻</span>
-        {{ $gettext('Try Again') }}
+      <button type="button" class="oc-button oc-rounded oc-button-m oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" @click="retryLoad">
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.463 4.433A9.961 9.961 0 0 1 12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 0 0-11.196-7.328l-.341.76zm13.074 15.134A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12c0-2.136.67-4.116 1.81-5.74L7 12H4a8 8 0 0 0 11.196 7.328l.341-.76z" /></svg></span>
+        <span>{{ $gettext('Try Again') }}</span>
       </button>
     </div>
 
     <!-- Calendar View -->
     <div v-if="!error && viewType === 'calendar'" class="photos-content">
       <div v-if="!loading && photoCount === 0" class="empty-state">
-        <span class="empty-icon">📷</span>
+        <span class="empty-icon" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.828 5L7.828 7H4V19H20V7H16.172L14.172 5H9.828ZM9 3H15L17 5H21C21.5523 5 22 5.44772 22 6V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V6C2 5.44772 2.44772 5 3 5H7L9 3ZM12 18C9.23858 18 7 15.7614 7 13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13C17 15.7614 14.7614 18 12 18ZM12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16Z" /></svg></span>
         <p>{{ $gettext('No photos found') }}</p>
         <p class="empty-hint">{{ $gettext('Photos will appear here after EXIF tags are synced') }}</p>
       </div>
@@ -201,6 +204,7 @@ import PhotoLightbox from '../components/PhotoLightbox.vue'
 import PhotoStack from '../components/PhotoStack.vue'
 import PhotoContextMenu from '../components/PhotoContextMenu.vue'
 import PhotoMap from '../components/PhotoMap.vue'
+import FilterSelect from '../components/FilterSelect.vue'
 import { usePhotos } from '../composables/usePhotos'
 import { useTranslations } from '../composables/useTranslations'
 import type {
@@ -482,6 +486,10 @@ const availableYears = computed(() => {
   }
   return years
 })
+
+// FilterSelect option arrays
+const yearOptions = computed(() => availableYears.value.map(y => ({ value: y, label: String(y) })))
+const monthOptions = computed(() => monthNames.value.map((name: string, idx: number) => ({ value: idx, label: name })))
 
 // Check if filter is set to current month
 const isCurrentMonth = computed(() => {
@@ -1000,6 +1008,7 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
       const latitudeEl = prop.getElementsByTagNameNS(ocNs, 'photo-location-latitude')[0]
       const longitudeEl = prop.getElementsByTagNameNS(ocNs, 'photo-location-longitude')[0]
       const altitudeEl = prop.getElementsByTagNameNS(ocNs, 'photo-location-altitude')[0]
+      const tagsEl = prop.getElementsByTagNameNS(ocNs, 'tags')[0]
 
       // Build GraphPhoto object
       const graphPhoto: GraphPhoto & { location?: GeoCoordinates } = {}
@@ -1060,6 +1069,11 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
         filePath = href.substring(encodedSpacePrefix.length)
       }
 
+      // Parse tags (comma-separated string from oCIS)
+      const tags = tagsEl?.textContent
+        ? tagsEl.textContent.split(',').map(t => t.trim()).filter(Boolean)
+        : []
+
       // Create PhotoWithDate object
       const photoResource: PhotoWithDate = {
         id: fileId || `${spaceId}!${fileName}`,
@@ -1073,7 +1087,8 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
         exifTime,
         timestamp,
         dateSource,
-        graphPhoto
+        graphPhoto,
+        tags: tags.length > 0 ? tags : undefined
       } as PhotoWithDate
 
       photos.push(photoResource)
@@ -1151,6 +1166,7 @@ async function fetchPhotosViaSearch(driveId: string, dateRange: { start: string,
     <oc:photo-location-latitude/>
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
+    <oc:tags/>
   </d:prop>
 </oc:search-files>`
 
@@ -1223,6 +1239,7 @@ async function fetchAllImagesViaSearch(driveId: string): Promise<PhotoWithDate[]
     <oc:photo-location-latitude/>
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
+    <oc:tags/>
   </d:prop>
 </oc:search-files>`
 
@@ -1296,6 +1313,7 @@ async function fetchPhotosWithGPS(driveId: string): Promise<PhotoWithDate[]> {
     <oc:photo-location-latitude/>
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
+    <oc:tags/>
   </d:prop>
 </oc:search-files>`
 
@@ -1720,19 +1738,18 @@ function processQueue() {
   }
 }
 
-// Create a nice placeholder SVG for files without thumbnails
-function createPlaceholderSvg(filename: string): string {
-  // Extract file extension
-  const ext = filename.split('.').pop()?.toUpperCase() || '?'
+// Create error SVG matching oCIS "Failed to load" style for grid thumbnails
+function createErrorSvg(filename: string): string {
+  const displayName = filename.length > 25 ? filename.substring(0, 22) + '...' : filename
+  const escaped = displayName.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-  // Create an SVG with a camera icon and file extension
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <rect fill="%23f0f0f0" width="100" height="100" rx="4"/>
-    <rect x="25" y="35" width="50" height="35" rx="3" fill="%23999"/>
-    <circle cx="50" cy="52" r="10" fill="%23f0f0f0"/>
-    <circle cx="50" cy="52" r="7" fill="%23777"/>
-    <rect x="35" y="30" width="12" height="6" rx="1" fill="%23999"/>
-    <text x="50" y="85" text-anchor="middle" fill="%23666" font-size="12" font-family="system-ui, sans-serif" font-weight="600">${ext}</text>
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+    <rect fill="%23f5f5f5" width="200" height="200" rx="8"/>
+    <svg x="76" y="30" width="48" height="48" viewBox="0 0 24 24">
+      <path fill="%23c41e3a" d="M3 14L7 16.5L10 13L13 17L15 14.5L18 15L15 12L13 14.5L10 9.5L6.5 13.25L3 10V2.9918C3 2.45531 3.44694 2 3.99826 2H14V8C14 8.55228 14.4477 9 15 9H21V20.9925C21 21.5511 20.5552 22 20.0066 22H3.9934C3.44495 22 3 21.556 3 21.0082V14ZM21 7H16V2.00318L21 7Z"/>
+    </svg>
+    <text x="100" y="105" text-anchor="middle" fill="%23666" font-size="12" font-family="system-ui, sans-serif">Failed to load</text>
+    <text x="100" y="125" text-anchor="middle" fill="%23999" font-size="9" font-family="system-ui, sans-serif">${escaped}</text>
   </svg>`
 
   return 'data:image/svg+xml,' + encodeURIComponent(svg)
@@ -1772,9 +1789,9 @@ async function doFetch(photo: PhotoWithDate, cacheKey: string) {
     // Trigger reactivity update for components using this cache
     triggerRef(blobUrlCache)
   } catch {
-    // Cache a nice placeholder showing file type
+    // Cache error SVG matching oCIS "Failed to load" style
     const filename = photo.name || photoPath.split('/').pop() || 'unknown'
-    cache.set(cacheKey, createPlaceholderSvg(filename))
+    cache.set(cacheKey, createErrorSvg(filename))
     evictOldestThumbnails()
 
     // Trigger reactivity update
@@ -1835,7 +1852,8 @@ function closeLightbox() {
 
 function handleImageError(event: Event) {
   const img = event.target as HTMLImageElement
-  img.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23ddd" width="100" height="100"/><text x="50" y="55" text-anchor="middle" fill="%23999" font-size="12">No preview</text></svg>'
+  const filename = img.alt || 'unknown'
+  img.src = createErrorSvg(filename)
 }
 
 // Context menu functions
@@ -2046,33 +2064,6 @@ function injectStyles() {
       font-size: 1.5rem;
       color: var(--oc-color-text-default, #333);
     }
-    .view-selector {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      background: var(--oc-color-background-muted, #e5e5e5);
-      border-radius: 6px;
-      padding: 2px;
-    }
-    .view-btn {
-      padding: 6px 12px;
-      border: none;
-      background: transparent;
-      color: var(--oc-color-text-default, #333);
-      font-size: 0.875rem;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: all 0.15s ease;
-    }
-    .view-btn:hover {
-      background: var(--oc-color-background-default, #fff);
-    }
-    .view-btn.active {
-      background: var(--oc-color-background-default, #fff);
-      color: var(--oc-color-swatch-primary-default, #0070c0);
-      font-weight: 600;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
     /* Header controls container */
     .header-controls {
       display: flex;
@@ -2080,75 +2071,33 @@ function injectStyles() {
       gap: 1rem;
       flex-wrap: wrap;
     }
-    /* Control labels */
-    .control-label {
-      font-size: 0.875rem;
-      color: var(--oc-color-text-muted, #666);
-      white-space: nowrap;
-    }
     /* Date filter */
     .date-filter {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .date-select {
-      padding: 6px 10px;
-      border: 1px solid var(--oc-color-border, #ddd);
-      border-radius: 4px;
-      background: var(--oc-color-background-default, #fff);
-      color: var(--oc-color-text-default, #333);
-      font-size: 0.875rem;
-      cursor: pointer;
-      min-width: 80px;
-    }
-    .date-select:hover {
-      border-color: var(--oc-color-swatch-primary-default, #0070c0);
-    }
-    .date-select:focus {
-      outline: none;
-      border-color: var(--oc-color-swatch-primary-default, #0070c0);
-      box-shadow: 0 0 0 2px rgba(0, 112, 192, 0.2);
-    }
-    .today-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--oc-color-swatch-primary-default, #0070c0);
-      border-radius: 4px;
-      background: transparent;
-      color: var(--oc-color-swatch-primary-default, #0070c0);
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .today-btn:hover {
-      background: var(--oc-color-swatch-primary-default, #0070c0);
-      color: white;
-    }
-    /* EXIF only toggle */
-    .exif-toggle {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
+    /* Inline filter toggle (Calendar/Map) */
+    .item-inline-filter {
+      gap: 2px;
       background: var(--oc-color-background-muted, #f0f0f0);
-      transition: background 0.15s ease;
+      border-radius: 100px;
+      padding: 2px;
     }
-    .exif-toggle:hover {
-      background: var(--oc-color-background-highlight, #e5e5e5);
+    .item-inline-filter-option {
+      border-radius: 100px !important;
+      transition: background-color 0.15s ease;
     }
-    .exif-toggle input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-      accent-color: var(--oc-color-swatch-primary-default, #0070c0);
+    .item-inline-filter-option-selected {
+      background-color: var(--oc-color-swatch-primary-default, #0070c0) !important;
+      color: var(--oc-color-text-inverse, #fff) !important;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-    .exif-toggle .toggle-label {
-      font-size: 0.875rem;
-      color: var(--oc-color-text-default, #333);
-      white-space: nowrap;
+    .item-inline-filter-option:not(.item-inline-filter-option-selected):hover {
+      background-color: rgba(0, 0, 0, 0.05);
     }
+    /* EXIF only toggle - uses ODS oc-switch classes (unscoped, loaded at runtime) */
     .photo-count, .loading-status {
       color: var(--oc-color-text-muted, #666);
       margin: 0;
@@ -2156,16 +2105,10 @@ function injectStyles() {
       align-items: center;
       gap: 0.5rem;
     }
-    .spinner {
-      width: 16px;
-      height: 16px;
+    .oc-spinner {
       border: 2px solid var(--oc-color-border, #ddd);
       border-top-color: var(--oc-color-swatch-primary-default, #0070c0);
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
     }
     .load-more-hint {
       color: var(--oc-color-swatch-primary-default, #0070c0);
@@ -2230,31 +2173,6 @@ function injectStyles() {
     .error-suggestions li:last-child {
       margin-bottom: 0;
     }
-    .retry-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--oc-color-swatch-primary-default, #0070c0);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .retry-button:hover {
-      background: var(--oc-color-swatch-primary-hover, #005a9e);
-      transform: translateY(-1px);
-    }
-    .retry-button:active {
-      transform: translateY(0);
-    }
-    .retry-icon {
-      font-size: 1.2rem;
-      display: inline-block;
-    }
     .empty-state {
       display: flex;
       flex-direction: column;
@@ -2264,7 +2182,8 @@ function injectStyles() {
       text-align: center;
       color: var(--oc-color-text-muted, #666);
     }
-    .empty-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .empty-icon { display: block; margin-bottom: 1rem; color: var(--oc-color-text-muted, #666); }
+    .empty-icon svg { width: 4rem; height: 4rem; }
     .empty-hint { font-size: 0.875rem; opacity: 0.7; }
     .photo-groups {
       position: relative;
@@ -2803,6 +2722,3 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* Scoped styles as backup */
-</style>

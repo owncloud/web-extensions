@@ -9,7 +9,7 @@
         :aria-label="$gettext('Photo locations map. Use arrow keys to pan, plus and minus to zoom.')"
       ></div>
       <div v-if="photosWithGps === 0" class="no-gps-overlay">
-        <span class="icon">📍</span>
+        <span class="no-gps-icon" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.364 17.364L12 23.728L5.636 17.364C2.121 13.849 2.121 8.151 5.636 4.636C9.151 1.121 14.849 1.121 18.364 4.636C21.879 8.151 21.879 13.849 18.364 17.364ZM12 13C13.105 13 14 12.105 14 11C14 9.895 13.105 9 12 9C10.895 9 10 9.895 10 11C10 12.105 10.895 13 12 13Z" /></svg></span>
         <p>{{ $gettext('No photos with GPS data found') }}</p>
       </div>
       <div class="map-stats">
@@ -255,7 +255,7 @@ function injectTileFixCSS() {
       width: auto !important;
       height: auto !important;
       overflow: hidden !important;
-      background: #ddd !important;
+      background: var(--oc-color-background-muted, #ddd) !important;
     }
 
     /* Panes need absolute positioning with base coordinates */
@@ -377,7 +377,7 @@ function injectTileFixCSS() {
       display: none !important;
     }
     .map-photo-tooltip {
-      background: #fff;
+      background: var(--oc-color-background-default, #fff);
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       overflow: hidden;
@@ -389,7 +389,7 @@ function injectTileFixCSS() {
       height: 100px;
       object-fit: cover;
       display: block;
-      background: #f0f0f0;
+      background: var(--oc-color-background-muted, #f0f0f0);
     }
     .map-photo-tooltip .tooltip-info {
       padding: 8px;
@@ -399,7 +399,7 @@ function injectTileFixCSS() {
       display: block;
       font-size: 12px;
       font-weight: 500;
-      color: #333;
+      color: var(--oc-color-text-default, #333);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -407,13 +407,13 @@ function injectTileFixCSS() {
     .map-photo-tooltip .tooltip-date {
       display: block;
       font-size: 11px;
-      color: #666;
+      color: var(--oc-color-text-muted, #666);
       margin-top: 2px;
     }
     .map-photo-tooltip .tooltip-count {
       display: inline-block;
-      background: #e65100;
-      color: #fff;
+      background: var(--oc-color-swatch-warning-default, #e65100);
+      color: var(--oc-color-text-inverse, #fff);
       font-size: 10px;
       font-weight: 600;
       padding: 2px 6px;
@@ -772,7 +772,7 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   overflow: hidden;
-  background: #e0e0e0;
+  background: var(--oc-color-background-muted, #e0e0e0);
 }
 
 /* Inner container - positioning context for the map */
@@ -797,33 +797,38 @@ onUnmounted(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--oc-color-background-default, #fff);
   padding: 2rem 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   z-index: 450;
 }
 
-.no-gps-overlay .icon {
-  font-size: 3rem;
+.no-gps-icon {
   display: block;
   margin-bottom: 1rem;
+  color: var(--oc-color-text-muted, #666);
+}
+
+.no-gps-icon svg {
+  width: 3rem;
+  height: 3rem;
 }
 
 .no-gps-overlay p {
   margin: 0;
-  color: #666;
+  color: var(--oc-color-text-muted, #666);
 }
 
 .map-stats {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--oc-color-background-default, #fff);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.85rem;
-  color: #333;
+  color: var(--oc-color-text-default, #333);
   z-index: 450;
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
