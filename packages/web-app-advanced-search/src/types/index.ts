@@ -103,6 +103,8 @@ export interface PhotoFilters {
   focalLengthRange?: NumericRange
   /** Image orientation (1-8 per EXIF spec) */
   orientation?: number
+  /** AI-generated image caption (searched via fulltext analyzer) */
+  objectCaption?: string
 }
 
 /**

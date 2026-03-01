@@ -269,6 +269,12 @@ export function buildPhotoKQL(photo: SearchFilters['photo']): string[] {
     parts.push(`photo.orientation:${photo.orientation}`)
   }
 
+  if (photo.objectCaption) {
+    // ObjectCaptions uses the fulltext analyzer (tokenized + stemmed),
+    // so word-level search works without wildcards
+    parts.push(`objectCaption:${wrapForSearch(photo.objectCaption, false)}`)
+  }
+
   return parts
 }
 
