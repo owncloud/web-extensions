@@ -13,22 +13,22 @@
     @keydown.tab="handleTabKey"
   >
     <!-- Context Menu (inside overlay for proper stacking) -->
-    <div v-if="menuVisible" :style="menuStyle" role="menu" tabindex="-1" :aria-label="$gettext('Photo options')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
-      <button ref="firstMenuItemRef" role="menuitem" :style="menuItemStyle" @click="handleMenuAction('download')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
-        <span aria-hidden="true" style="width: 18px; opacity: 0.7;">↓</span>
+    <div v-if="menuVisible" class="lightbox-context-menu" :style="{ top: menuTop, left: menuLeft }" role="menu" tabindex="-1" :aria-label="$gettext('Photo options')" @click.stop @keydown.escape.stop="closeMenuAndFocusButton">
+      <button ref="firstMenuItemRef" class="oc-button-reset lbmenu-item" role="menuitem" @click="handleMenuAction('download')">
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 19H21V21H3V19ZM13 13.172L19.071 7.1L20.485 8.514L12 17L3.515 8.514L4.929 7.1L11 13.172V2H13V13.172Z" /></svg></span>
         <span>{{ $gettext('Download') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('openInFiles')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
-        <span aria-hidden="true" style="width: 18px; opacity: 0.7;">→</span>
+      <button class="oc-button-reset lbmenu-item" role="menuitem" @click="handleMenuAction('openInFiles')">
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6V8H5V19H16V14H18V20C18 20.5523 17.5523 21 17 21H4C3.44772 21 3 20.5523 3 20V7C3 6.44772 3.44772 6 4 6H10ZM21 3V11H19V6.413L11.207 14.207L9.793 12.793L17.585 5H13V3H21Z" /></svg></span>
         <span>{{ $gettext('Open in Files') }}</span>
       </button>
-      <button role="menuitem" :style="menuItemStyle" @click="handleMenuAction('copyLink')" @mouseenter="$event.target.style.background='#f5f5f5'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#f5f5f5'" @focusout="$event.target.style.background='none'">
-        <span aria-hidden="true" style="width: 18px; opacity: 0.7;">⎘</span>
+      <button class="oc-button-reset lbmenu-item" role="menuitem" @click="handleMenuAction('copyLink')">
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 7H13V5H17C19.7614 5 22 7.23858 22 10C22 12.7614 19.7614 15 17 15H13V13H17C18.6569 13 20 11.6569 20 10C20 8.34315 18.6569 7 17 7ZM7 17H11V19H7C4.23858 19 2 16.7614 2 14C2 11.2386 4.23858 9 7 9H11V11H7C5.34315 11 4 12.3431 4 14C4 15.6569 5.34315 17 7 17ZM8 13H16V11H8V13Z" /></svg></span>
         <span>{{ $gettext('Copy Link') }}</span>
       </button>
-      <div role="separator" style="height: 1px; background: #eee; margin: 6px 0;"></div>
-      <button role="menuitem" :style="menuItemDangerStyle" @click="handleMenuAction('delete')" @mouseenter="$event.target.style.background='#fff0f0'" @mouseleave="$event.target.style.background='none'" @focusin="$event.target.style.background='#fff0f0'" @focusout="$event.target.style.background='none'">
-        <span aria-hidden="true" style="width: 18px; opacity: 0.7;">✕</span>
+      <div class="lbmenu-divider" role="separator"></div>
+      <button class="oc-button-reset lbmenu-item lbmenu-item-danger" role="menuitem" @click="handleMenuAction('delete')">
+        <span class="oc-icon oc-icon-m oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z" /></svg></span>
         <span>{{ $gettext('Delete') }}</span>
       </button>
     </div>
@@ -38,16 +38,17 @@
       <div class="lightbox-top-buttons">
         <button
           ref="menuButtonRef"
+          type="button"
           class="lightbox-menu-btn"
           aria-haspopup="menu"
           :aria-expanded="menuVisible"
           :aria-label="$gettext('Photo options')"
           @click.stop="toggleMenu($event)"
         >
-          <span aria-hidden="true">⋮</span>
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
         </button>
-        <button ref="closeButtonRef" class="lightbox-close" :aria-label="$gettext('Close')" @click="close">
-          <span aria-hidden="true">&times;</span>
+        <button ref="closeButtonRef" type="button" class="lightbox-close" :aria-label="$gettext('Close')" @click="close">
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 10.586L16.95 5.636L18.364 7.05L13.414 12L18.364 16.95L16.95 18.364L12 13.414L7.05 18.364L5.636 16.95L10.586 12L5.636 7.05L7.05 5.636L12 10.586Z" /></svg>
         </button>
       </div>
 
@@ -79,11 +80,12 @@
         <!-- Navigation: Previous (inside image container) -->
         <button
           v-if="canNavigatePrev"
+          type="button"
           class="lightbox-nav lightbox-nav-prev"
           :aria-label="$gettext('Previous photo')"
           @click.stop="navigate('prev')"
         >
-          <span class="nav-arrow" aria-hidden="true">&#8249;</span>
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10.828 12L15.778 16.95L14.364 18.364L8 12L14.364 5.636L15.778 7.05L10.828 12Z" /></svg>
         </button>
 
         <!-- Loading spinner while waiting for full-size image -->
@@ -91,9 +93,19 @@
           <span class="loading-spinner large"></span>
         </div>
 
+        <!-- Error state - file could not be loaded -->
+        <div v-else-if="isLoadError" class="lightbox-error">
+          <span class="lightbox-error-icon">
+            <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 14L7 16.5L10 13L13 17L15 14.5L18 15L15 12L13 14.5L10 9.5L6.5 13.25L3 10V2.9918C3 2.45531 3.44694 2 3.99826 2H14V8C14 8.55228 14.4477 9 15 9H21V20.9925C21 21.5511 20.5552 22 20.0066 22H3.9934C3.44495 22 3 21.556 3 21.0082V14ZM21 7H16V2.00318L21 7Z"></path>
+            </svg>
+          </span>
+          <p class="lightbox-error-text">{{ $gettext('Failed to load "%{name}"').replace('%{name}', photo.name || '') }}</p>
+        </div>
+
         <!-- Full-size image -->
         <img
-          v-if="fullSizeUrl"
+          v-else
           :src="fullSizeUrl"
           :alt="photo.name || 'Photo'"
           class="lightbox-image"
@@ -102,11 +114,12 @@
         <!-- Navigation: Next (inside image container) -->
         <button
           v-if="canNavigateNext"
+          type="button"
           class="lightbox-nav lightbox-nav-next"
           :aria-label="$gettext('Next photo')"
           @click.stop="navigate('next')"
         >
-          <span class="nav-arrow" aria-hidden="true">&#8250;</span>
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg>
         </button>
       </div>
 
@@ -116,6 +129,9 @@
           <div class="lightbox-title-group">
             <h3 id="lightbox-title" class="lightbox-title">{{ photo.name || $gettext('Untitled') }}</h3>
             <span v-if="folderPath" class="lightbox-path">{{ folderPath }}</span>
+          </div>
+          <div v-if="photoTags.length > 0" class="lightbox-tags" :aria-label="$gettext('Tags')">
+            <span v-for="tag in photoTags" :key="tag" class="oc-tag oc-tag-rounded oc-tag-s">{{ tag }}</span>
           </div>
         </div>
 
@@ -127,7 +143,7 @@
               <span class="metadata-label">{{ $gettext('Date Taken') }}</span>
               <span class="metadata-value date-with-source">
                 {{ displayDate }}
-                <span :class="['date-source-badge', isExifDate ? 'badge-exif' : 'badge-upload']">
+                <span :class="['oc-tag oc-tag-s', isExifDate ? 'badge-exif' : 'badge-upload']">
                   {{ isExifDate ? $gettext('(EXIF)') : $gettext('(Mod time)') }}
                 </span>
               </span>
@@ -254,48 +270,7 @@ const lightboxRef = ref<HTMLElement | null>(null)
 const closeButtonRef = ref<HTMLButtonElement | null>(null)
 const firstMenuItemRef = ref<HTMLButtonElement | null>(null)
 
-// Computed style for menu positioning
-const menuStyle = computed(() => ({
-  position: 'fixed' as const,
-  display: 'flex',
-  flexDirection: 'column' as const,
-  top: menuTop.value,
-  left: menuLeft.value,
-  zIndex: 10001,
-  background: '#fff',
-  borderRadius: '8px',
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.25)',
-  minWidth: '160px',
-  padding: '6px 0',
-  overflow: 'hidden'
-}))
-
-// Computed style for menu items
-const menuItemStyle = computed(() => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '10px',
-  width: '100%',
-  padding: '10px 16px',
-  border: 'none',
-  background: 'none',
-  cursor: 'pointer',
-  fontSize: '14px',
-  color: '#333',
-  textAlign: 'left' as const,
-  fontFamily: 'inherit',
-  WebkitAppearance: 'none' as const,
-  MozAppearance: 'none' as const,
-  appearance: 'none' as const,
-  outline: 'none',
-  boxSizing: 'border-box' as const
-}))
-
-// Computed style for danger menu item
-const menuItemDangerStyle = computed(() => ({
-  ...menuItemStyle.value,
-  color: '#dc3545'
-}))
+// Menu positioning is handled via CSS class + inline top/left
 
 // Image loading state
 const imageLoading = ref(true)
@@ -459,9 +434,20 @@ const fullSizeUrl = computed(() => {
   return imageCache.value.get(photoId) || ''
 })
 
+// Detect if the cached URL is an error placeholder (data: SVG) vs a real blob URL
+const isLoadError = computed(() => {
+  const url = fullSizeUrl.value
+  return url !== '' && url.startsWith('data:')
+})
+
 // Extract EXIF data from graphPhoto
 const exifData = computed<GraphPhoto>(() => {
   return photoWithDate.value?.graphPhoto || {}
+})
+
+// Extract tags from photo
+const photoTags = computed<string[]>(() => {
+  return photoWithDate.value?.tags || []
 })
 
 // Check if date comes from EXIF data
@@ -943,7 +929,7 @@ function getMapUrl(lat: number, lon: number): string {
   position: fixed;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: var(--oc-color-background-default, #fff);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   min-width: 160px;
@@ -955,46 +941,32 @@ function getMapUrl(lat: number, lon: number): string {
 .lbmenu-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
   width: 100%;
-  padding: 10px 16px;
-  border: none;
-  background: none;
+  padding: 0.6rem 1rem;
   cursor: pointer;
-  font-size: 14px;
-  color: #333;
+  font-size: var(--oc-font-size-default, 0.875rem);
+  color: var(--oc-color-text-default, #333);
   text-align: left;
   transition: background 0.15s;
-  font-family: inherit;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  outline: none;
-  box-sizing: border-box;
 }
 
 .lbmenu-item:hover {
-  background: #f5f5f5;
+  background: var(--oc-color-background-muted, #f5f5f5);
 }
 
 .lbmenu-item-danger {
-  color: #dc3545;
+  color: var(--oc-color-swatch-danger-default, #dc3545);
 }
 
 .lbmenu-item-danger:hover {
-  background: #fff0f0;
-}
-
-.lbmenu-icon {
-  width: 18px;
-  font-size: 14px;
-  opacity: 0.7;
+  background: rgba(200, 0, 0, 0.1);
 }
 
 .lbmenu-divider {
   height: 1px;
-  background: #eee;
-  margin: 6px 0;
+  background: var(--oc-color-border, #eee);
+  margin: 0.5rem 0;
 }
 
 .lightbox-container {
@@ -1024,14 +996,17 @@ function getMapUrl(lat: number, lon: number): string {
   border: none;
   background: rgba(0, 0, 0, 0.5);
   color: white;
-  font-size: 1.25rem;
-  font-weight: bold;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
+}
+
+.lightbox-menu-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .lightbox-menu-btn:hover {
@@ -1044,13 +1019,17 @@ function getMapUrl(lat: number, lon: number): string {
   border: none;
   background: rgba(0, 0, 0, 0.5);
   color: white;
-  font-size: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background 0.2s;
+}
+
+.lightbox-close svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .lightbox-close:hover {
@@ -1067,7 +1046,6 @@ function getMapUrl(lat: number, lon: number): string {
   border: none;
   background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-size: 1.5rem;
   border-radius: 50%;
   cursor: pointer;
   z-index: 10;
@@ -1077,6 +1055,11 @@ function getMapUrl(lat: number, lon: number): string {
   transition: background 0.2s, transform 0.2s;
 }
 
+.lightbox-nav svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .lightbox-nav:hover {
   background: rgba(255, 255, 255, 0.4);
   transform: scale(1.1);
@@ -1084,11 +1067,6 @@ function getMapUrl(lat: number, lon: number): string {
 
 .lightbox-nav-prev { left: 0.5rem; }
 .lightbox-nav-next { right: 0.5rem; }
-
-.nav-arrow {
-  font-weight: bold;
-  line-height: 1;
-}
 
 .lightbox-counter {
   position: absolute;
@@ -1122,14 +1100,35 @@ function getMapUrl(lat: number, lon: number): string {
   z-index: 1;
 }
 
-.lightbox-loading-overlay {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background: rgba(0, 0, 0, 0.6);
-  padding: 0.5rem;
-  border-radius: 4px;
-  z-index: 5;
+.lightbox-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--oc-color-text-muted, #999);
+}
+
+.lightbox-error-icon {
+  display: block;
+  width: 64px;
+  height: 64px;
+  color: var(--oc-color-swatch-danger-default, #c41e3a);
+}
+
+.lightbox-error-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.lightbox-error-text {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: var(--oc-color-text-muted, #999);
+  text-align: center;
+  word-break: break-word;
+  max-width: 80%;
 }
 
 .loading-spinner {
@@ -1193,20 +1192,19 @@ function getMapUrl(lat: number, lon: number): string {
   margin-top: 0.25rem;
 }
 
-.lightbox-download {
-  padding: 0.5rem 1rem;
-  background: var(--oc-color-swatch-primary-default, #0070f3);
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: background 0.2s;
-  white-space: nowrap;
+.lightbox-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  max-width: 60%;
+  max-height: 4.5rem;
+  overflow-y: auto;
 }
 
-.lightbox-download:hover {
-  background: var(--oc-color-swatch-primary-hover, #0060d0);
+.lightbox-tags .oc-tag {
+  font-size: 0.75rem;
+  line-height: 1.4;
 }
 
 .lightbox-metadata {
@@ -1245,16 +1243,6 @@ function getMapUrl(lat: number, lon: number): string {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.date-source-badge {
-  display: inline-block;
-  padding: 0.1rem 0.35rem;
-  border-radius: 3px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
 }
 
 .badge-exif {
