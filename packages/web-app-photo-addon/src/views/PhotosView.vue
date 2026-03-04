@@ -1034,6 +1034,17 @@ function parseSearchResponse(xmlText: string, spaceId: string): PhotoWithDate[] 
         if (altitudeEl?.textContent) graphPhoto.location.altitude = parseFloat(altitudeEl.textContent)
       }
 
+      // AI object detection metadata (from Tika)
+      const objectCaptionsEl = prop.getElementsByTagNameNS(ocNs, 'object-captions')[0]
+      const objectLabelsEl = prop.getElementsByTagNameNS(ocNs, 'object-labels')[0]
+
+      if (objectCaptionsEl?.textContent) {
+        graphPhoto.objectCaptions = objectCaptionsEl.textContent.split(',').map(s => s.trim()).filter(Boolean)
+      }
+      if (objectLabelsEl?.textContent) {
+        graphPhoto.objectLabels = objectLabelsEl.textContent.split(',').map(s => s.trim()).filter(Boolean)
+      }
+
       // Extract date - prefer EXIF, fallback to last modified
       let exifDate: string
       let exifTime: string
@@ -1167,6 +1178,8 @@ async function fetchPhotosViaSearch(driveId: string, dateRange: { start: string,
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
     <oc:tags/>
+    <oc:object-captions/>
+    <oc:object-labels/>
   </d:prop>
 </oc:search-files>`
 
@@ -1240,6 +1253,8 @@ async function fetchAllImagesViaSearch(driveId: string): Promise<PhotoWithDate[]
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
     <oc:tags/>
+    <oc:object-captions/>
+    <oc:object-labels/>
   </d:prop>
 </oc:search-files>`
 
@@ -1314,6 +1329,8 @@ async function fetchPhotosWithGPS(driveId: string): Promise<PhotoWithDate[]> {
     <oc:photo-location-longitude/>
     <oc:photo-location-altitude/>
     <oc:tags/>
+    <oc:object-captions/>
+    <oc:object-labels/>
   </d:prop>
 </oc:search-files>`
 
@@ -1918,34 +1935,11 @@ async function downloadPhoto(photo: PhotoWithDate) {
 function openInFiles(photo: PhotoWithDate) {
   const serverUrl = (configStore.serverUrl || '').replace(/\/$/, '')
   const fileId = (photo as any).fileId || photo.id || ''
-  const filePath = (photo as any).filePath || photo.name || ''
 
-  // Get the drive alias (e.g., "personal/paul")
-  const driveAlias = (personalSpace as any)?.driveAlias || 'personal/home'
-
-  // Build the full path for preview URL: driveAlias + filePath
-  const fullPath = `${driveAlias}${filePath}`
-  const encodedFullPath = fullPath.split('/').map((s: string) => encodeURIComponent(s)).join('/')
-
-  // Get folder path (without filename) for contextRouteParams
-  const lastSlash = filePath.lastIndexOf('/')
-  const folderPath = lastSlash > 0 ? filePath.substring(0, lastSlash) : ''
-  const driveAliasAndItem = `${driveAlias}${folderPath}`
-
-  // Get parent folder's fileId from parentReference if available
-  const parentId = (photo as any).parentReference?.id || ''
-
-  // Build the preview URL with context parameters
-  const params = new URLSearchParams()
-  params.set('fileId', fileId)
-  params.set('contextRouteName', 'files-spaces-generic')
-  params.set('contextRouteParams.driveAliasAndItem', driveAliasAndItem)
-  if (parentId) {
-    params.set('contextRouteQuery.fileId', parentId)
-  }
-
-  const previewUrl = `${serverUrl}/preview/${encodedFullPath}?${params.toString()}`
-  window.open(previewUrl, '_blank')
+  // Use the /f/{fileId} short URL — oCIS resolves this to the file's
+  // location in the Files app, opening the parent folder with the file selected
+  const filesUrl = `${serverUrl}/f/${encodeURIComponent(fileId)}`
+  window.open(filesUrl, '_blank')
 }
 
 async function copyPhotoLink(photo: PhotoWithDate) {
