@@ -204,6 +204,7 @@ export const KNOWN_CAMERA_MAKES = [
   'Canon',
   'DJI',
   'Fujifilm',
+  'Google',
   'GoPro',
   'Leica',
   'Nikon',
