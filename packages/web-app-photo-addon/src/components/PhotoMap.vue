@@ -462,12 +462,16 @@ function initMap() {
   }
 
   // Create map with INTEGER zoom to minimize gap issues
+  // maxBounds prevents panning beyond one world map
   map = L.map(mapContainer.value, {
     center: center,
     zoom: initialZoom,
     zoomSnap: 1,      // Force integer zoom levels only
     zoomDelta: 1,     // Zoom by whole levels
     wheelPxPerZoomLevel: 120, // Require more scroll for zoom
+    maxBounds: [[-90, -180], [90, 180]],
+    maxBoundsViscosity: 1.0,
+    minZoom: 2,
   })
 
   // Save position, update visible photos, and prefetch thumbnails when map moves or zooms
@@ -482,11 +486,12 @@ function initMap() {
     prefetchVisibleClusters()
   })
 
-  // Add OpenStreetMap tile layer
+  // Add OpenStreetMap tile layer (noWrap prevents world map repeating)
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
     keepBuffer: 2,
+    noWrap: true,
   }).addTo(map)
 
   // Add photo markers
@@ -636,8 +641,12 @@ function addPhotoMarkers() {
       }
     })
 
-    // Handle click - open in lightbox with group navigation
+    // Handle click - dismiss tooltip first (touch devices fire mouseover but not mouseout)
     marker.on('click', () => {
+      if (activeTooltip) {
+        activeTooltip.remove()
+        activeTooltip = null
+      }
       emit('photo-click', representativePhoto, photos)
     })
 
