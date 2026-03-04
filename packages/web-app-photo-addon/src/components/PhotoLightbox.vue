@@ -208,6 +208,20 @@
               <span class="metadata-value">{{ exifData.location.altitude.toFixed(1) }}m</span>
             </div>
 
+            <!-- AI: Image Caption -->
+            <div v-if="exifData.objectCaptions?.length" class="metadata-item metadata-wide" role="listitem" tabindex="0">
+              <span class="metadata-label">{{ $gettext('AI Caption') }}</span>
+              <span class="metadata-value">{{ exifData.objectCaptions[0] }}</span>
+            </div>
+
+            <!-- AI: Object Detection Labels -->
+            <div v-if="exifData.objectLabels?.length" class="metadata-item metadata-wide" role="listitem" tabindex="0">
+              <span class="metadata-label">{{ $gettext('Detected Objects') }}</span>
+              <span class="metadata-value metadata-tags">
+                <span v-for="label in exifData.objectLabels" :key="label" class="metadata-tag">{{ label }}</span>
+              </span>
+            </div>
+
             <!-- File info -->
             <div v-if="photo.size" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ $gettext('File Size') }}</span>
@@ -1255,8 +1269,29 @@ function getMapUrl(lat: number, lon: number): string {
   color: var(--oc-color-text-muted, #666);
 }
 
-.metadata-location {
+.metadata-location,
+.metadata-wide {
   grid-column: span 2;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.metadata-wide .metadata-value {
+  word-break: break-word;
+}
+
+.metadata-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.metadata-tag {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  background: var(--oc-color-background-highlight, #e8e8e8);
+  border-radius: 3px;
+  font-size: 0.75rem;
 }
 
 .map-link {
