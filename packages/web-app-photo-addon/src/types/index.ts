@@ -55,6 +55,8 @@ export interface GraphPhoto {
   exposureNumerator?: number    // e.g., 1 for 1/250s
   exposureDenominator?: number  // e.g., 250 for 1/250s
   location?: GeoCoordinates
+  objectCaptions?: string[]     // AI-generated image captions (from Tika Show & Tell)
+  objectLabels?: string[]       // AI-detected object labels (from Tika Inception V3)
 }
 
 /**
