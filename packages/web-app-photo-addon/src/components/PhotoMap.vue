@@ -151,29 +151,29 @@ interface PhotoCluster {
 }
 
 /**
+ * Calculate grid size based on zoom level for zoom-dependent clustering.
+ * At any zoom level, photos within ~40 pixels of each other on screen should cluster.
+ *
+ * Formula: gridSize = 60 / 2^zoom
+ * - Zoom 2 (world):  ~15° — entire countries merge
+ * - Zoom 5 (region):  ~1.9° — nearby cities merge
+ * - Zoom 10 (city):   ~0.06° — ~6km
+ * - Zoom 15 (street): ~0.002° — ~200m
+ * - Zoom 18 (house):  ~0.0002° — ~25m
+ */
+function getGridSizeForZoom(zoom: number): number {
+  return 60 / Math.pow(2, zoom)
+}
+
+/**
  * Cluster photos by geographic proximity using a spatial grid algorithm.
- *
- * Algorithm: O(n) spatial hashing instead of O(n²) pairwise distance comparison
- *
- * How it works:
- * 1. Divide the world into a grid of cells (each ~1km × 1km)
- * 2. Hash each photo to its grid cell using floor(lat/GRID_SIZE), floor(lng/GRID_SIZE)
- * 3. All photos in the same cell form one cluster
- *
- * Trade-offs:
- * - Pros: O(n) time complexity, simple implementation, predictable performance
- * - Cons: Grid boundaries can split nearby photos into different clusters
- *         (e.g., photos 10m apart but on different sides of a grid line)
- *
- * For photo galleries, this trade-off is acceptable because:
- * - Perfect clustering isn't required (users expect approximate grouping)
- * - Performance matters more (can have 10,000+ photos)
- * - 1km cells are large enough that edge cases are rare
+ * Grid size adapts to zoom level so clusters merge/split as user zooms.
  *
  * @param photos - Array of photos with GPS coordinates
+ * @param gridSize - Grid cell size in degrees (zoom-dependent)
  * @returns Array of photo clusters with center coordinates and representative photo
  */
-function clusterPhotos(photos: PhotoWithLocation[]): PhotoCluster[] {
+function clusterPhotos(photos: PhotoWithLocation[], gridSize: number): PhotoCluster[] {
   const photosWithLocation = photos.filter(p =>
     p.graphPhoto?.location?.latitude != null &&
     p.graphPhoto?.location?.longitude != null
@@ -181,26 +181,12 @@ function clusterPhotos(photos: PhotoWithLocation[]): PhotoCluster[] {
 
   if (photosWithLocation.length === 0) return []
 
-  /**
-   * Grid size in degrees. 0.009° ≈ 1km at the equator.
-   *
-   * At different latitudes, 1° longitude varies:
-   * - Equator: 111km
-   * - 45°: 78km
-   * - 60°: 55km
-   *
-   * So 0.009° is roughly 1km at equator, ~0.7km at 45° latitude.
-   * This variance is acceptable for visual clustering purposes.
-   */
-  const GRID_SIZE = 0.009
-
   // Build spatial grid - O(n): each photo assigned to one cell
   const grid = new Map<string, PhotoWithLocation[]>()
   for (const photo of photosWithLocation) {
     const lat = photo.graphPhoto!.location!.latitude!
     const lng = photo.graphPhoto!.location!.longitude!
-    // Hash to grid cell (integer division via floor)
-    const gridKey = `${Math.floor(lat / GRID_SIZE)},${Math.floor(lng / GRID_SIZE)}`
+    const gridKey = `${Math.floor(lat / gridSize)},${Math.floor(lng / gridSize)}`
 
     if (!grid.has(gridKey)) grid.set(gridKey, [])
     grid.get(gridKey)!.push(photo)
@@ -483,6 +469,7 @@ function initMap() {
   map.on('zoomend', () => {
     saveMapPosition()
     updateVisiblePhotos()
+    refreshMarkersForZoom()
     prefetchVisibleClusters()
   })
 
@@ -507,6 +494,8 @@ function initMap() {
 
 // Store clusters for viewport-based prefetching
 let allClusters: PhotoCluster[] = []
+let lastClusterZoom = -1  // Track zoom to avoid unnecessary reclustering
+let markerLayer: L.LayerGroup | null = null  // Layer group for easy marker management
 
 /**
  * Prefetch thumbnails only for clusters visible in the current viewport.
@@ -525,17 +514,44 @@ function prefetchVisibleClusters() {
   }
 }
 
+/**
+ * Recluster and redraw markers when zoom changes.
+ * Only reclusters if the zoom level actually changed.
+ */
+function refreshMarkersForZoom() {
+  if (!map) return
+  const zoom = map.getZoom()
+  if (zoom === lastClusterZoom) return
+  lastClusterZoom = zoom
+
+  // Remove old markers
+  if (markerLayer) {
+    markerLayer.clearLayers()
+  }
+
+  addPhotoMarkers()
+}
+
 function addPhotoMarkers() {
   if (!map) return
 
-  // Cluster photos by geographic proximity
-  const clusters = clusterPhotos(props.photos)
+  const zoom = map.getZoom()
+  const gridSize = getGridSizeForZoom(zoom)
+  lastClusterZoom = zoom
+
+  // Cluster photos by geographic proximity (zoom-dependent)
+  const clusters = clusterPhotos(props.photos, gridSize)
   allClusters = clusters  // Store for viewport-based prefetching
 
   if (clusters.length === 0) return
 
   // Initial prefetch for visible clusters only
   prefetchVisibleClusters()
+
+  // Create layer group for markers (allows easy clearing on recluster)
+  if (!markerLayer) {
+    markerLayer = L.layerGroup().addTo(map)
+  }
 
   const bounds = L.latLngBounds([])
 
@@ -650,7 +666,7 @@ function addPhotoMarkers() {
       emit('photo-click', representativePhoto, photos)
     })
 
-    marker.addTo(map)
+    marker.addTo(markerLayer!)
     bounds.extend([centerLat, centerLng])
   }
 
@@ -669,12 +685,10 @@ function addPhotoMarkers() {
 // Watch for photo changes
 watch(() => props.photos, () => {
   if (map) {
-    // Clear existing markers
-    map.eachLayer((layer) => {
-      if (layer instanceof L.CircleMarker) {
-        map!.removeLayer(layer)
-      }
-    })
+    if (markerLayer) {
+      markerLayer.clearLayers()
+    }
+    lastClusterZoom = -1  // Force recluster
     addPhotoMarkers()
   }
 }, { deep: true })
