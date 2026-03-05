@@ -25,13 +25,14 @@
         @click="emit('item-click', item)"
         @keydown.enter="emit('item-click', item)"
       >
-        <span class="item-icon">{{ getIcon(item) }}</span>
+        <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="item-thumb" loading="lazy" />
+        <span v-else class="item-icon">{{ getIcon(item) }}</span>
         <div class="item-details">
           <span class="item-name">{{ item.name }}</span>
           <span class="item-path">{{ getPath(item) }}</span>
         </div>
         <span class="item-size">{{ formatBytes(item.size) }}</span>
-        <span class="item-date">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</span>
+        <span class="item-date">{{ formatDate(item.mdate) }}</span>
         <button
           type="button"
           class="oc-button-reset item-menu-btn"
@@ -57,7 +58,8 @@
         @keydown.enter="emit('item-click', item)"
       >
         <div class="grid-thumbnail">
-          <span class="grid-icon">{{ getIcon(item) }}</span>
+          <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="grid-thumb-img" loading="lazy" />
+          <span v-else class="grid-icon">{{ getIcon(item) }}</span>
           <button
             type="button"
             class="oc-button-reset grid-menu-btn"
@@ -100,7 +102,7 @@
           <td class="oc-table-cell cell-path">{{ getPath(item) }}</td>
           <td class="oc-table-cell">{{ item.mimeType || $gettext('folder') }}</td>
           <td class="oc-table-cell">{{ formatBytes(item.size) }}</td>
-          <td class="oc-table-cell">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</td>
+          <td class="oc-table-cell">{{ formatDate(item.mdate) }}</td>
           <td v-if="hasPhotoItems" class="oc-table-cell">{{ getCameraInfo(item) }}</td>
           <td v-if="hasPhotoItems" class="oc-table-cell">{{ getPhotoDate(item) }}</td>
           <td class="oc-table-cell cell-actions">
@@ -121,17 +123,22 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, type ShallowRef } from 'vue'
 import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
 
-const { $gettext, getUserLocale } = useTranslations()
+const { $gettext } = useTranslations()
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   items: SearchResource[]
   viewMode: ResultViewMode
-}>()
+  getThumbnailUrl?: (item: SearchResource) => string
+  thumbnailCache?: ShallowRef<Map<string, string>>
+}>(), {
+  getThumbnailUrl: undefined,
+  thumbnailCache: undefined,
+})
 
 const emit = defineEmits<{
   (e: 'item-click', item: SearchResource): void
@@ -169,6 +176,29 @@ const hasPhotoItems = computed(() => {
 })
 
 // Helper functions
+
+/**
+ * Get thumbnail for an item. Triggers async fetch on first call,
+ * returns blob URL once cached. The thumbnailCache ShallowRef triggers
+ * re-render when new thumbnails are loaded.
+ */
+function itemThumbnail(item: SearchResource): string {
+  if (!props.getThumbnailUrl) return ''
+  // Read from cache to establish reactivity dependency
+  const key = item.id || item.fileId || ''
+  if (props.thumbnailCache && key) {
+    const cached = props.thumbnailCache.value.get(key)
+    if (cached) return cached
+  }
+  // Trigger fetch (returns '' while loading)
+  return props.getThumbnailUrl(item)
+}
+
+function isImageType(item: SearchResource): boolean {
+  const mime = item.mimeType || ''
+  return mime.startsWith('image/') || mime.startsWith('video/')
+}
+
 function getIcon(item: SearchResource): string {
   return getFileIcon(item.mimeType, item.isFolder || item.type === 'folder')
 }
@@ -190,7 +220,7 @@ function getCameraInfo(item: SearchResource): string {
 
 function getPhotoDate(item: SearchResource): string {
   if (!item.photo?.takenDateTime) return '—'
-  return formatDate(item.photo.takenDateTime, undefined, getUserLocale())
+  return formatDate(item.photo.takenDateTime)
 }
 </script>
 
@@ -221,6 +251,14 @@ function getPhotoDate(item: SearchResource): string {
 
 .item-icon {
   font-size: 1.25rem;
+}
+
+.item-thumb {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 .item-details {
@@ -295,7 +333,7 @@ function getPhotoDate(item: SearchResource): string {
   overflow: hidden;
 }
 
-.grid-thumbnail img {
+.grid-thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
