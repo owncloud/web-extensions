@@ -499,14 +499,18 @@ function updateRange(
   const updated = { ...current, [field]: parsedValue }
 
   // Validate date ranges: auto-swap if start > end
+  // Only swap when both dates are fully formed (YYYY-MM-DD) to avoid
+  // scrambling during manual year typing (e.g., "2010" typed as "0002" mid-edit)
   if (type === 'date' && updated.start && updated.end) {
-    const startDate = new Date(updated.start as string)
-    const endDate = new Date(updated.end as string)
-    if (startDate > endDate) {
-      // Swap the values
-      const temp = updated.start
-      updated.start = updated.end
-      updated.end = temp
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+    if (dateRegex.test(updated.start as string) && dateRegex.test(updated.end as string)) {
+      const startDate = new Date(updated.start as string)
+      const endDate = new Date(updated.end as string)
+      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && startDate > endDate) {
+        const temp = updated.start
+        updated.start = updated.end
+        updated.end = temp
+      }
     }
   }
 
