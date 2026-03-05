@@ -18,7 +18,7 @@
       <div
         v-for="item in items"
         :key="item.id"
-        v-memo="[item.id, item.name, item.size, item.mdate]"
+        v-memo="[item.id, item.name, item.size, item.mdate, thumbnailVersion]"
         class="list-item"
         role="button"
         tabindex="0"
@@ -50,7 +50,7 @@
       <div
         v-for="item in items"
         :key="item.id"
-        v-memo="[item.id, item.name, item.mimeType]"
+        v-memo="[item.id, item.name, item.mimeType, thumbnailVersion]"
         class="grid-item"
         role="button"
         tabindex="0"
@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type ShallowRef } from 'vue'
+import { computed } from 'vue'
 import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
@@ -134,10 +134,11 @@ const props = withDefaults(defineProps<{
   items: SearchResource[]
   viewMode: ResultViewMode
   getThumbnailUrl?: (item: SearchResource) => string
-  thumbnailCache?: ShallowRef<Map<string, string>>
+  /** Incremented when new thumbnails are loaded, triggers re-render */
+  thumbnailVersion?: number
 }>(), {
   getThumbnailUrl: undefined,
-  thumbnailCache: undefined,
+  thumbnailVersion: 0,
 })
 
 const emit = defineEmits<{
@@ -178,19 +179,13 @@ const hasPhotoItems = computed(() => {
 // Helper functions
 
 /**
- * Get thumbnail for an item. Triggers async fetch on first call,
- * returns blob URL once cached. The thumbnailCache ShallowRef triggers
- * re-render when new thumbnails are loaded.
+ * Get thumbnail for an item. Returns cached blob URL or '' (triggers async fetch).
+ * Re-evaluated when thumbnailVersion prop changes (incremented by parent on cache update).
  */
 function itemThumbnail(item: SearchResource): string {
   if (!props.getThumbnailUrl) return ''
-  // Read from cache to establish reactivity dependency
-  const key = item.id || item.fileId || ''
-  if (props.thumbnailCache && key) {
-    const cached = props.thumbnailCache.value.get(key)
-    if (cached) return cached
-  }
-  // Trigger fetch (returns '' while loading)
+  // Reference thumbnailVersion to establish reactivity (re-render on new thumbnails)
+  void props.thumbnailVersion
   return props.getThumbnailUrl(item)
 }
 
