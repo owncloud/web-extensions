@@ -159,7 +159,7 @@
         :items="state.results.items"
         :view-mode="state.viewMode"
         :get-thumbnail-url="getThumbnailUrl"
-        :thumbnail-cache="thumbnailCache"
+        :thumbnail-version="thumbnailVersion"
         @item-click="handleItemClick"
         @context-menu="openContextMenu"
       />
@@ -263,7 +263,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch, nextTick, shallowRef, triggerRef } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useAdvancedSearch } from '../composables/useAdvancedSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import { useTranslations } from '../composables/useTranslations'
@@ -332,8 +332,9 @@ const contextMenuPosition = ref({ x: 0, y: 0 })
 
 // Thumbnail cache: maps item ID → blob URL for authenticated preview images
 const clientService = useClientService()
-const thumbnailCache = shallowRef(new Map<string, string>())
+const thumbnailCacheMap = new Map<string, string>()
 const pendingThumbnails = new Set<string>()
+const thumbnailVersion = ref(0)
 const MAX_THUMBNAIL_CACHE = 200
 
 /**
@@ -345,7 +346,7 @@ function getThumbnailUrl(item: SearchResource): string {
   if (!key) return ''
 
   // Return cached value
-  if (thumbnailCache.value.has(key)) return thumbnailCache.value.get(key) || ''
+  if (thumbnailCacheMap.has(key)) return thumbnailCacheMap.get(key) || ''
 
   // Only fetch thumbnails for image/video types
   const mime = item.mimeType || ''
@@ -373,18 +374,18 @@ async function fetchThumbnail(item: SearchResource, key: string) {
   try {
     const response = await clientService.httpAuthenticated.get(url, { responseType: 'blob' } as any)
     const blobUrl = URL.createObjectURL(response.data as Blob)
-    const cache = thumbnailCache.value
-    cache.set(key, blobUrl)
+    thumbnailCacheMap.set(key, blobUrl)
     // Evict oldest entries
-    if (cache.size > MAX_THUMBNAIL_CACHE) {
-      const oldest = cache.keys().next().value
+    if (thumbnailCacheMap.size > MAX_THUMBNAIL_CACHE) {
+      const oldest = thumbnailCacheMap.keys().next().value
       if (oldest) {
-        const oldUrl = cache.get(oldest)
+        const oldUrl = thumbnailCacheMap.get(oldest)
         if (oldUrl) URL.revokeObjectURL(oldUrl)
-        cache.delete(oldest)
+        thumbnailCacheMap.delete(oldest)
       }
     }
-    triggerRef(thumbnailCache)
+    // Increment version to trigger child re-render
+    thumbnailVersion.value++
   } catch {
     // Don't retry failed thumbnails
     pendingThumbnails.delete(key)
@@ -393,10 +394,10 @@ async function fetchThumbnail(item: SearchResource, key: string) {
 
 // Clean up blob URLs on unmount
 onUnmounted(() => {
-  for (const url of thumbnailCache.value.values()) {
+  for (const url of thumbnailCacheMap.values()) {
     if (url.startsWith('blob:')) URL.revokeObjectURL(url)
   }
-  thumbnailCache.value.clear()
+  thumbnailCacheMap.clear()
 })
 
 // Computed
