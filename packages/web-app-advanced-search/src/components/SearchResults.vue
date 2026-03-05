@@ -78,33 +78,33 @@
     <table v-else-if="viewMode === 'table'" class="oc-table oc-table-hover results-table">
       <thead>
         <tr>
-          <th class="oc-table-header-cell">{{ $gettext('Name') }}</th>
-          <th class="oc-table-header-cell">{{ $gettext('Path') }}</th>
-          <th class="oc-table-header-cell">{{ $gettext('Type') }}</th>
-          <th class="oc-table-header-cell">{{ $gettext('Size') }}</th>
-          <th class="oc-table-header-cell">{{ $gettext('Modified') }}</th>
-          <th v-if="hasPhotoItems" class="oc-table-header-cell">{{ $gettext('Camera') }}</th>
-          <th v-if="hasPhotoItems" class="oc-table-header-cell">{{ $gettext('Date Taken') }}</th>
+          <th class="oc-table-header-cell th-name th-sortable" @click="toggleSort('name')">{{ $gettext('Name') }}{{ sortIndicator('name') }}</th>
+          <th class="oc-table-header-cell th-path th-sortable" @click="toggleSort('path')">{{ $gettext('Path') }}{{ sortIndicator('path') }}</th>
+          <th class="oc-table-header-cell th-type th-sortable" @click="toggleSort('type')">{{ $gettext('Type') }}{{ sortIndicator('type') }}</th>
+          <th class="oc-table-header-cell th-size th-sortable" @click="toggleSort('size')">{{ $gettext('Size') }}{{ sortIndicator('size') }}</th>
+          <th class="oc-table-header-cell th-date th-sortable" @click="toggleSort('mdate')">{{ $gettext('Modified') }}{{ sortIndicator('mdate') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell th-camera th-sortable" @click="toggleSort('camera')">{{ $gettext('Camera') }}{{ sortIndicator('camera') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell th-date th-sortable" @click="toggleSort('taken')">{{ $gettext('Date Taken') }}{{ sortIndicator('taken') }}</th>
           <th class="oc-table-header-cell th-actions"></th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="item in items"
+          v-for="item in sortedItems"
           :key="item.id"
-          v-memo="[item.id, item.name, item.mimeType, item.size, item.mdate, item.photo?.cameraMake, item.photo?.takenDateTime]"
           @click="emit('item-click', item)"
         >
           <td class="oc-table-cell cell-name">
-            <span class="item-icon">{{ getIcon(item) }}</span>
+            <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="table-thumb" loading="lazy" />
+            <span v-else class="item-icon">{{ getIcon(item) }}</span>
             {{ item.name }}
           </td>
-          <td class="oc-table-cell cell-path">{{ getPath(item) }}</td>
-          <td class="oc-table-cell">{{ item.mimeType || $gettext('folder') }}</td>
-          <td class="oc-table-cell">{{ formatBytes(item.size) }}</td>
-          <td class="oc-table-cell">{{ formatDate(item.mdate) }}</td>
-          <td v-if="hasPhotoItems" class="oc-table-cell">{{ getCameraInfo(item) }}</td>
-          <td v-if="hasPhotoItems" class="oc-table-cell">{{ getPhotoDate(item) }}</td>
+          <td class="oc-table-cell cell-path" :title="getPath(item)">{{ getPath(item) }}</td>
+          <td class="oc-table-cell cell-type">{{ item.mimeType || $gettext('folder') }}</td>
+          <td class="oc-table-cell cell-size">{{ formatBytes(item.size) }}</td>
+          <td class="oc-table-cell cell-date">{{ formatDate(item.mdate) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell cell-camera">{{ getCameraInfo(item) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell cell-date">{{ getPhotoDate(item) }}</td>
           <td class="oc-table-cell cell-actions">
             <button
               type="button"
@@ -123,7 +123,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
@@ -139,6 +139,74 @@ const props = withDefaults(defineProps<{
 }>(), {
   getThumbnailUrl: undefined,
   thumbnailVersion: 0,
+})
+
+// Table sort state
+type SortField = 'name' | 'path' | 'type' | 'size' | 'mdate' | 'camera' | 'taken'
+const sortField = ref<SortField>('name')
+const sortDir = ref<'asc' | 'desc'>('asc')
+
+function toggleSort(field: SortField) {
+  if (sortField.value === field) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortField.value = field
+    sortDir.value = field === 'mdate' || field === 'taken' ? 'desc' : 'asc'
+  }
+}
+
+function sortIndicator(field: SortField): string {
+  if (sortField.value !== field) return ''
+  return sortDir.value === 'asc' ? ' \u25B2' : ' \u25BC'
+}
+
+const sortedItems = computed(() => {
+  if (props.viewMode !== 'table') return props.items
+  const items = [...props.items]
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const field = sortField.value
+
+  items.sort((a, b) => {
+    let va: string | number = ''
+    let vb: string | number = ''
+
+    switch (field) {
+      case 'name':
+        va = (a.name || '').toLowerCase()
+        vb = (b.name || '').toLowerCase()
+        break
+      case 'path':
+        va = (a.path || '').toLowerCase()
+        vb = (b.path || '').toLowerCase()
+        break
+      case 'type':
+        va = (a.mimeType || '').toLowerCase()
+        vb = (b.mimeType || '').toLowerCase()
+        break
+      case 'size':
+        va = typeof a.size === 'number' ? a.size : 0
+        vb = typeof b.size === 'number' ? b.size : 0
+        break
+      case 'mdate':
+        va = a.mdate ? new Date(a.mdate).getTime() : 0
+        vb = b.mdate ? new Date(b.mdate).getTime() : 0
+        break
+      case 'camera':
+        va = ((a.photo?.cameraMake || '') + ' ' + (a.photo?.cameraModel || '')).trim().toLowerCase()
+        vb = ((b.photo?.cameraMake || '') + ' ' + (b.photo?.cameraModel || '')).trim().toLowerCase()
+        break
+      case 'taken':
+        va = a.photo?.takenDateTime ? new Date(a.photo.takenDateTime).getTime() : 0
+        vb = b.photo?.takenDateTime ? new Date(b.photo.takenDateTime).getTime() : 0
+        break
+    }
+
+    if (va < vb) return -1 * dir
+    if (va > vb) return 1 * dir
+    return 0
+  })
+
+  return items
 })
 
 const emit = defineEmits<{
@@ -349,10 +417,18 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 /* Table View */
+.results-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .results-table th,
 .results-table td {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .results-table th {
@@ -360,27 +436,63 @@ function getPhotoDate(item: SearchResource): string {
   top: 0;
 }
 
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.th-sortable:hover {
+  background: var(--oc-color-background-hover, #f5f5f5);
+}
+
 .results-table tr {
   cursor: pointer;
 }
+
+/* Column widths — Name and Path flex, rest fixed */
+.th-name { width: 25%; }
+.th-path { width: auto; }  /* takes remaining space, truncates */
+.th-type { width: 120px; }
+.th-size { width: 70px; }
+.th-date { width: 95px; }
+.th-camera { width: 120px; }
+.th-actions { width: 40px; }
 
 .cell-name {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  overflow: hidden;
+  font-weight: 500;
 }
 
 .cell-name .item-icon {
   font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.table-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .cell-path {
-  font-size: 0.8125rem;
   color: var(--oc-color-text-muted, #888);
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.8125rem;
+}
+
+.cell-type {
+  font-size: 0.8125rem;
+  color: var(--oc-color-text-muted, #666);
+}
+
+.cell-size { text-align: right; font-size: 0.8125rem; }
+.cell-date { font-size: 0.8125rem; }
+.cell-camera {
+  font-size: 0.8125rem;
 }
 
 /* Menu button styling */
