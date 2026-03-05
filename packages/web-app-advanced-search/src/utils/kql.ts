@@ -141,7 +141,10 @@ export function escapeXML(str: string): string {
  * @returns KQL-safe search term with proper quoting and wildcards
  */
 function wrapForSearch(value: string, addWildcards: boolean = true): string {
-  const trimmed = value.trim()
+  // Strip user-entered quotes to avoid double-quoting (e.g., user types "hello world")
+  const trimmed = value.trim().replace(/^"+|"+$/g, '').trim()
+  if (!trimmed) return '""'
+
   const hasSpaces = /\s/.test(trimmed)
 
   if (hasSpaces) {
