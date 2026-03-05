@@ -35,7 +35,7 @@
             </button>
           </div>
           <!-- EXIF only toggle (hidden in map view) -->
-          <span v-if="viewType !== 'map'" class="oc-switch">
+          <span v-if="viewType !== 'map'" class="oc-switch" :title="$gettext('When enabled, only shows photos with camera EXIF metadata (date taken, camera info). When disabled, shows all photos including those without EXIF data.')">
             <span id="exif-only-toggle-label">{{ $gettext('EXIF only') }}</span>
             <button
               class="oc-switch-btn"
@@ -1820,16 +1820,16 @@ function openPhoto(photo: PhotoWithDate, groupPhotos?: PhotoWithDate[]) {
   selectedPhoto.value = photo
 
   // Set up group navigation context
-  if (groupPhotos && groupPhotos.length > 1) {
-    currentGroupPhotos.value = groupPhotos
-    currentPhotoIndex.value = groupPhotos.findIndex(p =>
-      (p.fileId || p.id || p.path) === (photo.fileId || photo.id || photo.path)
-    )
-    if (currentPhotoIndex.value < 0) currentPhotoIndex.value = 0
-  } else {
-    currentGroupPhotos.value = [photo]
-    currentPhotoIndex.value = 0
-  }
+  // When groupPhotos is provided (e.g., from map cluster), use that group
+  // Otherwise, use all displayed photos so the user can browse through everything
+  const navPhotos = (groupPhotos && groupPhotos.length > 1)
+    ? groupPhotos
+    : displayedPhotos.value
+  currentGroupPhotos.value = navPhotos
+  currentPhotoIndex.value = navPhotos.findIndex(p =>
+    (p.fileId || p.id || p.path) === (photo.fileId || photo.id || photo.path)
+  )
+  if (currentPhotoIndex.value < 0) currentPhotoIndex.value = 0
 }
 
 function openStack(subGroup: PhotoSubGroup) {

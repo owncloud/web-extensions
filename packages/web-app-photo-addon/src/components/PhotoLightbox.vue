@@ -149,10 +149,16 @@
               </span>
             </div>
 
-            <!-- EXIF: Camera -->
-            <div v-if="exifData.cameraMake || exifData.cameraModel" class="metadata-item" role="listitem" tabindex="0">
+            <!-- EXIF: Camera Make -->
+            <div v-if="exifData.cameraMake" class="metadata-item" role="listitem" tabindex="0">
               <span class="metadata-label">{{ $gettext('Camera') }}</span>
-              <span class="metadata-value">{{ [exifData.cameraMake, exifData.cameraModel].filter(Boolean).join(' ') }}</span>
+              <span class="metadata-value">{{ exifData.cameraMake }}</span>
+            </div>
+
+            <!-- EXIF: Camera Model -->
+            <div v-if="exifData.cameraModel" class="metadata-item" role="listitem" tabindex="0">
+              <span class="metadata-label">{{ $gettext('Model') }}</span>
+              <span class="metadata-value">{{ exifData.cameraModel }}</span>
             </div>
 
             <!-- EXIF: Aperture -->
