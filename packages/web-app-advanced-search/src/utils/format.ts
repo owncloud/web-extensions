@@ -28,21 +28,17 @@ export function formatBytes(bytes: number | string | undefined): string {
  * @param options - Intl.DateTimeFormat options
  * @returns Formatted date string
  */
-export function formatDate(
-  dateStr: string | undefined,
-  options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  },
-  locale?: string
-): string {
+export function formatDate(dateStr: string | undefined): string {
   if (!dateStr) return '—'
 
   try {
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return '—'
-    return date.toLocaleDateString(locale, options)
+    // ISO 8601 format (YYYY-MM-DD) per international standard
+    const y = date.getFullYear()
+    const m = String(date.getMonth() + 1).padStart(2, '0')
+    const d = String(date.getDate()).padStart(2, '0')
+    return `${y}-${m}-${d}`
   } catch {
     return '—'
   }

@@ -158,6 +158,8 @@
         v-else-if="state.results && state.results.items.length > 0"
         :items="state.results.items"
         :view-mode="state.viewMode"
+        :get-thumbnail-url="getThumbnailUrl"
+        :thumbnail-cache="thumbnailCache"
         @item-click="handleItemClick"
         @context-menu="openContextMenu"
       />
@@ -201,7 +203,7 @@
           >
             {{ query.name }}
           </button>
-          <span class="saved-date">{{ formatDate(query.savedAt, undefined, getUserLocale()) }}</span>
+          <span class="saved-date">{{ formatDate(query.savedAt) }}</span>
           <button class="oc-button-reset delete-btn" :aria-label="$gettext('Delete')" @click="deleteQuery(query.id)"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17 6H22V8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8H2V6H7V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V6ZM18 8H6V20H18V8ZM9 11H11V17H9V11ZM13 11H15V17H13V11ZM9 4V6H15V4H9Z" /></svg></button>
         </li>
       </ul>
@@ -261,11 +263,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick, shallowRef, triggerRef } from 'vue'
 import { useAdvancedSearch } from '../composables/useAdvancedSearch'
 import { useSearchHistory } from '../composables/useSearchHistory'
 import { useTranslations } from '../composables/useTranslations'
-import { useThemeStore } from '@ownclouders/web-pkg'
+import { useThemeStore, useClientService } from '@ownclouders/web-pkg'
 import type { SavedQuery, SearchResource } from '../types'
 import { formatDate, classifyError, debounce } from '../utils/format'
 import SearchFilters from '../components/SearchFilters.vue'
@@ -275,7 +277,7 @@ import SearchStats from '../components/SearchStats.vue'
 import ResultContextMenu from '../components/ResultContextMenu.vue'
 
 // Translations
-const { $gettext, $ngettext, getUserLocale } = useTranslations()
+const { $gettext, $ngettext } = useTranslations()
 
 // Theme detection for native controls (color-scheme)
 const themeStore = useThemeStore()
@@ -327,6 +329,75 @@ const saveQueryInput = ref<HTMLInputElement | null>(null)
 const contextMenuVisible = ref(false)
 const contextMenuItem = ref<SearchResource | null>(null)
 const contextMenuPosition = ref({ x: 0, y: 0 })
+
+// Thumbnail cache: maps item ID → blob URL for authenticated preview images
+const clientService = useClientService()
+const thumbnailCache = shallowRef(new Map<string, string>())
+const pendingThumbnails = new Set<string>()
+const MAX_THUMBNAIL_CACHE = 200
+
+/**
+ * Get thumbnail blob URL for a search result item.
+ * Returns cached blob URL, or empty string (triggers async fetch for images).
+ */
+function getThumbnailUrl(item: SearchResource): string {
+  const key = item.id || item.fileId || ''
+  if (!key) return ''
+
+  // Return cached value
+  if (thumbnailCache.value.has(key)) return thumbnailCache.value.get(key) || ''
+
+  // Only fetch thumbnails for image/video types
+  const mime = item.mimeType || ''
+  if (!mime.startsWith('image/') && !mime.startsWith('video/')) return ''
+
+  // Fetch async if not pending
+  if (!pendingThumbnails.has(key)) {
+    pendingThumbnails.add(key)
+    fetchThumbnail(item, key)
+  }
+  return ''
+}
+
+async function fetchThumbnail(item: SearchResource, key: string) {
+  const serverUrl = getServerUrl()
+  const spaceId = item.spaceId || ''
+  const itemPath = item.path || item.name || ''
+  if (!spaceId || !itemPath) {
+    pendingThumbnails.delete(key)
+    return
+  }
+  const encodedPath = itemPath.split('/').map(s => encodeURIComponent(s)).join('/')
+  const url = `${serverUrl}/dav/spaces/${encodeURIComponent(spaceId)}${encodedPath}?preview=1&x=128&y=128&a=1`
+
+  try {
+    const response = await clientService.httpAuthenticated.get(url, { responseType: 'blob' } as any)
+    const blobUrl = URL.createObjectURL(response.data as Blob)
+    const cache = thumbnailCache.value
+    cache.set(key, blobUrl)
+    // Evict oldest entries
+    if (cache.size > MAX_THUMBNAIL_CACHE) {
+      const oldest = cache.keys().next().value
+      if (oldest) {
+        const oldUrl = cache.get(oldest)
+        if (oldUrl) URL.revokeObjectURL(oldUrl)
+        cache.delete(oldest)
+      }
+    }
+    triggerRef(thumbnailCache)
+  } catch {
+    // Don't retry failed thumbnails
+    pendingThumbnails.delete(key)
+  }
+}
+
+// Clean up blob URLs on unmount
+onUnmounted(() => {
+  for (const url of thumbnailCache.value.values()) {
+    if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+  }
+  thumbnailCache.value.clear()
+})
 
 // Computed
 const loading = computed(() => state.loading)
@@ -453,26 +524,9 @@ async function downloadItem(item: SearchResource): Promise<void> {
 function openInFiles(item: SearchResource): void {
   const serverUrl = getServerUrl()
   const fileId = item.fileId || item.id || ''
-  const filePath = item.path || item.name || ''
-  const driveAlias = item.driveAlias || 'personal/home'
-
-  // Build paths for preview URL
-  const fullPath = `${driveAlias}${filePath}`
-  const lastSlash = filePath.lastIndexOf('/')
-  const folderPath = lastSlash > 0 ? filePath.substring(0, lastSlash) : ''
-  const parentId = item.parentReference?.id || item.parentId || ''
-
-  // Build preview URL with context parameters
-  const params = new URLSearchParams({
-    fileId,
-    contextRouteName: 'files-spaces-generic',
-    'contextRouteParams.driveAliasAndItem': `${driveAlias}${folderPath}`
-  })
-  if (parentId) {
-    params.set('contextRouteQuery.fileId', parentId)
-  }
-
-  window.open(`${serverUrl}/preview/${encodePath(fullPath)}?${params}`, '_blank')
+  if (!fileId) return
+  // Use /f/{fileId} short URL — oCIS resolves this to the file's location in Files
+  window.open(`${serverUrl}/f/${encodeURIComponent(fileId)}`, '_blank')
 }
 
 async function copyItemLink(item: SearchResource): Promise<void> {
