@@ -47,6 +47,7 @@
               class="filter-select-custom-input"
               :value="customText"
               :placeholder="customPlaceholder || label"
+              :aria-label="customPlaceholder || label"
               @input="customText = ($event.target as HTMLInputElement).value"
               @keyup.enter="applyCustom"
               @click.stop
