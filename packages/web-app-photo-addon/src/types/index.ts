@@ -55,6 +55,8 @@ export interface GraphPhoto {
   exposureNumerator?: number    // e.g., 1 for 1/250s
   exposureDenominator?: number  // e.g., 250 for 1/250s
   location?: GeoCoordinates
+  objectCaptions?: string[]     // AI-generated image captions (from Tika Show & Tell)
+  objectLabels?: string[]       // AI-detected object labels (from Tika Inception V3)
 }
 
 /**
@@ -110,6 +112,7 @@ export interface PhotoWithDate extends Resource {
   timestamp?: number      // Unix ms for sorting (Date.getTime())
   dateSource?: string     // "photo.takenDateTime" | "mdate" | etc. (debug)
   graphPhoto?: GraphPhoto & { location?: GeoCoordinates }
+  tags?: string[]         // Tags from oc:tags (comma-separated in WebDAV)
 }
 
 /**
