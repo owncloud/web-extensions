@@ -61,22 +61,20 @@
           <div class="range-inputs">
             <input
               id="filter-size-min"
-              type="number"
-              min="0"
-              :value="filters.standard.sizeRange?.min || ''"
-              :placeholder="$gettext('Min (bytes)')"
-              @input="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
+              type="text"
+              :value="formatSizeDisplay(filters.standard.sizeRange?.min)"
+              :placeholder="$gettext('Min (e.g. 1M)')"
+              @change="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
             <input
               id="filter-size-max"
-              type="number"
-              min="0"
-              :value="filters.standard.sizeRange?.max || ''"
-              :placeholder="$gettext('Max (bytes)')"
+              type="text"
+              :value="formatSizeDisplay(filters.standard.sizeRange?.max)"
+              :placeholder="$gettext('Max (e.g. 10M)')"
               :aria-label="$gettext('Size maximum')"
-              @input="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
+              @change="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -91,6 +89,7 @@
               type="date"
               :value="filters.standard.modifiedRange?.start || ''"
               @input="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
+              @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
@@ -100,6 +99,7 @@
               :value="filters.standard.modifiedRange?.end || ''"
               :aria-label="$gettext('Modified date end')"
               @input="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
+              @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -191,6 +191,7 @@
               type="date"
               :value="filters.photo.takenDateRange?.start || ''"
               @input="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
+              @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
@@ -200,6 +201,7 @@
               :value="filters.photo.takenDateRange?.end || ''"
               :aria-label="$gettext('Date taken end')"
               @input="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
+              @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -521,9 +523,41 @@ function updateRange(
   }
 }
 
+/**
+ * Parse human-readable size input (e.g., "1M", "500K", "2G") into bytes.
+ * Falls back to plain number parsing for raw byte values.
+ */
+function parseSizeInput(value: string): string {
+  const trimmed = value.trim().toUpperCase()
+  if (!trimmed) return ''
+  const match = trimmed.match(/^(\d+(?:\.\d+)?)\s*([KMGT]?)B?$/i)
+  if (match) {
+    const num = parseFloat(match[1])
+    const unit = match[2]
+    const multipliers: Record<string, number> = { '': 1, 'K': 1024, 'M': 1048576, 'G': 1073741824, 'T': 1099511627776 }
+    return String(Math.round(num * (multipliers[unit] || 1)))
+  }
+  // If it's already a plain number, return as-is
+  const num = parseFloat(trimmed)
+  return isNaN(num) ? '' : String(Math.round(num))
+}
+
+/**
+ * Format bytes back to human-readable shorthand for display in the input.
+ */
+function formatSizeDisplay(bytes: number | string | undefined): string {
+  if (bytes === undefined || bytes === '') return ''
+  const num = typeof bytes === 'string' ? parseInt(bytes, 10) : bytes
+  if (isNaN(num) || num === 0) return num === 0 ? '0' : ''
+  if (num >= 1073741824 && num % 1073741824 === 0) return `${num / 1073741824}G`
+  if (num >= 1048576 && num % 1048576 === 0) return `${num / 1048576}M`
+  if (num >= 1024 && num % 1024 === 0) return `${num / 1024}K`
+  return String(num)
+}
+
 // Convenience wrappers for template readability
 const updateSizeRange = (field: 'min' | 'max', value: string) =>
-  updateRange('standard', 'sizeRange', field, value, 'numeric')
+  updateRange('standard', 'sizeRange', field, parseSizeInput(value), 'numeric')
 
 const updateModifiedRange = (field: 'start' | 'end', value: string) =>
   updateRange('standard', 'modifiedRange', field, value, 'date')
