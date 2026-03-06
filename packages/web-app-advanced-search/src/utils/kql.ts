@@ -239,13 +239,13 @@ export function buildPhotoKQL(photo: SearchFilters['photo']): string[] {
   const parts: string[] = []
 
   if (photo.cameraMake) {
-    // Camera makes can have spaces (e.g., "FUJIFILM CORPORATION")
-    parts.push(`photo.cameramake:${wrapForSearch(photo.cameraMake, false)}`)
+    // Add wildcards so "Nikon" matches "NIKON CORPORATION" etc.
+    parts.push(`photo.cameramake:${wrapForSearch(photo.cameraMake, true)}`)
   }
 
   if (photo.cameraModel) {
-    // Camera models often have spaces (e.g., "EOS R5", "iPhone 14 Pro")
-    parts.push(`photo.cameramodel:${wrapForSearch(photo.cameraModel, false)}`)
+    // Add wildcards so partial model names match
+    parts.push(`photo.cameramodel:${wrapForSearch(photo.cameraModel, true)}`)
   }
 
   if (photo.takenDateRange) {
