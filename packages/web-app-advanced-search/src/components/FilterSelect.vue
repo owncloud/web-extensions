@@ -42,6 +42,7 @@
         <div class="oc-card-body oc-background-secondary oc-p-s">
           <div v-if="allowCustom" class="filter-select-custom">
             <input
+              :id="`filter-custom-${label.toLowerCase().replace(/\s+/g, '-')}`"
               ref="customInput"
               type="text"
               class="filter-select-custom-input"
