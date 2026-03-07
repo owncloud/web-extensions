@@ -10,7 +10,7 @@
       @keydown.enter="toggleExpanded"
       @keydown.space.prevent="toggleExpanded"
     >
-      <span class="stats-icon" aria-hidden="true">{{ expanded ? '▼' : '▶' }}</span>
+      <span class="oc-icon oc-icon-s stats-toggle-icon" :class="{ 'stats-toggle-icon-open': expanded }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span>
       <h4>{{ $gettext('Search Status') }}</h4>
       <span v-if="loading" class="loading-indicator" aria-live="polite">{{ $gettext('Loading...') }}</span>
     </div>
@@ -89,8 +89,9 @@
 
       <!-- Refresh Button -->
       <div class="stats-actions">
-        <button class="refresh-btn" :disabled="loading" @click="loadStats">
-          {{ loading ? $gettext('Loading...') : $gettext('Refresh Stats') }}
+        <button type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled" :disabled="loading" @click="loadStats">
+          <span class="oc-icon oc-icon-s oc-icon-passive" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.463 4.433A9.961 9.961 0 0 1 12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 0 0-11.196-7.328l-.341.76zm13.074 15.134A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12c0-2.136.67-4.116 1.81-5.74L7 12H4a8 8 0 0 0 11.196 7.328l.341-.76z" /></svg></span>
+          <span>{{ loading ? $gettext('Loading...') : $gettext('Refresh Stats') }}</span>
         </button>
       </div>
     </div>
@@ -128,7 +129,7 @@ interface OcsCapabilities {
   ocs?: {
     data?: {
       capabilities?: {
-        search?: { ocr?: boolean }
+        search?: { ocr?: boolean; property?: { content?: { enabled?: boolean } } }
         files?: { content_search?: { ocr?: boolean } }
       }
       version?: {
@@ -267,6 +268,10 @@ async function fetchCapabilities(serverUrl: string): Promise<void> {
       stats.ocrEnabled = caps.search.ocr === true
     } else if (caps?.files?.content_search?.ocr !== undefined) {
       stats.ocrEnabled = caps.files.content_search.ocr === true
+    } else if (caps?.search?.property?.content?.enabled === true) {
+      // oCIS doesn't expose an explicit OCR flag, but content search
+      // requires Tika which typically includes Tesseract OCR.
+      stats.ocrEnabled = true
     }
 
     const version = data?.ocs?.data?.version
@@ -389,9 +394,12 @@ async function loadStats(): Promise<void> {
   flex: 1;
 }
 
-.stats-icon {
-  font-size: 0.75rem;
-  color: var(--oc-color-text-muted, #666);
+.stats-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.stats-toggle-icon-open {
+  transform: rotate(90deg);
 }
 
 .loading-indicator {
@@ -446,11 +454,11 @@ async function loadStats(): Promise<void> {
 }
 
 .stat-value.enabled {
-  color: #2e7d32;
+  color: var(--oc-color-swatch-success-default, #2e7d32);
 }
 
 .stat-value.disabled {
-  color: #c62828;
+  color: var(--oc-color-swatch-danger-default, #c62828);
 }
 
 .stat-value.path {
@@ -509,23 +517,5 @@ async function loadStats(): Promise<void> {
   justify-content: flex-end;
 }
 
-.refresh-btn {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.refresh-btn:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
-.refresh-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
 
 </style>

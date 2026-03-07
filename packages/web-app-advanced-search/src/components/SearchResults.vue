@@ -18,27 +18,29 @@
       <div
         v-for="item in items"
         :key="item.id"
-        v-memo="[item.id, item.name, item.size, item.mdate]"
+        v-memo="[item.id, item.name, item.size, item.mdate, thumbnailVersion]"
         class="list-item"
         role="button"
         tabindex="0"
         @click="emit('item-click', item)"
         @keydown.enter="emit('item-click', item)"
       >
-        <span class="item-icon">{{ getIcon(item) }}</span>
+        <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="item-thumb" loading="lazy" />
+        <span v-else class="item-icon">{{ getIcon(item) }}</span>
         <div class="item-details">
           <span class="item-name">{{ item.name }}</span>
           <span class="item-path">{{ getPath(item) }}</span>
         </div>
         <span class="item-size">{{ formatBytes(item.size) }}</span>
-        <span class="item-date">{{ formatDate(item.mdate, undefined, getUserLocale()) }}</span>
+        <span class="item-date">{{ formatDate(item.mdate) }}</span>
         <button
-          class="item-menu-btn"
+          type="button"
+          class="oc-button-reset item-menu-btn"
           :title="$gettext('More actions')"
           :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
           @click.stop="emit('context-menu', $event, item)"
         >
-          ⋮
+          <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
         </button>
       </div>
     </div>
@@ -48,7 +50,7 @@
       <div
         v-for="item in items"
         :key="item.id"
-        v-memo="[item.id, item.name, item.mimeType]"
+        v-memo="[item.id, item.name, item.mimeType, thumbnailVersion]"
         class="grid-item"
         role="button"
         tabindex="0"
@@ -56,14 +58,16 @@
         @keydown.enter="emit('item-click', item)"
       >
         <div class="grid-thumbnail">
-          <span class="grid-icon">{{ getIcon(item) }}</span>
+          <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="grid-thumb-img" loading="lazy" />
+          <span v-else class="grid-icon">{{ getIcon(item) }}</span>
           <button
-            class="grid-menu-btn"
+            type="button"
+            class="oc-button-reset grid-menu-btn"
             :title="$gettext('More actions')"
             :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
             @click.stop="emit('context-menu', $event, item)"
           >
-            ⋮
+            <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
           </button>
         </div>
         <span class="grid-name">{{ item.name }}</span>
@@ -71,44 +75,45 @@
     </div>
 
     <!-- Table View -->
-    <table v-else-if="viewMode === 'table'" class="results-table">
+    <table v-else-if="viewMode === 'table'" class="oc-table oc-table-hover results-table">
       <thead>
         <tr>
-          <th>{{ $gettext('Name') }}</th>
-          <th>{{ $gettext('Path') }}</th>
-          <th>{{ $gettext('Type') }}</th>
-          <th>{{ $gettext('Size') }}</th>
-          <th>{{ $gettext('Modified') }}</th>
-          <th v-if="hasPhotoItems">{{ $gettext('Camera') }}</th>
-          <th v-if="hasPhotoItems">{{ $gettext('Date Taken') }}</th>
-          <th class="th-actions"></th>
+          <th class="oc-table-header-cell th-name th-sortable" @click="toggleSort('name')">{{ $gettext('Name') }}{{ sortIndicator('name') }}</th>
+          <th class="oc-table-header-cell th-path th-sortable" @click="toggleSort('path')">{{ $gettext('Path') }}{{ sortIndicator('path') }}</th>
+          <th class="oc-table-header-cell th-type th-sortable" @click="toggleSort('type')">{{ $gettext('Type') }}{{ sortIndicator('type') }}</th>
+          <th class="oc-table-header-cell th-size th-sortable" @click="toggleSort('size')">{{ $gettext('Size') }}{{ sortIndicator('size') }}</th>
+          <th class="oc-table-header-cell th-date th-sortable" @click="toggleSort('mdate')">{{ $gettext('Modified') }}{{ sortIndicator('mdate') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell th-camera th-sortable" @click="toggleSort('camera')">{{ $gettext('Camera') }}{{ sortIndicator('camera') }}</th>
+          <th v-if="hasPhotoItems" class="oc-table-header-cell th-date th-sortable" @click="toggleSort('taken')">{{ $gettext('Date Taken') }}{{ sortIndicator('taken') }}</th>
+          <th class="oc-table-header-cell th-actions"></th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="item in items"
+          v-for="item in sortedItems"
           :key="item.id"
-          v-memo="[item.id, item.name, item.mimeType, item.size, item.mdate, item.photo?.cameraMake, item.photo?.takenDateTime]"
           @click="emit('item-click', item)"
         >
-          <td class="cell-name">
-            <span class="item-icon">{{ getIcon(item) }}</span>
+          <td class="oc-table-cell cell-name">
+            <img v-if="isImageType(item) && itemThumbnail(item)" :src="itemThumbnail(item)" :alt="item.name || ''" class="table-thumb" loading="lazy" />
+            <span v-else class="item-icon">{{ getIcon(item) }}</span>
             {{ item.name }}
           </td>
-          <td class="cell-path">{{ getPath(item) }}</td>
-          <td>{{ item.mimeType || $gettext('folder') }}</td>
-          <td>{{ formatBytes(item.size) }}</td>
-          <td>{{ formatDate(item.mdate, undefined, getUserLocale()) }}</td>
-          <td v-if="hasPhotoItems">{{ getCameraInfo(item) }}</td>
-          <td v-if="hasPhotoItems">{{ getPhotoDate(item) }}</td>
-          <td class="cell-actions">
+          <td class="oc-table-cell cell-path" :title="getPath(item)">{{ getPath(item) }}</td>
+          <td class="oc-table-cell cell-type">{{ item.mimeType || $gettext('folder') }}</td>
+          <td class="oc-table-cell cell-size">{{ formatBytes(item.size) }}</td>
+          <td class="oc-table-cell cell-date">{{ formatDate(item.mdate) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell cell-camera">{{ getCameraInfo(item) }}</td>
+          <td v-if="hasPhotoItems" class="oc-table-cell cell-date">{{ getPhotoDate(item) }}</td>
+          <td class="oc-table-cell cell-actions">
             <button
-              class="item-menu-btn"
+              type="button"
+              class="oc-button-reset item-menu-btn"
               :title="$gettext('More actions')"
               :aria-label="$gettext('More actions for %{name}').replace('%{name}', item.name || '')"
               @click.stop="emit('context-menu', $event, item)"
             >
-              ⋮
+              <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 3C10.9 3 10 3.9 10 5C10 6.1 10.9 7 12 7C13.1 7 14 6.1 14 5C14 3.9 13.1 3 12 3ZM12 17C10.9 17 10 17.9 10 19C10 20.1 10.9 21 12 21C13.1 21 14 20.1 14 19C14 17.9 13.1 17 12 17ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10Z" /></svg>
             </button>
           </td>
         </tr>
@@ -118,17 +123,91 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
 
-const { $gettext, getUserLocale } = useTranslations()
+const { $gettext } = useTranslations()
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   items: SearchResource[]
   viewMode: ResultViewMode
-}>()
+  getThumbnailUrl?: (item: SearchResource) => string
+  /** Incremented when new thumbnails are loaded, triggers re-render */
+  thumbnailVersion?: number
+}>(), {
+  getThumbnailUrl: undefined,
+  thumbnailVersion: 0,
+})
+
+// Table sort state
+type SortField = 'name' | 'path' | 'type' | 'size' | 'mdate' | 'camera' | 'taken'
+const sortField = ref<SortField>('name')
+const sortDir = ref<'asc' | 'desc'>('asc')
+
+function toggleSort(field: SortField) {
+  if (sortField.value === field) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortField.value = field
+    sortDir.value = field === 'mdate' || field === 'taken' ? 'desc' : 'asc'
+  }
+}
+
+function sortIndicator(field: SortField): string {
+  if (sortField.value !== field) return ''
+  return sortDir.value === 'asc' ? ' \u25B2' : ' \u25BC'
+}
+
+const sortedItems = computed(() => {
+  if (props.viewMode !== 'table') return props.items
+  const items = [...props.items]
+  const dir = sortDir.value === 'asc' ? 1 : -1
+  const field = sortField.value
+
+  items.sort((a, b) => {
+    let va: string | number = ''
+    let vb: string | number = ''
+
+    switch (field) {
+      case 'name':
+        va = (a.name || '').toLowerCase()
+        vb = (b.name || '').toLowerCase()
+        break
+      case 'path':
+        va = (a.path || '').toLowerCase()
+        vb = (b.path || '').toLowerCase()
+        break
+      case 'type':
+        va = (a.mimeType || '').toLowerCase()
+        vb = (b.mimeType || '').toLowerCase()
+        break
+      case 'size':
+        va = typeof a.size === 'number' ? a.size : 0
+        vb = typeof b.size === 'number' ? b.size : 0
+        break
+      case 'mdate':
+        va = a.mdate ? new Date(a.mdate).getTime() : 0
+        vb = b.mdate ? new Date(b.mdate).getTime() : 0
+        break
+      case 'camera':
+        va = ((a.photo?.cameraMake || '') + ' ' + (a.photo?.cameraModel || '')).trim().toLowerCase()
+        vb = ((b.photo?.cameraMake || '') + ' ' + (b.photo?.cameraModel || '')).trim().toLowerCase()
+        break
+      case 'taken':
+        va = a.photo?.takenDateTime ? new Date(a.photo.takenDateTime).getTime() : 0
+        vb = b.photo?.takenDateTime ? new Date(b.photo.takenDateTime).getTime() : 0
+        break
+    }
+
+    if (va < vb) return -1 * dir
+    if (va > vb) return 1 * dir
+    return 0
+  })
+
+  return items
+})
 
 const emit = defineEmits<{
   (e: 'item-click', item: SearchResource): void
@@ -166,6 +245,23 @@ const hasPhotoItems = computed(() => {
 })
 
 // Helper functions
+
+/**
+ * Get thumbnail for an item. Returns cached blob URL or '' (triggers async fetch).
+ * Re-evaluated when thumbnailVersion prop changes (incremented by parent on cache update).
+ */
+function itemThumbnail(item: SearchResource): string {
+  if (!props.getThumbnailUrl) return ''
+  // Reference thumbnailVersion to establish reactivity (re-render on new thumbnails)
+  void props.thumbnailVersion
+  return props.getThumbnailUrl(item)
+}
+
+function isImageType(item: SearchResource): boolean {
+  const mime = item.mimeType || ''
+  return mime.startsWith('image/') || mime.startsWith('video/')
+}
+
 function getIcon(item: SearchResource): string {
   return getFileIcon(item.mimeType, item.isFolder || item.type === 'folder')
 }
@@ -187,7 +283,7 @@ function getCameraInfo(item: SearchResource): string {
 
 function getPhotoDate(item: SearchResource): string {
   if (!item.photo?.takenDateTime) return '—'
-  return formatDate(item.photo.takenDateTime, undefined, getUserLocale())
+  return formatDate(item.photo.takenDateTime)
 }
 </script>
 
@@ -218,6 +314,14 @@ function getPhotoDate(item: SearchResource): string {
 
 .item-icon {
   font-size: 1.25rem;
+}
+
+.item-thumb {
+  width: 2rem;
+  height: 2rem;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
 }
 
 .item-details {
@@ -281,6 +385,7 @@ function getPhotoDate(item: SearchResource): string {
 }
 
 .grid-thumbnail {
+  position: relative;
   width: 100px;
   height: 100px;
   display: flex;
@@ -291,7 +396,7 @@ function getPhotoDate(item: SearchResource): string {
   overflow: hidden;
 }
 
-.grid-thumbnail img {
+.grid-thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -314,50 +419,80 @@ function getPhotoDate(item: SearchResource): string {
 /* Table View */
 .results-table {
   width: 100%;
-  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .results-table th,
 .results-table td {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
   text-align: left;
-  border-bottom: 1px solid var(--oc-color-border, #eee);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .results-table th {
-  background: var(--oc-color-background-muted, #f9f9f9);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  color: var(--oc-color-text-muted, #666);
   position: sticky;
   top: 0;
+}
+
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.th-sortable:hover {
+  background: var(--oc-color-background-hover, #f5f5f5);
 }
 
 .results-table tr {
   cursor: pointer;
 }
 
-.results-table tr:hover {
-  background: var(--oc-color-background-hover, #f5f5f5);
-}
+/* Column widths — Name and Path flex, rest fixed */
+.th-name { width: 25%; }
+.th-path { width: auto; }  /* takes remaining space, truncates */
+.th-type { width: 120px; }
+.th-size { width: 70px; }
+.th-date { width: 95px; }
+.th-camera { width: 120px; }
+.th-actions { width: 40px; }
 
 .cell-name {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  overflow: hidden;
+  font-weight: 500;
 }
 
 .cell-name .item-icon {
   font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.table-thumb {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 
 .cell-path {
-  font-size: 0.8125rem;
   color: var(--oc-color-text-muted, #888);
-  max-width: 250px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.8125rem;
+}
+
+.cell-type {
+  font-size: 0.8125rem;
+  color: var(--oc-color-text-muted, #666);
+}
+
+.cell-size { text-align: right; font-size: 0.8125rem; }
+.cell-date { font-size: 0.8125rem; }
+.cell-camera {
+  font-size: 0.8125rem;
 }
 
 /* Menu button styling */
@@ -367,14 +502,16 @@ function getPhotoDate(item: SearchResource): string {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  background: transparent;
-  border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1.25rem;
   color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s, background 0.15s;
+}
+
+.item-menu-btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .list-item:hover .item-menu-btn,
@@ -387,11 +524,6 @@ function getPhotoDate(item: SearchResource): string {
   color: var(--oc-color-text-default, #333);
 }
 
-/* Grid menu button */
-.grid-thumbnail {
-  position: relative;
-}
-
 .grid-menu-btn {
   position: absolute;
   top: 4px;
@@ -402,14 +534,17 @@ function getPhotoDate(item: SearchResource): string {
   width: 1.75rem;
   height: 1.75rem;
   background: var(--oc-color-background-default, rgba(255, 255, 255, 0.9));
-  border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1rem;
   color: var(--oc-color-text-muted, #666);
   opacity: 0;
   transition: opacity 0.15s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.grid-menu-btn svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .grid-item:hover .grid-menu-btn {
