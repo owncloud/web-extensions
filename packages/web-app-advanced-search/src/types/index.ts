@@ -204,13 +204,14 @@ export const KNOWN_CAMERA_MAKES = [
   'Canon',
   'DJI',
   'Fujifilm',
+  'Google',
   'GoPro',
   'Leica',
   'Nikon',
   'Olympus',
   'Panasonic',
   'Pentax',
-  'samsung',
+  'Samsung',
   'Sony',
 ] as const
 
