@@ -182,6 +182,32 @@
           </select>
         </div>
 
+        <!-- Image Caption (AI-generated) -->
+        <div class="filter-row">
+          <label for="filter-caption">{{ $gettext('Image Caption') }}</label>
+          <input
+            id="filter-caption"
+            type="text"
+            :value="filters.photo.objectCaption || ''"
+            :placeholder="$gettext('e.g., a dog sitting on a beach')"
+            @input="emit('update:photo', { ...filters.photo, objectCaption: ($event.target as HTMLInputElement).value || undefined })"
+            @keyup.enter="emit('search')"
+          />
+        </div>
+
+        <!-- Object Detection Label -->
+        <div class="filter-row">
+          <label for="filter-object-label">{{ $gettext('Object Detection') }}</label>
+          <input
+            id="filter-object-label"
+            type="text"
+            :value="filters.photo.objectLabel || ''"
+            :placeholder="$gettext('e.g., dog, car, person')"
+            @input="emit('update:photo', { ...filters.photo, objectLabel: ($event.target as HTMLInputElement).value || undefined })"
+            @keyup.enter="emit('search')"
+          />
+        </div>
+
         <!-- Date Taken -->
         <div class="filter-row">
           <label for="filter-date-taken-start">{{ $gettext('Date Taken') }}</label>

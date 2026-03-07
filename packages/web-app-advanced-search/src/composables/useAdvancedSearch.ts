@@ -306,6 +306,26 @@ export function useAdvancedSearch() {
       })
     }
 
+    if (photo.objectCaption) {
+      filters.push({
+        id: 'objectCaption',
+        label: $gettext('Image Caption'),
+        field: 'objectCaption',
+        value: photo.objectCaption,
+        category: 'photo',
+      })
+    }
+
+    if (photo.objectLabel) {
+      filters.push({
+        id: 'objectLabel',
+        label: $gettext('Object Detection'),
+        field: 'objectLabel',
+        value: photo.objectLabel,
+        category: 'photo',
+      })
+    }
+
     if (photo.takenDateRange && (photo.takenDateRange.start || photo.takenDateRange.end)) {
       filters.push({
         id: 'takenDate',
@@ -518,6 +538,8 @@ export function useAdvancedSearch() {
     content: () => { state.filters.standard.content = undefined },
     cameraMake: () => { state.filters.photo.cameraMake = undefined },
     cameraModel: () => { state.filters.photo.cameraModel = undefined },
+    objectCaption: () => { state.filters.photo.objectCaption = undefined },
+    objectLabel: () => { state.filters.photo.objectLabel = undefined },
     takenDate: () => { state.filters.photo.takenDateRange = undefined },
     iso: () => { state.filters.photo.isoRange = undefined },
     fNumber: () => { state.filters.photo.fNumberRange = undefined },
@@ -783,6 +805,14 @@ export function useAdvancedSearch() {
         break
       case 'photo.orientation':
         state.filters.photo.orientation = parseInt(value, 10)
+        break
+      case 'objectcaption':
+      case 'objectcaptions':
+        state.filters.photo.objectCaption = value
+        break
+      case 'objectlabel':
+      case 'objectlabels':
+        state.filters.photo.objectLabel = value
         break
       default:
         // Unknown field - ignore silently
