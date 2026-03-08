@@ -90,6 +90,13 @@ describe('buildRangeQuery', () => {
   it('works with different field names', () => {
     expect(buildRangeQuery('photo.iso', { min: 100, max: 800 })).toBe('(photo.iso>=100 AND photo.iso<=800)')
   })
+
+  it('filters out NaN values', () => {
+    expect(buildRangeQuery('size', { min: NaN })).toBeNull()
+    expect(buildRangeQuery('size', { max: NaN })).toBeNull()
+    expect(buildRangeQuery('size', { min: NaN, max: 1000 })).toBe('size<=1000')
+    expect(buildRangeQuery('size', { min: 100, max: NaN })).toBe('size>=100')
+  })
 })
 
 describe('buildDateRangeQuery', () => {
