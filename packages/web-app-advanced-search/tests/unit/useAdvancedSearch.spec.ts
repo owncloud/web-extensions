@@ -86,14 +86,14 @@ describe('useAdvancedSearch', () => {
 
     it('builds query from photo filters', () => {
       search.state.filters.photo.cameraMake = 'Canon'
-      expect(search.kqlQuery.value).toBe('photo.cameramake:Canon')
+      expect(search.kqlQuery.value).toBe('photo.cameramake:*Canon*')
     })
 
     it('combines multiple filters with AND', () => {
       search.state.filters.term = 'photo'
       search.state.filters.standard.type = 'file'
       search.state.filters.photo.cameraMake = 'Nikon'
-      expect(search.kqlQuery.value).toBe('name:*photo* AND Type:1 AND photo.cameramake:Nikon')
+      expect(search.kqlQuery.value).toBe('name:*photo* AND Type:1 AND photo.cameramake:*Nikon*')
     })
   })
 

@@ -242,16 +242,16 @@ describe('buildPhotoKQL', () => {
     expect(buildPhotoKQL(emptyFilters)).toEqual([])
   })
 
-  it('builds camera make filter', () => {
-    expect(buildPhotoKQL({ cameraMake: 'Canon' })).toEqual(['photo.cameramake:Canon'])
+  it('builds camera make filter with wildcards', () => {
+    expect(buildPhotoKQL({ cameraMake: 'Canon' })).toEqual(['photo.cameramake:*Canon*'])
   })
 
-  it('builds camera model filter for single word', () => {
-    expect(buildPhotoKQL({ cameraModel: 'R5' })).toEqual(['photo.cameramodel:R5'])
+  it('builds camera model filter for single word with wildcards', () => {
+    expect(buildPhotoKQL({ cameraModel: 'R5' })).toEqual(['photo.cameramodel:*R5*'])
   })
 
-  it('builds camera model filter with spaces (quoted)', () => {
-    expect(buildPhotoKQL({ cameraModel: 'EOS R5' })).toEqual(['photo.cameramodel:"EOS R5"'])
+  it('builds camera model filter with spaces (quoted with wildcards)', () => {
+    expect(buildPhotoKQL({ cameraModel: 'EOS R5' })).toEqual(['photo.cameramodel:"*EOS R5*"'])
   })
 
   it('builds taken date range filter', () => {
@@ -288,7 +288,7 @@ describe('buildPhotoKQL', () => {
       isoRange: { min: 100, max: 400 },
     }
     expect(buildPhotoKQL(filters)).toEqual([
-      'photo.cameramake:Nikon',
+      'photo.cameramake:*Nikon*',
       '(photo.iso>=100 AND photo.iso<=400)',
     ])
   })
@@ -322,7 +322,7 @@ describe('buildKQL', () => {
       standard: { mediaType: 'image/*' },
       photo: { cameraMake: 'Canon' },
     }
-    expect(buildKQL(filters)).toBe('mediatype:image\\/* AND photo.cameramake:Canon')
+    expect(buildKQL(filters)).toBe('mediatype:image\\/* AND photo.cameramake:*Canon*')
   })
 
   it('builds complex query with multiple filters', () => {
@@ -339,7 +339,7 @@ describe('buildKQL', () => {
       },
     }
     expect(buildKQL(filters)).toBe(
-      'name:*sunset* AND Type:1 AND mediatype:image\\/* AND photo.cameramake:Canon AND photo.iso<=800'
+      'name:*sunset* AND Type:1 AND mediatype:image\\/* AND photo.cameramake:*Canon* AND photo.iso<=800'
     )
   })
 })
