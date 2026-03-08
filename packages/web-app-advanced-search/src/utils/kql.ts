@@ -62,13 +62,14 @@ export function buildRangeQuery(field: string, range: NumericRange): string | nu
   }
 
   const parts: string[] = []
-  if (range.min !== undefined) {
+  if (range.min !== undefined && !isNaN(range.min)) {
     parts.push(`${field}>=${range.min}`)
   }
-  if (range.max !== undefined) {
+  if (range.max !== undefined && !isNaN(range.max)) {
     parts.push(`${field}<=${range.max}`)
   }
 
+  if (parts.length === 0) return null
   // If both min and max, wrap in parentheses
   if (parts.length === 2) {
     return `(${parts.join(' AND ')})`
