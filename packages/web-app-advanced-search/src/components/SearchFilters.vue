@@ -403,8 +403,24 @@ const typeOptions = computed(() => [
   { value: 'folder', label: $gettext('Folders only') },
 ])
 
+const mediaTypeIconConfig: Record<string, { icon: string; color: string }> = {
+  '': { icon: 'resource-type-file', color: 'var(--oc-color-text-muted)' },
+  'image': { icon: 'resource-type-image', color: 'var(--oc-color-icon-image)' },
+  'video': { icon: 'resource-type-video', color: 'var(--oc-color-icon-video)' },
+  'audio': { icon: 'resource-type-audio', color: 'var(--oc-color-icon-audio)' },
+  'document': { icon: 'resource-type-document', color: 'var(--oc-color-icon-document)' },
+  'spreadsheet': { icon: 'resource-type-spreadsheet', color: 'var(--oc-color-icon-spreadsheet)' },
+  'presentation': { icon: 'resource-type-presentation', color: 'var(--oc-color-icon-presentation)' },
+  'pdf': { icon: 'resource-type-pdf', color: 'var(--oc-color-icon-pdf)' },
+  'archive': { icon: 'resource-type-archive', color: 'var(--oc-color-icon-archive)' },
+  'folder': { icon: 'resource-type-folder', color: 'var(--oc-color-icon-folder)' },
+}
+
 const mediaTypeOptions = computed(() =>
-  mediaTypes.map(mt => ({ value: mt.value, label: mt.label }))
+  mediaTypes.map(mt => {
+    const cfg = mediaTypeIconConfig[mt.value] || mediaTypeIconConfig['']
+    return { value: mt.value, label: mt.label, icon: cfg.icon, iconColor: cfg.color }
+  })
 )
 
 const cameraMakeOptions = computed(() => [
