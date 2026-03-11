@@ -9,20 +9,19 @@
       :aria-label="ariaLabel || label"
       @click.stop="toggle"
     >
-      <OcIcon v-if="hasValue" name="check" size="xsmall" class="filter-chip-check" />
+      <oc-icon v-if="hasValue" name="check" size="xsmall" class="filter-chip-check" />
       <span class="filter-chip-label">{{ displayLabel }}</span>
-      <OcIcon name="arrow-down-s" size="xsmall" class="filter-chip-arrow" />
+      <oc-icon name="arrow-down-s" size="xsmall" class="filter-chip-arrow" />
     </button>
-    <OcButton
+    <button
       v-if="hasValue"
-      appearance="raw"
-      variation="passive"
+      type="button"
       class="filter-chip-clear"
-      :aria-label="$gettext('Clear')"
+      aria-label="Clear"
       @click.stop="clear"
     >
-      <OcIcon name="close" size="xsmall" />
-    </OcButton>
+      <oc-icon name="close" size="xsmall" />
+    </button>
     <Teleport to="body">
       <div
         v-if="isOpen"
@@ -44,31 +43,28 @@
               @keyup.enter="applyCustom"
               @click.stop
             />
-            <OcButton
+            <button
               v-if="customText"
-              variation="primary"
-              appearance="filled"
-              size="small"
-              class="filter-select-custom-apply"
+              type="button"
+              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled filter-select-custom-apply"
               @click.stop="applyCustom"
             >
               <span>OK</span>
-            </OcButton>
+            </button>
           </div>
           <ul class="oc-list oc-my-rm oc-mx-rm">
             <li v-for="opt in filteredOptions" :key="String(opt.value)" class="oc-my-xs">
-              <OcButton
-                appearance="raw"
-                variation="passive"
+              <button
+                type="button"
                 role="option"
-                class="filter-select-item"
+                class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-flex oc-flex-middle oc-p-xs filter-select-item"
                 :class="{ 'filter-select-item-selected': String(opt.value) === String(modelValue) }"
                 :aria-selected="String(opt.value) === String(modelValue)"
                 @click.stop="select(opt.value)"
               >
                 <span class="oc-flex oc-flex-middle">
                   <span class="filter-select-check oc-mr-s">
-                    <OcIcon
+                    <oc-icon
                       v-if="String(opt.value) === String(modelValue)"
                       name="check"
                       size="xsmall"
@@ -77,7 +73,7 @@
                   </span>
                   <span>{{ opt.label }}</span>
                 </span>
-              </OcButton>
+              </button>
             </li>
           </ul>
         </div>
@@ -88,7 +84,6 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
-import { OcButton, OcIcon } from '@ownclouders/design-system/components'
 import { useTranslations } from '../composables/useTranslations'
 
 const { $gettext } = useTranslations()

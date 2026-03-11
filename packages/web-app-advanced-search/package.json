@@ -12,7 +12,6 @@
     "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
   },
   "dependencies": {
-    "@ownclouders/design-system": "^12.3.1",
     "@ownclouders/web-client": "^12.3.1",
     "@ownclouders/web-pkg": "^12.3.1"
   },

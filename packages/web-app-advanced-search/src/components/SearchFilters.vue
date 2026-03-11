@@ -12,7 +12,7 @@
         @keydown.enter="showStandard = !showStandard"
         @keydown.space.prevent="showStandard = !showStandard"
       >
-        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" /> {{ $gettext('Standard Filters') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" /> {{ $gettext('Standard Filters') }}
       </h4>
       
       <div v-if="showStandard" id="standard-filters" class="filter-group">
@@ -87,6 +87,7 @@
             <input
               id="filter-modified-start"
               type="date"
+              max="9999-12-31"
               :value="filters.standard.modifiedRange?.start || ''"
               @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
@@ -95,6 +96,7 @@
             <input
               id="filter-modified-end"
               type="date"
+              max="9999-12-31"
               :value="filters.standard.modifiedRange?.end || ''"
               :aria-label="$gettext('Modified date end')"
               @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
@@ -143,7 +145,7 @@
         @keydown.enter="showPhoto = !showPhoto"
         @keydown.space.prevent="showPhoto = !showPhoto"
       >
-        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" /> {{ $gettext('Photo / EXIF Filters') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" /> {{ $gettext('Photo / EXIF Filters') }}
       </h4>
 
       <div v-if="showPhoto" id="photo-filters" class="filter-group">
@@ -187,6 +189,7 @@
             <input
               id="filter-date-taken-start"
               type="date"
+              max="9999-12-31"
               :value="filters.photo.takenDateRange?.start || ''"
               @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
@@ -195,6 +198,7 @@
             <input
               id="filter-date-taken-end"
               type="date"
+              max="9999-12-31"
               :value="filters.photo.takenDateRange?.end || ''"
               :aria-label="$gettext('Date taken end')"
               @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
@@ -300,7 +304,7 @@
         @keydown.enter="showKQL = !showKQL"
         @keydown.space.prevent="showKQL = !showKQL"
       >
-        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" /> {{ $gettext('KQL Query') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" /> {{ $gettext('KQL Query') }}
       </h4>
 
       <div v-if="showKQL" id="kql-section" class="kql-group">
@@ -349,7 +353,6 @@ import { ref, computed, watch } from 'vue'
 import type { SearchFilters } from '../types'
 import { KNOWN_CAMERA_MAKES, COMMON_MEDIA_TYPES } from '../types'
 import { useTranslations } from '../composables/useTranslations'
-import { OcIcon } from '@ownclouders/design-system/components'
 import FilterSelect from './FilterSelect.vue'
 
 const { $gettext } = useTranslations()
@@ -496,22 +499,6 @@ function updateRange(
   }
 
   const updated = { ...current, [field]: parsedValue }
-
-  // Validate date ranges: auto-swap if start > end
-  // Only swap when both dates are fully formed (YYYY-MM-DD) to avoid
-  // scrambling during manual year typing (e.g., "2010" typed as "0002" mid-edit)
-  if (type === 'date' && updated.start && updated.end) {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-    if (dateRegex.test(updated.start as string) && dateRegex.test(updated.end as string)) {
-      const startDate = new Date(updated.start as string)
-      const endDate = new Date(updated.end as string)
-      if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && startDate > endDate) {
-        const temp = updated.start
-        updated.start = updated.end
-        updated.end = temp
-      }
-    }
-  }
 
   if (category === 'standard') {
     emit('update:standard', { ...props.filters.standard, [rangeKey]: updated })
