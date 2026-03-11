@@ -1,8 +1,8 @@
 <template>
-  <OcTag rounded class="filter-chip" :class="categoryClass" type="span">
+  <oc-tag rounded class="filter-chip" :class="categoryClass" type="span">
     <span class="chip-label">{{ filter.label }}:</span>
     <span class="chip-value">{{ filter.value }}</span>
-    <OcButton
+    <oc-button
       appearance="raw"
       variation="passive"
       size="small"
@@ -10,14 +10,13 @@
       :aria-label="$gettext('Remove filter') + ': ' + filter.label + ' ' + filter.value"
       @click="emit('remove')"
     >
-      <OcIcon name="close" size="xsmall" />
-    </OcButton>
-  </OcTag>
+      <oc-icon name="close" size="xsmall" />
+    </oc-button>
+  </oc-tag>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { OcButton, OcIcon, OcTag } from '@ownclouders/design-system/components'
 import type { ActiveFilter } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 
