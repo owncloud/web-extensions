@@ -12,7 +12,7 @@
         @keydown.enter="showStandard = !showStandard"
         @keydown.space.prevent="showStandard = !showStandard"
       >
-        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('Standard Filters') }}
+        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" /> {{ $gettext('Standard Filters') }}
       </h4>
       
       <div v-if="showStandard" id="standard-filters" class="filter-group">
@@ -88,7 +88,6 @@
               id="filter-modified-start"
               type="date"
               :value="filters.standard.modifiedRange?.start || ''"
-              @input="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
               @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -98,7 +97,6 @@
               type="date"
               :value="filters.standard.modifiedRange?.end || ''"
               :aria-label="$gettext('Modified date end')"
-              @input="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
               @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -145,7 +143,7 @@
         @keydown.enter="showPhoto = !showPhoto"
         @keydown.space.prevent="showPhoto = !showPhoto"
       >
-        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('Photo / EXIF Filters') }}
+        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" /> {{ $gettext('Photo / EXIF Filters') }}
       </h4>
 
       <div v-if="showPhoto" id="photo-filters" class="filter-group">
@@ -190,7 +188,6 @@
               id="filter-date-taken-start"
               type="date"
               :value="filters.photo.takenDateRange?.start || ''"
-              @input="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
               @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -200,7 +197,6 @@
               type="date"
               :value="filters.photo.takenDateRange?.end || ''"
               :aria-label="$gettext('Date taken end')"
-              @input="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
               @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
@@ -304,7 +300,7 @@
         @keydown.enter="showKQL = !showKQL"
         @keydown.space.prevent="showKQL = !showKQL"
       >
-        <span class="oc-icon oc-icon-s section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.172 12L8.222 7.05L9.636 5.636L16 12L9.636 18.364L8.222 16.95L13.172 12Z" /></svg></span> {{ $gettext('KQL Query') }}
+        <OcIcon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" /> {{ $gettext('KQL Query') }}
       </h4>
 
       <div v-if="showKQL" id="kql-section" class="kql-group">
@@ -353,6 +349,7 @@ import { ref, computed, watch } from 'vue'
 import type { SearchFilters } from '../types'
 import { KNOWN_CAMERA_MAKES, COMMON_MEDIA_TYPES } from '../types'
 import { useTranslations } from '../composables/useTranslations'
+import { OcIcon } from '@ownclouders/design-system/components'
 import FilterSelect from './FilterSelect.vue'
 
 const { $gettext } = useTranslations()

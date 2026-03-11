@@ -1,19 +1,23 @@
 <template>
-  <span class="oc-tag oc-tag-rounded filter-chip" :class="categoryClass" role="group">
+  <OcTag rounded class="filter-chip" :class="categoryClass" type="span">
     <span class="chip-label">{{ filter.label }}:</span>
     <span class="chip-value">{{ filter.value }}</span>
-    <button
-      class="oc-button-reset chip-remove"
+    <OcButton
+      appearance="raw"
+      variation="passive"
+      size="small"
+      class="chip-remove"
       :aria-label="$gettext('Remove filter') + ': ' + filter.label + ' ' + filter.value"
       @click="emit('remove')"
     >
-      <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 10.586L16.95 5.636L18.364 7.05L13.414 12L18.364 16.95L16.95 18.364L12 13.414L7.05 18.364L5.636 16.95L10.586 12L5.636 7.05L7.05 5.636L12 10.586Z" /></svg>
-    </button>
-  </span>
+      <OcIcon name="close" size="xsmall" />
+    </OcButton>
+  </OcTag>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { OcButton, OcIcon, OcTag } from '@ownclouders/design-system/components'
 import type { ActiveFilter } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 
@@ -78,14 +82,8 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
   opacity: 0.7;
 }
 
-.chip-remove svg {
-  width: 0.75rem;
-  height: 0.75rem;
-}
-
 .chip-remove:hover {
   background: rgba(0, 0, 0, 0.1);
   opacity: 1;
 }
-
 </style>

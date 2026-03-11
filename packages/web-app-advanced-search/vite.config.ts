@@ -7,6 +7,10 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
+      external: [
+        '@ownclouders/design-system',
+        '@ownclouders/design-system/components'
+      ],
       output: {
         entryFileNames: 'advanced-search.js'
       }

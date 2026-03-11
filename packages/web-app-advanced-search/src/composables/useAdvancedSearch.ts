@@ -504,6 +504,7 @@ export function useAdvancedSearch() {
     state.filters = createEmptyFilters()
     state.results = null
     state.kqlQuery = ''
+    state.error = null
   }
 
   // Filter registry: maps filter ID to reset action

@@ -9,29 +9,20 @@
       :aria-label="ariaLabel || label"
       @click.stop="toggle"
     >
-      <span v-if="hasValue" class="filter-chip-check">
-        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z" />
-        </svg>
-      </span>
+      <OcIcon v-if="hasValue" name="check" size="xsmall" class="filter-chip-check" />
       <span class="filter-chip-label">{{ displayLabel }}</span>
-      <span class="filter-chip-arrow">
-        <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <path d="M12 16L6 10H18L12 16Z" />
-        </svg>
-      </span>
+      <OcIcon name="arrow-down-s" size="xsmall" class="filter-chip-arrow" />
     </button>
-    <button
+    <OcButton
       v-if="hasValue"
-      type="button"
+      appearance="raw"
+      variation="passive"
       class="filter-chip-clear"
-      aria-label="Clear"
+      :aria-label="$gettext('Clear')"
       @click.stop="clear"
     >
-      <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-        <path d="M12 10.5858L6.70711 5.29289L5.29289 6.70711L10.5858 12L5.29289 17.2929L6.70711 18.7071L12 13.4142L17.2929 18.7071L18.7071 17.2929L13.4142 12L18.7071 6.70711L17.2929 5.29289L12 10.5858Z" />
-      </svg>
-    </button>
+      <OcIcon name="close" size="xsmall" />
+    </OcButton>
     <Teleport to="body">
       <div
         v-if="isOpen"
@@ -53,34 +44,40 @@
               @keyup.enter="applyCustom"
               @click.stop
             />
-            <button
+            <OcButton
               v-if="customText"
-              type="button"
-              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled filter-select-custom-apply"
+              variation="primary"
+              appearance="filled"
+              size="small"
+              class="filter-select-custom-apply"
               @click.stop="applyCustom"
             >
               <span>OK</span>
-            </button>
+            </OcButton>
           </div>
           <ul class="oc-list oc-my-rm oc-mx-rm">
             <li v-for="opt in filteredOptions" :key="String(opt.value)" class="oc-my-xs">
-              <button
-                type="button"
+              <OcButton
+                appearance="raw"
+                variation="passive"
                 role="option"
-                class="oc-button oc-rounded oc-button-m oc-button-justify-content-space-between oc-button-gap-m oc-button-passive oc-button-passive-raw oc-flex oc-flex-middle oc-p-xs filter-select-item"
+                class="filter-select-item"
                 :class="{ 'filter-select-item-selected': String(opt.value) === String(modelValue) }"
                 :aria-selected="String(opt.value) === String(modelValue)"
                 @click.stop="select(opt.value)"
               >
                 <span class="oc-flex oc-flex-middle">
                   <span class="filter-select-check oc-mr-s">
-                    <svg v-if="String(opt.value) === String(modelValue)" width="16" height="16" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M9.9997 15.1709L19.1921 5.97852L20.6063 7.39273L9.9997 17.9993L3.63574 11.6354L5.04996 10.2212L9.9997 15.1709Z" />
-                    </svg>
+                    <OcIcon
+                      v-if="String(opt.value) === String(modelValue)"
+                      name="check"
+                      size="xsmall"
+                      variation="primary"
+                    />
                   </span>
                   <span>{{ opt.label }}</span>
                 </span>
-              </button>
+              </OcButton>
             </li>
           </ul>
         </div>
@@ -91,6 +88,10 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { OcButton, OcIcon } from '@ownclouders/design-system/components'
+import { useTranslations } from '../composables/useTranslations'
+
+const { $gettext } = useTranslations()
 
 const props = withDefaults(defineProps<{
   modelValue: string | number
@@ -210,8 +211,8 @@ watch(isOpen, (open) => {
         document.removeEventListener('click', handler, true)
       }
     }
-    // Slight delay to avoid catching the opening click
-    setTimeout(() => document.addEventListener('click', handler, true), 0)
+    // Use nextTick to avoid catching the opening click
+    nextTick(() => document.addEventListener('click', handler, true))
   }
 })
 
@@ -256,29 +257,6 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside, true))
   border-radius: 100px 0 0 100px;
 }
 
-.filter-chip-check {
-  display: inline-flex;
-  width: 14px;
-  height: 14px;
-}
-
-.filter-chip-check svg {
-  width: 14px;
-  height: 14px;
-  fill: var(--oc-color-text-inverse, #fff);
-}
-
-.filter-chip-arrow {
-  display: inline-flex;
-  width: 14px;
-  height: 14px;
-}
-
-.filter-chip-arrow svg {
-  width: 14px;
-  height: 14px;
-}
-
 .filter-chip-clear {
   display: inline-flex;
   align-items: center;
@@ -290,12 +268,6 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside, true))
   color: var(--oc-color-text-inverse, #fff);
   cursor: pointer;
   margin-left: 1px;
-}
-
-.filter-chip-clear svg {
-  width: 14px;
-  height: 14px;
-  fill: var(--oc-color-text-inverse, #fff);
 }
 
 .filter-chip-clear:hover {
@@ -366,9 +338,5 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside, true))
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-}
-
-.filter-select-check svg {
-  color: var(--oc-color-swatch-primary-default, #0070c0);
 }
 </style>

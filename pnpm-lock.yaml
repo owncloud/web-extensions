@@ -63,6 +63,9 @@ importers:
 
   packages/web-app-advanced-search:
     dependencies:
+      '@ownclouders/design-system':
+        specifier: ^12.3.1
+        version: 12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/web-client':
         specifier: ^12.3.1
         version: 12.3.1
@@ -884,11 +887,6 @@ packages:
 
   '@one-ini/wasm@0.1.1':
     resolution: {integrity: sha512-XuySG1E38YScSJoMlqovLru4KTUNSjgVTIjyh7qMX6aNN5HY5Ct5LhRJdxO79JtTzKfzV/bnWpz+zquYrISsvw==}
-
-  '@ownclouders/design-system@12.3.0':
-    resolution: {integrity: sha512-O+eSPbepbiZuuKrXtOrAq7eBHBP8jabTd4vj/QvHXXvM5XEFTxYRf//6NO7PLRZDdTLVUs+rz1A43rZLj5bS8w==}
-    peerDependencies:
-      vue: ^3.5.26
 
   '@ownclouders/design-system@12.3.1':
     resolution: {integrity: sha512-988dZK5vCIJJufbk57hWFOAgmNewvVHHdaQuJf27oYwVXONnI9s28/ndMiBBA3pGnMn0UThd8a6e0t4ZverKZw==}
@@ -4659,27 +4657,6 @@ snapshots:
 
   '@one-ini/wasm@0.1.1': {}
 
-  '@ownclouders/design-system@12.3.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))':
-    dependencies:
-      '@emoji-mart/data': 1.2.1
-      '@popperjs/core': 2.11.8
-      deepmerge: 4.3.1
-      emoji-mart: 5.6.0
-      focus-trap: 7.8.0
-      focus-trap-vue: 4.1.0(focus-trap@7.8.0)(vue@3.5.22(typescript@5.9.3))
-      fuse.js: 7.1.0
-      lodash-es: 4.17.23
-      luxon: 3.7.2
-      tippy.js: 6.3.7
-      vue: 3.5.22(typescript@5.9.3)
-      vue-inline-svg: 4.0.1(vue@3.5.22(typescript@5.9.3))
-      vue-router: 4.6.4(vue@3.5.22(typescript@5.9.3))
-      vue-select: 4.0.0-beta.6(vue@3.5.22(typescript@5.9.3))
-      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
-      webfontloader: 1.6.28
-    transitivePeerDependencies:
-      - '@vue/compiler-sfc'
-
   '@ownclouders/design-system@12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))':
     dependencies:
       '@emoji-mart/data': 1.2.1
@@ -4780,7 +4757,7 @@ snapshots:
       '@casl/vue': 2.2.6(@casl/ability@6.8.0)(vue@3.5.22(typescript@5.9.3))
       '@chevrotain/regexp-to-ast': 11.1.1
       '@microsoft/fetch-event-source': 2.0.1
-      '@ownclouders/design-system': 12.3.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      '@ownclouders/design-system': 12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/web-client': 12.3.1
       '@pdf-lib/fontkit': 1.1.1
       '@sentry/vue': 10.36.0(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))
@@ -4890,7 +4867,7 @@ snapshots:
     dependencies:
       '@casl/ability': 6.8.0
       '@casl/vue': 2.2.6(@casl/ability@6.8.0)(vue@3.5.22(typescript@5.9.3))
-      '@ownclouders/design-system': 12.3.0(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
+      '@ownclouders/design-system': 12.3.1(@vue/compiler-sfc@3.5.22)(vue@3.5.22(typescript@5.9.3))
       '@ownclouders/web-client': 12.3.1
       '@ownclouders/web-pkg': 12.3.0(@vue/compiler-sfc@3.5.22)(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
       '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3)))
