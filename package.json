@@ -26,7 +26,7 @@
     "prettier": "3.6.2",
     "ts-node": "^10.9.2",
     "typescript": "5.9.3",
-    "vite": "7.1.11",
+    "vite": "8.0.0",
     "vitest": "4.0.16",
     "vitest-mock-extended": "3.1.0",
     "vue-tsc": "3.1.0",
