@@ -7,6 +7,7 @@ This guide helps you to create new extensions. It highlights important prerequis
    * [General Information](#general-information)
    * [Environmental Prerequisites](#environmental-prerequisites)
    * [Web-Extension Prerequisites](#web-extension-prerequisites)
+   * [The Design System](#the-design-system)
    * [Linting and Typescript Checks](#linting-and-typescript-checks)
    * [Testing the App](#testing-the-app)
    * [ocis_full Deployment Example](#ocis_full-deployment-example)
@@ -34,7 +35,7 @@ If the local branch becomes corrupted and needs to be reset, resynced or rebased
 
 ```bash
 git checkout main
-git pull --rebase origin/main
+git pull --rebase origin main
 git checkout <your-local-branch>
 git reset --hard origin/main
 git merge <remote-branch>
@@ -52,21 +53,72 @@ New web-extensions must be placed inside the `packages` folder and be prefixed w
 
 - Add the new web-extension to the `APPS` variable in the `.drone.star` file.
 - Add the `dist` folder of the web-extension to the list of volume mounts in the `docker-compose.yml` file in the `ocis` service section.
-- If the web-extension requires additional external docker images, they must be added to the `docker-compose.yml` file.
+- If the web-extension requires additional external docker images, they must be added to the `docker-compose.yml` file for testing.
 - Add any changes to content security policies, if required, to `dev/docker/csp.yaml`.
 - Follow the structure of files and folders of other web-extensions.
 - Provide a README file for the web-extension.
-- Use the actual stable tag of web In the `dependencies` and `devDependencies` section of the `package.json` file.\
+- Use the actual stable tag of web In the `dependencies` and `devDependencies` section of the `package.json` file, for details see below.\
   This tag must be updated on new ocis production releases, see the [RELEASE_WORKFLOW](./RELEASE_WORKFLOW.md) documentation.
 - Post creating the `package.json` file or on changes, run from the repo-root `pnpm install`.\
   To avoid rare issues, delete the `pnpm-lock.json` file before running `pnpm install`.
 - If texts are printed to the webUI:
   - Texts must be translatable. Use `l10n` and `gettext` to do so.
   - Use other web-extensions as template for the `l10n` folder.
-  - On merge, the resource to translate is available on [Transifex](https://app.transifex.com/owncloud-org/owncloud-web/translate/#de).\
+  - On merge, the resource to translate or changes to source strings are available on [Transifex](https://app.transifex.com/owncloud-org/owncloud-web/translate/#de).\
     Note that an account is required and you need to be promoted as translator for defined languages, otherwise, you will not see the data.
+  - Note that translations made will be downloaded and committed via an automated nightly sync. Changes are available with the next app-release.
 - Web provides themes (light and dark). Check that the web-extension supports the themes.
 - Provide tests
+
+Template **package.json** file for the web-app:
+
+- These sections and their dependencies are required at minimum. Replace variables and versions updates accordingly.
+  ```json
+  {
+    "name": "<extension name>",
+    "version": "x.y.z",
+    "private": true,
+    "description": "<place description here",
+    "license": "AGPL-3.0",
+    "type": "module",
+    "scripts": {
+      "build": "pnpm vite build",
+      "build:w": "pnpm vite build --watch --mode development",
+      "check:types": "vue-tsc --noEmit",
+      "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+    },
+    "dependencies": {
+      "@ownclouders/web-client": "^12.3.1",
+      "@ownclouders/web-pkg": "^12.3.1"
+    },
+    "devDependencies": {
+      "@ownclouders/extension-sdk": "^12.3.1",
+      "@ownclouders/web-test-helpers": "^12.3.1",
+      "vue": "^3.4.21",
+      "vue3-gettext": "^2.4.0"
+    }
+  }
+  ```
+
+- You can find more details on the respective dependencies here:
+  - [web-client](https://github.com/owncloud/web/tree/master/packages/web-client)
+  - [web-pkg](https://github.com/owncloud/web/tree/master/packages/web-pkg)
+  - [extension-sdk](https://github.com/owncloud/web/tree/master/packages/extension-sdk)
+  - [web-test-helpers](https://github.com/owncloud/web/tree/master/packages/web-test-helpers)
+  - [design-system](https://github.com/owncloud/web/tree/master/packages/design-system)\
+    The design-system is added via the `web-pkg` dependency automatically.\
+    The provided link includes further information and documentation.
+
+## The Design System
+
+Web provides a design system that makes it easy to reuse and configure the provided designs, such as icons, bottons etc. You must use the design system and can only use your e.g. own SVG icons if there is absolutely no matching one. Otherwise, the PR will not be approved!
+
+Example:
+```vue
+<oc-icon name="pencil" size="small" fill-type="line" />
+```
+
+For a list of available icons see [src/assets/icons](https://github.com/owncloud/web/tree/master/packages/design-system/src/assets/icons). Please note that due to the size of the list, you may need to view it via a browser on a local clone.
 
 ## Linting and Typescript Checks
 

@@ -60,11 +60,13 @@ packages/web-app-unzip/package.json
 
 **Apps in this Repository:**
 
+- `packages/web-app-advanced-search/`
 - `packages/web-app-cast/`
 - `packages/web-app-draw-io/`
 - `packages/web-app-external-sites/`
 - `packages/web-app-importer/`
 - `packages/web-app-json-viewer/`
+- `packages/web-app-photo-addon/`
 - `packages/web-app-progress-bars/`
 - `packages/web-app-unzip/`
 
@@ -103,11 +105,13 @@ Create one tag per app that was bumped, all pointing to the **same** merge commi
 
 ```bash
 # Create tags for each app (use the version you set in step 2)
+git tag advanced-search-v0.2.0 2524913
 git tag cast-v0.3.3 2524913
 git tag draw-io-v0.3.3 2524913
 git tag external-sites-v0.3.3 2524913
 git tag importer-v0.3.2 2524913
 git tag json-viewer-v0.3.3 2524913
+git tag photo-addon-v0.2.0 2524913
 git tag progress-bars-v0.3.3 2524913
 git tag unzip-v0.4.3 2524913
 ```
@@ -123,11 +127,13 @@ git push origin --tags
 If CI does not trigger for all tags, re-push each tag **individually** to ensure Drone CI webhooks trigger properly:
 
 ```bash
+git push origin --delete advanced-search-v0.2.0 && git push origin advanced-search-v0.2.0
 git push origin --delete cast-v0.3.3 && git push origin cast-v0.3.3
 git push origin --delete draw-io-v0.3.3 && git push origin draw-io-v0.3.3
 git push origin --delete external-sites-v0.3.3 && git push origin external-sites-v0.3.3
 git push origin --delete importer-v0.3.2 && git push origin importer-v0.3.2
 git push origin --delete json-viewer-v0.3.3 && git push origin json-viewer-v0.3.3
+git push origin --delete photo-addon-v0.2.0 && git push origin photo-addon-v0.2.0
 git push origin --delete progress-bars-v0.3.3 && git push origin progress-bars-v0.3.3
 git push origin --delete unzip-v0.4.3 && git push origin unzip-v0.4.3
 ```
