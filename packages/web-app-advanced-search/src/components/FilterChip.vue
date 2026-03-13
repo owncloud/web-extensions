@@ -1,15 +1,18 @@
 <template>
-  <span class="filter-chip" :class="categoryClass" role="group">
+  <oc-tag rounded class="filter-chip" :class="categoryClass" type="span">
     <span class="chip-label">{{ filter.label }}:</span>
     <span class="chip-value">{{ filter.value }}</span>
-    <button
+    <oc-button
+      appearance="raw"
+      variation="passive"
+      size="small"
       class="chip-remove"
       :aria-label="$gettext('Remove filter') + ': ' + filter.label + ' ' + filter.value"
       @click="emit('remove')"
     >
-      <span aria-hidden="true">×</span>
-    </button>
-  </span>
+      <oc-icon name="close" size="xsmall" />
+    </oc-button>
+  </oc-tag>
 </template>
 
 <script setup lang="ts">
@@ -32,11 +35,8 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
 
 <style scoped>
 .filter-chip {
-  display: inline-flex;
-  align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border-radius: 16px;
   font-size: 0.8125rem;
   background: var(--oc-color-background-muted, #e8e8e8);
   color: var(--oc-color-text-default, #333);
@@ -49,12 +49,12 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
 
 .chip-photo {
   background: rgba(156, 39, 176, 0.15);
-  color: #9c27b0;
+  color: #6a1b9a;
 }
 
 .chip-text {
   background: rgba(46, 125, 50, 0.15);
-  color: #2e7d32;
+  color: var(--oc-color-swatch-success-default, #2e7d32);
 }
 
 .chip-label {
@@ -75,12 +75,8 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
   width: 1.25rem;
   height: 1.25rem;
   margin-left: 0.25rem;
-  background: transparent;
-  border: none;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 1rem;
-  line-height: 1;
   color: inherit;
   opacity: 0.7;
 }
@@ -89,5 +85,4 @@ const categoryClass = computed(() => `chip-${props.filter.category}`)
   background: rgba(0, 0, 0, 0.1);
   opacity: 1;
 }
-
 </style>

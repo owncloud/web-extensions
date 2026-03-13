@@ -12,7 +12,7 @@
         @keydown.enter="showStandard = !showStandard"
         @keydown.space.prevent="showStandard = !showStandard"
       >
-        <span aria-hidden="true">{{ showStandard ? '▼' : '▶' }}</span> {{ $gettext('Standard Filters') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showStandard }" /> {{ $gettext('Standard Filters') }}
       </h4>
       
       <div v-if="showStandard" id="standard-filters" class="filter-group">
@@ -31,30 +31,28 @@
 
         <!-- Type -->
         <div class="filter-row">
-          <label for="filter-type">{{ $gettext('Type') }}</label>
-          <select
-            id="filter-type"
-            :value="filters.standard.type || ''"
-            @change="emit('update:standard', { ...filters.standard, type: ($event.target as HTMLSelectElement).value as '' | 'file' | 'folder' })"
-          >
-            <option value="">{{ $gettext('All') }}</option>
-            <option value="file">{{ $gettext('Files only') }}</option>
-            <option value="folder">{{ $gettext('Folders only') }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.standard.type || ''"
+            :options="typeOptions"
+            :label="$gettext('Type')"
+            default-value=""
+            :aria-label="$gettext('File type filter')"
+            @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, type: (v as '' | 'file' | 'folder') })"
+          />
         </div>
 
         <!-- Media Type -->
         <div class="filter-row">
-          <label for="filter-media-type">{{ $gettext('Media Type') }}</label>
-          <select
-            id="filter-media-type"
-            :value="filters.standard.mediaType || ''"
-            @change="emit('update:standard', { ...filters.standard, mediaType: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option v-for="mt in mediaTypes" :key="mt.value" :value="mt.value">
-              {{ mt.label }}
-            </option>
-          </select>
+          <FilterSelect
+            :model-value="filters.standard.mediaType || ''"
+            :options="mediaTypeOptions"
+            :label="$gettext('Media Type')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select media type')"
+            :aria-label="$gettext('Media type filter')"
+            @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, mediaType: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Size Range -->
@@ -63,22 +61,20 @@
           <div class="range-inputs">
             <input
               id="filter-size-min"
-              type="number"
-              min="0"
-              :value="filters.standard.sizeRange?.min || ''"
-              :placeholder="$gettext('Min (bytes)')"
-              @input="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
+              type="text"
+              :value="formatSizeDisplay(filters.standard.sizeRange?.min)"
+              :placeholder="$gettext('Min (e.g. 1M)')"
+              @change="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
             <input
               id="filter-size-max"
-              type="number"
-              min="0"
-              :value="filters.standard.sizeRange?.max || ''"
-              :placeholder="$gettext('Max (bytes)')"
+              type="text"
+              :value="formatSizeDisplay(filters.standard.sizeRange?.max)"
+              :placeholder="$gettext('Max (e.g. 10M)')"
               :aria-label="$gettext('Size maximum')"
-              @input="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
+              @change="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -91,17 +87,19 @@
             <input
               id="filter-modified-start"
               type="date"
+              max="9999-12-31"
               :value="filters.standard.modifiedRange?.start || ''"
-              @input="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
+              @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
             <input
               id="filter-modified-end"
               type="date"
+              max="9999-12-31"
               :value="filters.standard.modifiedRange?.end || ''"
               :aria-label="$gettext('Modified date end')"
-              @input="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
+              @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -147,7 +145,7 @@
         @keydown.enter="showPhoto = !showPhoto"
         @keydown.space.prevent="showPhoto = !showPhoto"
       >
-        <span aria-hidden="true">{{ showPhoto ? '▼' : '▶' }}</span> {{ $gettext('Photo / EXIF Filters') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showPhoto }" /> {{ $gettext('Photo / EXIF Filters') }}
       </h4>
 
       <div v-if="showPhoto" id="photo-filters" class="filter-group">
@@ -158,28 +156,30 @@
 
         <!-- Camera Make -->
         <div class="filter-row">
-          <label for="filter-camera-make">{{ $gettext('Camera Make') }}</label>
-          <select
-            id="filter-camera-make"
-            :value="filters.photo.cameraMake || ''"
-            @change="emit('update:photo', { ...filters.photo, cameraMake: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option value="">{{ $gettext('Any') }}</option>
-            <option v-for="make in cameraMakes" :key="make" :value="make">{{ make }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.photo.cameraMake || ''"
+            :options="cameraMakeOptions"
+            :label="$gettext('Camera Make')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select camera make')"
+            :aria-label="$gettext('Camera make filter')"
+            @update:model-value="(v: string | number) => emit('update:photo', { ...filters.photo, cameraMake: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Camera Model -->
         <div class="filter-row">
-          <label for="filter-camera-model">{{ $gettext('Camera Model') }}</label>
-          <select
-            id="filter-camera-model"
-            :value="filters.photo.cameraModel || ''"
-            @change="emit('update:photo', { ...filters.photo, cameraModel: ($event.target as HTMLSelectElement).value || undefined })"
-          >
-            <option value="">{{ $gettext('Any') }}</option>
-            <option v-for="model in cameraModels" :key="model" :value="model">{{ model }}</option>
-          </select>
+          <FilterSelect
+            :model-value="filters.photo.cameraModel || ''"
+            :options="cameraModelOptions"
+            :label="$gettext('Camera Model')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select camera model')"
+            :aria-label="$gettext('Camera model filter')"
+            @update:model-value="(v: string | number) => emit('update:photo', { ...filters.photo, cameraModel: (String(v) || undefined) })"
+          />
         </div>
 
         <!-- Date Taken -->
@@ -189,17 +189,19 @@
             <input
               id="filter-date-taken-start"
               type="date"
+              max="9999-12-31"
               :value="filters.photo.takenDateRange?.start || ''"
-              @input="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
+              @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
             <span>{{ $gettext('to') }}</span>
             <input
               id="filter-date-taken-end"
               type="date"
+              max="9999-12-31"
               :value="filters.photo.takenDateRange?.end || ''"
               :aria-label="$gettext('Date taken end')"
-              @input="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
+              @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
               @keyup.enter="emit('search')"
             />
           </div>
@@ -302,7 +304,7 @@
         @keydown.enter="showKQL = !showKQL"
         @keydown.space.prevent="showKQL = !showKQL"
       >
-        <span aria-hidden="true">{{ showKQL ? '▼' : '▶' }}</span> {{ $gettext('KQL Query') }}
+        <oc-icon name="arrow-right-s" size="small" class="section-toggle-icon" :class="{ 'section-toggle-icon-open': showKQL }" /> {{ $gettext('KQL Query') }}
       </h4>
 
       <div v-if="showKQL" id="kql-section" class="kql-group">
@@ -318,11 +320,12 @@
             @keyup.enter="emit('search')"
           />
           <button
-            class="kql-apply-btn"
+            type="button"
+            class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled"
             :title="$gettext('Parse KQL and populate filters')"
             @click="emit('apply-kql')"
           >
-            ↑ {{ $gettext('Apply to Filters') }}
+            <span>{{ $gettext('Apply to Filters') }}</span>
           </button>
         </div>
         <p class="kql-hint">
@@ -350,6 +353,7 @@ import { ref, computed, watch } from 'vue'
 import type { SearchFilters } from '../types'
 import { KNOWN_CAMERA_MAKES, COMMON_MEDIA_TYPES } from '../types'
 import { useTranslations } from '../composables/useTranslations'
+import FilterSelect from './FilterSelect.vue'
 
 const { $gettext } = useTranslations()
 
@@ -391,6 +395,43 @@ const cameraModels = computed(() => {
 })
 
 const mediaTypes = COMMON_MEDIA_TYPES
+
+// FilterSelect option arrays
+const typeOptions = computed(() => [
+  { value: '', label: $gettext('All') },
+  { value: 'file', label: $gettext('Files only') },
+  { value: 'folder', label: $gettext('Folders only') },
+])
+
+const mediaTypeIconConfig: Record<string, { icon: string; color: string }> = {
+  '': { icon: 'resource-type-file', color: 'var(--oc-color-text-muted)' },
+  'image': { icon: 'resource-type-image', color: 'var(--oc-color-icon-image)' },
+  'video': { icon: 'resource-type-video', color: 'var(--oc-color-icon-video)' },
+  'audio': { icon: 'resource-type-audio', color: 'var(--oc-color-icon-audio)' },
+  'document': { icon: 'resource-type-document', color: 'var(--oc-color-icon-document)' },
+  'spreadsheet': { icon: 'resource-type-spreadsheet', color: 'var(--oc-color-icon-spreadsheet)' },
+  'presentation': { icon: 'resource-type-presentation', color: 'var(--oc-color-icon-presentation)' },
+  'pdf': { icon: 'resource-type-pdf', color: 'var(--oc-color-icon-pdf)' },
+  'archive': { icon: 'resource-type-archive', color: 'var(--oc-color-icon-archive)' },
+  'folder': { icon: 'resource-type-folder', color: 'var(--oc-color-icon-folder)' },
+}
+
+const mediaTypeOptions = computed(() =>
+  mediaTypes.map(mt => {
+    const cfg = mediaTypeIconConfig[mt.value] || mediaTypeIconConfig['']
+    return { value: mt.value, label: mt.label, icon: cfg.icon, iconColor: cfg.color }
+  })
+)
+
+const cameraMakeOptions = computed(() => [
+  { value: '', label: $gettext('Any') },
+  ...cameraMakes.value.map(make => ({ value: make, label: make })),
+])
+
+const cameraModelOptions = computed(() => [
+  { value: '', label: $gettext('Any') },
+  ...cameraModels.value.map(model => ({ value: model, label: model })),
+])
 
 // Fetch camera makes and models when photo section is expanded
 // Check loadingPhotoData to prevent duplicate concurrent requests
@@ -475,18 +516,6 @@ function updateRange(
 
   const updated = { ...current, [field]: parsedValue }
 
-  // Validate date ranges: auto-swap if start > end
-  if (type === 'date' && updated.start && updated.end) {
-    const startDate = new Date(updated.start as string)
-    const endDate = new Date(updated.end as string)
-    if (startDate > endDate) {
-      // Swap the values
-      const temp = updated.start
-      updated.start = updated.end
-      updated.end = temp
-    }
-  }
-
   if (category === 'standard') {
     emit('update:standard', { ...props.filters.standard, [rangeKey]: updated })
   } else {
@@ -494,9 +523,41 @@ function updateRange(
   }
 }
 
+/**
+ * Parse human-readable size input (e.g., "1M", "500K", "2G") into bytes.
+ * Falls back to plain number parsing for raw byte values.
+ */
+function parseSizeInput(value: string): string {
+  const trimmed = value.trim().toUpperCase()
+  if (!trimmed) return ''
+  const match = trimmed.match(/^(\d+(?:\.\d+)?)\s*([KMGT]?)B?$/i)
+  if (match) {
+    const num = parseFloat(match[1])
+    const unit = match[2]
+    const multipliers: Record<string, number> = { '': 1, 'K': 1024, 'M': 1048576, 'G': 1073741824, 'T': 1099511627776 }
+    return String(Math.round(num * (multipliers[unit] || 1)))
+  }
+  // If it's already a plain number, return as-is
+  const num = parseFloat(trimmed)
+  return isNaN(num) ? '' : String(Math.round(num))
+}
+
+/**
+ * Format bytes back to human-readable shorthand for display in the input.
+ */
+function formatSizeDisplay(bytes: number | string | undefined): string {
+  if (bytes === undefined || bytes === '') return ''
+  const num = typeof bytes === 'string' ? parseInt(bytes, 10) : bytes
+  if (isNaN(num) || num === 0) return num === 0 ? '0' : ''
+  if (num >= 1073741824 && num % 1073741824 === 0) return `${num / 1073741824}G`
+  if (num >= 1048576 && num % 1048576 === 0) return `${num / 1048576}M`
+  if (num >= 1024 && num % 1024 === 0) return `${num / 1024}K`
+  return String(num)
+}
+
 // Convenience wrappers for template readability
 const updateSizeRange = (field: 'min' | 'max', value: string) =>
-  updateRange('standard', 'sizeRange', field, value, 'numeric')
+  updateRange('standard', 'sizeRange', field, parseSizeInput(value), 'numeric')
 
 const updateModifiedRange = (field: 'start' | 'end', value: string) =>
   updateRange('standard', 'modifiedRange', field, value, 'date')
@@ -538,6 +599,17 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   color: var(--oc-color-text-default, #333);
   cursor: pointer;
   user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.section-toggle-icon {
+  transition: transform 0.2s ease;
+}
+
+.section-toggle-icon-open {
+  transform: rotate(90deg);
 }
 
 .section-title:hover {
@@ -562,25 +634,16 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   color: var(--oc-color-text-muted, #666);
 }
 
-.filter-row input,
-.filter-row select {
+.filter-row input {
   padding: 0.5rem;
   border: 1px solid var(--oc-color-border, #ddd);
   color: inherit;
   border-radius: 4px;
   font-size: 0.875rem;
-}
-
-.filter-row input {
   background: var(--oc-color-background-default, #fff);
 }
 
-.filter-row select {
-  background: var(--oc-color-background-default, #fff);
-}
-
-.filter-row input:focus,
-.filter-row select:focus {
+.filter-row input:focus {
   outline: none;
   border-color: var(--oc-color-primary, #0066cc);
 }
@@ -629,21 +692,6 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
   border-color: var(--oc-color-primary, #0066cc);
 }
 
-.kql-apply-btn {
-  padding: 0.5rem 0.75rem;
-  font-size: 0.8125rem;
-  background: var(--oc-color-primary, #0066cc);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.kql-apply-btn:hover {
-  background: var(--oc-color-primary-hover, #0055aa);
-}
-
 .kql-hint {
   margin: 0;
   font-size: 0.75rem;
@@ -653,10 +701,10 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 .photo-data-error {
   grid-column: 1 / -1;
   padding: 0.5rem 0.75rem;
-  background: #fff3cd;
-  border: 1px solid #ffc107;
+  background: var(--oc-color-swatch-warning-muted, #fff3cd);
+  border: 1px solid var(--oc-color-swatch-warning-default, #ffc107);
   border-radius: 4px;
-  color: #856404;
+  color: var(--oc-color-swatch-warning-default, #856404);
   font-size: 0.8125rem;
 }
 

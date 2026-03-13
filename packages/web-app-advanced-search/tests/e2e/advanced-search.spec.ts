@@ -25,8 +25,8 @@ test.describe('Advanced Search App', () => {
   })
 
   test('should have filter panel toggle', async ({ page }) => {
-    // Verify toggle button exists
-    const toggleBtn = page.locator('.toggle-filters-btn')
+    // Verify toggle button exists (the "Advanced" button toggles the filters panel)
+    const toggleBtn = page.locator('button:has-text("Advanced")')
     await expect(toggleBtn).toBeVisible()
 
     // Filters should be visible by default
@@ -128,9 +128,10 @@ test.describe('Filter Panel', () => {
     await expect(photoFilters.first()).toBeVisible({ timeout: 10000 })
   })
 
-  test('should have media type dropdown', async ({ page }) => {
-    const mediaTypeSelect = page.locator('select, [data-testid="media-type-select"]').first()
-    await expect(mediaTypeSelect).toBeVisible({ timeout: 10000 })
+  test('should have media type filter', async ({ page }) => {
+    // Media Type uses an oc-filter-chip component
+    const mediaTypeChip = page.locator('.oc-filter-chip-button:has-text("Media Type")')
+    await expect(mediaTypeChip).toBeVisible({ timeout: 10000 })
   })
 
   test('should have KQL query input', async ({ page }) => {
@@ -152,8 +153,8 @@ test.describe('View Modes', () => {
     const hasResults = await resultsHeader.isVisible().catch(() => false)
 
     if (hasResults) {
-      const listViewBtn = page.locator('.view-btn').first()
-      await expect(listViewBtn).toBeVisible()
+      const viewBtn = page.locator('.item-inline-filter-option').first()
+      await expect(viewBtn).toBeVisible()
     }
   })
 
@@ -162,7 +163,7 @@ test.describe('View Modes', () => {
     const hasResults = await resultsHeader.isVisible().catch(() => false)
 
     if (hasResults) {
-      const viewBtns = page.locator('.view-btn')
+      const viewBtns = page.locator('.item-inline-filter-option')
       const count = await viewBtns.count()
 
       if (count >= 2) {
@@ -170,7 +171,7 @@ test.describe('View Modes', () => {
         await viewBtns.nth(1).click()
 
         // The clicked button should now be active
-        await expect(viewBtns.nth(1)).toHaveClass(/active/)
+        await expect(viewBtns.nth(1)).toHaveClass(/item-inline-filter-option-selected/)
       }
     }
   })
