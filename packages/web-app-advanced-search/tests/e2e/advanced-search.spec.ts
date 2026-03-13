@@ -129,8 +129,8 @@ test.describe('Filter Panel', () => {
   })
 
   test('should have media type filter', async ({ page }) => {
-    // Media Type uses a FilterSelect chip component, not a native <select>
-    const mediaTypeChip = page.locator('.filter-chip-btn:has-text("Media Type")')
+    // Media Type uses an oc-filter-chip component
+    const mediaTypeChip = page.locator('.oc-filter-chip-button:has-text("Media Type")')
     await expect(mediaTypeChip).toBeVisible({ timeout: 10000 })
   })
 
