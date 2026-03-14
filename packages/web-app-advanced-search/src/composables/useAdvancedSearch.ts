@@ -586,6 +586,25 @@ export function useAdvancedSearch() {
   }
 
   /**
+   * Fetch all tags from the oCIS Graph API.
+   * Endpoint: GET /graph/v1.0/extensions/org.libregraph/tags
+   * Returns: { value: string[] }
+   */
+  async function fetchTags(): Promise<string[]> {
+    try {
+      const serverUrl = (configStore.serverUrl || '').replace(/\/$/, '')
+      const response = await clientService.httpAuthenticated.get(
+        `${serverUrl}/graph/v1.0/extensions/org.libregraph/tags`
+      )
+      const data = response.data as { value?: string[] }
+      return (data.value || []).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    } catch (err) {
+      console.error('[useAdvancedSearch] Failed to fetch tags:', err)
+      return []
+    }
+  }
+
+  /**
    * Set KQL query directly (for manual editing)
    */
   function setKqlQuery(query: string): void {
@@ -913,5 +932,6 @@ export function useAdvancedSearch() {
     parseKqlToFilters,
     fetchCameraMakes,
     fetchCameraModels,
+    fetchTags,
   }
 }

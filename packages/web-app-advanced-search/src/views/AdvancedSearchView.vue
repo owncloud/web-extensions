@@ -73,6 +73,7 @@
         :filters="state.filters"
         :fetch-camera-makes="fetchCameraMakes"
         :fetch-camera-models="fetchCameraModels"
+        :fetch-tags="fetchTags"
         :kql-query="kqlQuery"
         @update:standard="updateStandardFilters"
         @update:photo="updatePhotoFilters"
@@ -304,6 +305,7 @@ const {
   parseKqlToFilters,
   fetchCameraMakes,
   fetchCameraModels,
+  fetchTags,
 } = useAdvancedSearch()
 
 const {
