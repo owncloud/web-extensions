@@ -32,7 +32,7 @@
           <span class="item-path">{{ getPath(item) }}</span>
         </div>
         <span class="item-size">{{ formatBytes(item.size) }}</span>
-        <span class="item-date">{{ formatDate(item.mdate) }}</span>
+        <span class="item-date">{{ formatDate(item.mdate, userLocale) }}</span>
         <button
           type="button"
           class="oc-button-reset item-menu-btn"
@@ -102,7 +102,7 @@
           <td class="oc-table-cell cell-path" :title="getPath(item)">{{ getPath(item) }}</td>
           <td class="oc-table-cell cell-type">{{ item.mimeType || $gettext('folder') }}</td>
           <td class="oc-table-cell cell-size">{{ formatBytes(item.size) }}</td>
-          <td class="oc-table-cell cell-date">{{ formatDate(item.mdate) }}</td>
+          <td class="oc-table-cell cell-date">{{ formatDate(item.mdate, userLocale) }}</td>
           <td v-if="hasPhotoItems" class="oc-table-cell cell-camera">{{ getCameraInfo(item) }}</td>
           <td v-if="hasPhotoItems" class="oc-table-cell cell-date">{{ getPhotoDate(item) }}</td>
           <td class="oc-table-cell cell-actions">
@@ -128,7 +128,8 @@ import type { SearchResource, ResultViewMode } from '../types'
 import { useTranslations } from '../composables/useTranslations'
 import { formatBytes, formatDate, getFileIcon } from '../utils/format'
 
-const { $gettext } = useTranslations()
+const { $gettext, getUserLocale } = useTranslations()
+const userLocale = getUserLocale()
 
 const props = withDefaults(defineProps<{
   items: SearchResource[]
@@ -283,7 +284,7 @@ function getCameraInfo(item: SearchResource): string {
 
 function getPhotoDate(item: SearchResource): string {
   if (!item.photo?.takenDateTime) return '—'
-  return formatDate(item.photo.takenDateTime)
+  return formatDate(item.photo.takenDateTime, userLocale)
 }
 </script>
 
