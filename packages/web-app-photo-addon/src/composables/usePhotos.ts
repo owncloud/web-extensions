@@ -269,7 +269,8 @@ export function usePhotos() {
   /**
    * Format date key for display based on mode
    */
-  function formatDateKey(dateKey: string, mode: GroupMode): string {
+  function formatDateKey(dateKey: string, mode: GroupMode, locale?: string): string {
+    const loc = locale || undefined
     const today = new Date()
     const yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - 1)
@@ -280,13 +281,13 @@ export function usePhotos() {
       case 'month': {
         const [year, month] = dateKey.split('-').map(Number)
         const date = new Date(year, month - 1, 1)
-        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })
+        return date.toLocaleDateString(loc, { year: 'numeric', month: 'long' })
       }
       case 'week': {
         const [year, weekPart] = dateKey.split('-W')
         const weekNum = parseInt(weekPart)
         const { start: weekStart, end: weekEnd } = getWeekDateRange(parseInt(year), weekNum)
-        return `${weekStart.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`
+        return `${weekStart.toLocaleDateString(loc, { month: 'short', day: 'numeric' })} - ${weekEnd.toLocaleDateString(loc, { month: 'short', day: 'numeric', year: 'numeric' })}`
       }
       case 'day':
       default: {
@@ -294,7 +295,7 @@ export function usePhotos() {
         const date = new Date(year, month - 1, day)
         if (date.toDateString() === today.toDateString()) return 'Today'
         if (date.toDateString() === yesterday.toDateString()) return 'Yesterday'
-        return date.toLocaleDateString(undefined, {
+        return date.toLocaleDateString(loc, {
           weekday: 'long',
           year: 'numeric',
           month: 'long',

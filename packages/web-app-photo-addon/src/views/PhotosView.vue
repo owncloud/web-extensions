@@ -224,7 +224,8 @@ const {
 } = usePhotos()
 
 // Initialize translations
-const { $gettext, getMonthNames } = useTranslations()
+const { $gettext, getUserLocale, getMonthNames } = useTranslations()
+const userLocale = getUserLocale()
 
 const clientService = useClientService()
 const spacesStore = useSpacesStore()
@@ -850,7 +851,7 @@ function formatDateHeader(dateKey: string): string {
     startDate.setDate(jan1.getDate() + (weekNum - 1) * 7 - jan1.getDay() + 1)
     const endDate = new Date(startDate)
     endDate.setDate(startDate.getDate() + 6)
-    return `${startDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`
+    return `${startDate.toLocaleDateString(userLocale, { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString(userLocale, { month: 'short', day: 'numeric', year: 'numeric' })}`
   }
 
   const parts = dateKey.split('-')
@@ -861,7 +862,7 @@ function formatDateHeader(dateKey: string): string {
   if (parts.length === 2) {
     // Month: 2026-01
     const date = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, 1)
-    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long' })
+    return date.toLocaleDateString(userLocale, { year: 'numeric', month: 'long' })
   }
 
   // Full date: 2026-01-11
@@ -870,7 +871,7 @@ function formatDateHeader(dateKey: string): string {
   if (date.toDateString() === today.toDateString()) return $gettext('Today')
   if (date.toDateString() === yesterday.toDateString()) return $gettext('Yesterday')
 
-  return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+  return date.toLocaleDateString(userLocale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 }
 
 // Handle date filter change - reload photos starting from selected month
