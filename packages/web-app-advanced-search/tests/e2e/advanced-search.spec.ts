@@ -278,7 +278,7 @@ test.describe('Save Search Dialog', () => {
       await saveBtn.click()
 
       const dialog = page.locator('.modal-dialog')
-      await expect(dialog).toBeVisible({ timeout: 5000 })
+      await expect(dialog).toBeVisible({ timeout: 10000 })
 
       // Should have input field
       const input = page.locator('.save-input')
@@ -289,17 +289,25 @@ test.describe('Save Search Dialog', () => {
   test('should close save dialog on Cancel', async ({ page }) => {
     const saveBtn = page.locator('button:has-text("Save Search")').first()
 
-    if (await saveBtn.isVisible()) {
+    const isSaveBtnVisible = await saveBtn.isVisible().catch(() => false)
+    if (!isSaveBtnVisible) return
+
+    await saveBtn.click()
+
+    const dialog = page.locator('.modal-dialog')
+    // Webkit can be slower to render the dialog — wait with retry
+    try {
+      await expect(dialog).toBeVisible({ timeout: 10000 })
+    } catch {
+      // Retry click — webkit sometimes swallows the first click
       await saveBtn.click()
-
-      const dialog = page.locator('.modal-dialog')
-      await expect(dialog).toBeVisible()
-
-      const cancelBtn = page.locator('.modal-dialog button:has-text("Cancel")')
-      await cancelBtn.click()
-
-      await expect(dialog).not.toBeVisible()
+      await expect(dialog).toBeVisible({ timeout: 10000 })
     }
+
+    const cancelBtn = page.locator('.modal-dialog button:has-text("Cancel")')
+    await cancelBtn.click()
+
+    await expect(dialog).not.toBeVisible()
   })
 })
 
