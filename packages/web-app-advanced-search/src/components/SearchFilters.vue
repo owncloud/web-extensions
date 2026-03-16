@@ -182,8 +182,8 @@
           />
         </div>
 
-        <!-- Image Caption (AI-generated) -->
-        <div class="filter-row">
+        <!-- Image Caption (AI-generated) — only shown when backend has caption data -->
+        <div v-if="captionSearchAvailable" class="filter-row">
           <label for="filter-caption">{{ $gettext('Image Caption') }}</label>
           <input
             id="filter-caption"
@@ -195,8 +195,8 @@
           />
         </div>
 
-        <!-- Object Detection Label -->
-        <div class="filter-row">
+        <!-- Object Detection Label — only shown when backend has caption data -->
+        <div v-if="captionSearchAvailable" class="filter-row">
           <label for="filter-object-label">{{ $gettext('Object Detection') }}</label>
           <input
             id="filter-object-label"
@@ -387,6 +387,7 @@ const props = defineProps<{
   filters: SearchFilters
   fetchCameraMakes?: () => Promise<string[]>
   fetchCameraModels?: () => Promise<string[]>
+  captionSearchAvailable?: boolean
   kqlQuery?: string
 }>()
 
