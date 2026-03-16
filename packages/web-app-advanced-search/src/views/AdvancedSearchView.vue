@@ -73,6 +73,7 @@
         :filters="state.filters"
         :fetch-camera-makes="fetchCameraMakes"
         :fetch-camera-models="fetchCameraModels"
+        :caption-search-available="captionSearchAvailable"
         :kql-query="kqlQuery"
         @update:standard="updateStandardFilters"
         @update:photo="updatePhotoFilters"
@@ -293,6 +294,7 @@ const {
   state,
   kqlQuery,
   activeFilters,
+  captionSearchAvailable,
   executeSearch,
   loadMore,
   clearFilters,
@@ -304,6 +306,7 @@ const {
   parseKqlToFilters,
   fetchCameraMakes,
   fetchCameraModels,
+  probeCaptionSupport,
 } = useAdvancedSearch()
 
 const {
@@ -631,6 +634,9 @@ function syncColorScheme() {
 // Load saved query if route param present
 onMounted(() => {
   syncColorScheme()
+
+  // Probe whether caption/label search is available (non-blocking)
+  probeCaptionSupport()
 
   if (props.queryId) {
     const query = getQuery(props.queryId)

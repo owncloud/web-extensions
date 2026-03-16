@@ -160,6 +160,9 @@ export function useAdvancedSearch() {
   // Page size for pagination
   const pageSize = ref(100)
 
+  // Whether the backend has caption/label data indexed (probed at startup)
+  const captionSearchAvailable = ref(false)
+
   // Request timeout in milliseconds (30 seconds)
   const REQUEST_TIMEOUT_MS = 30000
 
@@ -615,6 +618,48 @@ export function useAdvancedSearch() {
   }
 
   /**
+   * Probe whether the backend has caption/label data indexed.
+   * Fires a single lightweight search for objectCaption:* with limit 1.
+   * If any result comes back, the caption filters are shown to the user.
+   */
+  async function probeCaptionSupport(): Promise<void> {
+    try {
+      const serverUrl = (configStore.serverUrl || '').replace(/\/$/, '')
+      const spaces = spacesStore.spaces as SpaceResource[]
+      const personalSpace = spaces.find((s: SpaceResource) => s.driveType === 'personal') || spaces[0]
+      if (!personalSpace) return
+
+      const spaceId = personalSpace.id
+      const searchBody = `<?xml version="1.0" encoding="UTF-8"?>
+<oc:search-files xmlns:oc="http://owncloud.org/ns" xmlns:d="DAV:">
+  <oc:search>
+    <oc:pattern>${escapeXML('objectCaption:*')}</oc:pattern>
+    <oc:limit>1</oc:limit>
+  </oc:search>
+  <d:prop>
+    <oc:fileid/>
+  </d:prop>
+</oc:search-files>`
+
+      const response = await clientService.httpAuthenticated.request({
+        method: 'REPORT',
+        url: `${serverUrl}/dav/spaces/${encodeURIComponent(spaceId)}`,
+        headers: { 'Content-Type': 'application/xml' },
+        data: searchBody,
+      })
+
+      const xmlText = typeof response.data === 'string' ? response.data : new XMLSerializer().serializeToString(response.data)
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(xmlText, 'application/xml')
+      const responses = doc.getElementsByTagNameNS('DAV:', 'response')
+      captionSearchAvailable.value = responses.length > 0
+    } catch {
+      // If probe fails, keep filters hidden
+      captionSearchAvailable.value = false
+    }
+  }
+
+  /**
    * Maximum recursion depth for KQL parsing.
    * Prevents stack overflow from maliciously crafted or malformed nested queries.
    * Value of 10 is generous for legitimate queries (rarely >3 levels deep).
@@ -924,6 +969,7 @@ export function useAdvancedSearch() {
     // State
     state,
     pageSize,
+    captionSearchAvailable,
 
     // Computed
     kqlQuery: buildKQLQuery,
@@ -943,5 +989,6 @@ export function useAdvancedSearch() {
     parseKqlToFilters,
     fetchCameraMakes,
     fetchCameraModels,
+    probeCaptionSupport,
   }
 }
