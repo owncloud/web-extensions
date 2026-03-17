@@ -49,7 +49,7 @@
                 @click.stop
               />
               <div v-if="opt.icon">
-                <oc-icon :name="opt.icon" :color="opt.iconColor" size="large" />
+                <oc-icon :name="opt.icon" :color="opt.iconColor" size="small" />
               </div>
               <div class="oc-text-truncate oc-ml-s">
                 <span>{{ opt.label }}</span>

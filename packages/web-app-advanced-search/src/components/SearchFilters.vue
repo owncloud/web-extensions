@@ -107,14 +107,15 @@
 
         <!-- Tags -->
         <div class="filter-row">
-          <label for="filter-tags">{{ $gettext('Tags') }}</label>
-          <input
-            id="filter-tags"
-            type="text"
-            :value="filters.standard.tags || ''"
-            :placeholder="$gettext('Comma-separated tags')"
-            @input="emit('update:standard', { ...filters.standard, tags: ($event.target as HTMLInputElement).value || undefined })"
-            @keyup.enter="emit('search')"
+          <FilterSelect
+            :model-value="filters.standard.tags || ''"
+            :options="tagOptions"
+            :label="$gettext('Tags')"
+            default-value=""
+            allow-custom
+            :custom-placeholder="$gettext('Type or select tag')"
+            :aria-label="$gettext('Tags filter')"
+            @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, tags: (String(v) || undefined) })"
           />
         </div>
 
@@ -375,7 +376,7 @@
   to access .value property.
 -->
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import type { SearchFilters } from '../types'
 import { KNOWN_CAMERA_MAKES, COMMON_MEDIA_TYPES } from '../types'
 import { useTranslations } from '../composables/useTranslations'
@@ -388,6 +389,7 @@ const props = defineProps<{
   fetchCameraMakes?: () => Promise<string[]>
   fetchCameraModels?: () => Promise<string[]>
   captionSearchAvailable?: boolean
+  fetchTags?: () => Promise<string[]>
   kqlQuery?: string
 }>()
 
@@ -403,6 +405,10 @@ const emit = defineEmits<{
 const showStandard = ref(true)
 const showPhoto = ref(false)
 const showKQL = ref(true)
+
+// Tags from Graph API
+const discoveredTags = ref<string[]>([])
+const loadingTags = ref(false)
 
 // Camera makes/models from search index
 const discoveredCameraMakes = ref<string[]>([])
@@ -450,6 +456,11 @@ const mediaTypeOptions = computed(() =>
   })
 )
 
+const tagOptions = computed(() => [
+  { value: '', label: $gettext('Any'), icon: 'price-tag-3', iconColor: 'var(--oc-color-text-muted)' },
+  ...discoveredTags.value.map(tag => ({ value: tag, label: tag, icon: 'price-tag-3', iconColor: 'var(--oc-color-swatch-primary-default)' })),
+])
+
 const cameraMakeOptions = computed(() => [
   { value: '', label: $gettext('Any') },
   ...cameraMakes.value.map(make => ({ value: make, label: make })),
@@ -494,6 +505,20 @@ watch(showPhoto, async (isShown) => {
       photoDataError.value = 'Failed to load camera data. Autocomplete may be limited.'
     } finally {
       loadingPhotoData.value = false
+    }
+  }
+})
+
+// Fetch tags on mount (standard section is open by default)
+onMounted(async () => {
+  if (!loadingTags.value && discoveredTags.value.length === 0) {
+    loadingTags.value = true
+    try {
+      discoveredTags.value = await (props.fetchTags?.() ?? Promise.resolve([]))
+    } catch (err) {
+      console.error('[SearchFilters] Failed to fetch tags:', err)
+    } finally {
+      loadingTags.value = false
     }
   }
 })
