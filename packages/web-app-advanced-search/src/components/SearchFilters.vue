@@ -16,21 +16,8 @@
       </h4>
       
       <div v-if="showStandard" id="standard-filters" class="filter-group">
-        <!-- Name -->
-        <div class="filter-row">
-          <label for="filter-name">{{ $gettext('Name') }}</label>
-          <input
-            id="filter-name"
-            type="text"
-            :value="filters.standard.name || ''"
-            :placeholder="$gettext('File name (wildcards: * ?)')"
-            @input="emit('update:standard', { ...filters.standard, name: ($event.target as HTMLInputElement).value || undefined })"
-            @keyup.enter="emit('search')"
-          />
-        </div>
-
-        <!-- Type -->
-        <div class="filter-row">
+        <!-- Dropdown selectors row: Type, Media Type, Tags -->
+        <div class="filter-row-inline">
           <FilterSelect
             :model-value="filters.standard.type || ''"
             :options="typeOptions"
@@ -39,10 +26,6 @@
             :aria-label="$gettext('File type filter')"
             @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, type: (v as '' | 'file' | 'folder') })"
           />
-        </div>
-
-        <!-- Media Type -->
-        <div class="filter-row">
           <FilterSelect
             :model-value="filters.standard.mediaType || ''"
             :options="mediaTypeOptions"
@@ -53,60 +36,6 @@
             :aria-label="$gettext('Media type filter')"
             @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, mediaType: (String(v) || undefined) })"
           />
-        </div>
-
-        <!-- Size Range -->
-        <div class="filter-row">
-          <label for="filter-size-min">{{ $gettext('Size') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-size-min"
-              type="text"
-              :value="formatSizeDisplay(filters.standard.sizeRange?.min)"
-              :placeholder="$gettext('Min (e.g. 1M)')"
-              @change="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-size-max"
-              type="text"
-              :value="formatSizeDisplay(filters.standard.sizeRange?.max)"
-              :placeholder="$gettext('Max (e.g. 10M)')"
-              :aria-label="$gettext('Size maximum')"
-              @change="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-          </div>
-        </div>
-
-        <!-- Modified Date -->
-        <div class="filter-row">
-          <label for="filter-modified-start">{{ $gettext('Modified') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-modified-start"
-              type="date"
-              max="9999-12-31"
-              :value="filters.standard.modifiedRange?.start || ''"
-              @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-modified-end"
-              type="date"
-              max="9999-12-31"
-              :value="filters.standard.modifiedRange?.end || ''"
-              :aria-label="$gettext('Modified date end')"
-              @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-          </div>
-        </div>
-
-        <!-- Tags -->
-        <div class="filter-row">
           <FilterSelect
             :model-value="filters.standard.tags || ''"
             :options="tagOptions"
@@ -116,6 +45,19 @@
             :custom-placeholder="$gettext('Type or select tag')"
             :aria-label="$gettext('Tags filter')"
             @update:model-value="(v: string | number) => emit('update:standard', { ...filters.standard, tags: (String(v) || undefined) })"
+          />
+        </div>
+
+        <!-- Name -->
+        <div class="filter-row">
+          <label for="filter-name">{{ $gettext('Name') }}</label>
+          <input
+            id="filter-name"
+            type="text"
+            :value="filters.standard.name || ''"
+            :placeholder="$gettext('File name (wildcards: * ?)')"
+            @input="emit('update:standard', { ...filters.standard, name: ($event.target as HTMLInputElement).value || undefined })"
+            @keyup.enter="emit('search')"
           />
         </div>
 
@@ -130,6 +72,57 @@
             @input="emit('update:standard', { ...filters.standard, content: ($event.target as HTMLInputElement).value || undefined })"
             @keyup.enter="emit('search')"
           />
+        </div>
+
+        <!-- Range fields: Size and Modified side by side, vertically stacked -->
+        <div class="filter-ranges">
+          <div class="filter-row">
+            <label for="filter-size-min">{{ $gettext('Size') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-size-min"
+                type="text"
+                :value="formatSizeDisplay(filters.standard.sizeRange?.min)"
+                :placeholder="$gettext('Min (e.g. 1M)')"
+                @change="updateSizeRange('min', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-size-max"
+                type="text"
+                :value="formatSizeDisplay(filters.standard.sizeRange?.max)"
+                :placeholder="$gettext('Max (e.g. 10M)')"
+                :aria-label="$gettext('Size maximum')"
+                @change="updateSizeRange('max', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <label for="filter-modified-start">{{ $gettext('Modified') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-modified-start"
+                type="date"
+                max="9999-12-31"
+                :value="filters.standard.modifiedRange?.start || ''"
+                @change="updateModifiedRange('start', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-modified-end"
+                type="date"
+                max="9999-12-31"
+                :value="filters.standard.modifiedRange?.end || ''"
+                :aria-label="$gettext('Modified date end')"
+                @change="updateModifiedRange('end', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -155,8 +148,8 @@
           {{ photoDataError }}
         </div>
 
-        <!-- Camera Make -->
-        <div class="filter-row">
+        <!-- Dropdown selectors row: Camera Make, Camera Model -->
+        <div class="filter-row-inline">
           <FilterSelect
             :model-value="filters.photo.cameraMake || ''"
             :options="cameraMakeOptions"
@@ -167,10 +160,6 @@
             :aria-label="$gettext('Camera make filter')"
             @update:model-value="(v: string | number) => emit('update:photo', { ...filters.photo, cameraMake: (String(v) || undefined) })"
           />
-        </div>
-
-        <!-- Camera Model -->
-        <div class="filter-row">
           <FilterSelect
             :model-value="filters.photo.cameraModel || ''"
             :options="cameraModelOptions"
@@ -209,111 +198,110 @@
           />
         </div>
 
-        <!-- Date Taken -->
-        <div class="filter-row">
-          <label for="filter-date-taken-start">{{ $gettext('Date Taken') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-date-taken-start"
-              type="date"
-              max="9999-12-31"
-              :value="filters.photo.takenDateRange?.start || ''"
-              @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-date-taken-end"
-              type="date"
-              max="9999-12-31"
-              :value="filters.photo.takenDateRange?.end || ''"
-              :aria-label="$gettext('Date taken end')"
-              @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
+        <!-- Range fields: Date Taken, ISO, Aperture, Focal Length — vertically stacked -->
+        <div class="filter-ranges">
+          <div class="filter-row">
+            <label for="filter-date-taken-start">{{ $gettext('Date Taken') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-date-taken-start"
+                type="date"
+                max="9999-12-31"
+                :value="filters.photo.takenDateRange?.start || ''"
+                @change="updateTakenDateRange('start', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-date-taken-end"
+                type="date"
+                max="9999-12-31"
+                :value="filters.photo.takenDateRange?.end || ''"
+                :aria-label="$gettext('Date taken end')"
+                @change="updateTakenDateRange('end', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- ISO -->
-        <div class="filter-row">
-          <label for="filter-iso-min">{{ $gettext('ISO') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-iso-min"
-              type="number"
-              min="0"
-              :value="filters.photo.isoRange?.min || ''"
-              :placeholder="$gettext('Min')"
-              @input="updateIsoRange('min', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-iso-max"
-              type="number"
-              min="0"
-              :value="filters.photo.isoRange?.max || ''"
-              :placeholder="$gettext('Max')"
-              :aria-label="$gettext('ISO maximum')"
-              @input="updateIsoRange('max', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
+          <div class="filter-row">
+            <label for="filter-iso-min">{{ $gettext('ISO') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-iso-min"
+                type="number"
+                min="0"
+                :value="filters.photo.isoRange?.min || ''"
+                :placeholder="$gettext('Min')"
+                @input="updateIsoRange('min', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-iso-max"
+                type="number"
+                min="0"
+                :value="filters.photo.isoRange?.max || ''"
+                :placeholder="$gettext('Max')"
+                :aria-label="$gettext('ISO maximum')"
+                @input="updateIsoRange('max', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Aperture -->
-        <div class="filter-row">
-          <label for="filter-aperture-min">{{ $gettext('Aperture (f/)') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-aperture-min"
-              type="number"
-              step="0.1"
-              min="0"
-              :value="filters.photo.fNumberRange?.min || ''"
-              :placeholder="$gettext('Min')"
-              @input="updateFNumberRange('min', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-aperture-max"
-              type="number"
-              step="0.1"
-              min="0"
-              :value="filters.photo.fNumberRange?.max || ''"
-              :placeholder="$gettext('Max')"
-              :aria-label="$gettext('Aperture maximum')"
-              @input="updateFNumberRange('max', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
+          <div class="filter-row">
+            <label for="filter-aperture-min">{{ $gettext('Aperture (f/)') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-aperture-min"
+                type="number"
+                step="0.1"
+                min="0"
+                :value="filters.photo.fNumberRange?.min || ''"
+                :placeholder="$gettext('Min')"
+                @input="updateFNumberRange('min', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-aperture-max"
+                type="number"
+                step="0.1"
+                min="0"
+                :value="filters.photo.fNumberRange?.max || ''"
+                :placeholder="$gettext('Max')"
+                :aria-label="$gettext('Aperture maximum')"
+                @input="updateFNumberRange('max', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
           </div>
-        </div>
 
-        <!-- Focal Length -->
-        <div class="filter-row">
-          <label for="filter-focal-length-min">{{ $gettext('Focal Length (mm)') }}</label>
-          <div class="range-inputs">
-            <input
-              id="filter-focal-length-min"
-              type="number"
-              min="0"
-              :value="filters.photo.focalLengthRange?.min || ''"
-              :placeholder="$gettext('Min')"
-              @input="updateFocalLengthRange('min', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
-            <span>{{ $gettext('to') }}</span>
-            <input
-              id="filter-focal-length-max"
-              type="number"
-              min="0"
-              :value="filters.photo.focalLengthRange?.max || ''"
-              :placeholder="$gettext('Max')"
-              :aria-label="$gettext('Focal length maximum')"
-              @input="updateFocalLengthRange('max', ($event.target as HTMLInputElement).value)"
-              @keyup.enter="emit('search')"
-            />
+          <div class="filter-row">
+            <label for="filter-focal-length-min">{{ $gettext('Focal Length (mm)') }}</label>
+            <div class="range-inputs-vertical">
+              <input
+                id="filter-focal-length-min"
+                type="number"
+                min="0"
+                :value="filters.photo.focalLengthRange?.min || ''"
+                :placeholder="$gettext('Min')"
+                @input="updateFocalLengthRange('min', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+              <span class="range-separator">{{ $gettext('to') }}</span>
+              <input
+                id="filter-focal-length-max"
+                type="number"
+                min="0"
+                :value="filters.photo.focalLengthRange?.max || ''"
+                :placeholder="$gettext('Max')"
+                :aria-label="$gettext('Focal length maximum')"
+                @input="updateFocalLengthRange('max', ($event.target as HTMLInputElement).value)"
+                @keyup.enter="emit('search')"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -669,9 +657,42 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 }
 
 .filter-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.75rem;
+}
+
+.filter-row-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-row-inline > * {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.filter-ranges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 0.75rem;
+}
+
+.range-inputs-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.range-inputs-vertical input {
+  width: 100%;
+}
+
+.range-separator {
+  font-size: 0.75rem;
+  color: var(--oc-color-text-muted, #999);
+  text-align: center;
 }
 
 .filter-row {
