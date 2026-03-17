@@ -74,6 +74,7 @@
         :fetch-camera-makes="fetchCameraMakes"
         :fetch-camera-models="fetchCameraModels"
         :caption-search-available="captionSearchAvailable"
+        :fetch-tags="fetchTags"
         :kql-query="kqlQuery"
         @update:standard="updateStandardFilters"
         @update:photo="updatePhotoFilters"
@@ -307,6 +308,7 @@ const {
   fetchCameraMakes,
   fetchCameraModels,
   probeCaptionSupport,
+  fetchTags,
 } = useAdvancedSearch()
 
 const {
