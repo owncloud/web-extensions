@@ -23,22 +23,47 @@ export function formatBytes(bytes: number | string | undefined): string {
 }
 
 /**
- * Format date string for display
+ * Format date string for display using the user's oCIS locale.
  * @param dateStr - ISO date string or date-like string
- * @param options - Intl.DateTimeFormat options
- * @returns Formatted date string
+ * @param locale - BCP 47 locale string from oCIS user settings (e.g., "de", "en-US").
+ *                 Falls back to browser default if undefined.
+ * @returns Locale-formatted date string
  */
-export function formatDate(dateStr: string | undefined): string {
+export function formatDate(dateStr: string | undefined, locale?: string): string {
   if (!dateStr) return '—'
 
   try {
     const date = new Date(dateStr)
     if (isNaN(date.getTime())) return '—'
-    // ISO 8601 format (YYYY-MM-DD) per international standard
-    const y = date.getFullYear()
-    const m = String(date.getMonth() + 1).padStart(2, '0')
-    const d = String(date.getDate()).padStart(2, '0')
-    return `${y}-${m}-${d}`
+    return date.toLocaleDateString(locale || undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  } catch {
+    return '—'
+  }
+}
+
+/**
+ * Format date+time string for display using the user's oCIS locale.
+ * @param dateStr - ISO date string or date-like string
+ * @param locale - BCP 47 locale string from oCIS user settings
+ * @returns Locale-formatted date+time string (24-hour format)
+ */
+export function formatDateTime(dateStr: string | undefined, locale?: string): string {
+  if (!dateStr) return '—'
+
+  try {
+    const date = new Date(dateStr)
+    if (isNaN(date.getTime())) return '—'
+    return date.toLocaleString(locale || undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
   } catch {
     return '—'
   }
