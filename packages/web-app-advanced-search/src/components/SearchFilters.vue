@@ -665,34 +665,37 @@ const updateFocalLengthRange = (field: 'min' | 'max', value: string) =>
 .filter-row-inline {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .filter-row-inline > * {
-  flex: 1 1 180px;
+  flex: 1 1 150px;
   min-width: 0;
+  max-width: 220px;
 }
 
 .filter-ranges {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 220px));
+  gap: 1rem;
 }
 
 .range-inputs-vertical {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.125rem;
 }
 
 .range-inputs-vertical input {
   width: 100%;
+  box-sizing: border-box;
+  height: 2.125rem;
 }
 
 .range-separator {
   font-size: 0.75rem;
   color: var(--oc-color-text-muted, #999);
-  text-align: center;
+  text-align: left;
 }
 
 .filter-row {
