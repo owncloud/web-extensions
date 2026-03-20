@@ -35,7 +35,7 @@
             </button>
           </div>
           <!-- EXIF only toggle (hidden in map view) -->
-          <span v-if="viewType !== 'map'" class="oc-switch" :title="$gettext('When disabled, only shows photos without EXIF metadata.\nWhen enabled, only shows photos with EXIF metadata.\nEXIF metadata such as camera, model, time stamp, location...')">
+          <span v-if="viewType !== 'map'" class="oc-switch" :title="$gettext('Show only photos with an EXIF date (date taken).\nPhotos without an EXIF date are positioned by file modification date, which may not reflect when the photo was actually taken.\nEXIF date is required for accurate timeline placement, as EXIF location is required for map view.')">
             <span id="exif-only-toggle-label">{{ $gettext('EXIF only') }}</span>
             <button
               class="oc-switch-btn"
