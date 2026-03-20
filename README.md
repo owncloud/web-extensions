@@ -22,7 +22,6 @@ The following extension examples are provided to be used with the Infinite Scale
 - [web-app-cast](./packages/web-app-cast/)
 - [web-app-draw-io](./packages/web-app-draw-io/)
 - [web-app-external-sites](./packages/web-app-external-sites/)
-- [web-app-favorites](./packages/web-app-favorites/)
 - [web-app-importer](./packages/web-app-importer/)
 - [web-app-json-viewer](./packages/web-app-json-viewer/)
 - [web-app-photo-addon](./packages/web-app-photo-addon/)
@@ -46,3 +45,4 @@ To start developing a new web-extension or maintaining an existing one, see the 
 ## Release Workflow for Web Extensions
 
 If required, an own document guides you through processing new releases of apps, such as when code changes have been made or dependencies have been updated. For more details see the [RELEASE_WORKFLOW](./docs/RELEASE_WORKFLOW.md) documentation.
+

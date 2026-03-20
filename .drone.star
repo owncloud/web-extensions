@@ -16,7 +16,6 @@ APPS = [
     "cast",
     "draw-io",
     "external-sites",
-    "favorites",
     "importer",
     "json-viewer",
     "photo-addon",
