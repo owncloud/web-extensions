@@ -890,12 +890,12 @@ onUnmounted(() => {
 function formatExifDate(dateStr: string): string {
   try {
     const d = new Date(dateStr)
-    return d.toLocaleDateString(getUserLocale(), {
+    return d.toLocaleString(getUserLocale(), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     })
   } catch {
     return dateStr
