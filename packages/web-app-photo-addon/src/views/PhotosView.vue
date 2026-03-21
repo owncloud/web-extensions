@@ -1823,14 +1823,7 @@ async function loadMorePhotos() {
 
     currentDateRange.value = `${dateRange.start} to ${dateRange.end}`
 
-    // Check if we've gone too far back (10 years)
     const startDate = new Date(dateRange.start)
-    const today = new Date()
-    const yearsDiff = (today.getTime() - startDate.getTime()) / (365 * 24 * 60 * 60 * 1000)
-    if (yearsDiff > 10) {
-      isFullyLoaded.value = true
-      return
-    }
 
     // Fetch photos from server with date filter
     // Pass exifOnly.value to determine which date field to filter by
@@ -1858,10 +1851,22 @@ async function loadMorePhotos() {
       consecutiveEmptyBatches = 0
     }
 
-    // Track consecutive empty batches - stop after 12 in a row (~1 year gap)
+    // After 12 consecutive empty batches (~3 years gap), do a single
+    // catch-all search to find any remaining photos across all time
     if (photos.length === 0) {
       consecutiveEmptyBatches++
-      if (consecutiveEmptyBatches >= 12) {
+      if (consecutiveEmptyBatches >= 12 && personalSpace) {
+        const remaining = await fetchAllImagesViaSearch(personalSpace.id)
+        const extraPhotos = remaining.filter(p => {
+          const key = p.fileId || p.id || p.name
+          if (loadedPhotoIds.value.has(key)) return false
+          loadedPhotoIds.value.add(key)
+          return true
+        })
+        if (extraPhotos.length > 0) {
+          extraPhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+          allPhotos.value = [...allPhotos.value, ...extraPhotos]
+        }
         isFullyLoaded.value = true
       }
     }
