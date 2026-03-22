@@ -21,14 +21,14 @@
               :options="yearOptions"
               :label="$gettext('Year')"
               :aria-label="$gettext('Select year')"
-              @update:model-value="(v: string | number) => { filterYear = v as number; onDateFilterChange() }"
+              @update:model-value="onYearSelect"
             />
             <FilterSelect
               :model-value="filterMonth"
               :options="monthOptions"
               :label="$gettext('Month')"
               :aria-label="$gettext('Select month')"
-              @update:model-value="(v: string | number) => { filterMonth = v as number; onDateFilterChange() }"
+              @update:model-value="onMonthSelect"
             />
             <button v-if="!isCurrentMonth" type="button" class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline" :title="$gettext('Today')" @click="jumpToToday">
               <span>{{ $gettext('Today') }}</span>
@@ -45,6 +45,30 @@
               @click="exifOnly = !exifOnly"
             ></button>
           </span>
+          <!-- Zoom controls (hidden in map view) -->
+          <div v-if="viewType !== 'map'" class="zoom-controls" role="group" :aria-label="$gettext('Zoom')">
+            <button
+              type="button"
+              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw zoom-btn"
+              :disabled="groupMode === 'day'"
+              :title="$gettext('Zoom in (more detail)')"
+              :aria-label="$gettext('Zoom in')"
+              @click="zoomIn"
+            >
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11 11V5H13V11H19V13H13V19H11V13H5V11H11Z" /></svg>
+            </button>
+            <span class="zoom-level">{{ zoomIndicatorText }}</span>
+            <button
+              type="button"
+              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-raw zoom-btn"
+              :disabled="groupMode === 'year'"
+              :title="$gettext('Zoom out (less detail)')"
+              :aria-label="$gettext('Zoom out')"
+              @click="zoomOut"
+            >
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M5 11H19V13H5V11Z" /></svg>
+            </button>
+          </div>
           <!-- View type selector (Calendar / Map) -->
           <div class="view-selector item-inline-filter oc-flex-inline" role="group" :aria-label="$gettext('View mode')">
             <button
@@ -103,8 +127,29 @@
     <div v-if="!error && viewType === 'calendar'" class="photos-content">
       <div v-if="!loading && photoCount === 0" class="empty-state">
         <span class="empty-icon" aria-hidden="true"><svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.828 5L7.828 7H4V19H20V7H16.172L14.172 5H9.828ZM9 3H15L17 5H21C21.5523 5 22 5.44772 22 6V20C22 20.5523 21.5523 21 21 21H3C2.44772 21 2 20.5523 2 20V6C2 5.44772 2.44772 5 3 5H7L9 3ZM12 18C9.23858 18 7 15.7614 7 13C7 10.2386 9.23858 8 12 8C14.7614 8 17 10.2386 17 13C17 15.7614 14.7614 18 12 18ZM12 16C13.6569 16 15 14.6569 15 13C15 11.3431 13.6569 10 12 10C10.3431 10 9 11.3431 9 13C9 14.6569 10.3431 16 12 16Z" /></svg></span>
-        <p>{{ $gettext('No photos found') }}</p>
-        <p class="empty-hint">{{ $gettext('Photos will appear here after EXIF tags are synced') }}</p>
+        <template v-if="noPhotosForPeriod">
+          <p>{{ $gettext('No photos found for %{month} %{year}').replace('%{month}', monthNames[filterMonth]).replace('%{year}', String(filterYear)) }}</p>
+          <div class="empty-actions">
+            <button
+              type="button"
+              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-primary oc-button-primary-filled"
+              @click="findNearestPhotos"
+            >
+              <span>{{ $gettext('Jump to nearest photos') }}</span>
+            </button>
+            <button
+              type="button"
+              class="oc-button oc-rounded oc-button-s oc-button-justify-content-center oc-button-gap-m oc-button-passive oc-button-passive-outline"
+              @click="jumpToToday"
+            >
+              <span>{{ $gettext('Back to today') }}</span>
+            </button>
+          </div>
+        </template>
+        <template v-else>
+          <p>{{ $gettext('No photos found') }}</p>
+          <p class="empty-hint">{{ $gettext('Photos will appear here after EXIF tags are synced') }}</p>
+        </template>
       </div>
 
       <div v-else class="photo-groups">
@@ -112,6 +157,7 @@
           v-for="group in groupedPhotosWithStacks"
           :key="group.dateKey"
           class="date-group"
+          :data-date-key="group.dateKey"
         >
           <h2 class="date-header">{{ formatDateHeader(group.dateKey) }} ({{ group.subGroups.reduce((sum, sg) => sum + sg.photos.length, 0) }})</h2>
           <div class="photo-grid">
@@ -466,13 +512,16 @@ const contextMenuPosition = ref({ x: 0, y: 0 })
 // Track loaded photo IDs to avoid duplicates
 const loadedPhotoIds = ref<Set<string>>(new Set())
 
-// How far back we've loaded
+// How far back/forward we've loaded
 const oldestLoadedDate = ref<Date>(new Date())
+const newestLoadedDate = ref<Date>(new Date())
+const isFullyLoadedNewer = ref(false)  // No more newer photos to load
 
 // Date filter state
 const now = new Date()
 const filterYear = ref(now.getFullYear())
 const filterMonth = ref(now.getMonth())  // 0-indexed
+const noPhotosForPeriod = ref(false)  // True when selected month has no photos
 
 // Month names for dropdown (computed for i18n reactivity)
 const monthNames = computed(() => getMonthNames())
@@ -874,8 +923,163 @@ function formatDateHeader(dateKey: string): string {
 }
 
 // Handle date filter change - reload photos starting from selected month
-function onDateFilterChange() {
+function onYearSelect(v: string | number) {
+  filterYear.value = Number(v)
   loadPhotosFromFilter()
+}
+
+function onMonthSelect(v: string | number) {
+  filterMonth.value = Number(v)
+  loadPhotosFromFilter()
+}
+
+// Populate the view directly with found photos, setting up scroll boundaries
+// Then progressively fill the screen in both directions
+async function populateWithPhotos(photos: PhotoWithDate[], anchorDate: Date) {
+  allPhotos.value = []
+  loadedPhotoIds.value.clear()
+  loadedRanges.value = []
+  consecutiveEmptyBatches = 0
+  isFullyLoaded.value = false
+  useFallbackSearch = false
+  noPhotosForPeriod.value = false
+
+  // Deduplicate and sort
+  const newPhotos = photos.filter(p => {
+    const key = p.fileId || p.id || p.name
+    if (loadedPhotoIds.value.has(key)) return false
+    loadedPhotoIds.value.add(key)
+    return true
+  })
+  newPhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+  allPhotos.value = newPhotos
+
+  // Set up scroll boundaries from this anchor month
+  const monthStart = new Date(anchorDate.getFullYear(), anchorDate.getMonth(), 1)
+  const monthEnd = new Date(anchorDate.getFullYear(), anchorDate.getMonth() + 1, 0)
+  oldestLoadedDate.value = new Date(monthStart)
+  newestLoadedDate.value = new Date(monthEnd)
+  newestLoadedDate.value.setDate(newestLoadedDate.value.getDate() + 1)
+
+  // Check if we're at the current month (nothing newer to load)
+  const now = new Date()
+  isFullyLoadedNewer.value = (anchorDate.getFullYear() === now.getFullYear() && anchorDate.getMonth() === now.getMonth())
+
+  // Update filter dropdowns to match
+  filterYear.value = anchorDate.getFullYear()
+  filterMonth.value = anchorDate.getMonth()
+
+  // Fill the screen in both directions so a scrollbar appears
+  await fillScreen()
+
+  // Scroll to the anchor date so it's visible (newer content may have been prepended above)
+  await new Promise(r => setTimeout(r, 50))
+  scrollToAnchorDate(anchorDate)
+}
+
+function scrollToAnchorDate(anchorDate: Date) {
+  if (!scrollContainer.value) return
+
+  const year = String(anchorDate.getFullYear())
+  const month = String(anchorDate.getMonth() + 1).padStart(2, '0')
+  const mode = groupMode.value
+
+  let selector: string
+  switch (mode) {
+    case 'year':
+      selector = `.date-group[data-date-key="${year}"]`
+      break
+    case 'month':
+      selector = `.date-group[data-date-key="${year}-${month}"]`
+      break
+    case 'week': {
+      // Find the week key for this date
+      const weekNum = getISOWeek(anchorDate)
+      selector = `.date-group[data-date-key="${year}-W${String(weekNum).padStart(2, '0')}"]`
+      break
+    }
+    case 'day':
+    default: {
+      const day = String(anchorDate.getDate()).padStart(2, '0')
+      selector = `.date-group[data-date-key="${year}-${month}-${day}"]`
+      break
+    }
+  }
+
+  // Try exact match first, then fall back to year prefix
+  let anchorEl = scrollContainer.value.querySelector(selector)
+  if (!anchorEl) {
+    anchorEl = scrollContainer.value.querySelector(`.date-group[data-date-key^="${year}"]`)
+  }
+  if (anchorEl) {
+    anchorEl.scrollIntoView({ block: 'start' })
+  }
+}
+
+// Progressively load older photos until the screen is full (scrollbar appears)
+// Only loads backwards to avoid scroll position issues from prepending newer content
+async function fillScreen() {
+  // Wait a tick for the DOM to update before checking if we need more
+  await new Promise(r => setTimeout(r, 50))
+
+  let loopGuard = 0
+  while (needsMorePhotos() && !isFullyLoaded.value && loopGuard < 20) {
+    loopGuard++
+    await loadMorePhotos()
+  }
+
+  // Sync dropdowns to whatever is actually visible after filling
+  await new Promise(r => setTimeout(r, 50))
+  updateDropdownsFromScroll()
+}
+
+// Find the nearest month that has photos (searches backwards then forwards)
+async function findNearestPhotos() {
+  if (!personalSpace) return
+  loading.value = true
+  noPhotosForPeriod.value = false
+
+  try {
+    // Search backwards and forwards from selected date, up to 24 months each way
+    const selectedDate = new Date(filterYear.value, filterMonth.value, 15)
+
+    for (let offset = 1; offset <= 24; offset++) {
+      // Try one month back
+      const backDate = new Date(selectedDate)
+      backDate.setMonth(backDate.getMonth() - offset)
+      const backRange = {
+        start: `${backDate.getFullYear()}-${String(backDate.getMonth() + 1).padStart(2, '0')}-01`,
+        end: `${backDate.getFullYear()}-${String(backDate.getMonth() + 1).padStart(2, '0')}-${new Date(backDate.getFullYear(), backDate.getMonth() + 1, 0).getDate()}`
+      }
+      const backPhotos = await fetchPhotosViaSearch(personalSpace.id, backRange, exifOnly.value)
+      if (backPhotos.length > 0) {
+        populateWithPhotos(backPhotos, backDate)
+        return
+      }
+
+      // Try one month forward (but not into the future)
+      const fwdDate = new Date(selectedDate)
+      fwdDate.setMonth(fwdDate.getMonth() + offset)
+      if (fwdDate <= new Date()) {
+        const fwdRange = {
+          start: `${fwdDate.getFullYear()}-${String(fwdDate.getMonth() + 1).padStart(2, '0')}-01`,
+          end: `${fwdDate.getFullYear()}-${String(fwdDate.getMonth() + 1).padStart(2, '0')}-${new Date(fwdDate.getFullYear(), fwdDate.getMonth() + 1, 0).getDate()}`
+        }
+        const fwdPhotos = await fetchPhotosViaSearch(personalSpace.id, fwdRange, exifOnly.value)
+        if (fwdPhotos.length > 0) {
+          populateWithPhotos(fwdPhotos, fwdDate)
+          return
+        }
+      }
+    }
+
+    // Nothing found within 2 years either direction
+    noPhotosForPeriod.value = true
+  } catch {
+    noPhotosForPeriod.value = true
+  } finally {
+    loading.value = false
+  }
 }
 
 // Jump to today's date
@@ -892,16 +1096,79 @@ async function loadPhotosFromFilter() {
   await loadPhotos()
 }
 
-// Scroll handler
+// Scroll handler - loads older photos on scroll down, newer on scroll up
 function handleScroll() {
-  if (!scrollContainer.value || loadingMore.value || isFullyLoaded.value) return
+  if (!scrollContainer.value || loadingMore.value) return
 
   const { scrollHeight, clientHeight, scrollTop } = scrollContainer.value
-  const distanceFromBottom = scrollHeight - scrollTop - clientHeight
 
-  if (distanceFromBottom < SCROLL_THRESHOLD) {
+  // Scroll down: load older photos
+  const distanceFromBottom = scrollHeight - scrollTop - clientHeight
+  if (distanceFromBottom < SCROLL_THRESHOLD && !isFullyLoaded.value) {
     loadMorePhotos()
   }
+
+  // Scroll up: load newer photos (only when not at current month)
+  if (scrollTop < SCROLL_THRESHOLD && !isFullyLoadedNewer.value) {
+    loadNewerPhotos()
+  }
+
+  // Sync year/month dropdowns to the currently visible date group
+  updateDropdownsFromScroll()
+}
+
+// Throttle flag for dropdown sync (avoid thrashing on every scroll pixel)
+let scrollSyncPending = false
+
+function updateDropdownsFromScroll() {
+  if (scrollSyncPending) return
+  scrollSyncPending = true
+  requestAnimationFrame(() => {
+    scrollSyncPending = false
+    if (!scrollContainer.value) return
+
+    const groups = scrollContainer.value.querySelectorAll('.date-group[data-date-key]')
+    const containerTop = scrollContainer.value.getBoundingClientRect().top
+
+    // Find the first group whose top is at or below the container top (+ small offset for header)
+    let visibleKey: string | null = null
+    for (const group of groups) {
+      const rect = group.getBoundingClientRect()
+      // The group is visible if its bottom is below the container top
+      if (rect.bottom > containerTop + 60) {
+        visibleKey = (group as HTMLElement).dataset.dateKey || null
+        break
+      }
+    }
+
+    if (!visibleKey) return
+
+    // Parse year and month from dateKey (formats: "2024-11-15", "2024-11", "2024-W45", "2024")
+    let year: number | null = null
+    let month: number | null = null
+
+    if (visibleKey.includes('-W')) {
+      // Week format: "2024-W45" — extract year, estimate month from week
+      const [y, wPart] = visibleKey.split('-W')
+      year = parseInt(y)
+      const weekNum = parseInt(wPart)
+      // Approximate month from week number (week 1 = Jan, week 52 = Dec)
+      month = Math.min(11, Math.floor((weekNum - 1) / 4.33))
+    } else {
+      const parts = visibleKey.split('-')
+      year = parseInt(parts[0])
+      if (parts.length >= 2) {
+        month = parseInt(parts[1]) - 1  // 0-indexed
+      }
+    }
+
+    if (year !== null && !isNaN(year) && year !== filterYear.value) {
+      filterYear.value = year
+    }
+    if (month !== null && !isNaN(month) && month !== filterMonth.value) {
+      filterMonth.value = month
+    }
+  })
 }
 
 /**
@@ -1421,6 +1688,7 @@ function loadMapPhotos() {
 
 // Track loaded date ranges to avoid duplicate fetches
 const loadedRanges = ref<Array<{ start: string, end: string }>>([])
+let consecutiveEmptyBatches = 0
 
 // Flag to indicate if we've fallen back to non-date-filtered search
 let useFallbackSearch = false
@@ -1454,8 +1722,11 @@ async function loadPhotos() {
   allPhotos.value = []
   loadedPhotoIds.value.clear()
   loadedRanges.value = []
+  consecutiveEmptyBatches = 0
   isFullyLoaded.value = false
+  isFullyLoadedNewer.value = false
   useFallbackSearch = false
+  noPhotosForPeriod.value = false
 
   try {
     // Find personal space
@@ -1469,8 +1740,9 @@ async function loadPhotos() {
     }
 
     // Determine starting date based on filter
+    const isCurrentMonth = filterYear.value === new Date().getFullYear() && filterMonth.value === new Date().getMonth()
     let endDate: Date
-    if (filterYear.value === new Date().getFullYear() && filterMonth.value === new Date().getMonth()) {
+    if (isCurrentMonth) {
       endDate = new Date()
     } else {
       endDate = new Date(filterYear.value, filterMonth.value + 1, 0)
@@ -1478,17 +1750,34 @@ async function loadPhotos() {
       if (endDate > now) endDate = now
     }
 
-    // Store the end date for progressive loading
+    // Store the end date for progressive loading (backwards)
     oldestLoadedDate.value = new Date(endDate)
     oldestLoadedDate.value.setDate(oldestLoadedDate.value.getDate() + 1)
 
+    // Store the start boundary for forward loading
+    // When viewing current month, there's nothing newer to load
+    if (isCurrentMonth) {
+      isFullyLoadedNewer.value = true
+      newestLoadedDate.value = new Date()
+    } else {
+      newestLoadedDate.value = new Date(endDate)
+      newestLoadedDate.value.setDate(newestLoadedDate.value.getDate() + 1)
+    }
+
     currentDateRange.value = $gettext('Loading recent photos...')
 
-    // Load initial batch (3 months)
+    // Load initial batch
     await loadMorePhotos()
 
-    // If no photos found with date filter, try fallback search
-    if (allPhotos.value.length === 0 && !useFallbackSearch) {
+    // If no photos found for a specific (non-current) month, show empty state
+    if (allPhotos.value.length === 0 && !isCurrentMonth) {
+      noPhotosForPeriod.value = true
+      isFullyLoaded.value = true
+      return
+    }
+
+    // If no photos found at current month, try fallback search
+    if (allPhotos.value.length === 0 && isCurrentMonth && !useFallbackSearch) {
       currentDateRange.value = $gettext('Searching all photos...')
       useFallbackSearch = true
       const photos = await fetchAllImagesViaSearch(personalSpace.id)
@@ -1506,11 +1795,9 @@ async function loadPhotos() {
       isFullyLoaded.value = true
     }
 
-    // Keep loading more months until screen is filled
-    let loopGuard = 0
-    while (needsMorePhotos() && !isFullyLoaded.value && !useFallbackSearch && loopGuard < 10) {
-      loopGuard++
-      await loadMorePhotos()
+    // Keep loading in both directions until screen is filled
+    if (!useFallbackSearch) {
+      await fillScreen()
     }
 
   } catch (err: any) {
@@ -1536,14 +1823,7 @@ async function loadMorePhotos() {
 
     currentDateRange.value = `${dateRange.start} to ${dateRange.end}`
 
-    // Check if we've gone too far back (10 years)
     const startDate = new Date(dateRange.start)
-    const today = new Date()
-    const yearsDiff = (today.getTime() - startDate.getTime()) / (365 * 24 * 60 * 60 * 1000)
-    if (yearsDiff > 10) {
-      isFullyLoaded.value = true
-      return
-    }
 
     // Fetch photos from server with date filter
     // Pass exifOnly.value to determine which date field to filter by
@@ -1568,15 +1848,96 @@ async function loadMorePhotos() {
       newPhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
       // Append to existing (older photos go at end)
       allPhotos.value = [...allPhotos.value, ...newPhotos]
+      consecutiveEmptyBatches = 0
     }
 
-    // If we got very few photos, we might be near the end
-    // But don't mark fully loaded yet - let user keep scrolling
-    if (photos.length === 0 && loadedRanges.value.length > 5) {
-      // After 5 empty batches (15 months), assume we're done
-      const emptyBatches = loadedRanges.value.slice(-5)
-      if (emptyBatches.length >= 5) {
+    // After 12 consecutive empty batches (~3 years gap), do a single
+    // catch-all search to find any remaining photos across all time
+    if (photos.length === 0) {
+      consecutiveEmptyBatches++
+      if (consecutiveEmptyBatches >= 12 && personalSpace) {
+        const remaining = await fetchAllImagesViaSearch(personalSpace.id)
+        const extraPhotos = remaining.filter(p => {
+          const key = p.fileId || p.id || p.name
+          if (loadedPhotoIds.value.has(key)) return false
+          loadedPhotoIds.value.add(key)
+          return true
+        })
+        if (extraPhotos.length > 0) {
+          extraPhotos.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+          allPhotos.value = [...allPhotos.value, ...extraPhotos]
+        }
         isFullyLoaded.value = true
+      }
+    }
+
+  } finally {
+    loadingMore.value = false
+  }
+}
+
+// Load newer photos (future dates relative to current view) - called on scroll up
+async function loadNewerPhotos() {
+  if (loadingMore.value || isFullyLoadedNewer.value || useFallbackSearch) return
+  if (!personalSpace) return
+
+  loadingMore.value = true
+
+  try {
+    const startDate = new Date(newestLoadedDate.value)
+    const endDate = new Date(startDate)
+    endDate.setMonth(endDate.getMonth() + getMonthsPerBatch())
+
+    // Don't search past today
+    const today = new Date()
+    if (endDate > today) {
+      endDate.setTime(today.getTime())
+      isFullyLoadedNewer.value = true
+    }
+
+    // If start is already at or past today, nothing more to load
+    if (startDate >= today) {
+      isFullyLoadedNewer.value = true
+      return
+    }
+
+    const dateRange = {
+      start: formatDateForKQL(startDate),
+      end: formatDateForKQL(endDate)
+    }
+
+    const photos = await fetchPhotosViaSearch(personalSpace.id, dateRange, exifOnly.value)
+
+    // Update newest loaded date for next batch
+    newestLoadedDate.value = endDate
+
+    // Filter duplicates and add new photos
+    const newPhotos = photos.filter(p => {
+      const key = p.fileId || p.id || p.name
+      if (loadedPhotoIds.value.has(key)) return false
+      loadedPhotoIds.value.add(key)
+      return true
+    })
+
+    if (newPhotos.length > 0) {
+      // Merge newer photos into the sorted array (newest first)
+      const merged = [...newPhotos, ...allPhotos.value]
+      merged.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+
+      // Preserve scroll position: measure before update, restore after
+      const container = scrollContainer.value
+      const prevScrollHeight = container?.scrollHeight || 0
+      const prevScrollTop = container?.scrollTop || 0
+
+      allPhotos.value = merged
+
+      // After Vue updates DOM, adjust scroll to compensate for prepended content
+      if (container) {
+        requestAnimationFrame(() => {
+          const newScrollHeight = container.scrollHeight
+          const heightDiff = newScrollHeight - prevScrollHeight
+          container.scrollTop = prevScrollTop + heightDiff
+        })
       }
     }
 
@@ -2071,6 +2432,39 @@ function injectStyles() {
       align-items: center;
       gap: 0.5rem;
     }
+    /* Zoom controls */
+    .zoom-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .zoom-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: 1px solid var(--oc-color-text-muted, #888);
+      border-radius: 4px;
+      background: var(--oc-color-background-default, #fff);
+      color: var(--oc-color-text-default, #333);
+      cursor: pointer;
+    }
+    .zoom-btn:hover:not(:disabled) {
+      border-color: var(--oc-color-swatch-primary-default, #0070c0);
+      color: var(--oc-color-swatch-primary-default, #0070c0);
+    }
+    .zoom-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+    .zoom-level {
+      font-size: var(--oc-font-size-xsmall, 0.75rem);
+      color: var(--oc-color-text-muted, #888);
+      min-width: 3rem;
+      text-align: center;
+    }
     /* Inline filter toggle (Calendar/Map) */
     .item-inline-filter {
       gap: 2px;
@@ -2179,6 +2573,7 @@ function injectStyles() {
     .empty-icon { display: block; margin-bottom: 1rem; color: var(--oc-color-text-muted, #666); }
     .empty-icon svg { width: 4rem; height: 4rem; }
     .empty-hint { font-size: 0.875rem; opacity: 0.7; }
+    .empty-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
     .photo-groups {
       position: relative;
     }
