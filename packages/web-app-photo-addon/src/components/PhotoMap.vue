@@ -486,28 +486,27 @@ function initMap() {
     metaReferrer.content = 'no-referrer-when-downgrade'
   }
 
-  // Tile layer with retry on 403 (transient referrer issues)
-  const OsmTileLayer = L.TileLayer.extend({
-    createTile(coords: any, done: any) {
-      const tile = L.TileLayer.prototype.createTile.call(this, coords, done) as HTMLImageElement
-      tile.referrerPolicy = 'no-referrer-when-downgrade'
-      const originalSrc = tile.src
-      tile.addEventListener('error', () => {
-        // Retry once after a short delay
-        if (!tile.dataset.retried) {
-          tile.dataset.retried = '1'
-          setTimeout(() => { tile.src = originalSrc }, 500)
-        }
-      }, { once: false })
-      return tile
-    }
-  })
-  new OsmTileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // Tile layer with referrer policy fix and retry on 403
+  const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
     keepBuffer: 2,
     noWrap: true,
   }).addTo(map)
+
+  // Set referrer policy on each tile and retry on failure
+  tileLayer.on('tileloadstart', (event: L.TileEvent) => {
+    const tile = event.tile as HTMLImageElement
+    tile.referrerPolicy = 'no-referrer-when-downgrade'
+  })
+  tileLayer.on('tileerror', (event: L.TileErrorEvent) => {
+    const tile = event.tile as HTMLImageElement
+    if (!tile.dataset.retried) {
+      tile.dataset.retried = '1'
+      const src = tile.src
+      setTimeout(() => { tile.src = src }, 500)
+    }
+  })
 
   // Add photo markers
   addPhotoMarkers()
