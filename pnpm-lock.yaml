@@ -182,8 +182,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0(@uppy/core@5.2.0)
       '@uppy/webdav':
-        specifier: 1.0.1
-        version: 1.0.1(@uppy/core@5.2.0)
+        specifier: 1.1.1
+        version: 1.1.1(@uppy/core@5.2.0)
       pinia:
         specifier: ^3.0.3
         version: 3.0.4(typescript@5.9.3)(vue@3.5.22(typescript@5.9.3))
@@ -1489,8 +1489,8 @@ packages:
   '@uppy/utils@7.1.5':
     resolution: {integrity: sha512-Vz4WGTjef6WebECGur4clWjpkET4o3bdvPMj1m2sD5cL+dTt69m+FIE5h5JD3HBMLEPTXPVkrXGMIFcbOYC12Q==}
 
-  '@uppy/webdav@1.0.1':
-    resolution: {integrity: sha512-44E/nZ9JWayCcHqIzjWpbdPHcir49lT7LKCb6MJp+TvHaw904auwjCLqVoLqk7CdFnHktr8fi7uLojWKF6ouvQ==}
+  '@uppy/webdav@1.1.1':
+    resolution: {integrity: sha512-QEtjLjNo5XH16aww0rX2rRNF1eboqtqfnNkRH28+jJe1gt2PH7ZcPkCw3ROFzyxzbQPC9ABo7kvWAEKL3dH72g==}
     peerDependencies:
       '@uppy/core': 5.2.0
 
@@ -5313,7 +5313,7 @@ snapshots:
       lodash: 4.17.21
       preact: 10.27.2
 
-  '@uppy/webdav@1.0.1(@uppy/core@5.2.0)':
+  '@uppy/webdav@1.1.1(@uppy/core@5.2.0)':
     dependencies:
       '@uppy/companion-client': 5.1.1(@uppy/core@5.2.0)
       '@uppy/core': 5.2.0

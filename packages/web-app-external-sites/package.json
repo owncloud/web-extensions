@@ -8,7 +8,8 @@
   "scripts": {
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
-    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:e2e": "pnpm playwright test"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.3.0",

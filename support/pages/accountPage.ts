@@ -15,7 +15,9 @@ export class AccountPage {
 
     this.progressBarSelector = this.page.locator('.extension-preference .vs__search')
     this.progressBarCurrent = this.page.locator('.extension-preference .vs__selected span')
-    this.nyanCatProgressBarOption = this.page.getByText('Nyan Cat progress bar')
+    this.nyanCatProgressBarOption = this.page
+      .locator('.extension-preference .vs__dropdown-menu')
+      .getByText('Nyan Cat progress bar')
   }
 
   async goToAccountPage() {
@@ -25,6 +27,8 @@ export class AccountPage {
 
   async selectNyanCatProgressBarExtension() {
     await this.progressBarSelector.click()
-    await this.nyanCatProgressBarOption.click()
+    await this.progressBarSelector.fill('Nyan')
+    await this.nyanCatProgressBarOption.waitFor({ state: 'visible' })
+    await this.page.keyboard.press('Enter')
   }
 }

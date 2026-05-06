@@ -1,6 +1,6 @@
 services:
   ocis:
-    image: ${OCIS_IMAGE:-owncloud/ocis-rolling:master}
+    image: ${OCIS_IMAGE:-owncloud/ocis-rolling:latest}
     entrypoint: /bin/sh
     command: ['-c', 'ocis init || true && ocis server']
     extra_hosts:

@@ -9,7 +9,8 @@
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
     "check:types": "vue-tsc --noEmit",
-    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:e2e": "pnpm playwright test"
   },
   "dependencies": {
     "@ownclouders/web-client": "^12.3.0",
