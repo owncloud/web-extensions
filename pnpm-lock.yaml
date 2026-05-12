@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  jsonpath-plus: 10.3.0
+  jsonpath-plus: 10.4.0
   '@uppy/core': 5.2.0
 
 importers:
@@ -2660,8 +2660,8 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
-  jsonpath-plus@10.3.0:
-    resolution: {integrity: sha512-8TNmfeTCk2Le33A3vRRwtuworG/L5RrgMvdjhKZxvyShO+mBu2fP50OWUjRLNtvw344DdDarFh9buFAZs5ujeA==}
+  jsonpath-plus@10.4.0:
+    resolution: {integrity: sha512-T92WWatJXmhBbKsgH/0hl+jxjdXrifi5IKeMY02DWggRxX0UElcbVzPlmgLTbvsPeW1PasQ6xE2Q75stkhGbsA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -6512,7 +6512,7 @@ snapshots:
 
   json5@2.2.3: {}
 
-  jsonpath-plus@10.3.0:
+  jsonpath-plus@10.4.0:
     dependencies:
       '@jsep-plugin/assignment': 1.3.0(jsep@1.4.0)
       '@jsep-plugin/regex': 1.0.4(jsep@1.4.0)
@@ -7435,7 +7435,7 @@ snapshots:
       immutable-json-patch: 6.0.2
       jmespath: 0.16.0
       json-source-map: 0.6.1
-      jsonpath-plus: 10.3.0
+      jsonpath-plus: 10.4.0
       jsonrepair: 3.13.1
       lodash-es: 4.17.23
       memoize-one: 6.0.0
