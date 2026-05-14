@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly
       day: sunday
@@ -13,9 +13,16 @@ updates:
         update-types:
           - minor
           - patch
+      owncloud-web-monorepo:
+        patterns:
+          - '@ownclouders/extension-sdk'
+          - '@ownclouders/web-test-helpers'
+          - '@ownclouders/web-client'
+          - '@ownclouders/web-pkg'
+          - '@ownclouders/eslint-config'
 
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     schedule:
       interval: weekly
       day: sunday
