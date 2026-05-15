@@ -15,7 +15,7 @@
     "@ownclouders/extension-sdk": "^12.3.2",
     "@ownclouders/web-test-helpers": "^12.3.2",
     "vue": "^3.5.34",
-    "vue-router": "^4.2.5",
+    "vue-router": "^5.0.7",
     "vue3-gettext": "^2.4.0",
     "zod": "^4.4.3"
   },
