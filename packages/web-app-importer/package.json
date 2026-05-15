@@ -13,19 +13,19 @@
     "test:e2e": "echo 'E2E tests not implemented'"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.3.0",
-    "@ownclouders/web-pkg": "^12.3.0",
-    "@uppy/dashboard": "^5.1.0",
+    "@ownclouders/web-client": "^12.3.2",
+    "@ownclouders/web-pkg": "^12.3.2",
+    "@uppy/dashboard": "^5.1.1",
     "@uppy/google-drive": "^5.1.0",
     "@uppy/onedrive": "^5.1.0",
     "@uppy/webdav": "1.1.1",
     "pinia": "^3.0.3"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.3.0",
-    "@ownclouders/web-test-helpers": "^12.3.0",
+    "@ownclouders/extension-sdk": "^12.3.2",
+    "@ownclouders/web-test-helpers": "^12.3.2",
     "@uppy/core": "^5.2.0",
-    "vue": "^3.4.21",
+    "vue": "^3.5.34",
     "vue3-gettext": "^2.4.0"
   }
 }
