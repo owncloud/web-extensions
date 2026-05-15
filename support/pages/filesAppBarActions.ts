@@ -1,5 +1,5 @@
 import { Locator, Page, expect } from '@playwright/test'
-import path from 'path'
+import { fileURLToPath } from 'url'
 
 export class FilesAppBar {
   readonly page: Page
@@ -20,8 +20,8 @@ export class FilesAppBar {
 
   async uploadFile(file: string) {
     await this.uploadBtn.click()
-    const realPath = path.join('./support/filesForUpload', file)
-    const uploadAction: Promise<void> = this.uploadFileBtn.setInputFiles(path.resolve(realPath))
+    const realPath = fileURLToPath(new URL(`../filesForUpload/${file}`, import.meta.url))
+    const uploadAction: Promise<void> = this.uploadFileBtn.setInputFiles(realPath)
 
     await Promise.all([
       this.page.waitForResponse(

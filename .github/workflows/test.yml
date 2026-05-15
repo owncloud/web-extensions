@@ -1,0 +1,156 @@
+name: Test
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+env:
+  PNPM_VERSION: 10.27.0
+  NODE_VERSION: 24.15.0
+  OCIS_URL: https://localhost:9200
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check types
+        run: pnpm check:types
+
+      - name: Lint
+        run: pnpm lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        app:
+          - web-app-advanced-search
+          - web-app-cast
+          - web-app-draw-io
+          - web-app-external-sites
+          - web-app-importer
+          - web-app-json-viewer
+          - web-app-photo-addon
+          - web-app-progress-bars
+          - web-app-unzip
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run unit tests
+        run: pnpm --filter ./packages/${{ matrix.app }} test:unit
+
+      - name: Build
+        run: pnpm --filter ./packages/${{ matrix.app }} build
+
+      - name: Copy manifest
+        if: matrix.app == 'web-app-external-sites'
+        run: cp ./packages/web-app-external-sites/tests/config/manifest.json ./packages/web-app-external-sites/dist/manifest.json
+
+      - name: Setup oCIS
+        run: |
+          docker run -d --name ocis \
+            -p 9200:9200 \
+            -e OCIS_URL=${{ env.OCIS_URL }} \
+            -e OCIS_INSECURE=true \
+            -e OCIS_LOG_LEVEL=error \
+            -e IDM_ADMIN_PASSWORD=admin \
+            -e PROXY_ENABLE_BASIC_AUTH=true \
+            -e WEB_ASSET_APPS_PATH=/apps \
+            -e WEB_UI_CONFIG_FILE=/web/config.json \
+            -e PROXY_CSP_CONFIG_FILE_LOCATION=/etc/ocis/csp.yaml \
+            -v ${{github.workspace}}/packages/${{matrix.app}}/dist:/apps/${{matrix.app}} \
+            -v ${{github.workspace}}/support/actions/ocis.web.config.json:/web/config.json \
+            -v ${{github.workspace}}/dev/docker/csp.yaml:/etc/ocis/csp.yaml \
+            -v ${{github.workspace}}/support/actions/ocis.apps.yaml:/etc/ocis/apps.yaml \
+            --entrypoint sh \
+            owncloud/ocis-rolling:latest \
+            -c "ocis init || true && ocis server"
+
+      - name: Wait for oCIS
+        run: |
+          echo "Waiting for oCIS"
+          # 150s timeout
+          for i in {1..30}; do
+            if curl -kfsSL "${{ env.OCIS_URL }}" > /dev/null; then
+              echo "oCIS is up ✅"
+              exit 0
+            fi
+            echo "Retrying in 5s..."
+            sleep 5
+          done
+          echo "❌ oCIS failed to start"
+          docker logs ocis
+          exit 1
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run E2E tests
+        env:
+          BASE_URL_OCIS: ${{ env.OCIS_URL }}
+          OCIS_PASSWORD: admin
+        run: pnpm --filter ./packages/${{ matrix.app }} test:e2e
+
+      - name: Upload test results
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: test-results-${{ matrix.app }}
+          path: ./packages/${{ matrix.app }}/test-results/
+          retention-days: 7
+
+      - name: Dump oCIS logs
+        if: failure()
+        run: docker logs ocis
+
+  check-tests-passed:
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Check all test jobs passed
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            exit 1
+          fi

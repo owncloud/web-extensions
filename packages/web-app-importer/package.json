@@ -9,7 +9,8 @@
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
     "check:types": "vue-tsc --noEmit",
-    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:e2e": "echo 'E2E tests not implemented'"
   },
   "dependencies": {
     "@ownclouders/web-client": "^12.3.0",
@@ -17,7 +18,7 @@
     "@uppy/dashboard": "^5.1.0",
     "@uppy/google-drive": "^5.1.0",
     "@uppy/onedrive": "^5.1.0",
-    "@uppy/webdav": "1.0.1",
+    "@uppy/webdav": "1.1.1",
     "pinia": "^3.0.3"
   },
   "devDependencies": {

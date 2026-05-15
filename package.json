@@ -12,7 +12,7 @@
     "check:types": "pnpm -r check:types",
     "lint": "eslint '{packages,support}/**/*.{js,ts,vue}' '*.{ts,js}' --color",
     "test:unit": "pnpm -r test:unit --watch=false",
-    "test:e2e": "pnpm playwright test"
+    "test:e2e": "pnpm -r playwright test"
   },
   "devDependencies": {
     "@ownclouders/eslint-config": "^12.3.0",
