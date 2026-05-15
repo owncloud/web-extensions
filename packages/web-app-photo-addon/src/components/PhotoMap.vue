@@ -473,13 +473,40 @@ function initMap() {
     prefetchVisibleClusters()
   })
 
-  // Add OpenStreetMap tile layer (noWrap prevents world map repeating)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  // OSM tile servers require a Referer header. Ensure referrer policy allows it.
+  let metaReferrer = document.querySelector('meta[name="referrer"]') as HTMLMetaElement | null
+  if (!metaReferrer) {
+    metaReferrer = document.createElement('meta')
+    metaReferrer.name = 'referrer'
+    metaReferrer.content = 'no-referrer-when-downgrade'
+    document.head.appendChild(metaReferrer)
+  } else if (metaReferrer.content === 'no-referrer' || metaReferrer.content === 'same-origin') {
+    // Temporarily relax for OSM tiles — restored on unmount
+    metaReferrer.dataset.originalContent = metaReferrer.content
+    metaReferrer.content = 'no-referrer-when-downgrade'
+  }
+
+  // Tile layer with referrer policy fix and retry on 403
+  const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 19,
     keepBuffer: 2,
     noWrap: true,
   }).addTo(map)
+
+  // Set referrer policy on each tile and retry on failure
+  tileLayer.on('tileloadstart', (event: L.TileEvent) => {
+    const tile = event.tile as HTMLImageElement
+    tile.referrerPolicy = 'no-referrer-when-downgrade'
+  })
+  tileLayer.on('tileerror', (event: L.TileErrorEvent) => {
+    const tile = event.tile as HTMLImageElement
+    if (!tile.dataset.retried) {
+      tile.dataset.retried = '1'
+      const src = tile.src
+      setTimeout(() => { tile.src = src }, 500)
+    }
+  })
 
   // Add photo markers
   addPhotoMarkers()
@@ -779,6 +806,12 @@ onUnmounted(() => {
   if (activeTooltip) {
     activeTooltip.remove()
     activeTooltip = null
+  }
+  // Restore original referrer policy if we changed it
+  const metaRef = document.querySelector('meta[name="referrer"]') as HTMLMetaElement | null
+  if (metaRef?.dataset.originalContent) {
+    metaRef.content = metaRef.dataset.originalContent
+    delete metaRef.dataset.originalContent
   }
   // Clean up injected CSS (only if no other PhotoMap instances)
   // Note: We leave the CSS in place since it's idempotent and shared
