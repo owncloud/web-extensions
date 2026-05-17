@@ -21,7 +21,7 @@
     "@ownclouders/extension-sdk": "^12.3.2",
     "@ownclouders/web-test-helpers": "^12.3.2",
     "@uppy/core": "^5.2.0",
-    "p-queue": "^9.2.0",
+    "p-queue": "^9.3.0",
     "uuid": "^14.0.0",
     "vue": "^3.5.34",
     "vue3-gettext": "^2.4.0"
