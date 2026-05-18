@@ -31,6 +31,7 @@ The web-extensions repository uses a **per-app versioning** system where:
 - Multiple apps can be released from a single commit
 - One merge commit on `main` can have multiple tags (one per app)
 - Each tag triggers a separate CI pipeline for building and releasing that app
+- Tags need to be signed when created
 
 ## Step-by-Step Release Process
 
@@ -105,15 +106,15 @@ Create one tag per app that was bumped, all pointing to the **same** merge commi
 
 ```bash
 # Create tags for each app (use the version you set in step 2)
-git tag advanced-search-v0.2.0 2524913
-git tag cast-v0.3.3 2524913
-git tag draw-io-v0.3.3 2524913
-git tag external-sites-v0.3.3 2524913
-git tag importer-v0.3.2 2524913
-git tag json-viewer-v0.3.3 2524913
-git tag photo-addon-v0.2.0 2524913
-git tag progress-bars-v0.3.3 2524913
-git tag unzip-v0.4.3 2524913
+git tag -s advanced-search-v0.2.0 2524913
+git tag -s cast-v0.3.3 2524913
+git tag -s draw-io-v0.3.3 2524913
+git tag -s external-sites-v0.3.3 2524913
+git tag -s importer-v0.3.2 2524913
+git tag -s json-viewer-v0.3.3 2524913
+git tag -s photo-addon-v0.2.0 2524913
+git tag -s progress-bars-v0.3.3 2524913
+git tag -s unzip-v0.4.3 2524913
 ```
 
 ### 7. Push Tags to Trigger CI
@@ -191,7 +192,7 @@ If you tagged the wrong commit:
 
 2. Create tags on the correct commit:
    ```bash
-   git tag cast-v0.3.3 2524913
+   git tag -s cast-v0.3.3 2524913
    git push origin cast-v0.3.3
    ```
 
@@ -212,8 +213,8 @@ git push origin chore/bump-versions
 
 # 5. Get merge commit hash and create tags
 COMMIT=$(git log origin/main --oneline -1 | awk '{print $1}')
-git tag app1-vX.Y.Z $COMMIT
-git tag app2-vX.Y.Z $COMMIT
+git tag -s app1-vX.Y.Z $COMMIT
+git tag -s app2-vX.Y.Z $COMMIT
 # ... etc for all apps
 
 # 6. Push tags one by one
