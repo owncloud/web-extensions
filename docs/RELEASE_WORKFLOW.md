@@ -9,10 +9,10 @@ This guide explains how to release multiple app versions in the web-extensions m
       * [3. Commit and Push the Changes](#3-commit-and-push-the-changes)
       * [4. Create a Pull Request](#4-create-a-pull-request)
       * [5. Get the Merge Commit Hash](#5-get-the-merge-commit-hash)
-      * [6. Create Tags on the Merge Commit](#6-create-tags-on-the-merge-commit)
-      * [7. Push Tags to Trigger CI](#7-push-tags-to-trigger-ci)
-      * [8. Monitor CI Builds](#8-monitor-ci-builds)
-      * [9. Verify Releases](#9-verify-releases)
+      * [6. Create and Push Tags on the Merge Commit](#6-create-and-push-tags-on-the-merge-commit)
+      * [7. Monitor CI Builds](#7-monitor-ci-builds)
+      * [8. Verify Releases](#8-verify-releases)
+      * [9. Deployment Examples](#9-deployment-examples)
    * [Technical Details](#technical-details)
       * [Tag Naming Convention](#tag-naming-convention)
    * [Troubleshooting](#troubleshooting)
@@ -48,13 +48,13 @@ git checkout -b chore/bump-versions
 For each app that needs a version bump, update the `version` field in its `package.json`:
 
 ```bash
-# Example: Updating cast app from 0.3.2 to 0.3.3
+# Example: Updating cast app from 0.3.3 to 0.4.0
 packages/web-app-cast/package.json
-# Change: "version": "0.3.2" → "version": "0.3.3"
+# Change: "version": "0.3.3" → "version": "0.4.0"
 
-# Example: Updating unzip app from 0.4.2 to 0.4.3
+# Example: Updating unzip app from 0.4.3 to 0.5.0
 packages/web-app-unzip/package.json
-# Change: "version": "0.4.2" → "version": "0.4.3"
+# Change: "version": "0.4.3" → "version": "0.5.0"
 
 # ... repeat for other apps that need updates
 ```
@@ -100,70 +100,72 @@ git log --oneline | head -5
 
 The commit hash is `2524913` in this example.
 
-### 6. Create Tags on the Merge Commit
+### 6. Create and Push Tags on the Merge Commit
 
-Create one tag per app that was bumped, all pointing to the **same** merge commit:
+Note that it would be possible to tag all web-extensions and push them in one step, but it has turned out that this will not trigger the release workflow. You therefore have to tag and push web-extensions individually which is proven to work.
+
+When the tag is created, you will be asked to add a comment. As a rule of thumb, use as example:\t
+`feat: advanced-search-v0.3.0`
+ 
+Create a tag of the app that was bumped, pointing to the **exact** merge commit from above:
 
 ```bash
 # Create tags for each app (use the version you set in step 2)
-git tag -s advanced-search-v0.2.0 2524913
-git tag -s cast-v0.3.3 2524913
-git tag -s draw-io-v0.3.3 2524913
-git tag -s external-sites-v0.3.3 2524913
-git tag -s importer-v0.3.2 2524913
-git tag -s json-viewer-v0.3.3 2524913
-git tag -s photo-addon-v0.2.0 2524913
-git tag -s progress-bars-v0.3.3 2524913
-git tag -s unzip-v0.4.3 2524913
-```
+git tag -s advanced-search-v0.3.0 2524913
+git push origin --tags
 
-### 7. Push Tags to Trigger CI
+git tag -s cast-v0.4.3 2524913
+git push origin --tags
 
-You can push **all tags at once** with:
+git tag -s draw-io-v0.4.0 2524913
+git push origin --tags
 
-```bash
+git tag -s external-sites-v0.4.0 2524913
+git push origin --tags
+
+git tag -s importer-v0.4.0 2524913
+git push origin --tags
+
+git tag -s json-viewer-v0.4.0 2524913
+git push origin --tags
+
+git tag -s photo-addon-v0.3.0 2524913
+git push origin --tags
+
+git tag -s progress-bars-v0.4.0 2524913
+git push origin --tags
+
+git tag -s unzip-v0.5.0 2524913
 git push origin --tags
 ```
 
-If CI does not trigger for all tags, re-push each tag **individually** to ensure Drone CI webhooks trigger properly:
+### 7. Monitor CI Builds
 
-```bash
-git push origin --delete advanced-search-v0.2.0 && git push origin advanced-search-v0.2.0
-git push origin --delete cast-v0.3.3 && git push origin cast-v0.3.3
-git push origin --delete draw-io-v0.3.3 && git push origin draw-io-v0.3.3
-git push origin --delete external-sites-v0.3.3 && git push origin external-sites-v0.3.3
-git push origin --delete importer-v0.3.2 && git push origin importer-v0.3.2
-git push origin --delete json-viewer-v0.3.3 && git push origin json-viewer-v0.3.3
-git push origin --delete photo-addon-v0.2.0 && git push origin photo-addon-v0.2.0
-git push origin --delete progress-bars-v0.3.3 && git push origin progress-bars-v0.3.3
-git push origin --delete unzip-v0.4.3 && git push origin unzip-v0.4.3
-```
+Watch the builds on GitHub Actions:
 
-**Why delete and re-push?** The first `git push --tags` may not trigger all webhooks reliably. Deleting and re-pushing each tag ensures each one individually triggers the Drone CI webhook.
-
-### 8. Monitor CI Builds
-
-Watch the builds on Drone CI:
-
-- **Drone Dashboard**: https://drone.owncloud.com/owncloud/web-extensions
+- **GitHub Actions**: https://github.com/owncloud/web-extensions/actions
 
 Each tag push triggers a separate build that:
 
-1. Detects the tag (e.g., `draw-io-v0.3.3`)
-2. Extracts the app name (`draw-io`) and version (`0.3.3`)
+1. Detects the tag (e.g., `draw-io-v0.4.0`)
+2. Extracts the app name (`draw-io`) and version (`0.4.0`)
 3. Builds that specific app
 4. Creates a `.zip` artifact
 5. Creates a GitHub release
 6. Uploads the artifact to the release
 7. Builds and pushes a Docker image
 
-### 9. Verify Releases
+### 8. Verify Releases
 
 Once builds complete, check:
 
 - **GitHub Releases**: https://github.com/owncloud/web-extensions/releases
 - **GitHub Tags**: https://github.com/owncloud/web-extensions/tags
 - **Docker Hub**: https://hub.docker.com/r/owncloud/web-extensions
+
+### 9. Deployment Examples
+
+You can now update the image versions of the [ocis_full](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full/web_extensions) deployment examples.
 
 ## Technical Details
 
@@ -173,9 +175,9 @@ Tags follow the pattern: `{app-name}-v{version}`
 
 Examples:
 
-- `cast-v0.3.3`
-- `draw-io-v0.3.3`
-- `unzip-v0.4.3`
+- `cast-v0.4.0`
+- `draw-io-v0.4.0`
+- `unzip-v0.4.0`
 
 ## Troubleshooting
 
@@ -186,14 +188,14 @@ If you tagged the wrong commit:
 1. Delete local and remote tags:
 
    ```bash
-   git tag -d cast-v0.3.3
-   git push origin --delete cast-v0.3.3
+   git tag -d cast-v0.4.0
+   git push origin --delete cast-v0.4.0
    ```
 
 2. Create tags on the correct commit:
    ```bash
-   git tag -s cast-v0.3.3 2524913
-   git push origin cast-v0.3.3
+   git tag -s cast-v0.4.0 2524913
+   git push origin cast-v0.4.0
    ```
 
 ## Quick Reference
@@ -222,7 +224,7 @@ git push origin --delete app1-vX.Y.Z && git push origin app1-vX.Y.Z
 git push origin --delete app2-vX.Y.Z && git push origin app2-vX.Y.Z
 # ... etc
 
-# 7. Monitor on Drone and GitHub
+# 7. Monitor on GitHub Actions
 ```
 
 ## Files Modified in Each Release
@@ -239,9 +241,9 @@ The CI/CD pipeline automatically:
 
 You do **not** need to manually:
 
-- Create GitHub releases (done by `.drone.star`)
-- Build `.zip` files (done by Drone)
-- Upload artifacts (done by Drone)
+- Create GitHub releases (done by GHA)
+- Build `.zip` files (done by GHA)
+- Upload artifacts (done by GHA)
 
 
 ## Docker Hub
