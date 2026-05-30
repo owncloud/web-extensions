@@ -50,10 +50,12 @@ export async function navigateToPhotoView(page: Page): Promise<void> {
   await appSwitcher.waitFor({ state: 'visible', timeout: 30000 })
   await appSwitcher.click()
 
-  // Find and click the Photos app
-  const photoApp = page.locator('text=Photos')
-  await photoApp.waitFor({ state: 'visible', timeout: 10000 })
-  await photoApp.click()
+  // Find and click the Photos app. Use an exact text match so we don't accidentally
+  // pick up the photo app's own header (e.g. "Photos (123)") if it's already mounted
+  // from a prior test.
+  const photoApp = page.getByText('Photos', { exact: true })
+  await photoApp.first().waitFor({ state: 'visible', timeout: 10000 })
+  await photoApp.first().click()
 
   // Wait for the photo view to load
   await page.waitForLoadState('domcontentloaded')
@@ -63,23 +65,25 @@ export async function navigateToPhotoView(page: Page): Promise<void> {
  * Wait for photos to be loaded in the gallery view
  */
 export async function waitForPhotosLoaded(page: Page): Promise<void> {
-  // Wait for either photos to appear or the empty state
-  const photoGrid = page.locator('.photo-grid')
-  const emptyState = page.locator('.no-photos, .empty-state')
-  const loadingState = page.locator('.loading-spinner, .loading-state')
+  // Make sure we're actually on the photos view first.
+  await page.locator('.photos-app').waitFor({ state: 'visible', timeout: 30000 })
 
-  // Wait for loading to finish
-  await loadingState.waitFor({ state: 'hidden', timeout: 60000 }).catch(() => {
-    // Loading state might not be visible if photos load quickly
-  })
+  // Wait for the loading indicator to clear if present. The real selector lives in
+  // PhotosView.vue as `.loading-status`; the previous `.loading-spinner` never matched.
+  const loadingStatus = page.locator('.photos-app .loading-status')
+  if (await loadingStatus.isVisible().catch(() => false)) {
+    await loadingStatus.waitFor({ state: 'hidden', timeout: 60000 })
+  }
 
-  // Either photos or empty state should be visible
-  await Promise.race([
+  // After loading, the view shows either a populated photo grid or the empty state.
+  // Use Promise.any so the first to appear wins, and don't swallow failures — if
+  // neither shows up the test should fail here with a clear cause.
+  const photoGrid = page.locator('.photo-grid').first()
+  const emptyState = page.locator('.empty-state, .no-photos').first()
+  await Promise.any([
     photoGrid.waitFor({ state: 'visible', timeout: 30000 }),
     emptyState.waitFor({ state: 'visible', timeout: 30000 })
-  ]).catch(() => {
-    // Continue even if neither is visible - test will fail with better error
-  })
+  ])
 }
 
 /**
