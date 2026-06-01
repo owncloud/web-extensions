@@ -15,8 +15,8 @@
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.3.2",
     "@ownclouders/web-test-helpers": "^12.3.2",
-    "qs": "^6.15.1",
-    "vue": "^3.5.34",
+    "qs": "^6.15.2",
+    "vue": "^3.5.35",
     "vue3-gettext": "^2.4.0"
   },
   "dependencies": {
