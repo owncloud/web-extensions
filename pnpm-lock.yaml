@@ -58,8 +58,8 @@ importers:
         specifier: 3.3.3
         version: 3.3.3(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-advanced-search:
     dependencies:
@@ -75,7 +75,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       sass-embedded:
         specifier: ^1.100.0
         version: 1.100.0
@@ -83,8 +83,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-cast:
     dependencies:
@@ -100,7 +100,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       '@types/chromecast-caf-sender':
         specifier: ^1.0.8
         version: 1.0.11
@@ -108,8 +108,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-draw-io:
     dependencies:
@@ -125,7 +125,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       qs:
         specifier: ^6.15.2
         version: 6.15.2
@@ -133,8 +133,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-external-sites:
     dependencies:
@@ -150,7 +150,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       vue:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
@@ -158,8 +158,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -193,7 +193,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       '@uppy/core':
         specifier: 5.2.0
         version: 5.2.0
@@ -201,8 +201,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-json-viewer:
     dependencies:
@@ -221,7 +221,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       sass-embedded:
         specifier: ^1.100.0
         version: 1.100.0
@@ -229,8 +229,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-photo-addon:
     dependencies:
@@ -249,7 +249,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       '@types/leaflet':
         specifier: ^1.9.21
         version: 1.9.21
@@ -263,8 +263,8 @@ importers:
         specifier: ^5.1.0
         version: 5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-progress-bars:
     dependencies:
@@ -277,7 +277,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.3.0
         version: 14.3.0(vue@3.5.35(typescript@5.9.3))
@@ -285,8 +285,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
   packages/web-app-unzip:
     dependencies:
@@ -305,7 +305,7 @@ importers:
         version: 12.3.2(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.3.2
-        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
+        version: 12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))
       '@uppy/core':
         specifier: 5.2.0
         version: 5.2.0
@@ -319,8 +319,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        specifier: ^4.0.0
+        version: 4.0.0(vue@3.5.35(typescript@5.9.3))
 
 packages:
 
@@ -1652,6 +1652,16 @@ packages:
       '@vue/server-renderer':
         optional: true
 
+  '@vue/test-utils@2.4.11':
+    resolution: {integrity: sha512-GDqaqZsA6m2E5vNzej0aYiIb6BX8xV9pNSbbbXKOfEYwg7ZNblVX8suyqmUBThq8VIrgAJNxn+z72hVtUeiWHA==}
+    peerDependencies:
+      '@vue/compiler-dom': 3.x
+      '@vue/server-renderer': 3.x
+      vue: 3.x
+    peerDependenciesMeta:
+      '@vue/server-renderer':
+        optional: true
+
   '@vueuse/core@14.3.0':
     resolution: {integrity: sha512-aHfz47g0ZhMtTVHmIzMVpJy8ePhhOy68GY5bv110+5DVtZ+W7BsOx+m61UNQqfrWyPztIHIanWa3E2tib3NFIw==}
     peerDependencies:
@@ -1739,6 +1749,10 @@ packages:
     resolution: {integrity: sha512-TkuxA4UCOvxuDK6NZYXCalszEzj+TLszyASooky+i742l9TqsOdYCMJJupxRic61hwquNtppB3hgcuq9SVSH1Q==}
     engines: {node: '>=6'}
 
+  array-back@6.2.3:
+    resolution: {integrity: sha512-SGDvmg6QTYiTxCBkYVmThcoa67uLl35pyzRHdpCGBOcqFy6BtwnphoFPk7LhJshD+Yk1Kt35WGWeZPTgwR4Fhw==}
+    engines: {node: '>=12.17'}
+
   assertion-error@2.0.1:
     resolution: {integrity: sha512-Izi8RQcffqCeNVgFigKli1ssklIbpHnCYc6AknXGYoB6grJqyeby7jv12JUQgmTAnIDnbck1uxksT4dzN3PWBA==}
     engines: {node: '>=12'}
@@ -1778,8 +1792,8 @@ packages:
     resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
     engines: {node: '>= 0.6.0'}
 
-  baseline-browser-mapping@2.10.33:
-    resolution: {integrity: sha512-bA6+tcSLpz2tIEdDXZPpPTIuxBcC4+w6SieaYyfigIa4h8GlFxbA17v22Vx3JUtuZQj9SgOsnbK+aTBzyDyEuw==}
+  baseline-browser-mapping@2.10.34:
+    resolution: {integrity: sha512-IMDedajPifLnHNY0X9n8hKxRTQ6/eTHwr5bDo04WnuqxyKw6LYtQywCuuqPZwhl3aBXMvQpJov42GLCwRRdQzw==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1797,6 +1811,9 @@ packages:
 
   brace-expansion@2.1.0:
     resolution: {integrity: sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==}
+
+  brace-expansion@2.1.1:
+    resolution: {integrity: sha512-WR1cURNjuvBLMZBMbqM0UoE+WAfdUcEV1ccD8PVBVOI+Z3ND4+SZbN8RsfT2bMuG1qwz5RFvPukSZm5fF2D5eA==}
 
   brace-expansion@5.0.6:
     resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
@@ -1828,8 +1845,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  caniuse-lite@1.0.30001793:
-    resolution: {integrity: sha512-iwSsYWaCOoh26cV8NwNRViHlrfUvYsHDfRVcbtmw0Kg6PJIZZXwMkj1442FYLBGkeUf1juAsU3DTfxW579mrPA==}
+  caniuse-lite@1.0.30001797:
+    resolution: {integrity: sha512-l8xKG+gwAIExZGl9FrF7KUwuOmk6wbEPC9Xoy/RtnWv1XG0Q4LFlagaLpUv3Kiza3W/wm27zy0yWJEieYKAP6w==}
 
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
@@ -1883,6 +1900,15 @@ packages:
   command-line-args@5.2.1:
     resolution: {integrity: sha512-H4UfQhZyakIjC74I9d34fGYDwk3XpSr17QhEd0Q3I9Xq1CETHo4Hcuo87WyWHpAF1aSLjLRf5lD9ZGX2qStUvg==}
     engines: {node: '>=4.0.0'}
+
+  command-line-args@6.0.2:
+    resolution: {integrity: sha512-AIjYVxrV9X752LmPDLbVYv8aMCuHPSLZJXEo2qo/xJfv+NYhaZ4sMSF01rM+gHPaMgvPM0l5D/F+Qx+i2WfSmQ==}
+    engines: {node: '>=12.20'}
+    peerDependencies:
+      '@75lb/nature': latest
+    peerDependenciesMeta:
+      '@75lb/nature':
+        optional: true
 
   commander@10.0.1:
     resolution: {integrity: sha512-y4Mg2tXshplEbSGzx7amzPwKKOCGuoSRP/CjEdwwk0FOGlUbq6lKuoyDZTNZkmxHdJtp54hdfY/JUrdL7Xfdug==}
@@ -2177,8 +2203,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  electron-to-chromium@1.5.364:
-    resolution: {integrity: sha512-G/dYE3+AYhyHwzTwg8UbnXf7zqMERYh7l2jJ3QujhFsH8agSYwtnGAR2aZ7f0AakIKJXd5En/Hre4igIUrdlYw==}
+  electron-to-chromium@1.5.368:
+    resolution: {integrity: sha512-7RckJJK4uESJF9PxvfMWd3TGqIiieUTG4HxnKaKuIpGbcr+r2ZEB3g2gAhCP3Fqm42vJSzLfgab9eva/C4/XVw==}
 
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
@@ -2450,6 +2476,15 @@ packages:
     resolution: {integrity: sha512-6Tb2myMioCAgv5kfvP5/PkZZ/ntTpVK39fHY7WkWBgvbeE+VHd/tZuZ4mrC+bxh4cfOZeYKVPaJIZtZXV7GNCQ==}
     engines: {node: '>=4.0.0'}
 
+  find-replace@5.0.2:
+    resolution: {integrity: sha512-Y45BAiE3mz2QsrN2fb5QEtO4qb44NcS7en/0y9PEVsg351HsLeVclP8QPMH79Le9sH3rs5RSwJu99W0WPZO43Q==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@75lb/nature': latest
+    peerDependenciesMeta:
+      '@75lb/nature':
+        optional: true
+
   find-up@5.0.0:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
@@ -2538,6 +2573,10 @@ packages:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
     deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
+
+  glob@13.0.6:
+    resolution: {integrity: sha512-Wjlyrolmm8uDpm/ogGyXZXb1Z+Ca2B8NbJwqBVg0axK9GbBeoS7yGV6vjXnYdGm6X53iehEuxxbyiKp8QmN4Vw==}
+    engines: {node: 18 || 20 || >=22}
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
@@ -2789,6 +2828,10 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
+  lilconfig@3.1.3:
+    resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
+    engines: {node: '>=14'}
+
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -2847,6 +2890,10 @@ packages:
 
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
+  lru-cache@11.5.1:
+    resolution: {integrity: sha512-RPimw/7aMdv2oqRrxKwvZXcPfwBrn/JZ2xYcY9Hus/6LaS3VOAKVWKWgNLCFSiOm1ESXinjsDlidVU7JlnCN2A==}
+    engines: {node: 20 || >=22}
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -2955,8 +3002,8 @@ packages:
     resolution: {integrity: sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==}
     engines: {node: '>=16 || 14 >=14.17'}
 
-  minipass@7.1.2:
-    resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
+  minipass@7.1.3:
+    resolution: {integrity: sha512-tEBHqDnIoM/1rXME1zgka9g6Q2lcoCkxHLuc7ODJ5BxbP5d4c2Z5cGgtXAku59200Cx7diuHTOYfSBD8n6mm8A==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   mitt@3.0.1:
@@ -3010,8 +3057,8 @@ packages:
     resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  node-releases@2.0.46:
-    resolution: {integrity: sha512-GYVXHE2KnrzAfsAjl4uP++evGFCrAU1jta4ubEjIG7YWt/64Gqv66a30yKwWczVjA6j3bM4nBwH7Pk1JmDHaxQ==}
+  node-releases@2.0.47:
+    resolution: {integrity: sha512-Uzmd6LXpouKo8EUK68IjH4+E01w/hXyV3R3g/geCJo+rXLNfh1xucB+LOzYEOQPSiUK3h/xZf0cQGcSsmyL2Og==}
     engines: {node: '>=18'}
 
   nopt@7.2.1:
@@ -3130,6 +3177,10 @@ packages:
   path-scurry@1.11.1:
     resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
     engines: {node: '>=16 || 14 >=14.18'}
+
+  path-scurry@2.0.2:
+    resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==}
+    engines: {node: 18 || 20 || >=22}
 
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
@@ -3677,6 +3728,10 @@ packages:
     resolution: {integrity: sha512-VAH4IvQ7BDFYglMd7BPRDfLgxZZX4O4TFcRDA6EN5X7erNJJq+McIEp8np9aVtxrCJ6qx4GTYVfOWNjcqwZgRw==}
     engines: {node: '>=8'}
 
+  typical@7.3.0:
+    resolution: {integrity: sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==}
+    engines: {node: '>=12.17'}
+
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
 
@@ -3835,6 +3890,9 @@ packages:
   vue-component-type-helpers@3.2.8:
     resolution: {integrity: sha512-9689efAXhN/EV86plgkL/XFiJSXhGtWPG6JDboZ+QnjlUWUUQrQ0ILKQtw4iQsuwIwu5k6Aw+JnehDe7161e7A==}
 
+  vue-component-type-helpers@3.3.3:
+    resolution: {integrity: sha512-x4nsFpy5Pe8fqPzp/5vkTPeTTDBpAx4WVtV47Ejt0+2FQrq4pRRsJs7JmYRqMFzTu/LW+pCWEjQ3YVCkPV7f9g==}
+
   vue-concurrency@5.0.3:
     resolution: {integrity: sha512-z8K4acfOUOLufGysY21xqI+KI8a81XcGUNLXhPOxYevqcfX052VP9KLUNvrdJrbI7rKbDGjIrlRhXwJsFb1Ukw==}
     peerDependencies:
@@ -3891,6 +3949,13 @@ packages:
     hasBin: true
     peerDependencies:
       '@vue/compiler-sfc': '>=3.0.0'
+      vue: '>=3.0.0'
+
+  vue3-gettext@4.0.0:
+    resolution: {integrity: sha512-CNqZnrNgly3kAj4H8pZKuGYF1pjDWphrmAG8XlZo2YQFxJO3HzhiwwUb7HbRYamZHqd0Y2TddAXmMkKBdmzrTg==}
+    engines: {node: '>= 20.19.0'}
+    hasBin: true
+    peerDependencies:
       vue: '>=3.0.0'
 
   vue@3.5.35:
@@ -4861,7 +4926,7 @@ snapshots:
       - typescript
       - vue
 
-  '@ownclouders/web-test-helpers@12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))':
+  '@ownclouders/web-test-helpers@12.3.2(@ownclouders/web-pkg@12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))(vue@3.5.35(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.1
       '@casl/vue': 2.2.6(@casl/ability@6.8.1)(vue@3.5.35(typescript@5.9.3))
@@ -4869,7 +4934,7 @@ snapshots:
       '@ownclouders/web-client': 12.3.2
       '@ownclouders/web-pkg': 12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
       '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))
-      '@vue/test-utils': 2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
+      '@vue/test-utils': 2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
       axios: 1.13.5
       vitest-mock-extended: 3.1.0(typescript@5.9.3)(vitest@4.1.7(@types/node@24.12.4)(happy-dom@20.9.0)(vite@7.3.2(@types/node@24.12.4)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)))
       vue: 3.5.35(typescript@5.9.3)
@@ -5688,6 +5753,15 @@ snapshots:
     optionalDependencies:
       '@vue/server-renderer': 3.5.35(vue@3.5.35(typescript@5.9.3))
 
+  '@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))':
+    dependencies:
+      '@vue/compiler-dom': 3.5.35
+      js-beautify: 1.15.4
+      vue: 3.5.35(typescript@5.9.3)
+      vue-component-type-helpers: 3.3.3
+    optionalDependencies:
+      '@vue/server-renderer': 3.5.35(vue@3.5.35(typescript@5.9.3))
+
   '@vueuse/core@14.3.0(vue@3.5.35(typescript@5.9.3))':
     dependencies:
       '@types/web-bluetooth': 0.0.21
@@ -5763,6 +5837,8 @@ snapshots:
 
   array-back@3.1.0: {}
 
+  array-back@6.2.3: {}
+
   assertion-error@2.0.1: {}
 
   ast-kit@2.2.0:
@@ -5806,7 +5882,7 @@ snapshots:
 
   base64-arraybuffer@1.0.2: {}
 
-  baseline-browser-mapping@2.10.33: {}
+  baseline-browser-mapping@2.10.34: {}
 
   birpc@2.8.0: {}
 
@@ -5823,16 +5899,20 @@ snapshots:
     dependencies:
       balanced-match: 1.0.2
 
+  brace-expansion@2.1.1:
+    dependencies:
+      balanced-match: 1.0.2
+
   brace-expansion@5.0.6:
     dependencies:
       balanced-match: 4.0.4
 
   browserslist@4.28.2:
     dependencies:
-      baseline-browser-mapping: 2.10.33
-      caniuse-lite: 1.0.30001793
-      electron-to-chromium: 1.5.364
-      node-releases: 2.0.46
+      baseline-browser-mapping: 2.10.34
+      caniuse-lite: 1.0.30001797
+      electron-to-chromium: 1.5.368
+      node-releases: 2.0.47
       update-browserslist-db: 1.2.3(browserslist@4.28.2)
 
   buffer-from@1.1.2: {}
@@ -5853,7 +5933,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  caniuse-lite@1.0.30001793: {}
+  caniuse-lite@1.0.30001797: {}
 
   chai@6.2.2: {}
 
@@ -5911,6 +5991,13 @@ snapshots:
       find-replace: 3.0.0
       lodash.camelcase: 4.3.0
       typical: 4.0.0
+
+  command-line-args@6.0.2:
+    dependencies:
+      array-back: 6.2.3
+      find-replace: 5.0.2
+      lodash.camelcase: 4.3.0
+      typical: 7.3.0
 
   commander@10.0.1: {}
 
@@ -6209,7 +6296,7 @@ snapshots:
       minimatch: 9.0.1
       semver: 7.7.3
 
-  electron-to-chromium@1.5.364: {}
+  electron-to-chromium@1.5.368: {}
 
   emoji-mart@5.6.0: {}
 
@@ -6511,6 +6598,8 @@ snapshots:
     dependencies:
       array-back: 3.1.0
 
+  find-replace@5.0.2: {}
+
   find-up@5.0.0:
     dependencies:
       locate-path: 6.0.0
@@ -6606,9 +6695,15 @@ snapshots:
       foreground-child: 3.3.1
       jackspeak: 3.4.3
       minimatch: 9.0.9
-      minipass: 7.1.2
+      minipass: 7.1.3
       package-json-from-dist: 1.0.1
       path-scurry: 1.11.1
+
+  glob@13.0.6:
+    dependencies:
+      minimatch: 10.2.5
+      minipass: 7.1.3
+      path-scurry: 2.0.2
 
   glob@7.2.3:
     dependencies:
@@ -6814,6 +6909,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
+  lilconfig@3.1.3: {}
+
   lines-and-columns@1.2.4: {}
 
   linkify-it@5.0.0:
@@ -6869,6 +6966,8 @@ snapshots:
   lodash@4.18.1: {}
 
   lru-cache@10.4.3: {}
+
+  lru-cache@11.5.1: {}
 
   lru-cache@5.1.1:
     dependencies:
@@ -6997,13 +7096,13 @@ snapshots:
 
   minimatch@9.0.1:
     dependencies:
-      brace-expansion: 2.1.0
+      brace-expansion: 2.1.1
 
   minimatch@9.0.9:
     dependencies:
       brace-expansion: 2.1.0
 
-  minipass@7.1.2: {}
+  minipass@7.1.3: {}
 
   mitt@3.0.1: {}
 
@@ -7043,7 +7142,7 @@ snapshots:
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
 
-  node-releases@2.0.46: {}
+  node-releases@2.0.47: {}
 
   nopt@7.2.1:
     dependencies:
@@ -7151,7 +7250,12 @@ snapshots:
   path-scurry@1.11.1:
     dependencies:
       lru-cache: 10.4.3
-      minipass: 7.1.2
+      minipass: 7.1.3
+
+  path-scurry@2.0.2:
+    dependencies:
+      lru-cache: 11.5.1
+      minipass: 7.1.3
 
   path-type@4.0.0: {}
 
@@ -7662,6 +7766,8 @@ snapshots:
 
   typical@4.0.0: {}
 
+  typical@7.3.0: {}
+
   uc.micro@2.1.0: {}
 
   ufo@1.6.4: {}
@@ -7804,6 +7910,8 @@ snapshots:
 
   vue-component-type-helpers@3.2.8: {}
 
+  vue-component-type-helpers@3.3.3: {}
+
   vue-concurrency@5.0.3(vue@3.5.35(typescript@5.9.3)):
     dependencies:
       caf: 15.0.1
@@ -7878,6 +7986,16 @@ snapshots:
       pofile: 1.1.4
       tslib: 2.8.1
       vue: 3.5.35(typescript@5.9.3)
+
+  vue3-gettext@4.0.0(vue@3.5.35(typescript@5.9.3)):
+    dependencies:
+      command-line-args: 6.0.2
+      glob: 13.0.6
+      lilconfig: 3.1.3
+      pofile: 1.1.4
+      vue: 3.5.35(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@75lb/nature'
 
   vue@3.5.35(typescript@5.9.3):
     dependencies:
