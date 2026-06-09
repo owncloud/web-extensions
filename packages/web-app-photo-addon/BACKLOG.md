@@ -53,7 +53,6 @@
 - [x] Received positive response from maintainer - "this is awesome, please go ahead!"
 - [ ] Wait for maintainer feedback on clarifying questions
 - [ ] Fork and restructure to `web-app-photos` and `web-app-advanced-search`
-- [ ] Update license from Apache-2.0 to AGPL-3.0
 - [ ] Submit PRs after backend PR merges
 
 ### 🔴 Deployment Example Updates (Requested by Maintainer)

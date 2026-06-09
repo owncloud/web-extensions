@@ -3,7 +3,7 @@
 [![Matrix](https://img.shields.io/matrix/ocis%3Amatrix.org?logo=matrix)](https://app.element.io/#/room/#ocis:matrix.org)
 [![Test](https://github.com/owncloud/web-extensions/actions/workflows/test.yml/badge.svg)](https://github.com/owncloud/web-extensions/actions/workflows/test.yml)
 [![web-extensions docker image](https://img.shields.io/docker/v/owncloud/web-extensions?label=web-extensions&logo=docker&sort=semver)](https://hub.docker.com/r/owncloud/web-extensions)
-[![License](https://img.shields.io/badge/License-AGPL%203-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 This repository contains a collection of [ownCloud Web](https://github.com/owncloud/web) extensions that, for various reasons, have not been added to the main repository.
 
