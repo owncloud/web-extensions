@@ -2,7 +2,7 @@
 
 <!-- OSPO-managed README | Generated: 2026-04-16 | v2 -->
 
-[![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud)](https://hub.docker.com/r/owncloud/web-extensions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![ownCloud OSPO](https://img.shields.io/badge/OSPO-ownCloud-blue)](https://kiteworks.com/opensource) [![Docker Hub](https://img.shields.io/docker/pulls/owncloud)](https://hub.docker.com/r/owncloud/web-extensions)
 
 Web Extensions is a collection of community and supplementary extensions for the ownCloud Web frontend that, for various reasons, are maintained outside of the main web repository. It includes extensions for draw.io integration, JSON file viewing, file casting, advanced search, photo enhancements, file importing, progress bars, external sites embedding and file unzipping -- each deployable as a standalone web app within oCIS.
 
