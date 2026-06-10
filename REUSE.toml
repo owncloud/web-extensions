@@ -1,0 +1,22 @@
+version = 1
+SPDX-PackageName = "ownCloud web-extensions"
+SPDX-PackageSupplier = "ospo@kiteworks.com"
+SPDX-PackageDownloadLocation = "https://github.com/owncloud/web-extensions"
+
+[[annotations]]
+path = "**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "ownCloud GmbH"
+SPDX-License-Identifier = "Apache-2.0"
+
+[[annotations]]
+path = "packages/web-app-progress-bars/src/NyanCat.vue"
+precedence = "aggregate"
+SPDX-FileCopyrightText = ["ownCloud GmbH", "cristurm (https://github.com/cristurm/nyan-cat)"]
+SPDX-License-Identifier = "Apache-2.0 AND MIT"
+
+[[annotations]]
+path = "packages/**/dist/**"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "ownCloud GmbH"
+SPDX-License-Identifier = "Apache-2.0"

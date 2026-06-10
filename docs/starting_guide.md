@@ -79,7 +79,7 @@ Template **package.json** file for the web-app:
     "version": "x.y.z",
     "private": true,
     "description": "<place description here",
-    "license": "AGPL-3.0",
+    "license": "Apache-2.0",
     "type": "module",
     "scripts": {
       "build": "pnpm vite build",
