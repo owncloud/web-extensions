@@ -1,7 +1,7 @@
 {
   "name": "web-extensions",
   "description": "Collection of ownCloud Web Extensions",
-  "license": "AGPL-3.0",
+  "license": "Apache-2.0",
   "author": "ownCloud",
   "private": true,
   "homepage": "https://github.com/owncloud/web-extensions",
