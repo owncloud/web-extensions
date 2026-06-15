@@ -21,15 +21,13 @@ export class FilesAppBar {
   async uploadFile(file: string) {
     await this.uploadBtn.click()
     const realPath = fileURLToPath(new URL(`../filesForUpload/${file}`, import.meta.url))
-    const uploadAction: Promise<void> = this.uploadFileBtn.setInputFiles(realPath)
-
     await Promise.all([
       this.page.waitForResponse(
         (resp) =>
           [201, 204].includes(resp.status()) &&
           ['POST', 'PUT', 'PATCH'].includes(resp.request().method())
       ),
-      uploadAction
+      this.uploadFileBtn.setInputFiles(realPath)
     ])
     await this.closeUploadDialogBtn.click()
     await expect(this.newResourceContextMenu).not.toBeVisible()

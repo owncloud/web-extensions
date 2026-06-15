@@ -92,6 +92,7 @@ jobs:
           - web-app-photo-addon
           - web-app-progress-bars
           - web-app-unzip
+          - web-app-ai-doc-summary
     steps:
       - name: Checkout code
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3

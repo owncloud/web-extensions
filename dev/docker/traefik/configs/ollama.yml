@@ -1,0 +1,22 @@
+http:
+  routers:
+    ollama:
+      rule: "Host(`host.docker.internal`) && PathPrefix(`/ollama`)"
+      entrypoints:
+        - ocis
+      tls: true
+      service: ollama
+      middlewares:
+        - ollama-strip-prefix
+
+  middlewares:
+    ollama-strip-prefix:
+      stripPrefix:
+        prefixes:
+          - "/ollama"
+
+  services:
+    ollama:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:11434"

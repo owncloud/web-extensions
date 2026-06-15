@@ -49,8 +49,18 @@ export class FilesPage {
   }
 
   async deleteAllFromPersonal() {
+    const closeUploadBar = this.page.locator('#close-upload-bar-btn')
+    if (await closeUploadBar.isVisible()) {
+      await closeUploadBar.click()
+    }
     await this.appSwitcherButton.click()
     await this.files.click()
+    const sidebarCloseBtn = this.page
+      .locator('[data-testid="app-sidebar"]')
+      .getByLabel('Close file sidebar')
+    if (await sidebarCloseBtn.isVisible()) {
+      await sidebarCloseBtn.click()
+    }
     await this.selectAllCheckbox.check()
     await this.deleteBtn.click()
   }
