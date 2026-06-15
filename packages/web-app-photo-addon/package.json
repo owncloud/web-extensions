@@ -1,6 +1,6 @@
 {
   "name": "photo-addon",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Photo gallery extension for ownCloud with timeline view, EXIF metadata, and map display",
   "license": "AGPL-3.0",
