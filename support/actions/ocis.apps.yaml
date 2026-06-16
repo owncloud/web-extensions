@@ -1,3 +1,9 @@
 importer:
   config:
     companionUrl: 'https://localhost:9200/companion'
+
+web-app-chat-with-file:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'

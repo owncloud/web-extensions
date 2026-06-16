@@ -1,0 +1,149 @@
+# Chat with File — translatable strings
+# Copyright (C) ownCloud GmbH
+# This file is distributed under the Apache-2.0 license.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: web-extensions-chat-with-file\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-17 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgctxt "Chat with File extension name"
+msgid "Chat with File"
+msgstr ""
+
+msgctxt "Sidebar panel tab title"
+msgid "Chat"
+msgstr ""
+
+msgctxt "Context menu action to open file chat"
+msgid "Chat with file"
+msgstr ""
+
+msgctxt "Mode toggle — ask questions about the file"
+msgid "Chat"
+msgstr ""
+
+msgctxt "Mode toggle — request changes to the file"
+msgid "Edit"
+msgstr ""
+
+msgctxt "Button to clear the chat history"
+msgid "Clear chat"
+msgstr ""
+
+msgctxt "Button to discard a proposed file edit"
+msgid "Discard"
+msgstr ""
+
+msgctxt "Button label while saving a file edit"
+msgid "Saving…"
+msgstr ""
+
+msgctxt "Button to apply a proposed file edit"
+msgid "Apply to file"
+msgstr ""
+
+msgid "File chat is not set up yet. Contact your administrator to configure an AI endpoint."
+msgstr ""
+
+msgid "Describe the change you want to make to this file."
+msgstr ""
+
+msgid "Ask a question about this file."
+msgstr ""
+
+msgid "Hide changes"
+msgstr ""
+
+msgid "Show changes"
+msgstr ""
+
+msgid "No changes detected."
+msgstr ""
+
+msgid "Thinking…"
+msgstr ""
+
+msgid "Chat message input"
+msgstr ""
+
+msgid "Describe the change… (Enter to send)"
+msgstr ""
+
+msgid "Ask about this file… (Enter to send)"
+msgstr ""
+
+msgid "Chat mode"
+msgstr ""
+
+msgid "Editing is only available for text files"
+msgstr ""
+
+msgid "Send message"
+msgstr ""
+
+msgid "Resource location not available"
+msgstr ""
+
+msgid "Could not resolve file space"
+msgstr ""
+
+msgid "This file is too large to edit here (limit: 12,000 characters). Use a text editor instead."
+msgstr ""
+
+msgid "The AI endpoint must be on the same server as ownCloud. Contact your administrator."
+msgstr ""
+
+msgid "Access to the AI service was denied. Your session may have expired — try reloading the page."
+msgstr ""
+
+msgid "The AI endpoint could not be found. Check the endpoint URL in admin settings."
+msgstr ""
+
+msgid "The AI service is currently busy. Please try again in a moment."
+msgstr ""
+
+msgid "The AI service is temporarily unavailable. Please try again later."
+msgstr ""
+
+msgid "The AI service returned an unexpected response. Please try again."
+msgstr ""
+
+msgid "The AI response was cut off before the edit was complete. Try with a shorter instruction or a smaller file."
+msgstr ""
+
+msgid "Edit ready — click \"Apply to file\" to save the changes."
+msgstr ""
+
+msgid "The AI service did not respond in time. Please try again later."
+msgstr ""
+
+msgid "Could not reach the AI service. Check your network connection and try again."
+msgstr ""
+
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+msgid "Editing is only supported for text files."
+msgstr ""
+
+msgid "Edit applied successfully."
+msgstr ""
+
+msgid "The file was changed by someone else. Reload the panel and try again."
+msgstr ""
+
+msgid "Could not save the file. Please try again."
+msgstr ""
+
+msgid "Edit discarded."
+msgstr ""
