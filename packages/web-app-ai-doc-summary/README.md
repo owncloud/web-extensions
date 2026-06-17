@@ -14,7 +14,7 @@ against the oCIS OIDC userinfo endpoint, and forwards the request to the
 configured LLM with the LLM API key injected server-side. The API key
 never reaches the browser.
 
-## Supported file types
+## Supported File Types
 
 PDF, TXT, MD
 
@@ -22,7 +22,7 @@ PDF text is extracted client-side with PDF.js (fake-worker mode, no Worker
 spawn required). Plain-text files are fetched via WebDAV and truncated to
 12 000 characters before being sent to the LLM.
 
-## Extension points
+## Extension Points
 
 | ID | Type |
 |----|------|
@@ -31,7 +31,7 @@ spawn required). Plain-text files are fetched via WebDAV and truncated to
 
 ## Configuration
 
-### Web app config
+### Web App Config
 
 Admins set the proxy endpoint and model in the oCIS Web app config:
 
@@ -45,7 +45,7 @@ The panel reads `applicationConfig.llm` at startup. If `endpoint` or `model`
 is missing the panel renders the unconfigured placeholder immediately, without
 making any network requests.
 
-### `ai-llm-proxy` sidecar
+### `ai-llm-proxy` Sidecar
 
 The sidecar is configured entirely via environment variables — the LLM API key
 stays server-side and never reaches the browser:
@@ -63,7 +63,7 @@ In the dev docker-compose stack the sidecar is exposed at
 Set `AI_LLM_ENDPOINT` and `AI_LLM_API_KEY` in a `.env` file or as shell
 variables before running `docker-compose up`.
 
-## Capability probing
+## Capability Probing
 
 When the panel first mounts it probes the endpoint for four capabilities:
 structured JSON output (`response_format`), tool/function calling, streaming,
@@ -73,7 +73,7 @@ and the model's context window. Probe results are cached per
 The probing is best-effort — every individual probe failure degrades silently
 to a conservative default and never blocks the summary request.
 
-## Summary output
+## Summary Output
 
 The LLM is prompted to return a JSON object with two fields:
 
