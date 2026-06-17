@@ -42,6 +42,30 @@ services:
       - ./packages/web-app-photo-addon/dist:/web/apps/photo-addon
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
       - ./packages/web-app-unzip/dist:/web/apps/unzip
+      - ./packages/web-app-ai-doc-summary/dist:/web/apps/ai-doc-summary
+    depends_on:
+      - traefik
+
+  ai-llm-proxy:
+    build:
+      context: ./packages/ai-llm-proxy
+      dockerfile: Dockerfile
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: '0'
+      OCIS_URL: 'https://host.docker.internal:9200'
+      LLM_ENDPOINT: '${AI_LLM_ENDPOINT:-http://host.docker.internal:11434/v1}'
+      LLM_API_KEY: '${AI_LLM_API_KEY:-}'
+      PORT: '3030'
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ai-llm-proxy.tls: true
+      traefik.http.routers.ai-llm-proxy.rule: Host(`host.docker.internal`) && PathPrefix(`/ai-llm-proxy`)
+      traefik.http.routers.ai-llm-proxy.entrypoints: ocis
+      traefik.http.routers.ai-llm-proxy.middlewares: ai-llm-proxy-strip,cors
+      traefik.http.middlewares.ai-llm-proxy-strip.stripPrefix.prefixes: /ai-llm-proxy
+      traefik.http.services.ai-llm-proxy.loadbalancer.server.port: 3030
     depends_on:
       - traefik
 
