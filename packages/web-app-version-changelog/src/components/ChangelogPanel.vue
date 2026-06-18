@@ -149,7 +149,7 @@ function cacheKey(index: number): string {
 async function fetchVersionContent(versionIndex: number): Promise<string> {
   const version = versions.value[versionIndex]
   if (!version?.path) {
-    return ''
+    throw new Error($gettext('Version content is unavailable.'))
   }
   const serverUrl = configStore.serverUrl.replace(/\/$/, '')
   const url = `${serverUrl}/dav${version.path}`
@@ -162,11 +162,11 @@ async function fetchVersionContent(versionIndex: number): Promise<string> {
 async function fetchHeadContent(): Promise<string> {
   const res = props.resource
   if (!res?.fileId || !res?.storageId) {
-    return ''
+    throw new Error($gettext('File information is unavailable.'))
   }
   const space = spacesStore.getSpace(res.storageId)
   if (!space) {
-    return ''
+    throw new Error($gettext('File storage space could not be found.'))
   }
   const { response } = await clientService.webdav.getFileContents(
     space,
