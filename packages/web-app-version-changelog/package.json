@@ -9,7 +9,7 @@
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
     "check:types": "vue-tsc --noEmit",
-    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest run",
     "test:e2e": "pnpm playwright test"
   },
   "dependencies": {
@@ -24,7 +24,6 @@
     "eslint": "9.39.4",
     "happy-dom": "^20.9.0",
     "prettier": "3.8.3",
-    "ts-node": "^10.9.2",
     "typescript": "5.9.3",
     "vite": "7.2.2",
     "vitest": "4.1.7",

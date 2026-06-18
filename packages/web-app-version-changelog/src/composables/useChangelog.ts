@@ -99,8 +99,11 @@ export function useChangelog(llmConfig: LlmConfig | null | Ref<LlmConfig | null>
       throw new Error(aiErrorMessage(res.status))
     }
 
-    const data = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> }
-    const text = data.choices?.[0]?.message?.content ?? ''
+    const data = (await res.json()) as {
+      choices?: Array<{ message?: { content?: string }; finish_reason?: string }>
+    }
+    const choice = data.choices?.[0]
+    const text = choice?.finish_reason === 'length' ? '' : (choice?.message?.content ?? '')
 
     return { summary: text.trim() || $gettext('No changes detected.') }
   }

@@ -41,7 +41,12 @@
               </span>
             </div>
             <template v-if="llmConfig">
-              <span v-if="isGeneratingKey(cacheKey(index))" class="changelog-generating">
+              <span
+                v-if="isGeneratingKey(cacheKey(index))"
+                class="changelog-generating"
+                role="status"
+                aria-live="polite"
+              >
                 {{ $gettext('Generating…') }}
               </span>
               <oc-button
