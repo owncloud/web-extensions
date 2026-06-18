@@ -8,7 +8,7 @@ web-app-chat-with-file:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
 
-version-changelog:
+web-app-version-changelog:
   config:
     llm:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
