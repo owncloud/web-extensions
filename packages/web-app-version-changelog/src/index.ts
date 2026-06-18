@@ -13,8 +13,21 @@ export default defineWebApplication({
     const { $pgettext } = useGettext()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
-    const llmConfig: LlmConfig | null =
-      rawLlm?.endpoint && rawLlm?.model ? { endpoint: rawLlm.endpoint, model: rawLlm.model } : null
+    let llmConfig: LlmConfig | null = null
+    if (rawLlm?.endpoint && rawLlm?.model) {
+      try {
+        const resolved = new URL(rawLlm.endpoint, window.location.href)
+        if (resolved.origin === window.location.origin) {
+          llmConfig = { endpoint: rawLlm.endpoint, model: rawLlm.model }
+        } else {
+          console.error(
+            '[version-changelog] LLM endpoint must be same-origin. Changelog generation disabled.'
+          )
+        }
+      } catch {
+        console.error('[version-changelog] Invalid LLM endpoint URL. Changelog generation disabled.')
+      }
+    }
 
     const extensions = computed(() => [
       {
