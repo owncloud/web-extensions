@@ -20,6 +20,7 @@ Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/w
 - [web-app-chat-with-file](packages/web-app-chat-with-file/) -- AI chat about file content
 - [web-app-draw-io](packages/web-app-draw-io/) -- Draw.io diagram integration
 - [web-app-external-sites](packages/web-app-external-sites/) -- Embed external websites
+- [web-app-file-comments](packages/web-app-file-comments/) -- Markdown comments attached to files and folders
 - [web-app-importer](packages/web-app-importer/) -- File import functionality
 - [web-app-json-viewer](packages/web-app-json-viewer/) -- JSON file viewer
 - [web-app-photo-addon](packages/web-app-photo-addon/) -- Photo enhancement features
