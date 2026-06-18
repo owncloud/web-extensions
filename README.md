@@ -23,6 +23,7 @@ Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/w
 - [web-app-photo-addon](packages/web-app-photo-addon/) -- Photo enhancement features
 - [web-app-progress-bars](packages/web-app-progress-bars/) -- Upload/download progress bars
 - [web-app-unzip](packages/web-app-unzip/) -- ZIP file extraction
+- [web-app-version-changelog](packages/web-app-version-changelog/) -- AI-generated changelog summaries for file version history
 
 ## Getting Started
 
