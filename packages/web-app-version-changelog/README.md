@@ -23,19 +23,17 @@ to produce a concise description of what changed.
 Add an `llm` block to your oCIS web configuration:
 
 ```yaml
-web:
+version-changelog:
   config:
-    options:
-      apps:
-        - web-app-version-changelog
-      llm:
-        endpoint: "https://your-ocis.example.com/ai-llm-proxy/v1"
-        model: "llama3.1:70b"
+    llm:
+      endpoint: "https://your-ocis.example.com/ai-llm-proxy/v1"
+      model: "llama3.1:70b"
 ```
 
 The endpoint must be OpenAI-compatible (`POST /chat/completions`). The Bearer token from the
 current user session is forwarded as the `Authorization` header, so endpoint-level auth is
-handled by the proxy you configure in oCIS.
+handled by the proxy you configure in oCIS. The endpoint must be same-origin — cross-origin
+endpoints are rejected at startup to prevent session token exfiltration.
 
 ## Known Limitations (v1)
 
