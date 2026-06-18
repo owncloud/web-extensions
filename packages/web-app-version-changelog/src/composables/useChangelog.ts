@@ -119,7 +119,9 @@ export function useChangelog(llmConfig: LlmConfig | null | Ref<LlmConfig | null>
     try {
       const [oldContent, newContent] = await Promise.all([fetchOld(), fetchNew()])
       const hunks = computeDiff(oldContent, newContent)
-      const diffText = diffToText(hunks).slice(0, MAX_DIFF_CHARS)
+      const raw = diffToText(hunks)
+      const diffText =
+        raw.length > MAX_DIFF_CHARS ? raw.slice(0, MAX_DIFF_CHARS) + '\n...[diff truncated]' : raw
 
       if (!diffText.trim()) {
         if (oldContent !== newContent) {
