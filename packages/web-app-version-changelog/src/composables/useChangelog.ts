@@ -5,6 +5,7 @@ import { computeDiff, diffToText } from '../utils/diff'
 import type { LlmConfig } from './useLlm'
 
 const MAX_DIFF_CHARS = 8_000
+const MAX_CONTENT_CHARS = 500_000
 
 export interface ChangelogEntry {
   summary: string
@@ -118,6 +119,15 @@ export function useChangelog(llmConfig: LlmConfig | null | Ref<LlmConfig | null>
 
     try {
       const [oldContent, newContent] = await Promise.all([fetchOld(), fetchNew()])
+
+      if (oldContent.length > MAX_CONTENT_CHARS || newContent.length > MAX_CONTENT_CHARS) {
+        errors.value.set(
+          cacheKey,
+          $gettext('This file is too large to compare. Only files with up to 2,000 lines are supported.')
+        )
+        return
+      }
+
       const hunks = computeDiff(oldContent, newContent)
       const raw = diffToText(hunks)
       const diffText =
