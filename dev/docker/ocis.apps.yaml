@@ -3,7 +3,13 @@ importer:
     companionUrl: 'https://host.docker.internal:9200/companion'
 
 ai-doc-summary:
-    config:
-      llm:
-        endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
-        model: 'llama3.2'
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
+
+chat-with-file:
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'

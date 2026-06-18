@@ -43,6 +43,7 @@ services:
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
       - ./packages/web-app-unzip/dist:/web/apps/unzip
       - ./packages/web-app-ai-doc-summary/dist:/web/apps/ai-doc-summary
+      - ./packages/web-app-chat-with-file/dist:/web/apps/chat-with-file
     depends_on:
       - traefik
 
