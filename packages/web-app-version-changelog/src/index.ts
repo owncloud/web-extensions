@@ -5,6 +5,7 @@ import { useGettext } from 'vue3-gettext'
 import type { Resource, SpaceResource } from '@ownclouders/web-client'
 import ChangelogPanel from './components/ChangelogPanel.vue'
 import type { LlmConfig } from './composables/useLlm'
+import translations from '../l10n/translations.json'
 
 const APP_ID = 'version-changelog'
 
@@ -54,6 +55,7 @@ export default defineWebApplication({
         name: $pgettext('Version Changelog extension name', 'Version Changelog'),
         id: APP_ID
       },
+      translations,
       extensions
     }
   }
