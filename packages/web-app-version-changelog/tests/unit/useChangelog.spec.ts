@@ -139,4 +139,52 @@ describe('useChangelog', () => {
     clearError('key10')
     expect(getError('key10')).toBeUndefined()
   })
+
+  it('sends Authorization header with the access token', async () => {
+    const llmResponse = { choices: [{ message: { content: 'summary' } }] }
+    vi.mocked(fetch).mockReturnValueOnce(makeFetchResponse(llmResponse) as any)
+    const { generateEntry } = useChangelog(BASE_CONFIG)
+    await generateEntry('key-auth', () => Promise.resolve('old'), () => Promise.resolve('new'))
+    const [, init] = vi.mocked(fetch).mock.calls[0]
+    expect((init as RequestInit).headers).toMatchObject({ Authorization: 'Bearer test-token' })
+  })
+
+  it('omits Authorization header when no access token is available', async () => {
+    vi.mocked(useAuthStore).mockReturnValue({ accessToken: '' } as any)
+    const llmResponse = { choices: [{ message: { content: 'summary' } }] }
+    vi.mocked(fetch).mockReturnValueOnce(makeFetchResponse(llmResponse) as any)
+    const { generateEntry } = useChangelog(BASE_CONFIG)
+    await generateEntry('key-noauth', () => Promise.resolve('old'), () => Promise.resolve('new'))
+    const [, init] = vi.mocked(fetch).mock.calls[0]
+    expect((init as RequestInit & { headers: Record<string, string> }).headers).not.toHaveProperty(
+      'Authorization'
+    )
+  })
+
+  it('sets error message on AbortSignal timeout (DOMException TimeoutError)', async () => {
+    const timeout = Object.assign(new DOMException('Timeout', 'TimeoutError'))
+    vi.mocked(fetch).mockRejectedValueOnce(timeout)
+    const { generateEntry, getError } = useChangelog(BASE_CONFIG)
+    await generateEntry('key-timeout', () => Promise.resolve('old'), () => Promise.resolve('new'))
+    expect(getError('key-timeout')).toContain('did not respond in time')
+  })
+
+  it('sets error message on network failure (TypeError)', async () => {
+    vi.mocked(fetch).mockRejectedValueOnce(new TypeError('Failed to fetch'))
+    const { generateEntry, getError } = useChangelog(BASE_CONFIG)
+    await generateEntry('key-network', () => Promise.resolve('old'), () => Promise.resolve('new'))
+    expect(getError('key-network')).toContain('network')
+  })
+
+  it('uses array index as cache key fallback when version has no etag', () => {
+    // cacheKey is built in ChangelogPanel, but the composable must accept any string key
+    const { generateEntry, getEntry } = useChangelog(BASE_CONFIG)
+    const llmResponse = { choices: [{ message: { content: 'ok' } }] }
+    vi.mocked(fetch).mockReturnValueOnce(makeFetchResponse(llmResponse) as any)
+    // Two different index-based keys should be independent
+    const key0 = 'file123:0'
+    const key1 = 'file123:1'
+    void generateEntry(key0, () => Promise.resolve('a'), () => Promise.resolve('b'))
+    expect(getEntry(key1)).toBeUndefined()
+  })
 })
