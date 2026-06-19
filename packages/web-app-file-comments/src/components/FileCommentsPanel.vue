@@ -120,12 +120,14 @@
 import type { Resource } from '@ownclouders/web-client'
 import { ref, toRef } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useModals } from '@ownclouders/web-pkg'
 import { useFileComments } from '../composables/useFileComments'
 import type { FileComment } from '../services/commentFormat'
 import { renderMarkdown } from '../utils/markdown'
 
 const props = defineProps<{ resource?: Resource | null }>()
 const { $gettext } = useGettext()
+const { dispatchModal } = useModals()
 const newComment = ref('')
 const editBody = ref('')
 const editingId = ref<string | null>(null)
@@ -178,11 +180,18 @@ const saveEdit = async (comment: FileComment) => {
   }
 }
 
-const deleteComment = async (comment: FileComment) => {
-  if (!window.confirm($gettext('Delete this comment?'))) {
-    return
-  }
-  await runMutation(() => remove(comment))
+const deleteComment = (comment: FileComment) => {
+  // Use the ODS modal (consistent with other extensions and automatable in
+  // Playwright) instead of window.confirm, which auto-dismisses in headless runs.
+  dispatchModal({
+    title: $gettext('Delete comment'),
+    message: $gettext('Are you sure you want to delete this comment? This cannot be undone.'),
+    confirmText: $gettext('Delete'),
+    onConfirm: async () => {
+      // Failure surfaces through the panel error banner via the composable.
+      await runMutation(() => remove(comment))
+    }
+  })
 }
 </script>
 
