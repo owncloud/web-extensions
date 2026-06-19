@@ -15,7 +15,9 @@ Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/w
 ### Included Extensions
 
 - [web-app-advanced-search](packages/web-app-advanced-search/) -- Advanced search capabilities
+- [web-app-ai-doc-summary](packages/web-app-ai-doc-summary/) -- AI-generated document summaries
 - [web-app-cast](packages/web-app-cast/) -- Cast files to external devices
+- [web-app-chat-with-file](packages/web-app-chat-with-file/) -- AI chat about file content
 - [web-app-draw-io](packages/web-app-draw-io/) -- Draw.io diagram integration
 - [web-app-external-sites](packages/web-app-external-sites/) -- Embed external websites
 - [web-app-importer](packages/web-app-importer/) -- File import functionality
