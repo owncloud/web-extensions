@@ -1,9 +1,7 @@
 import { test, expect, Page } from '@playwright/test'
 import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
-import { FilesPage } from '../../../../support/pages/filesPage'
 
 const DRAFT_MENU_ITEM = '[data-action="ai-quick-draft-creator-create-draft"]'
-const MODAL_TITLE_SELECTOR = '.oc-modal-title, [data-testid="modal-title"]'
 const DESCRIPTION_INPUT = '[data-testid="draft-description"]'
 const FORMAT_SELECT = '[data-testid="draft-format"]'
 const CREATE_BTN = '[data-testid="draft-create"]'
