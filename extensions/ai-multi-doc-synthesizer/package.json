@@ -6,6 +6,7 @@
   "author": "ownCloud",
   "type": "module",
   "scripts": {
+    "postinstall": "node postinstall.cjs",
     "build": "pnpm vite build",
     "build:w": "pnpm vite build --watch --mode development",
     "check:types": "vue-tsc --noEmit",
