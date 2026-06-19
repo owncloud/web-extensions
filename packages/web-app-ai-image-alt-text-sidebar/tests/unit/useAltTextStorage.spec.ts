@@ -30,7 +30,7 @@ function getWrapper(setup: (result: ReturnType<typeof useAltTextStorage>) => voi
   mocks.$clientService.httpAuthenticated.request = vi.fn().mockResolvedValue({
     data: httpResponse,
     headers: {}
-  })
+  }) as any
   return getComposableWrapper(() => {
     const instance = useAltTextStorage()
     setup(instance)
@@ -76,7 +76,7 @@ describe('useAltTextStorage', () => {
 
     it('sets saveError when PROPPATCH fails', async () => {
       const mocks = { ...defaultComponentMocks() }
-      mocks.$clientService.httpAuthenticated.request = vi.fn().mockRejectedValue(new Error('Network error'))
+      mocks.$clientService.httpAuthenticated.request = vi.fn().mockRejectedValue(new Error('Network error')) as any
       await new Promise<void>((resolve) => {
         getComposableWrapper(() => {
           const instance = useAltTextStorage()

@@ -18,7 +18,7 @@ export function useLlm(initialConfig: LlmConfig | null): UseLlmResult {
   const status = ref<LlmStatus>('unconfigured')
   const config = ref<LlmConfig | null>(initialConfig)
 
-  async function ensureReady(): Promise<void> {
+  function ensureReady(): Promise<void> {
     if (!config.value) {
       status.value = 'unconfigured'
     } else if (config.value.vision) {
@@ -26,6 +26,7 @@ export function useLlm(initialConfig: LlmConfig | null): UseLlmResult {
     } else {
       status.value = 'text-only'
     }
+    return Promise.resolve()
   }
 
   return { status, config, ensureReady }
