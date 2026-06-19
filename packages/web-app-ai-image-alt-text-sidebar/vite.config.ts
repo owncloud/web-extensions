@@ -13,6 +13,7 @@ export default defineConfig({
     }
   },
   test: {
-    exclude: ['**/e2e/**']
+    exclude: ['**/e2e/**'],
+    pool: 'forks'
   }
 })
