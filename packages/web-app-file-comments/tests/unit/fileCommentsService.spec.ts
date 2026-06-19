@@ -24,7 +24,7 @@ describe('FileCommentsService', () => {
 
   beforeEach(() => {
     request = vi.fn()
-    service = new FileCommentsService({ request } as DavHttpClient)
+    service = new FileCommentsService({ request } as DavHttpClient, { delayMs: 0 })
   })
 
   it('loads allocated properties, skips deleted slots and parses comments', async () => {
@@ -130,5 +130,48 @@ describe('FileCommentsService', () => {
         body: 'Comment'
       })
     ).rejects.toThrow('rejected')
+  })
+
+  it('retries the lock when the resource is briefly locked, then succeeds', async () => {
+    request
+      .mockRejectedValueOnce(new Error('423 Locked'))
+      .mockResolvedValueOnce({ data: '<lock/>', headers: { 'lock-token': '<token-r>' } })
+      .mockResolvedValueOnce({ data: multistatus({ count: '0' }), headers: {} })
+      .mockResolvedValueOnce({ data: successfulPatch, headers: {} })
+      .mockResolvedValueOnce({ data: '', headers: {} })
+
+    const result = await service.add(resource, 'Hello', { id: 'alice-id', name: 'Alice' })
+
+    expect(result).toMatchObject({ sequence: 1, id: 'comment-000001' })
+    expect(request.mock.calls.map(([config]) => config.method)).toEqual([
+      'LOCK',
+      'LOCK',
+      'PROPFIND',
+      'PROPPATCH',
+      'UNLOCK'
+    ])
+  })
+
+  it('gives up after exhausting the lock attempts', async () => {
+    request.mockRejectedValue(new Error('423 Locked'))
+
+    await expect(
+      service.add(resource, 'Hello', { id: 'alice-id', name: 'Alice' })
+    ).rejects.toThrow('423 Locked')
+
+    expect(request.mock.calls.filter(([config]) => config.method === 'LOCK')).toHaveLength(3)
+  })
+
+  it('still resolves when releasing the lock fails', async () => {
+    request
+      .mockResolvedValueOnce({ data: '<lock/>', headers: { 'lock-token': '<token-u>' } })
+      .mockResolvedValueOnce({ data: multistatus({ count: '0' }), headers: {} })
+      .mockResolvedValueOnce({ data: successfulPatch, headers: {} })
+      .mockRejectedValueOnce(new Error('unlock failed'))
+
+    const result = await service.add(resource, 'Hello', { id: 'alice-id', name: 'Alice' })
+
+    expect(result).toMatchObject({ sequence: 1 })
+    expect(request.mock.calls[3][0].method).toBe('UNLOCK')
   })
 })

@@ -5,6 +5,15 @@ export const COMMENTS_NAMESPACE = 'urn:owncloud:file-comments'
 const COUNT_PROPERTY = 'count'
 const MAX_COMMENTS = 10_000
 
+// A LOCK can momentarily fail when another collaborator holds the write lock
+// while allocating their own comment sequence. Retry a few times with a short
+// linear backoff before surfacing the failure to the user.
+const DEFAULT_LOCK_ATTEMPTS = 3
+const DEFAULT_LOCK_RETRY_DELAY_MS = 150
+
+const delay = (ms: number): Promise<void> =>
+  ms > 0 ? new Promise((resolve) => setTimeout(resolve, ms)) : Promise.resolve()
+
 interface DavResponse {
   data: unknown
   headers: Record<string, string | undefined>
@@ -139,7 +148,10 @@ const assertProppatchSucceeded = (value: unknown): void => {
 }
 
 export class FileCommentsService {
-  constructor(private readonly http: DavHttpClient) {}
+  constructor(
+    private readonly http: DavHttpClient,
+    private readonly lockRetry: { attempts?: number; delayMs?: number } = {}
+  ) {}
 
   async list(resource: Resource): Promise<FileComment[]> {
     const countResult = await this.propfind(resource, [COUNT_PROPERTY])
@@ -264,33 +276,62 @@ export class FileCommentsService {
   }
 
   private async withLock<T>(resource: Resource, operation: (lockToken: string) => Promise<T>) {
-    const response = await this.http.request({
-      method: 'LOCK',
-      url: davUrl(resource),
-      data:
-        '<?xml version="1.0" encoding="UTF-8"?>' +
-        '<d:lockinfo xmlns:d="DAV:"><d:lockscope><d:exclusive/></d:lockscope>' +
-        '<d:locktype><d:write/></d:locktype><d:owner>ownCloud File Comments</d:owner></d:lockinfo>',
-      headers: {
-        Depth: '0',
-        Timeout: 'Second-15',
-        'Content-Type': 'application/xml; charset=utf-8'
-      },
-      responseType: 'text'
-    })
-    const lockToken = response.headers['lock-token'] || response.headers['Lock-Token']
-    if (!lockToken) {
-      throw new Error('The WebDAV server did not return a lock token')
-    }
+    const lockToken = await this.acquireLock(resource)
 
     try {
       return await operation(lockToken)
     } finally {
-      await this.http.request({
-        method: 'UNLOCK',
-        url: davUrl(resource),
-        headers: { 'Lock-Token': lockToken }
-      })
+      // Releasing the lock is best-effort: a failed UNLOCK must not mask the
+      // result (or error) of the operation it protected. The server-side lock
+      // expires on its own via the LOCK Timeout if this request is lost.
+      try {
+        await this.http.request({
+          method: 'UNLOCK',
+          url: davUrl(resource),
+          headers: { 'Lock-Token': lockToken }
+        })
+      } catch {
+        // ignore — the lock timeout is the backstop
+      }
     }
+  }
+
+  private async acquireLock(resource: Resource): Promise<string> {
+    const attempts = Math.max(1, this.lockRetry.attempts ?? DEFAULT_LOCK_ATTEMPTS)
+    const retryDelay = this.lockRetry.delayMs ?? DEFAULT_LOCK_RETRY_DELAY_MS
+    let lastError: unknown = new Error('The WebDAV server did not return a lock token')
+
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+      try {
+        const response = await this.http.request({
+          method: 'LOCK',
+          url: davUrl(resource),
+          data:
+            '<?xml version="1.0" encoding="UTF-8"?>' +
+            '<d:lockinfo xmlns:d="DAV:"><d:lockscope><d:exclusive/></d:lockscope>' +
+            '<d:locktype><d:write/></d:locktype><d:owner>ownCloud File Comments</d:owner></d:lockinfo>',
+          headers: {
+            Depth: '0',
+            Timeout: 'Second-15',
+            'Content-Type': 'application/xml; charset=utf-8'
+          },
+          responseType: 'text'
+        })
+        const lockToken = response.headers['lock-token'] || response.headers['Lock-Token']
+        if (lockToken) {
+          return lockToken
+        }
+      } catch (cause) {
+        lastError = cause
+      }
+
+      if (attempt < attempts) {
+        await delay(retryDelay * attempt)
+      }
+    }
+
+    throw lastError instanceof Error
+      ? lastError
+      : new Error('The WebDAV server did not return a lock token')
   }
 }
