@@ -9,17 +9,26 @@ can edit or delete their own comments.
 Comments are custom WebDAV properties on the file or folder itself in the
 `urn:owncloud:file-comments` namespace:
 
-- `count` stores the highest allocated sequence number.
+- `count` is a monotonic high-water allocator for sequence numbers; it only
+  ever grows, so a deleted comment's slot is never reused.
+- `index` is the comma-separated list of sequence numbers that are currently
+  live. Reads use it to fetch only existing comments, and deletions drop an
+  entry from it (leaving `count` untouched).
 - `comment-000001`, `comment-000002`, ... store one Markdown document each.
 - YAML front matter records the schema version, author and timestamps.
+
+Keeping the live `index` separate from the all-time `count` means a file with a
+long add/delete history neither bloats the read request nor locks out new
+comments once the high-water mark is large; the number of *live* comments is
+bounded instead.
 
 oCIS persists arbitrary WebDAV properties in the resource's existing
 MessagePack metadata. Because the metadata belongs to the stable resource node,
 comments follow resource renames and moves. The extension never reads or writes an
 internal `.mpk` file directly.
 
-Writes use a short WebDAV `LOCK` around counter allocation and `PROPPATCH` to
-avoid sequence collisions between collaborators.
+Writes use a short WebDAV `LOCK` (retried briefly on contention) around sequence
+allocation and `PROPPATCH` to avoid collisions between collaborators.
 
 ## Permissions
 

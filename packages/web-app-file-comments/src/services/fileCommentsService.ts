@@ -2,8 +2,34 @@ import type { Resource } from '@ownclouders/web-client'
 import { parseComment, serializeComment, type FileComment } from './commentFormat'
 
 export const COMMENTS_NAMESPACE = 'urn:owncloud:file-comments'
+// `count` is a monotonic high-water allocator: it only ever grows, so a deleted
+// comment's sequence number is never reused and stays a stable id. `index`
+// holds the sequence numbers that are currently live. Keeping them separate
+// means list() fetches only existing comments (not every slot 1..count) and a
+// file with a long add/delete history neither bloats the PROPFIND body nor
+// locks out new comments once the high-water mark is large.
 const COUNT_PROPERTY = 'count'
-const MAX_COMMENTS = 10_000
+const INDEX_PROPERTY = 'index'
+const MAX_COMMENTS = 10_000 // upper bound on *live* comments per resource
+const MAX_SEQUENCE = 999_999 // structural limit from the 6-digit propertyName() padding
+
+const parseIndex = (value: string | undefined): number[] => {
+  if (!value) {
+    return []
+  }
+  const sequences = value
+    .split(',')
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0)
+    .map((part) => Number.parseInt(part, 10))
+  const invalid = sequences.some(
+    (sequence) => !Number.isSafeInteger(sequence) || sequence < 1 || sequence > MAX_SEQUENCE
+  )
+  if (invalid || sequences.length > MAX_COMMENTS) {
+    throw new Error('The stored comment index is invalid')
+  }
+  return sequences
+}
 
 // A LOCK can momentarily fail when another collaborator holds the write lock
 // while allocating their own comment sequence. Retry a few times with a short
@@ -109,6 +135,10 @@ const parseXml = (value: unknown): XMLDocument => {
   return result
 }
 
+// Note: getElementsByTagNameNS() would be the native equivalent, but happy-dom
+// (the unit-test DOM) does not implement its namespace matching, so we filter
+// getElementsByTagName('*') by namespace/localName for portability. The scan is
+// negligible now that list() only fetches the live comment slots.
 const findElements = (parent: Document | Element, namespace: string, localName: string) =>
   Array.from(parent.getElementsByTagName('*')).filter(
     (element) => element.namespaceURI === namespace && element.localName === localName
@@ -154,26 +184,26 @@ export class FileCommentsService {
   ) {}
 
   async list(resource: Resource): Promise<FileComment[]> {
-    const countResult = await this.propfind(resource, [COUNT_PROPERTY])
-    const count = Number.parseInt(countResult.get(COUNT_PROPERTY) || '0', 10)
-    if (!Number.isSafeInteger(count) || count < 0 || count > MAX_COMMENTS) {
-      throw new Error('The stored comment count is invalid')
-    }
-    if (count === 0) {
+    const indexResult = await this.propfind(resource, [INDEX_PROPERTY])
+    const sequences = parseIndex(indexResult.get(INDEX_PROPERTY))
+    if (sequences.length === 0) {
       return []
     }
 
-    const names = Array.from({ length: count }, (_, index) => propertyName(index + 1))
-    const values = await this.propfind(resource, names)
+    // Fetch only the live slots, never the full 1..count range.
+    const values = await this.propfind(
+      resource,
+      sequences.map((sequence) => propertyName(sequence))
+    )
     const comments: FileComment[] = []
 
-    names.forEach((name, index) => {
-      const value = values.get(name)
+    sequences.forEach((sequence) => {
+      const value = values.get(propertyName(sequence))
       if (!value) {
         return
       }
       try {
-        comments.push(parseComment(value, index + 1))
+        comments.push(parseComment(value, sequence))
       } catch {
         // Keep one malformed property from hiding the rest of the conversation.
       }
@@ -184,13 +214,19 @@ export class FileCommentsService {
 
   add(resource: Resource, body: string, author: CommentAuthor): Promise<FileComment> {
     return this.withLock(resource, async (lockToken) => {
-      const countResult = await this.propfind(resource, [COUNT_PROPERTY])
-      const currentCount = Number.parseInt(countResult.get(COUNT_PROPERTY) || '0', 10)
-      if (!Number.isSafeInteger(currentCount) || currentCount < 0 || currentCount >= MAX_COMMENTS) {
+      const state = await this.propfind(resource, [COUNT_PROPERTY, INDEX_PROPERTY])
+      const highWater = Number.parseInt(state.get(COUNT_PROPERTY) || '0', 10)
+      if (!Number.isSafeInteger(highWater) || highWater < 0 || highWater > MAX_SEQUENCE) {
         throw new Error('The stored comment count is invalid')
       }
+      // Bound the number of *live* comments, not the all-time allocator, so
+      // deleting comments always frees capacity for new ones.
+      const sequences = parseIndex(state.get(INDEX_PROPERTY))
+      const sequence = highWater + 1
+      if (sequences.length >= MAX_COMMENTS || sequence > MAX_SEQUENCE) {
+        throw new Error('This item has reached the maximum number of comments')
+      }
 
-      const sequence = currentCount + 1
       const createdAt = new Date().toISOString()
       const metadata = {
         version: 1 as const,
@@ -203,7 +239,8 @@ export class FileCommentsService {
         {
           set: {
             [propertyName(sequence)]: serializeComment(metadata, body),
-            [COUNT_PROPERTY]: String(sequence)
+            [COUNT_PROPERTY]: String(sequence),
+            [INDEX_PROPERTY]: [...sequences, sequence].join(',')
           }
         },
         lockToken
@@ -238,9 +275,22 @@ export class FileCommentsService {
   }
 
   async remove(resource: Resource, comment: FileComment): Promise<void> {
-    await this.withLock(resource, (lockToken) =>
-      this.proppatch(resource, { remove: [propertyName(comment.sequence)] }, lockToken)
-    )
+    await this.withLock(resource, async (lockToken) => {
+      const indexResult = await this.propfind(resource, [INDEX_PROPERTY])
+      const sequences = parseIndex(indexResult.get(INDEX_PROPERTY)).filter(
+        (sequence) => sequence !== comment.sequence
+      )
+      // Drop the slot from the live index and delete the property in one patch.
+      // `count` is intentionally left untouched so sequence numbers are never reused.
+      await this.proppatch(
+        resource,
+        {
+          set: { [INDEX_PROPERTY]: sequences.join(',') },
+          remove: [propertyName(comment.sequence)]
+        },
+        lockToken
+      )
+    })
   }
 
   private async propfind(resource: Resource, properties: string[]): Promise<Map<string, string>> {
