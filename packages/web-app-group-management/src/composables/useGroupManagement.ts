@@ -6,6 +6,13 @@ export interface MemberMutationResult {
   failed: { id: string; reason: Error }[]
 }
 
+// Escape a user-supplied term for use inside an OData `$search` phrase (which is
+// wrapped in double quotes). Without escaping, a typed `"` produces a malformed
+// expression and the Graph API returns 400 -- which would otherwise surface to
+// the user as an empty list / "no results" for a perfectly valid search.
+const quoteSearchTerm = (term: string): string =>
+  `"${term.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
+
 /**
  * Thin, typed wrapper around the LibreGraph groups/users client.
  *
@@ -27,7 +34,7 @@ export function useGroupManagement() {
       .groups.listGroups({
         orderBy: ['displayName'],
         expand: ['members'],
-        ...(search ? { search: `"${search}"` } : {})
+        ...(search ? { search: quoteSearchTerm(search) } : {})
       })
       .then((groups) => groups ?? [])
 
@@ -51,7 +58,17 @@ export function useGroupManagement() {
    * Users already in the group are skipped.
    */
   const addMembers = async (group: Group, userIds: string[]): Promise<MemberMutationResult> => {
-    const existing = new Set((group.members ?? []).map((m) => m.id))
+    // Build the dedup set from live server state rather than the snapshot taken
+    // when the modal opened, so a user added concurrently by another admin is
+    // not added again (which would surface as a spurious per-user failure).
+    // Fall back to the snapshot if the refresh itself fails.
+    let existing: Set<string>
+    try {
+      const fresh = await getGroup(group.id)
+      existing = new Set((fresh.members ?? []).map((m) => m.id))
+    } catch {
+      existing = new Set((group.members ?? []).map((m) => m.id))
+    }
     const toAdd = userIds.filter((id) => !existing.has(id))
     const results = await Promise.allSettled(
       toAdd.map((userId) => graph().groups.addMember(group.id, userId))
@@ -77,7 +94,7 @@ export function useGroupManagement() {
     graph()
       .users.listUsers({
         orderBy: ['displayName'],
-        ...(search ? { search: `"${search}"` } : {})
+        ...(search ? { search: quoteSearchTerm(search) } : {})
       })
       .then((users) => users ?? [])
 

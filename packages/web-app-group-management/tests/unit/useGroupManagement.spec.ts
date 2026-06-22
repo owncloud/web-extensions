@@ -48,6 +48,15 @@ describe('useGroupManagement', () => {
       })
     })
 
+    it('escapes double quotes in the search term so a typed " cannot break the OData phrase', async () => {
+      await useGroupManagement().listGroups('a"b')
+      expect(graph.groups.listGroups).toHaveBeenCalledWith({
+        orderBy: ['displayName'],
+        expand: ['members'],
+        search: '"a\\"b"'
+      })
+    })
+
     it('returns an empty array when the client yields nothing', async () => {
       graph.groups.listGroups.mockResolvedValueOnce(null)
       expect(await useGroupManagement().listGroups()).toEqual([])
@@ -72,15 +81,23 @@ describe('useGroupManagement', () => {
   })
 
   describe('addMembers', () => {
-    it('skips users already in the group and reports success/failure per user', async () => {
+    it('dedups against fresh server membership (not the passed snapshot)', async () => {
+      // The snapshot has no members, but the server says u1 is already in the
+      // group; u1 must be skipped based on the live state fetched at call time.
+      graph.groups.getGroup.mockResolvedValueOnce({
+        id: 'g1',
+        displayName: 'G1',
+        members: [{ id: 'u1' }]
+      })
       graph.groups.addMember
         .mockResolvedValueOnce(undefined) // u2 succeeds
         .mockRejectedValueOnce(new Error('boom')) // u3 fails
 
-      const group = { id: 'g1', displayName: 'G1', members: [{ id: 'u1' }] } as any
+      const group = { id: 'g1', displayName: 'G1', members: [] } as any
       const result = await useGroupManagement().addMembers(group, ['u1', 'u2', 'u3'])
 
-      // u1 is already a member -> skipped
+      expect(graph.groups.getGroup).toHaveBeenCalledWith('g1', { expand: ['members'] })
+      // u1 is already a member on the server -> skipped
       expect(graph.groups.addMember).toHaveBeenCalledTimes(2)
       expect(graph.groups.addMember).toHaveBeenCalledWith('g1', 'u2')
       expect(graph.groups.addMember).toHaveBeenCalledWith('g1', 'u3')
@@ -89,6 +106,15 @@ describe('useGroupManagement', () => {
       expect(result.succeeded).toEqual(['u2'])
       expect(result.failed).toHaveLength(1)
       expect(result.failed[0].id).toBe('u3')
+    })
+
+    it('falls back to the passed snapshot for dedup when the refresh fails', async () => {
+      graph.groups.getGroup.mockRejectedValueOnce(new Error('refresh failed'))
+      const group = { id: 'g1', displayName: 'G1', members: [{ id: 'u1' }] } as any
+      await useGroupManagement().addMembers(group, ['u1', 'u2'])
+      // u1 from the snapshot is still skipped despite the refresh failure
+      expect(graph.groups.addMember).toHaveBeenCalledTimes(1)
+      expect(graph.groups.addMember).toHaveBeenCalledWith('g1', 'u2')
     })
 
     it('reports all as succeeded when none fail', async () => {

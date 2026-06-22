@@ -49,6 +49,9 @@ const userOptions = ref<User[]>([])
 const searching = ref(false)
 
 let searchTimeout: ReturnType<typeof setTimeout> | null = null
+// Monotonic counter so a slower, older search response cannot overwrite the
+// results of a newer one (the onMounted empty search races debounced typing).
+let searchRequestId = 0
 
 const existingMemberIds = () => new Set((props.group.members ?? []).map((m) => m.id))
 
@@ -58,17 +61,26 @@ const existingMemberIds = () => new Set((props.group.members ?? []).map((m) => m
 const serverSideFilter = (users: User[]) => users
 
 const runSearch = async (query: string) => {
+  const requestId = ++searchRequestId
   searching.value = true
   try {
     const members = existingMemberIds()
     const selected = new Set(unref(selectedUsers).map((u) => u.id))
     const users = await searchUsers(query)
+    if (requestId !== searchRequestId) {
+      return // a newer search has superseded this one -- discard stale results
+    }
     userOptions.value = users.filter((u) => !members.has(u.id) && !selected.has(u.id))
   } catch (error) {
+    if (requestId !== searchRequestId) {
+      return
+    }
     console.error(error)
     userOptions.value = []
   } finally {
-    searching.value = false
+    if (requestId === searchRequestId) {
+      searching.value = false
+    }
   }
 }
 
@@ -126,6 +138,14 @@ const onConfirm = async () => {
     })
   }
 
+  if (!succeeded.length) {
+    // Nothing was added: reject so the modal framework keeps the dialog open
+    // and the user can retry without reopening it.
+    throw new Error('No members were added')
+  }
+
+  // At least one member was added. The mutation already succeeded, so a failed
+  // re-fetch must not be reported as an error; hand back best-effort data.
   try {
     const updated = await getGroup(props.group.id)
     props.onSaved?.(updated)

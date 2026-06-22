@@ -161,8 +161,9 @@ const loadGroups = async (search = '') => {
     }
   } catch (error) {
     console.error(error)
+    // Keep the previously loaded list visible: a transient refresh/search
+    // failure must not blank the whole UI and force a full page reload.
     showErrorMessage({ title: $gettext('Failed to load groups'), errors: [error] })
-    groups.value = []
   } finally {
     loading.value = false
   }
@@ -178,11 +179,24 @@ const onSearch = () => {
 const selectGroup = async (id: string) => {
   selectedGroupId.value = id
   // The list endpoint returns a lightweight projection; fetch the full group
-  // (description + members) for the detail panel.
+  // (members) for the detail panel.
   try {
-    upsertGroup(await getGroup(id))
+    const full = await getGroup(id)
+    // A later click may have superseded this selection while the fetch was in
+    // flight; if so, discard this stale response so the panel keeps showing the
+    // group the user last clicked rather than snapping back to this one.
+    if (unref(selectedGroupId) !== id) {
+      return
+    }
+    upsertGroup(full)
   } catch (error) {
     console.error(error)
+    // Ignore the error of a selection the user has already moved away from.
+    if (unref(selectedGroupId) !== id) {
+      return
+    }
+    // Surface the failure rather than silently leaving the panel half-populated.
+    showErrorMessage({ title: $gettext('Failed to load group details'), errors: [error] })
   }
 }
 
@@ -259,20 +273,37 @@ const openDeleteGroup = (group: Group) => {
 const removeMemberConfirmed = async (group: Group, member: User) => {
   try {
     await removeMember(group.id, member.id)
-    showMessage({
-      title: $gettext('"%{member}" was removed from "%{group}"', {
-        member: member.displayName,
-        group: group.displayName
-      })
-    })
-    const updated = await getGroup(group.id)
-    upsertGroup(updated)
   } catch (error) {
     console.error(error)
     showErrorMessage({
       title: $gettext('Failed to remove "%{member}"', { member: member.displayName }),
       errors: [error]
     })
+    return
+  }
+
+  // Removal succeeded: confirm now. The re-fetch below is best-effort and must
+  // not turn a successful removal into a contradictory error toast.
+  showMessage({
+    title: $gettext('"%{member}" was removed from "%{group}"', {
+      member: member.displayName,
+      group: group.displayName
+    })
+  })
+
+  try {
+    upsertGroup(await getGroup(group.id))
+  } catch (error) {
+    console.error(error)
+    // Re-fetch failed; reflect the removal locally so the member list updates
+    // without a misleading error (it refreshes fully on the next load).
+    const current = unref(groups).find((g) => g.id === group.id)
+    if (current) {
+      upsertGroup({
+        ...current,
+        members: (current.members ?? []).filter((m) => m.id !== member.id)
+      })
+    }
   }
 }
 

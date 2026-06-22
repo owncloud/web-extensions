@@ -67,27 +67,48 @@ const onConfirm = async () => {
     return Promise.reject()
   }
   const name = unref(displayName).trim()
+  const editing = unref(isEdit)
+  // Capture the group identity before any await: the parent can unmount the
+  // modal (clearing `props.group`) during the async mutation, so a later
+  // `props.group.id` access would throw.
+  const original = props.group
+  const groupId = original?.id
+
+  let mutated: Group
   try {
-    if (unref(isEdit)) {
-      await editGroup(props.group.id, name)
-      const updated = await getGroup(props.group.id)
-      showMessage({ title: $gettext('Group "%{group}" was saved', { group: name }) })
-      props.onSaved?.(updated)
+    if (editing) {
+      await editGroup(groupId as string, name)
+      mutated = { ...(original as Group), id: groupId as string, displayName: name }
     } else {
-      const created = await createGroup(name)
-      // Re-fetch the canonical group (with members) before handing it back.
-      const full = await getGroup(created.id)
-      showMessage({ title: $gettext('Group "%{group}" was created', { group: name }) })
-      props.onSaved?.(full)
+      mutated = await createGroup(name)
     }
   } catch (error) {
     console.error(error)
     showErrorMessage({
-      title: unref(isEdit)
-        ? $gettext('Failed to save group')
-        : $gettext('Failed to create group'),
+      title: editing ? $gettext('Failed to save group') : $gettext('Failed to create group'),
       errors: [error]
     })
+    return
+  }
+
+  // The mutation succeeded on the server: confirm to the user and notify the
+  // parent now, independently of the canonical re-fetch below. Otherwise a
+  // transient re-fetch failure would show a false error and skip onSaved even
+  // though the group was actually saved.
+  showMessage({
+    title: editing
+      ? $gettext('Group "%{group}" was saved', { group: name })
+      : $gettext('Group "%{group}" was created', { group: name })
+  })
+
+  try {
+    const full = await getGroup(mutated.id)
+    props.onSaved?.(full)
+  } catch (error) {
+    // Re-fetch failed but the save itself succeeded; hand back the best-known
+    // group so the list still updates (it refreshes fully on the next load).
+    console.error(error)
+    props.onSaved?.(mutated)
   }
 }
 
