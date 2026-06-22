@@ -1,0 +1,27 @@
+{
+  "name": "group-management",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Group management full-app extension for ownCloud Web",
+  "license": "Apache-2.0",
+  "author": "ownCloud GmbH",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest run",
+    "test:e2e": "pnpm playwright test"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.3.2",
+    "@ownclouders/web-pkg": "^12.3.2"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.3.2",
+    "@ownclouders/web-test-helpers": "^12.3.2",
+    "vue": "^3.5.35",
+    "vue-router": "^5.1.0",
+    "vue3-gettext": "^2.4.0"
+  }
+}
