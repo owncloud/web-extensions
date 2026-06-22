@@ -1,6 +1,7 @@
 import { ref, type Ref } from 'vue'
 import { useAuthStore, useClientService, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
+import type { Resource } from '@ownclouders/web-client'
 import { useLlm, type LlmConfig, type LlmStatus } from './useLlm'
 
 const MAX_IMAGE_BYTES = 4_194_304 // 4 MB
@@ -17,16 +18,6 @@ const MIME_FALLBACK: Record<string, string> = {
   gif: 'image/gif'
 }
 
-export interface AltTextResource {
-  id?: string
-  name?: string
-  extension?: string
-  mimeType?: string
-  storageId?: string
-  path?: string
-  size?: number
-}
-
 export interface UseAltTextResult {
   status: Ref<LlmStatus>
   isGenerating: Ref<boolean>
@@ -35,6 +26,7 @@ export interface UseAltTextResult {
   panelError: Ref<string | null>
   triggerGenerate: () => Promise<void>
   ensureReady: () => Promise<void>
+  reset: () => void
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -47,9 +39,17 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary)
 }
 
+function isSameOrigin(endpoint: string): boolean {
+  try {
+    return new URL(endpoint, location.origin).origin === location.origin
+  } catch {
+    return false
+  }
+}
+
 export function useAltText(
   llmConfig: LlmConfig | null,
-  resource: Ref<AltTextResource | null | undefined>
+  resource: Ref<Resource | null | undefined>
 ): UseAltTextResult {
   const { $gettext, current: gettextLanguage } = useGettext()
   const { status, config, ensureReady: llmEnsureReady } = useLlm(llmConfig)
@@ -59,11 +59,12 @@ export function useAltText(
   async function probeVision(): Promise<boolean> {
     const cfg = config.value
     if (!cfg) throw new Error('no config')
+    const base = cfg.endpoint.replace(/\/$/, '')
     let res: Response
     try {
-      res = await fetch(`${cfg.endpoint.replace(/\/$/, '')}/chat/completions`, {
+      res = await fetch(`${base}/chat/completions`, {
         method: 'POST',
-        headers: buildHeaders(),
+        headers: buildHeaders(cfg.endpoint),
         signal: AbortSignal.timeout(10_000),
         body: JSON.stringify({
           model: cfg.model,
@@ -120,10 +121,10 @@ export function useAltText(
   const altText = ref<string | null>(null)
   const panelError = ref<string | null>(null)
 
-  function buildHeaders(): Record<string, string> {
+  function buildHeaders(endpoint: string): Record<string, string> {
     const h: Record<string, string> = { 'Content-Type': 'application/json' }
     const token = authStore.accessToken
-    if (token) {
+    if (token && isSameOrigin(endpoint)) {
       h['Authorization'] = `Bearer ${token}`
     }
     return h
@@ -159,7 +160,7 @@ export function useAltText(
       throw new Error($gettext('Resource location not available'))
     }
 
-    if (res.size !== undefined && res.size > MAX_IMAGE_BYTES) {
+    if (res.size !== undefined && Number(res.size) > MAX_IMAGE_BYTES) {
       throw new Error($gettext('This image is too large to process (maximum 4 MB).'))
     }
 
@@ -191,7 +192,7 @@ export function useAltText(
 
     const res = await fetch(`${base}/chat/completions`, {
       method: 'POST',
-      headers: buildHeaders(),
+      headers: buildHeaders(cfg.endpoint),
       signal: AbortSignal.timeout(30_000),
       body: JSON.stringify({
         model: cfg.model,
@@ -229,11 +230,16 @@ export function useAltText(
   async function triggerGenerate(): Promise<void> {
     if (status.value !== 'vision-ready') return
 
+    const expectedId = resource.value?.id
     isGenerating.value = true
     panelError.value = null
     try {
-      altText.value = await generate()
+      const result = await generate()
+      if (resource.value?.id === expectedId) {
+        altText.value = result
+      }
     } catch (err) {
+      if (resource.value?.id !== expectedId) return
       if (err instanceof DOMException && err.name === 'TimeoutError') {
         panelError.value = $gettext(
           'The AI service did not respond in time. Please try again later.'
@@ -253,5 +259,10 @@ export function useAltText(
     }
   }
 
-  return { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady }
+  function reset(): void {
+    altText.value = null
+    panelError.value = null
+  }
+
+  return { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady, reset }
 }

@@ -5,15 +5,22 @@ import AltTextPanel from '../../src/components/AltTextPanel.vue'
 
 vi.mock('../../src/composables/useAltText')
 vi.mock('../../src/composables/useAltTextStorage')
+vi.mock('@ownclouders/web-pkg', async () => {
+  const actual = await vi.importActual<typeof import('@ownclouders/web-pkg')>('@ownclouders/web-pkg')
+  return { ...actual, useMessages: vi.fn() }
+})
 
 import { useAltText } from '../../src/composables/useAltText'
 import { useAltTextStorage } from '../../src/composables/useAltTextStorage'
+import { useMessages } from '@ownclouders/web-pkg'
 import type { LlmStatus, LlmConfig } from '../../src/composables/useLlm'
 
 const triggerGenerateMock = vi.fn()
 const ensureReadyMock = vi.fn().mockResolvedValue(undefined)
+const resetMock = vi.fn()
 const saveTextMock = vi.fn().mockResolvedValue(undefined)
 const loadStoredTextMock = vi.fn().mockResolvedValue(undefined)
+const showMessageMock = vi.fn()
 
 function setupAltTextMock({
   status = 'vision-ready' as LlmStatus,
@@ -29,18 +36,21 @@ function setupAltTextMock({
     altText: ref(altText),
     panelError: ref(panelError),
     triggerGenerate: triggerGenerateMock,
-    ensureReady: ensureReadyMock
+    ensureReady: ensureReadyMock,
+    reset: resetMock
   })
 }
 
 function setupStorageMock({
   storedText = null as string | null,
   isSaving = false,
+  loadError = null as string | null,
   saveError = null as string | null
 } = {}) {
   vi.mocked(useAltTextStorage).mockReturnValue({
     storedText: ref(storedText),
     isSaving: ref(isSaving),
+    loadError: ref(loadError),
     saveError: ref(saveError),
     loadStoredText: loadStoredTextMock,
     saveText: saveTextMock
@@ -58,8 +68,11 @@ describe('AltTextPanel', () => {
   beforeEach(() => {
     triggerGenerateMock.mockReset()
     ensureReadyMock.mockReset().mockResolvedValue(undefined)
+    resetMock.mockReset()
     saveTextMock.mockReset().mockResolvedValue(undefined)
     loadStoredTextMock.mockReset().mockResolvedValue(undefined)
+    showMessageMock.mockReset()
+    vi.mocked(useMessages).mockReturnValue({ showMessage: showMessageMock } as any)
     setupAltTextMock()
     setupStorageMock()
   })
@@ -145,6 +158,57 @@ describe('AltTextPanel', () => {
     expect(vi.mocked(useAltText)).toHaveBeenCalledWith(
       llmConfig,
       expect.objectContaining({ value: resource })
+    )
+  })
+
+  it('resets state and reloads stored text when resource id changes', async () => {
+    setupAltTextMock({ status: 'vision-ready', altText: 'old text' })
+    setupStorageMock({ storedText: 'old stored' })
+    const wrapper = createWrapper({ resource: { id: 'file-1', path: '/a.jpg' } })
+    await flushPromises()
+    loadStoredTextMock.mockClear()
+    resetMock.mockClear()
+    await wrapper.setProps({ resource: { id: 'file-2', path: '/b.jpg' } })
+    await flushPromises()
+    expect(resetMock).toHaveBeenCalledTimes(1)
+    expect(loadStoredTextMock).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows load error banner when loadError is set', async () => {
+    setupAltTextMock({ status: 'vision-ready' })
+    setupStorageMock({ loadError: 'Could not load stored alt text.' })
+    const wrapper = createWrapper({ resource: { id: 'f1' } })
+    await flushPromises()
+    const errors = wrapper.findAll('.ai-alt-text-error')
+    expect(errors.some((e) => e.text().includes('Could not load'))).toBe(true)
+  })
+
+  it('shows success toast after saving', async () => {
+    setupAltTextMock({ status: 'vision-ready', altText: 'A mountain.' })
+    const wrapper = createWrapper({ resource: { id: 'f1' } })
+    await flushPromises()
+    const saveBtn = wrapper.findAllComponents({ name: 'OcButton' }).find((b) =>
+      b.text().includes('Save')
+    )
+    await saveBtn?.trigger('click')
+    await flushPromises()
+    expect(showMessageMock).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 'success' })
+    )
+  })
+
+  it('shows error toast when clipboard is unavailable', async () => {
+    setupAltTextMock({ status: 'vision-ready', altText: 'A mountain.' })
+    const wrapper = createWrapper({ resource: { id: 'f1' } })
+    await flushPromises()
+    Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true })
+    const copyBtn = wrapper.findAllComponents({ name: 'OcButton' }).find((b) =>
+      b.text().includes('Copy')
+    )
+    await copyBtn?.trigger('click')
+    await flushPromises()
+    expect(showMessageMock).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 'danger' })
     )
   })
 })

@@ -60,6 +60,41 @@ describe('useAltTextStorage', () => {
         }, propfindResponse(null))
       })
     })
+
+    it('sets loadError when PROPFIND request fails', async () => {
+      const mocks = { ...defaultComponentMocks() }
+      mocks.$clientService.httpAuthenticated.request = vi.fn().mockRejectedValue(new Error('Network error')) as any
+      await new Promise<void>((resolve) => {
+        getComposableWrapper(() => {
+          const instance = useAltTextStorage()
+          instance.loadStoredText(BASE_RESOURCE).then(() => {
+            expect(instance.storedText.value).toBeNull()
+            expect(instance.loadError.value).not.toBeNull()
+            resolve()
+          })
+        }, { mocks, provide: mocks })
+      })
+    })
+
+    it('clears loadError on successful load after a previous failure', async () => {
+      const mocks = { ...defaultComponentMocks() }
+      const requestMock = vi.fn()
+        .mockRejectedValueOnce(new Error('Network error'))
+        .mockResolvedValueOnce({ data: propfindResponse('A nice image.'), headers: {} })
+      mocks.$clientService.httpAuthenticated.request = requestMock as any
+      await new Promise<void>((resolve) => {
+        getComposableWrapper(() => {
+          const instance = useAltTextStorage()
+          instance.loadStoredText(BASE_RESOURCE).then(async () => {
+            expect(instance.loadError.value).not.toBeNull()
+            await instance.loadStoredText(BASE_RESOURCE)
+            expect(instance.loadError.value).toBeNull()
+            expect(instance.storedText.value).toBe('A nice image.')
+            resolve()
+          })
+        }, { mocks, provide: mocks })
+      })
+    })
   })
 
   describe('saveText', () => {

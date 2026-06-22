@@ -5,12 +5,12 @@ import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-te
 vi.mock('../../src/composables/useLlm', () => ({ useLlm: vi.fn() }))
 vi.mock('@ownclouders/web-pkg', async () => {
   const actual = await vi.importActual<typeof import('@ownclouders/web-pkg')>('@ownclouders/web-pkg')
-  return { ...actual, useSpacesStore: vi.fn() }
+  return { ...actual, useSpacesStore: vi.fn(), useAuthStore: vi.fn() }
 })
 
 import { useAltText } from '../../src/composables/useAltText'
 import { useLlm } from '../../src/composables/useLlm'
-import { useSpacesStore } from '@ownclouders/web-pkg'
+import { useSpacesStore, useAuthStore } from '@ownclouders/web-pkg'
 
 const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'llava' }
 const RESOURCE = {
@@ -49,17 +49,34 @@ function makeFetch(body: unknown, ok = true, statusCode = 200) {
   return Promise.resolve({ ok, status: statusCode, json: async () => body })
 }
 
-function getWrapper(
-  setup: (result: ReturnType<typeof useAltText>) => void,
-  resource: typeof RESOURCE | { size: number } & typeof RESOURCE = RESOURCE
-) {
+function makeMocks() {
   const mocks = { ...defaultComponentMocks() }
   mocks.$clientService.webdav.getFileContents.mockResolvedValue({
     response: { data: new ArrayBuffer(8) }
   })
   vi.mocked(useSpacesStore).mockReturnValue({ getSpace: vi.fn().mockReturnValue({ id: 'space-1' }) } as any)
+  return mocks
+}
+
+function getWrapper(
+  setup: (result: ReturnType<typeof useAltText>) => void,
+  resource: typeof RESOURCE | { size: number } & typeof RESOURCE = RESOURCE
+) {
+  const mocks = makeMocks()
   return getComposableWrapper(() => {
     const instance = useAltText(BASE_CONFIG, ref(resource as any))
+    setup(instance)
+  }, { mocks, provide: mocks })
+}
+
+function getWrapperWithRef(
+  setup: (result: ReturnType<typeof useAltText>) => void,
+  resourceRef: ReturnType<typeof ref>,
+  config = BASE_CONFIG
+) {
+  const mocks = makeMocks()
+  return getComposableWrapper(() => {
+    const instance = useAltText(config, resourceRef as any)
     setup(instance)
   }, { mocks, provide: mocks })
 }
@@ -69,6 +86,7 @@ describe('useAltText', () => {
     vi.restoreAllMocks()
     vi.stubGlobal('fetch', vi.fn())
     setupUseLlmMock('vision-ready')
+    vi.mocked(useAuthStore).mockReturnValue({ accessToken: 'mock-oidc-token' } as any)
   })
 
   it('does not call fetch when status is text-only', async () => {
@@ -185,6 +203,102 @@ describe('useAltText', () => {
         expect(instance.isGenerating.value).toBe(true)
         trigger.then(() => {
           expect(instance.isGenerating.value).toBe(false)
+          resolve()
+        })
+      })
+    })
+  })
+
+  it('does not set altText when resource changes during generation', async () => {
+    const resourceRef = ref({ ...RESOURCE, id: 'f1' } as any)
+    let resolveFetch: () => void
+    const fetchDone = new Promise<void>((r) => { resolveFetch = r })
+    vi.stubGlobal('fetch', vi.fn().mockImplementation(async () => {
+      await fetchDone
+      return { ok: true, json: async () => ({ choices: [{ message: { content: 'stale result' } }] }) }
+    }))
+    await new Promise<void>((done) => {
+      getWrapperWithRef((instance) => {
+        const trigger = instance.triggerGenerate()
+        resourceRef.value = { ...RESOURCE, id: 'f2' }
+        resolveFetch!()
+        trigger.then(() => {
+          expect(instance.altText.value).toBeNull()
+          done()
+        })
+      }, resourceRef)
+    })
+  })
+
+  it('does not set panelError when resource changes during generation', async () => {
+    const resourceRef = ref({ ...RESOURCE, id: 'f1' } as any)
+    let resolveFetch: () => void
+    const fetchDone = new Promise<void>((r) => { resolveFetch = r })
+    vi.stubGlobal('fetch', vi.fn().mockImplementation(async () => {
+      await fetchDone
+      return { ok: false, status: 500 }
+    }))
+    await new Promise<void>((done) => {
+      getWrapperWithRef((instance) => {
+        const trigger = instance.triggerGenerate()
+        resourceRef.value = { ...RESOURCE, id: 'f2' }
+        resolveFetch!()
+        trigger.then(() => {
+          expect(instance.panelError.value).toBeNull()
+          done()
+        })
+      }, resourceRef)
+    })
+  })
+
+  it('omits Authorization header when endpoint is cross-origin', async () => {
+    const crossOriginConfig = { endpoint: 'https://external-llm.example.com/v1', model: 'llava' }
+    setupUseLlmMock('vision-ready', crossOriginConfig)
+    const fetchMock = vi.fn().mockReturnValue(
+      makeFetch({ choices: [{ message: { content: 'text' } }] })
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    await new Promise<void>((resolve) => {
+      getWrapperWithRef((instance) => {
+        instance.triggerGenerate().then(() => {
+          const headers = fetchMock.mock.calls[0][1].headers as Record<string, string>
+          expect(headers['Authorization']).toBeUndefined()
+          resolve()
+        })
+      }, ref(RESOURCE as any), crossOriginConfig)
+    })
+  })
+
+  it('includes Authorization header when endpoint is same-origin', async () => {
+    // Vitest's jsdom sets location.origin to http://localhost:3000
+    const sameOriginConfig = { endpoint: 'http://localhost:3000/v1', model: 'llava' }
+    setupUseLlmMock('vision-ready', sameOriginConfig)
+    const fetchMock = vi.fn().mockReturnValue(
+      makeFetch({ choices: [{ message: { content: 'text' } }] })
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    await new Promise<void>((resolve) => {
+      getWrapperWithRef((instance) => {
+        instance.triggerGenerate().then(() => {
+          const headers = fetchMock.mock.calls[0][1].headers as Record<string, string>
+          expect(headers['Authorization']).toMatch(/^Bearer /)
+          resolve()
+        })
+      }, ref(RESOURCE as any), sameOriginConfig)
+    })
+  })
+
+  it('reset() clears altText and panelError', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(
+      makeFetch({ choices: [{ message: { content: 'Some text.' } }] })
+    ))
+    await new Promise<void>((resolve) => {
+      getWrapper((instance) => {
+        instance.triggerGenerate().then(() => {
+          expect(instance.altText.value).toBe('Some text.')
+          instance.reset()
+          expect(instance.altText.value).toBeNull()
+          expect(instance.panelError.value).toBeNull()
           resolve()
         })
       })

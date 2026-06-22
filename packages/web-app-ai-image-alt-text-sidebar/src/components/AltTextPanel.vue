@@ -31,6 +31,9 @@
       <div v-if="panelError" class="ai-alt-text-error oc-mb-m" role="alert">
         {{ panelError }}
       </div>
+      <div v-if="loadError" class="ai-alt-text-error oc-mb-m" role="alert">
+        {{ loadError }}
+      </div>
 
       <template v-if="editableText !== null">
         <label class="ai-alt-text-label oc-mt-s">
@@ -80,25 +83,28 @@
 <script setup lang="ts">
 import { ref, computed, toRef, watch, onMounted, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
-import { useAltText, type AltTextResource } from '../composables/useAltText'
+import { useMessages } from '@ownclouders/web-pkg'
+import type { Resource } from '@ownclouders/web-client'
+import { useAltText } from '../composables/useAltText'
 import { useAltTextStorage } from '../composables/useAltTextStorage'
 import type { LlmConfig } from '../composables/useLlm'
 
 const { $gettext, $pgettext } = useGettext()
+const { showMessage } = useMessages()
 
 const props = defineProps<{
-  resource?: AltTextResource | null
+  resource?: Resource | null
   llmConfig?: LlmConfig | null
 }>()
 
 const resourceRef = toRef(props, 'resource')
 
-const { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady } = useAltText(
+const { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady, reset } = useAltText(
   props.llmConfig ?? null,
   resourceRef
 )
 
-const { storedText, isSaving, saveError: storageError, loadStoredText, saveText } = useAltTextStorage()
+const { storedText, isSaving, loadError, saveError: storageError, loadStoredText, saveText } = useAltTextStorage()
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const editableText = ref<string | null>(null)
@@ -140,20 +146,39 @@ watch(
 
 async function handleSave() {
   if (editableText.value !== null && props.resource) {
-    await saveText(props.resource as any, editableText.value)
+    await saveText(props.resource, editableText.value)
+    if (!storageError.value) {
+      showMessage({ title: $gettext('Alt text saved.'), status: 'success' })
+    }
   }
 }
 
 async function copyToClipboard() {
-  if (editableText.value) {
-    await navigator.clipboard?.writeText(editableText.value)
+  if (!editableText.value) return
+  try {
+    if (!navigator.clipboard) throw new Error('unavailable')
+    await navigator.clipboard.writeText(editableText.value)
+  } catch {
+    showMessage({ title: $gettext('Could not copy to clipboard.'), status: 'danger' })
   }
 }
+
+watch(
+  () => props.resource?.id,
+  (newId, oldId) => {
+    if (newId === oldId) return
+    reset()
+    editableText.value = null
+    if (props.resource) {
+      loadStoredText(props.resource)
+    }
+  }
+)
 
 onMounted(async () => {
   await ensureReady()
   if (props.resource) {
-    await loadStoredText(props.resource as any)
+    await loadStoredText(props.resource)
   }
 })
 </script>

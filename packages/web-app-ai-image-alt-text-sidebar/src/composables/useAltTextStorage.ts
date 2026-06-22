@@ -57,6 +57,7 @@ interface DavHttpClient {
 export interface UseAltTextStorageResult {
   storedText: Ref<string | null>
   isSaving: Ref<boolean>
+  loadError: Ref<string | null>
   saveError: Ref<string | null>
   loadStoredText: (resource: Resource) => Promise<void>
   saveText: (resource: Resource, text: string) => Promise<void>
@@ -69,9 +70,11 @@ export function useAltTextStorage(): UseAltTextStorageResult {
 
   const storedText = ref<string | null>(null)
   const isSaving = ref(false)
+  const loadError = ref<string | null>(null)
   const saveError = ref<string | null>(null)
 
   async function loadStoredText(resource: Resource): Promise<void> {
+    loadError.value = null
     try {
       const response = await http.request({
         method: 'PROPFIND',
@@ -83,6 +86,7 @@ export function useAltTextStorage(): UseAltTextStorageResult {
       storedText.value = parseStoredText(response.data)
     } catch {
       storedText.value = null
+      loadError.value = $gettext('Could not load stored alt text.')
     }
   }
 
@@ -105,5 +109,5 @@ export function useAltTextStorage(): UseAltTextStorageResult {
     }
   }
 
-  return { storedText, isSaving, saveError, loadStoredText, saveText }
+  return { storedText, isSaving, loadError, saveError, loadStoredText, saveText }
 }
