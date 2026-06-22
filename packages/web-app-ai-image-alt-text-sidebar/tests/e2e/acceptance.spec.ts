@@ -8,8 +8,8 @@ const MOCK_ALT_TEXT = 'A cobblestone street in Oslo at dusk.'
 const MOCK_OK = { choices: [{ message: { content: MOCK_ALT_TEXT } }] }
 const VISION_REJECTION = { error: { message: 'model does not support image input' } }
 
-function mockLlmSuccess(page: Page): Promise<void> {
-  return page.route('**/ai-llm-proxy/v1/chat/completions', (route) =>
+async function mockLlmSuccess(page: Page): Promise<void> {
+  await page.route('**/ai-llm-proxy/v1/chat/completions', (route) =>
     route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -18,8 +18,8 @@ function mockLlmSuccess(page: Page): Promise<void> {
   )
 }
 
-function mockLlmProbeOkGenerationError(page: Page): Promise<void> {
-  return page.route('**/ai-llm-proxy/v1/chat/completions', async (route) => {
+async function mockLlmProbeOkGenerationError(page: Page): Promise<void> {
+  await page.route('**/ai-llm-proxy/v1/chat/completions', async (route) => {
     const body = JSON.parse(route.request().postData() ?? '{}') as { max_tokens?: number }
     if (body.max_tokens === 1) {
       await route.fulfill({
