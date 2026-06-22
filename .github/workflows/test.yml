@@ -93,6 +93,7 @@ jobs:
           - web-app-progress-bars
           - web-app-unzip
           - web-app-ai-doc-summary
+          - web-app-ai-image-alt-text-sidebar
           - web-app-chat-with-file
           - ai-llm-proxy
           - web-app-version-changelog
