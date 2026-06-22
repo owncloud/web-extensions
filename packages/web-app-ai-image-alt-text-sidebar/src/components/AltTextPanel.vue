@@ -130,7 +130,10 @@ watch(
 watch(
   storedText,
   (val) => {
-    if (val !== null && editableText.value === null) editableText.value = val
+    if (val !== null && editableText.value === null) {
+      editableText.value = val
+      nextTick(autoGrow)
+    }
   },
   { immediate: true }
 )
@@ -174,6 +177,7 @@ onMounted(async () => {
 }
 .ai-alt-text-textarea {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   resize: none;
   overflow: hidden;
