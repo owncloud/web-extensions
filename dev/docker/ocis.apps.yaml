@@ -12,7 +12,7 @@ ai-image-alt-text-sidebar:
   config:
     llm:
       endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
-      model: 'llama3.2-vision'
+      model: 'llava:7b'
 
 chat-with-file:
   config:

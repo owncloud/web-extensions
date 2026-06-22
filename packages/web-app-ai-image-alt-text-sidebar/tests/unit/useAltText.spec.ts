@@ -12,7 +12,7 @@ import { useAltText } from '../../src/composables/useAltText'
 import { useLlm } from '../../src/composables/useLlm'
 import { useSpacesStore } from '@ownclouders/web-pkg'
 
-const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'gpt-4o', vision: true }
+const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'llava' }
 const RESOURCE = {
   id: 'f1',
   name: 'photo.jpg',
@@ -23,12 +23,26 @@ const RESOURCE = {
   size: 1024
 }
 
-function setupUseLlmMock(status = 'vision-ready', config: unknown = BASE_CONFIG) {
+function setupUseLlmMock(initialStatus = 'unconfigured', cfg: unknown = BASE_CONFIG) {
+  const status = ref(initialStatus as any)
   vi.mocked(useLlm).mockReturnValue({
-    status: ref(status as any),
-    config: ref(config as any),
-    ensureReady: vi.fn().mockResolvedValue(undefined)
+    status,
+    config: ref(cfg as any),
+    ensureReady: vi.fn().mockImplementation(async (probe?: () => Promise<boolean>) => {
+      if (status.value !== 'unconfigured') return
+      if (!cfg) return
+      if (probe) {
+        try {
+          status.value = (await probe()) ? 'vision-ready' : 'text-only'
+        } catch {
+          // stay unconfigured
+        }
+      } else {
+        status.value = 'vision-ready'
+      }
+    })
   })
+  return status
 }
 
 function makeFetch(body: unknown, ok = true, statusCode = 200) {
@@ -54,7 +68,7 @@ describe('useAltText', () => {
   beforeEach(() => {
     vi.restoreAllMocks()
     vi.stubGlobal('fetch', vi.fn())
-    setupUseLlmMock()
+    setupUseLlmMock('vision-ready')
   })
 
   it('does not call fetch when status is text-only', async () => {
@@ -73,6 +87,7 @@ describe('useAltText', () => {
 
   it('does not call fetch when status is unconfigured', async () => {
     setupUseLlmMock('unconfigured', null)
+
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
     await new Promise<void>((resolve) => {
@@ -170,6 +185,70 @@ describe('useAltText', () => {
         expect(instance.isGenerating.value).toBe(true)
         trigger.then(() => {
           expect(instance.isGenerating.value).toBe(false)
+          resolve()
+        })
+      })
+    })
+  })
+
+  describe('vision probe (ensureReady)', () => {
+    it('sets status to vision-ready when probe response is ok', async () => {
+      setupUseLlmMock()
+      vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) }))
+      await new Promise<void>((resolve) => {
+        getWrapper(async (instance) => {
+          await instance.ensureReady()
+          expect(instance.status.value).toBe('vision-ready')
+          resolve()
+        })
+      })
+    })
+
+    it('sets status to text-only when probe body signals no image support', async () => {
+      setupUseLlmMock()
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: false,
+          status: 400,
+          json: async () => ({ error: { message: 'model does not support image input' } })
+        })
+      )
+      await new Promise<void>((resolve) => {
+        getWrapper(async (instance) => {
+          await instance.ensureReady()
+          expect(instance.status.value).toBe('text-only')
+          resolve()
+        })
+      })
+    })
+
+    it('stays unconfigured when probe throws a network error', async () => {
+      setupUseLlmMock()
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
+      await new Promise<void>((resolve) => {
+        getWrapper(async (instance) => {
+          await instance.ensureReady()
+          expect(instance.status.value).toBe('unconfigured')
+          resolve()
+        })
+      })
+    })
+
+    it('stays unconfigured when probe returns a non-vision HTTP error (e.g. 404)', async () => {
+      setupUseLlmMock()
+      vi.stubGlobal(
+        'fetch',
+        vi.fn().mockResolvedValue({
+          ok: false,
+          status: 404,
+          json: async () => ({ error: 'Not found' })
+        })
+      )
+      await new Promise<void>((resolve) => {
+        getWrapper(async (instance) => {
+          await instance.ensureReady()
+          expect(instance.status.value).toBe('unconfigured')
           resolve()
         })
       })

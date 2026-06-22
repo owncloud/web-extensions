@@ -18,12 +18,14 @@ const loadStoredTextMock = vi.fn().mockResolvedValue(undefined)
 function setupAltTextMock({
   status = 'vision-ready' as LlmStatus,
   isGenerating = false,
+  isProbing = false,
   altText = null as string | null,
   panelError = null as string | null
 } = {}) {
   vi.mocked(useAltText).mockReturnValue({
     status: ref(status),
     isGenerating: ref(isGenerating),
+    isProbing: ref(isProbing),
     altText: ref(altText),
     panelError: ref(panelError),
     triggerGenerate: triggerGenerateMock,
@@ -83,6 +85,13 @@ describe('AltTextPanel', () => {
     expect(wrapper.find('.ai-alt-text-placeholder').text()).toContain('vision')
   })
 
+  it('shows probing message while checking capabilities', async () => {
+    setupAltTextMock({ status: 'unconfigured', isProbing: true })
+    const wrapper = createWrapper()
+    await flushPromises()
+    expect(wrapper.find('.ai-alt-text-placeholder').text()).toContain('Checking')
+  })
+
   it('shows generating spinner', async () => {
     setupAltTextMock({ status: 'vision-ready', isGenerating: true })
     const wrapper = createWrapper()
@@ -97,11 +106,11 @@ describe('AltTextPanel', () => {
     expect(wrapper.text()).toContain('Generate')
   })
 
-  it('shows the alt text in an oc-textarea', async () => {
+  it('shows the alt text in a textarea', async () => {
     setupAltTextMock({ status: 'vision-ready', altText: 'A mountain landscape.' })
     const wrapper = createWrapper()
     await flushPromises()
-    expect(wrapper.findComponent({ name: 'OcTextarea' }).exists()).toBe(true)
+    expect(wrapper.find('textarea').exists()).toBe(true)
   })
 
   it('shows error message in error banner', async () => {
@@ -124,11 +133,11 @@ describe('AltTextPanel', () => {
     setupStorageMock({ storedText: 'Previously saved description.' })
     const wrapper = createWrapper()
     await flushPromises()
-    expect(wrapper.findComponent({ name: 'OcTextarea' }).exists()).toBe(true)
+    expect(wrapper.find('textarea').exists()).toBe(true)
   })
 
   it('passes llmConfig and resource props to useAltText', async () => {
-    const llmConfig = { endpoint: 'http://llm.local/v1', model: 'gpt-4o', vision: true }
+    const llmConfig = { endpoint: 'http://llm.local/v1', model: 'gpt-4o' }
     const resource = { id: 'file-1', extension: 'jpg', name: 'photo.jpg' }
     setupAltTextMock({ status: 'vision-ready' })
     createWrapper({ llmConfig, resource })

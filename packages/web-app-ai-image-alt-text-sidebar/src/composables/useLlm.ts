@@ -3,7 +3,6 @@ import { ref, type Ref } from 'vue'
 export interface LlmConfig {
   endpoint: string
   model: string
-  vision?: boolean
 }
 
 export type LlmStatus = 'unconfigured' | 'text-only' | 'vision-ready'
@@ -11,22 +10,25 @@ export type LlmStatus = 'unconfigured' | 'text-only' | 'vision-ready'
 export interface UseLlmResult {
   status: Ref<LlmStatus>
   config: Ref<LlmConfig | null>
-  ensureReady: () => Promise<void>
+  ensureReady: (probeVision?: () => Promise<boolean>) => Promise<void>
 }
 
 export function useLlm(initialConfig: LlmConfig | null): UseLlmResult {
   const status = ref<LlmStatus>('unconfigured')
   const config = ref<LlmConfig | null>(initialConfig)
 
-  function ensureReady(): Promise<void> {
-    if (!config.value) {
-      status.value = 'unconfigured'
-    } else if (config.value.vision) {
-      status.value = 'vision-ready'
+  async function ensureReady(probeVision?: () => Promise<boolean>): Promise<void> {
+    if (status.value !== 'unconfigured') return
+    if (!config.value) return
+    if (probeVision) {
+      try {
+        status.value = (await probeVision()) ? 'vision-ready' : 'text-only'
+      } catch {
+        // Infrastructure error (404, 502, network) — leave as unconfigured so no button appears
+      }
     } else {
-      status.value = 'text-only'
+      status.value = 'vision-ready'
     }
-    return Promise.resolve()
   }
 
   return { status, config, ensureReady }

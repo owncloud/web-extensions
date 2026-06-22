@@ -12,8 +12,8 @@ const OCIS_URL = (process.env.OCIS_URL ?? '').replace(/\/$/, '')
 const LLM_MODEL = process.env.LLM_MODEL ?? ''
 /** Hard ceiling on max_tokens forwarded to the LLM (default 4 096). */
 const LLM_MAX_TOKENS = parseInt(process.env.LLM_MAX_TOKENS ?? '4096', 10)
-/** Maximum request body the proxy will buffer in bytes (default 128 KiB). */
-const MAX_BODY_BYTES = parseInt(process.env.MAX_BODY_BYTES ?? '131072', 10)
+/** Maximum request body the proxy will buffer in bytes (default 6 MiB — covers a 4 MiB image after base64 encoding). */
+const MAX_BODY_BYTES = parseInt(process.env.MAX_BODY_BYTES ?? '6291456', 10)
 /** Maximum LLM requests per user per rolling minute (default 20). */
 const RATE_LIMIT_RPM = parseInt(process.env.RATE_LIMIT_RPM ?? '20', 10)
 
@@ -92,7 +92,6 @@ export function readBody(req: http.IncomingMessage, maxBytes: number): Promise<s
     req.on('data', (chunk: Buffer) => {
       totalBytes += chunk.length
       if (totalBytes > maxBytes) {
-        req.destroy()
         reject(new BodyTooLargeError('Request body too large'))
         return
       }

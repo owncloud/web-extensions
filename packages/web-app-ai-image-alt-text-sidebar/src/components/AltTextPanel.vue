@@ -3,7 +3,11 @@
     data-testid="ai-alt-text-panel"
     class="ai-alt-text-panel oc-background-muted oc-p-m oc-rounded"
   >
-    <div v-if="status === 'unconfigured'" class="ai-alt-text-placeholder">
+    <div v-if="isProbing" class="ai-alt-text-placeholder">
+      {{ $gettext('Checking AI capabilities…') }}
+    </div>
+
+    <div v-else-if="status === 'unconfigured'" class="ai-alt-text-placeholder">
       {{
         $gettext(
           'Alt text generation is not set up. Contact your administrator to configure an AI endpoint.'
@@ -29,12 +33,16 @@
       </div>
 
       <template v-if="editableText !== null">
-        <oc-textarea
-          v-model="currentText"
-          class="oc-mt-s"
-          :label="$pgettext('Alt text editable field label', 'Alt text')"
-          :submit-on-enter="false"
-        />
+        <label class="ai-alt-text-label oc-mt-s">
+          {{ $pgettext('Alt text editable field label', 'Alt text') }}
+          <textarea
+            ref="textareaRef"
+            v-model="currentText"
+            class="ai-alt-text-textarea oc-mt-xs"
+            rows="1"
+            @input="autoGrow"
+          />
+        </label>
         <div v-if="storageError" class="ai-alt-text-error oc-mt-s" role="alert">
           {{ storageError }}
         </div>
@@ -70,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, toRef, watch, onMounted } from 'vue'
+import { ref, computed, toRef, watch, onMounted, nextTick } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useAltText, type AltTextResource } from '../composables/useAltText'
 import { useAltTextStorage } from '../composables/useAltTextStorage'
@@ -85,14 +93,21 @@ const props = defineProps<{
 
 const resourceRef = toRef(props, 'resource')
 
-const { status, isGenerating, altText, panelError, triggerGenerate, ensureReady } = useAltText(
+const { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady } = useAltText(
   props.llmConfig ?? null,
   resourceRef
 )
 
 const { storedText, isSaving, saveError: storageError, loadStoredText, saveText } = useAltTextStorage()
 
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
 const editableText = ref<string | null>(null)
+
+function autoGrow() {
+  if (!textareaRef.value) return
+  textareaRef.value.style.height = 'auto'
+  textareaRef.value.style.height = `${textareaRef.value.scrollHeight}px`
+}
 
 const currentText = computed({
   get: () => editableText.value ?? '',
@@ -104,7 +119,10 @@ const currentText = computed({
 watch(
   altText,
   (val) => {
-    if (val !== null) editableText.value = val
+    if (val !== null) {
+      editableText.value = val
+      nextTick(autoGrow)
+    }
   },
   { immediate: true }
 )
@@ -147,5 +165,25 @@ onMounted(async () => {
 }
 .ai-alt-text-error {
   color: var(--oc-color-swatch-danger-default, #c00);
+}
+.ai-alt-text-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--oc-color-text-default, #1d1d1d);
+}
+.ai-alt-text-textarea {
+  display: block;
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  padding: 0.5rem;
+  border: 1px solid var(--oc-color-border, #c8c8c8);
+  border-radius: 0.25rem;
+  background: var(--oc-color-background-default, #fff);
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  line-height: 1.5;
 }
 </style>

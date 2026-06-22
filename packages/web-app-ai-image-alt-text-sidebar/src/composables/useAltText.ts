@@ -5,6 +5,10 @@ import { useLlm, type LlmConfig, type LlmStatus } from './useLlm'
 
 const MAX_IMAGE_BYTES = 4_194_304 // 4 MB
 
+// 1×1 transparent PNG — minimal valid image for the vision probe
+const PROBE_PNG =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
+
 const MIME_FALLBACK: Record<string, string> = {
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',
@@ -26,6 +30,7 @@ export interface AltTextResource {
 export interface UseAltTextResult {
   status: Ref<LlmStatus>
   isGenerating: Ref<boolean>
+  isProbing: Ref<boolean>
   altText: Ref<string | null>
   panelError: Ref<string | null>
   triggerGenerate: () => Promise<void>
@@ -47,13 +52,71 @@ export function useAltText(
   resource: Ref<AltTextResource | null | undefined>
 ): UseAltTextResult {
   const { $gettext, current: gettextLanguage } = useGettext()
-  const { status, config, ensureReady } = useLlm(llmConfig)
+  const { status, config, ensureReady: llmEnsureReady } = useLlm(llmConfig)
+
+  // Returns true (vision-ready) or false (text-only).
+  // Throws for infrastructure errors (404, 5xx, network) so status stays unconfigured.
+  async function probeVision(): Promise<boolean> {
+    const cfg = config.value
+    if (!cfg) throw new Error('no config')
+    let res: Response
+    try {
+      res = await fetch(`${cfg.endpoint.replace(/\/$/, '')}/chat/completions`, {
+        method: 'POST',
+        headers: buildHeaders(),
+        signal: AbortSignal.timeout(10_000),
+        body: JSON.stringify({
+          model: cfg.model,
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'ok' },
+                { type: 'image_url', image_url: { url: `data:image/png;base64,${PROBE_PNG}` } }
+              ]
+            }
+          ],
+          max_tokens: 1
+        })
+      })
+    } catch {
+      throw new Error('probe network error')
+    }
+    if (res.ok) return true
+    const body = (await res.json().catch(() => ({}))) as Record<string, unknown>
+    const errMsg = (
+      (body?.error as Record<string, unknown>)?.message ??
+      body?.error ??
+      ''
+    )
+      .toString()
+      .toLowerCase()
+    if (
+      errMsg.includes('does not support') ||
+      errMsg.includes('vision') ||
+      errMsg.includes('multimodal') ||
+      errMsg.includes('image')
+    ) {
+      return false
+    }
+    throw new Error('probe infrastructure error')
+  }
+
+  async function ensureReady(): Promise<void> {
+    isProbing.value = true
+    try {
+      await llmEnsureReady(probeVision)
+    } finally {
+      isProbing.value = false
+    }
+  }
   const authStore = useAuthStore()
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
 
   const isGenerating = ref(false)
+  const isProbing = ref(false)
   const altText = ref<string | null>(null)
   const panelError = ref<string | null>(null)
 
@@ -139,9 +202,9 @@ export function useAltText(
               {
                 type: 'text',
                 text: [
-                  `Generate a concise, descriptive alt text for the image "${resource.value?.name ?? 'this image'}".`,
-                  `Respond in the language with BCP 47 tag "${lang}".`,
-                  'Return only the alt text string — no markdown, no quotes, no extra text.'
+                  `Describe "${resource.value?.name ?? 'this image'}" in one short sentence of at most 15 words.`,
+                  `Use language "${lang}".`,
+                  'Output only that sentence — no quotes, no markdown, nothing else.'
                 ].join(' ')
               },
               {
@@ -151,7 +214,7 @@ export function useAltText(
             ]
           }
         ],
-        max_tokens: 150
+        max_tokens: 60
       })
     })
 
@@ -190,5 +253,5 @@ export function useAltText(
     }
   }
 
-  return { status, isGenerating, altText, panelError, triggerGenerate, ensureReady }
+  return { status, isGenerating, isProbing, altText, panelError, triggerGenerate, ensureReady }
 }

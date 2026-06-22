@@ -28,8 +28,7 @@ export default defineWebApplication({
       rawLlm?.endpoint && rawLlm?.model
         ? {
             endpoint: rawLlm.endpoint as string,
-            model: rawLlm.model as string,
-            vision: rawLlm.vision === true
+            model: rawLlm.model as string
           }
         : null
 
