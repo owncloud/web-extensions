@@ -13,8 +13,8 @@
     "test:e2e": "echo 'E2E tests not implemented'"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2",
+    "@ownclouders/web-client": "^12.4.1",
+    "@ownclouders/web-pkg": "^12.4.1",
     "@uppy/dashboard": "^5.1.1",
     "@uppy/google-drive": "^5.1.0",
     "@uppy/onedrive": "^5.1.0",
@@ -22,10 +22,10 @@
     "pinia": "^3.0.3"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.3.2",
-    "@ownclouders/web-test-helpers": "^12.3.2",
+    "@ownclouders/extension-sdk": "^12.4.1",
+    "@ownclouders/web-test-helpers": "^12.4.1",
     "@uppy/core": "^5.2.0",
-    "vue": "^3.5.35",
+    "vue": "^3.5.38",
     "vue3-gettext": "^2.4.0"
   }
 }
