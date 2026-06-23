@@ -15,14 +15,15 @@ test.beforeEach(async ({ browser }) => {
       body: JSON.stringify({ choices: [{ message: { content: '{"findings":[]}' } }] })
     })
   )
+
+  // Auto-dismiss any OcModal (scan results or file-conflict dialog) that would block
+  // pointer events during navigation. OcModal cancel button class: .oc-modal-body-actions-cancel
+  await adminPage.addLocatorHandler(adminPage.locator('.oc-modal-background'), async () => {
+    await adminPage.locator('.oc-modal-body-actions-cancel').click()
+  })
 })
 
 test.afterEach(async () => {
-  // oc-modal-passive modals don't close on Escape; click the cancel button if one is open
-  const cancelBtn = adminPage.getByTestId('modal-cancel')
-  if (await cancelBtn.isVisible()) {
-    await cancelBtn.click()
-  }
   const filesPage = new FilesPage(adminPage)
   await filesPage.deleteAllFromPersonal()
   await logout(adminPage)
@@ -61,9 +62,8 @@ test('clicking "Scan for sensitive data" opens the results modal', async () => {
 
   await expect(scanner.resultsModal).toBeVisible()
 
-  // Close the modal so the afterEach hook can navigate and clean up without the
-  // oc-modal-background intercepting pointer events on the app switcher button.
-  // oc-modal-passive does not respond to Escape, so we click the cancel button.
-  await adminPage.getByTestId('modal-cancel').click()
+  // OcModal dismiss: click .oc-modal-body-actions-cancel (the cancel button class).
+  // oc-modal-passive does not respond to Escape; data-testid="modal-cancel" does not exist.
+  await adminPage.locator('.oc-modal-body-actions-cancel').click()
   await expect(scanner.resultsModal).not.toBeVisible()
 })
