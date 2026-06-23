@@ -29,7 +29,7 @@ export default defineWebApplication({
           icon: 'search',
           label: () => $pgettext('Batch action to scan files for sensitive data', 'Scan for sensitive data'),
           isVisible: ({ resources }: { resources?: Array<{ extension?: string }> }) =>
-            (resources?.length ?? 0) >= 1 && (resources ?? []).some(isSupportedFile),
+            (resources?.length ?? 0) >= 1 && (resources ?? []).some((r) => isSupportedFile(r)),
           handler: ({ resources }: FileActionOptions) => {
             dispatchModal({
               title: $pgettext('Sensitive data scan results modal title', 'Sensitive Data Scan'),
