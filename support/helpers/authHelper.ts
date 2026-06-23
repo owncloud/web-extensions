@@ -18,6 +18,9 @@ export async function loginAsUser(
     ),
     loginPage.login(username, password)
   ])
+  // Wait for the OIDC callback to fully complete so callers can safely call
+  // page.goto() without racing against the in-flight redirect.
+  await loginPage.myAccount.waitFor({ state: 'visible', timeout: 30000 })
   return { page }
 }
 
