@@ -15,15 +15,16 @@ test.beforeEach(async ({ browser }) => {
       body: JSON.stringify({ choices: [{ message: { content: '{"findings":[]}' } }] })
     })
   )
-
-  // Auto-dismiss any OcModal (scan results or file-conflict dialog) that would block
-  // pointer events during navigation. OcModal cancel button class: .oc-modal-body-actions-cancel
-  await adminPage.addLocatorHandler(adminPage.locator('.oc-modal-background'), async () => {
-    await adminPage.locator('.oc-modal-body-actions-cancel').click()
-  })
 })
 
 test.afterEach(async () => {
+  // Dismiss any open OcModal (scan results or file-conflict dialog) before navigating.
+  // OcModal passive does not respond to Escape; dismiss via the cancel button class.
+  // isVisible() returns immediately (no retry); only act when the backdrop is actually present.
+  if (await adminPage.locator('.oc-modal-background').isVisible()) {
+    await adminPage.locator('.oc-modal-body-actions-cancel').click()
+    await adminPage.locator('.oc-modal-background').waitFor({ state: 'hidden' })
+  }
   const filesPage = new FilesPage(adminPage)
   await filesPage.deleteAllFromPersonal()
   await logout(adminPage)
@@ -63,7 +64,7 @@ test('clicking "Scan for sensitive data" opens the results modal', async () => {
   await expect(scanner.resultsModal).toBeVisible()
 
   // OcModal dismiss: click .oc-modal-body-actions-cancel (the cancel button class).
-  // oc-modal-passive does not respond to Escape; data-testid="modal-cancel" does not exist.
+  // oc-modal-passive does not respond to Escape.
   await adminPage.locator('.oc-modal-body-actions-cancel').click()
   await expect(scanner.resultsModal).not.toBeVisible()
 })
