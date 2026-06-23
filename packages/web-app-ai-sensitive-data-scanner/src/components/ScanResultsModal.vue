@@ -40,7 +40,10 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useGettext } from 'vue3-gettext'
 import { useScanner, type LlmConfig, type ScanResource } from '../composables/useScanner'
+
+const { $gettext } = useGettext()
 
 const props = defineProps<{
   resources?: ScanResource[]
