@@ -73,20 +73,21 @@ describe('ScanResultsModal', () => {
   })
 
   describe('per-file pending state', () => {
-    it('shows "Waiting…" for a file still in pending state', async () => {
-      const result: FileScanResult = {
-        filename: 'report.txt',
-        state: 'pending',
-        findings: [],
-        narrative: '',
-        error: null
-      }
-      setupUseScannerMock({ status: 'ready', isScanning: true, scanResults: [result] })
+    it('shows "Waiting…" for a file still in pending state when another file has already been processed', async () => {
+      // The pending per-file row is only visible when hasAnyResult=true (at least one
+      // result has moved past 'pending'). When ALL results are pending the component
+      // renders the global "Scanning files…" placeholder instead.
+      const results: FileScanResult[] = [
+        { filename: 'first.txt', state: 'done', findings: [], narrative: '', error: null },
+        { filename: 'second.txt', state: 'pending', findings: [], narrative: '', error: null }
+      ]
+      setupUseScannerMock({ status: 'ready', isScanning: true, scanResults: results })
       const wrapper = createWrapper()
       await flushPromises()
-      const row = wrapper.find('.scan-result')
-      expect(row.exists()).toBe(true)
-      expect(row.find('.scan-results-placeholder').text()).toContain('Waiting')
+      const rows = wrapper.findAll('.scan-result')
+      expect(rows).toHaveLength(2)
+      const pendingRow = rows[1]
+      expect(pendingRow.find('.scan-results-placeholder').text()).toContain('Waiting')
     })
   })
 
