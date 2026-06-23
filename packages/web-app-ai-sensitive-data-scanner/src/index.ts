@@ -27,7 +27,7 @@ export default defineWebApplication({
       {
         id: `${APP_ID}.action`,
         type: 'action',
-        extensionPointIds: ['global.files.context-actions'],
+        extensionPointIds: ['global.files.context-actions', 'global.files.default-actions'],
         action: {
           name: `${APP_ID}-scan`,
           icon: 'search',
