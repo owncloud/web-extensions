@@ -4,13 +4,9 @@ import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import ScanResultsModal from './components/ScanResultsModal.vue'
 import type { LlmConfig } from './composables/useScanner'
+import { isSupportedFile } from './utils/file-support'
 
-const SUPPORTED_EXTS = ['csv', 'doc', 'docx', 'md', 'pdf', 'txt']
 const APP_ID = 'ai-sensitive-data-scanner'
-
-function isSupportedFile(resource: { extension?: string }): boolean {
-  return SUPPORTED_EXTS.includes(resource.extension?.toLowerCase() ?? '')
-}
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
