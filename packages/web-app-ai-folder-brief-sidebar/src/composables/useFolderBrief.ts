@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue'
-import { useAuthStore, useClientService, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
+import { useClientService, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import type { Resource } from '@ownclouders/web-client'
 import { useLlm, type LlmConfig, type LlmStatus } from './useLlm'
@@ -35,8 +35,7 @@ export function useFolderBrief(
   resource: Ref<FolderResource | null | undefined>
 ): UseFolderBriefResult {
   const { $gettext, current: gettextLanguage } = useGettext()
-  const { status, config, ensureReady } = useLlm(llmConfig)
-  const authStore = useAuthStore()
+  const { status, config, ensureReady, buildHeaders } = useLlm(llmConfig)
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
@@ -44,15 +43,6 @@ export function useFolderBrief(
   const isLoading = ref(false)
   const panelError = ref<string | null>(null)
   const briefResult = ref<BriefResult | null>(null)
-
-  function buildHeaders(): Record<string, string> {
-    const h: Record<string, string> = { 'Content-Type': 'application/json' }
-    const token = authStore.accessToken
-    if (token) {
-      h['Authorization'] = `Bearer ${token}`
-    }
-    return h
-  }
 
   function getUserLanguage(): string {
     return userStore.user?.preferredLanguage || gettextLanguage

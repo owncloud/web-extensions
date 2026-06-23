@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import { useAuthStore } from '@ownclouders/web-pkg'
 
 export interface LlmConfig {
   endpoint: string
@@ -11,6 +12,7 @@ export interface UseLlmResult {
   status: Ref<LlmStatus>
   config: Ref<LlmConfig | null>
   ensureReady: () => Promise<void>
+  buildHeaders: () => Record<string, string>
 }
 
 export function useLlm(initialConfig: LlmConfig | null): UseLlmResult {
@@ -21,5 +23,14 @@ export function useLlm(initialConfig: LlmConfig | null): UseLlmResult {
     status.value = config.value ? 'ready' : 'unconfigured'
   }
 
-  return { status, config, ensureReady }
+  function buildHeaders(): Record<string, string> {
+    const authStore = useAuthStore()
+    const h: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (authStore.accessToken) {
+      h['Authorization'] = `Bearer ${authStore.accessToken}`
+    }
+    return h
+  }
+
+  return { status, config, ensureReady, buildHeaders }
 }

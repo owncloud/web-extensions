@@ -5,12 +5,12 @@ import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-te
 vi.mock('../../src/composables/useLlm', () => ({ useLlm: vi.fn() }))
 vi.mock('@ownclouders/web-pkg', async () => {
   const actual = await vi.importActual<typeof import('@ownclouders/web-pkg')>('@ownclouders/web-pkg')
-  return { ...actual, useSpacesStore: vi.fn(), useAuthStore: vi.fn(), useUserStore: vi.fn() }
+  return { ...actual, useSpacesStore: vi.fn(), useUserStore: vi.fn() }
 })
 
 import { useFolderBrief } from '../../src/composables/useFolderBrief'
 import { useLlm } from '../../src/composables/useLlm'
-import { useSpacesStore, useAuthStore, useUserStore } from '@ownclouders/web-pkg'
+import { useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 
 const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'llama3.2' }
 const RESOURCE = {
@@ -54,7 +54,8 @@ function setupUseLlmMock(status = 'ready', cfg: unknown = BASE_CONFIG) {
   vi.mocked(useLlm).mockReturnValue({
     status: ref(status as any),
     config: ref(cfg as any),
-    ensureReady: vi.fn().mockResolvedValue(undefined)
+    ensureReady: vi.fn().mockResolvedValue(undefined),
+    buildHeaders: vi.fn().mockReturnValue({ 'Content-Type': 'application/json' })
   })
 }
 
@@ -66,7 +67,6 @@ function getWrapper(setup: (result: ReturnType<typeof useFolderBrief>) => void) 
   const mocks = { ...defaultComponentMocks() }
   mocks.$clientService.webdav.listFiles.mockResolvedValue({ resource: RESOURCE, children: CHILDREN })
   vi.mocked(useSpacesStore).mockReturnValue({ getSpace: vi.fn().mockReturnValue({ id: 'space-1' }) } as any)
-  vi.mocked(useAuthStore).mockReturnValue({ accessToken: 'tok' } as any)
   vi.mocked(useUserStore).mockReturnValue({ user: { preferredLanguage: 'en' } } as any)
 
   return getComposableWrapper(
@@ -179,7 +179,6 @@ describe('useFolderBrief', () => {
       vi.mocked(useSpacesStore).mockReturnValue({
         getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
       } as any)
-      vi.mocked(useAuthStore).mockReturnValue({ accessToken: 'tok' } as any)
       vi.mocked(useUserStore).mockReturnValue({ user: { preferredLanguage: 'en' } } as any)
       const fetchMock = vi.fn()
       vi.stubGlobal('fetch', fetchMock)
