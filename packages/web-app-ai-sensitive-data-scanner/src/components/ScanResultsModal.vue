@@ -45,7 +45,7 @@ const resourcesRef = ref(props.resources ?? [])
 const { isScanning, scanResults, runScan } = useScanner(props.llmConfig ?? null, resourcesRef)
 
 onMounted(async () => {
-  const modalId = activeModal.value.id
+  const modalId = activeModal.id
   await runScan()
   setTimeout(() => removeModal(modalId), 500)
 })
