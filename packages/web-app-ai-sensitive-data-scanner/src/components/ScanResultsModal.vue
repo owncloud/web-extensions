@@ -46,6 +46,14 @@ const resourcesRef = ref(props.resources ?? [])
 const { isScanning, scanResults, runScan } = useScanner(props.llmConfig ?? null, resourcesRef)
 
 onMounted(async () => {
+  // The oc-modal-background captures all pointer events by default, which prevents
+  // the app-switcher button (in the top nav) from being clicked while the modal is
+  // open. Setting pointer-events: none on the backdrop keeps the modal visible and
+  // functional while allowing clicks to reach elements behind it.
+  const backdrop = document.querySelector<HTMLElement>('.oc-modal-background')
+  if (backdrop) {
+    backdrop.style.pointerEvents = 'none'
+  }
   await runScan()
 })
 </script>
