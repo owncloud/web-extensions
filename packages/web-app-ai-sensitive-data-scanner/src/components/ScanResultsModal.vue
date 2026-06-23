@@ -1,15 +1,27 @@
 <template>
   <div class="scan-results-modal oc-p-s">
-    <div v-if="isScanning" class="oc-p-m">
+    <div v-if="isScanning && !hasAnyResult" class="oc-p-m">
       {{ $gettext('Scanning files for sensitive data…') }}
     </div>
 
     <template v-else>
-      <div v-for="result in scanResults" :key="result.name" class="scan-result oc-mb-m">
-        <p class="oc-text-bold oc-mb-xs">{{ result.name }}</p>
+      <div v-for="result in scanResults" :key="result.filename" class="scan-result oc-mb-m">
+        <p class="oc-text-bold oc-mb-xs">{{ result.filename }}</p>
 
-        <div v-if="result.error" role="alert" class="scan-error">
+        <div v-if="result.state === 'scanning'" class="scan-scanning">
+          {{ $gettext('Scanning…') }}
+        </div>
+
+        <div v-else-if="result.state === 'skipped'" class="scan-skipped">
+          {{ $gettext('File type not supported — skipped.') }}
+        </div>
+
+        <div v-else-if="result.error" role="alert" class="scan-error">
           {{ result.error }}
+        </div>
+
+        <div v-else-if="result.narrative" class="scan-narrative">
+          {{ result.narrative }}
         </div>
 
         <div v-else-if="result.findings.length === 0" class="scan-no-findings">
@@ -18,8 +30,7 @@
 
         <ul v-else class="oc-mt-xs">
           <li v-for="(finding, i) in result.findings" :key="i">
-            <strong>{{ finding.type }}</strong
-            >: {{ finding.value }}
+            <strong>{{ finding.category }}</strong>: {{ finding.excerpt }}
           </li>
         </ul>
       </div>
@@ -28,13 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useGettext } from 'vue3-gettext'
-import { useModals } from '@ownclouders/web-pkg'
+import { ref, computed, onMounted } from 'vue'
 import { useScanner, type LlmConfig, type ScanResource } from '../composables/useScanner'
-
-const { $gettext } = useGettext()
-const { activeModal, removeModal } = useModals()
 
 const props = defineProps<{
   resources?: ScanResource[]
@@ -44,10 +50,10 @@ const props = defineProps<{
 const resourcesRef = ref(props.resources ?? [])
 const { isScanning, scanResults, runScan } = useScanner(props.llmConfig ?? null, resourcesRef)
 
+const hasAnyResult = computed(() => scanResults.value.some((r) => r.state !== 'pending'))
+
 onMounted(async () => {
-  const modalId = activeModal.id
   await runScan()
-  setTimeout(() => removeModal(modalId), 500)
 })
 </script>
 
@@ -56,8 +62,13 @@ onMounted(async () => {
   color: var(--oc-color-danger, #c00);
 }
 
-.scan-no-findings {
+.scan-no-findings,
+.scan-skipped {
   color: var(--oc-color-text-muted, #6f6f6f);
   font-style: italic;
+}
+
+.scan-narrative {
+  white-space: pre-wrap;
 }
 </style>
