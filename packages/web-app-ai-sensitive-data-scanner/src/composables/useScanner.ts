@@ -94,7 +94,7 @@ export function useScanner(llmConfig: LlmConfig | null, resources: Ref<ScanResou
                 'Scan the following text for sensitive data: PII (names, emails, phone numbers, addresses),',
                 'credentials (passwords, API keys, tokens), financial data (credit card numbers, bank accounts).',
                 'Return a JSON object with a "findings" array where each entry has:',
-                '"type": the data category (e.g. "email", "api_key"),',
+                '"type": the data category (e.g. "email", "credential", "phone"),',
                 '"value": the exact found value,',
                 '"context": a short surrounding snippet.',
                 'Example: {"findings":[{"type":"email","value":"a@b.com","context":"email: a@b.com"}]}',
