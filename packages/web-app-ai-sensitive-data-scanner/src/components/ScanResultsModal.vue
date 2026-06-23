@@ -30,9 +30,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useModals } from '@ownclouders/web-pkg'
 import { useScanner, type LlmConfig, type ScanResource } from '../composables/useScanner'
 
 const { $gettext } = useGettext()
+const { activeModal, removeModal } = useModals()
 
 const props = defineProps<{
   resources?: ScanResource[]
@@ -43,7 +45,9 @@ const resourcesRef = ref(props.resources ?? [])
 const { isScanning, scanResults, runScan } = useScanner(props.llmConfig ?? null, resourcesRef)
 
 onMounted(async () => {
+  const modalId = activeModal.value.id
   await runScan()
+  setTimeout(() => removeModal(modalId), 500)
 })
 </script>
 
