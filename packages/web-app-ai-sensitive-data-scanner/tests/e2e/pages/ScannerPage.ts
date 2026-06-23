@@ -9,5 +9,12 @@ export class ScannerPage {
     this.page = page
     this.scanAction = this.page.getByTestId('action-label').filter({ hasText: 'Scan for sensitive data' })
     this.resultsModal = this.page.getByRole('dialog').filter({ hasText: 'Sensitive Data Scan' })
+
+    page.addLocatorHandler(page.locator('.oc-modal-background'), async () => {
+      const cancelBtn = page.getByRole('button', { name: 'Cancel' })
+      if (await cancelBtn.isVisible()) {
+        await cancelBtn.click()
+      }
+    })
   }
 }
