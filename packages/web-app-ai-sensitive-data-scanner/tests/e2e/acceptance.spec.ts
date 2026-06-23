@@ -18,6 +18,8 @@ test.beforeEach(async ({ browser }) => {
 })
 
 test.afterEach(async () => {
+  // Dismiss any open modal or overlay that might block navigation during cleanup
+  await adminPage.keyboard.press('Escape')
   const filesPage = new FilesPage(adminPage)
   await filesPage.deleteAllFromPersonal()
   await logout(adminPage)
@@ -55,4 +57,9 @@ test('clicking "Scan for sensitive data" opens the results modal', async () => {
   await scanner.scanAction.click()
 
   await expect(scanner.resultsModal).toBeVisible()
+
+  // Close the modal so the afterEach hook can navigate and clean up without the
+  // oc-modal-background intercepting pointer events on the app switcher button
+  await adminPage.keyboard.press('Escape')
+  await expect(scanner.resultsModal).not.toBeVisible()
 })
