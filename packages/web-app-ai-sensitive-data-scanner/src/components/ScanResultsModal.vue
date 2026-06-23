@@ -5,11 +5,7 @@
     </div>
 
     <template v-else>
-      <div
-        v-for="result in scanResults"
-        :key="result.name"
-        class="scan-result oc-mb-m"
-      >
+      <div v-for="result in scanResults" :key="result.name" class="scan-result oc-mb-m">
         <p class="oc-text-bold oc-mb-xs">{{ result.name }}</p>
 
         <div v-if="result.error" role="alert" class="scan-error">
@@ -22,7 +18,8 @@
 
         <ul v-else class="oc-mt-xs">
           <li v-for="(finding, i) in result.findings" :key="i">
-            <strong>{{ finding.type }}</strong>: {{ finding.value }}
+            <strong>{{ finding.type }}</strong
+            >: {{ finding.value }}
           </li>
         </ul>
       </div>
@@ -46,14 +43,6 @@ const resourcesRef = ref(props.resources ?? [])
 const { isScanning, scanResults, runScan } = useScanner(props.llmConfig ?? null, resourcesRef)
 
 onMounted(async () => {
-  // The oc-modal-background captures all pointer events by default, which prevents
-  // the app-switcher button (in the top nav) from being clicked while the modal is
-  // open. Setting pointer-events: none on the backdrop keeps the modal visible and
-  // functional while allowing clicks to reach elements behind it.
-  const backdrop = document.querySelector<HTMLElement>('.oc-modal-background')
-  if (backdrop) {
-    backdrop.style.pointerEvents = 'none'
-  }
   await runScan()
 })
 </script>
