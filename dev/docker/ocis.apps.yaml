@@ -37,3 +37,9 @@ ai-sensitive-data-scanner:
     llm:
       endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+ai-data-insights-sidebar:
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'

@@ -1,0 +1,37 @@
+{
+  "name": "web-app-ai-data-insights-sidebar",
+  "version": "0.1.0",
+  "description": "CANDIDATE",
+  "license": "Apache-2.0",
+  "author": "ownCloud",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "lint": "eslint src --max-warnings 0",
+    "test": "NODE_OPTIONS=--unhandled-rejections=throw vitest run",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest run",
+    "test:e2e": "pnpm playwright test"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.3.2",
+    "@ownclouders/web-pkg": "^12.3.2"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "12.3.2",
+    "@ownclouders/tsconfig": "0.0.6",
+    "@types/node": "22.19.19",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "9.39.4",
+    "happy-dom": "^20.9.0",
+    "prettier": "3.8.3",
+    "typescript": "5.9.3",
+    "vite": "7.2.2",
+    "vitest": "4.1.7",
+    "vue": "^3.4.21",
+    "vue-router": "^5.0.7",
+    "vue-tsc": "3.3.2",
+    "vue3-gettext": "^2.4.0"
+  }
+}
