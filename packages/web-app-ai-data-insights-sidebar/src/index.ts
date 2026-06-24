@@ -10,7 +10,7 @@ import { useGettext } from 'vue3-gettext'
 import type { Resource, SpaceResource } from '@ownclouders/web-client'
 import InsightsPanel from './components/InsightsPanel.vue'
 import { isSupportedFile } from './utils/file-support'
-import type { LlmConfig } from './composables/useLlm'
+import type { LLMConfig } from './composables/useLLM'
 
 const SUPPORTED_EXTS = ['csv', 'tsv']
 const APP_ID = 'ai-data-insights-sidebar'
@@ -21,7 +21,7 @@ export default defineWebApplication({
     const resourcesStore = useResourcesStore()
 
     const rawLlm = applicationConfig?.llm as Record<string, unknown> | undefined
-    const llmConfig: LlmConfig | null =
+    const llmConfig: LLMConfig | null =
       rawLlm?.endpoint && rawLlm?.model
         ? { endpoint: rawLlm.endpoint as string, model: rawLlm.model as string }
         : null

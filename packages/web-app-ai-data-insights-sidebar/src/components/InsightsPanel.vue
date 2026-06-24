@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-import type { LlmConfig } from '../composables/useLlm'
+import type { LLMConfig } from '../composables/useLLM'
 
 defineProps<{
   resource: unknown
-  llmConfig: LlmConfig | null
+  llmConfig: LLMConfig | null
 }>()
 </script>
