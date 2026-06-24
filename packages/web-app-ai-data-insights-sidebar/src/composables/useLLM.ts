@@ -1,5 +1,4 @@
 import { ref, type Ref } from 'vue'
-import { useAuthStore } from '@ownclouders/web-pkg'
 
 export interface LLMConfig {
   endpoint: string
@@ -26,12 +25,9 @@ export interface UseLLMReturn {
 }
 
 export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
-  const authStore = useAuthStore()
   const status = ref<LLMStatus>('unconfigured')
 
   if (cfg) {
-    // Enforce same-origin: cfg.endpoint must be the in-cluster ai-llm-proxy, never a direct
-    // external LLM URL. Forwarding the oCIS access token cross-origin leaks user credentials.
     let endpointOrigin: string
     try {
       endpointOrigin = new URL(cfg.endpoint).origin
@@ -41,15 +37,6 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     status.value = endpointOrigin === window.location.origin ? 'ready' : 'cross-origin'
   }
 
-  function buildHeaders(): Record<string, string> {
-    const h: Record<string, string> = { 'Content-Type': 'application/json' }
-    const token = authStore.accessToken
-    if (token) {
-      h['Authorization'] = `Bearer ${token}`
-    }
-    return h
-  }
-
   async function complete(messages: ChatMessage[], opts: CompletionOptions = {}): Promise<string> {
     if (!cfg || status.value !== 'ready') {
       throw new Error('LLM is not configured or endpoint is not same-origin')
@@ -57,7 +44,7 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const base = cfg.endpoint.replace(/\/$/, '')
     const r = await fetch(`${base}/chat/completions`, {
       method: 'POST',
-      headers: buildHeaders(),
+      headers: { 'Content-Type': 'application/json' },
       signal: AbortSignal.timeout(60_000),
       body: JSON.stringify({
         model: cfg.model,
@@ -79,7 +66,7 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const base = cfg.endpoint.replace(/\/$/, '')
     const r = await fetch(`${base}/chat/completions`, {
       method: 'POST',
-      headers: buildHeaders(),
+      headers: { 'Content-Type': 'application/json' },
       signal: AbortSignal.timeout(60_000),
       body: JSON.stringify({ model: cfg.model, messages, stream: true, max_tokens: 1024 })
     })
