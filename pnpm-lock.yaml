@@ -98,6 +98,58 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
 
+  packages/web-app-ai-data-insights-sidebar:
+    dependencies:
+      '@ownclouders/web-client':
+        specifier: ^12.3.2
+        version: 12.3.2
+      '@ownclouders/web-pkg':
+        specifier: ^12.3.2
+        version: 12.3.2(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
+    devDependencies:
+      '@ownclouders/extension-sdk':
+        specifier: 12.3.2
+        version: 12.3.2(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
+      '@ownclouders/tsconfig':
+        specifier: 0.0.6
+        version: 0.0.6
+      '@types/node':
+        specifier: 22.19.19
+        version: 22.19.19
+      '@vue/test-utils':
+        specifier: ^2.4.6
+        version: 2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
+      eslint:
+        specifier: 9.39.4
+        version: 9.39.4
+      happy-dom:
+        specifier: ^20.9.0
+        version: 20.9.0
+      prettier:
+        specifier: 3.8.3
+        version: 3.8.3
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: 7.2.2
+        version: 7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
+      vitest:
+        specifier: 4.1.7
+        version: 4.1.7(@types/node@22.19.19)(happy-dom@20.9.0)(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+      vue:
+        specifier: ^3.4.21
+        version: 3.5.35(typescript@5.9.3)
+      vue-router:
+        specifier: ^5.0.7
+        version: 5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
+      vue-tsc:
+        specifier: 3.3.2
+        version: 3.3.2(typescript@5.9.3)
+      vue3-gettext:
+        specifier: ^2.4.0
+        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+
   packages/web-app-ai-doc-summary:
     dependencies:
       '@ownclouders/web-client':
@@ -1288,10 +1340,6 @@ packages:
 
   '@eslint/js@9.39.4':
     resolution: {integrity: sha512-nE7DEIchvtiFTwBw4Lfbu59PG+kCofhjsKaCWzxTpt4lfRjRMqG6uMBzKXuEcyXhOHoUp9riAm7/aWYGhXZ9cw==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@eslint/object-schema@2.1.6':
-    resolution: {integrity: sha512-RBMg5FRL0I0gs51M/guSAj5/e14VQ4tpZnQNWwuDT66P14I43ItmPfIZRhO9fUVIPOAQXU47atlywZ/czoqFPA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.7':
@@ -5654,7 +5702,7 @@ snapshots:
 
   '@eslint/config-array@0.21.0':
     dependencies:
-      '@eslint/object-schema': 2.1.6
+      '@eslint/object-schema': 2.1.7
       debug: 4.4.3
       minimatch: 3.1.5
     transitivePeerDependencies:
@@ -5731,8 +5779,6 @@ snapshots:
   '@eslint/js@9.37.0': {}
 
   '@eslint/js@9.39.4': {}
-
-  '@eslint/object-schema@2.1.6': {}
 
   '@eslint/object-schema@2.1.7': {}
 
