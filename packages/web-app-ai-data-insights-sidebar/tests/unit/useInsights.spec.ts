@@ -49,7 +49,7 @@ function setupLLMMock({ status = 'ready' as LLMStatus, response = HAPPY_PATH_LLM
     status: ref(status),
     complete: completeMock,
     stream: vi.fn()
-  })
+  } as any)
 }
 
 let getFileContentsMock: ReturnType<typeof vi.fn>
