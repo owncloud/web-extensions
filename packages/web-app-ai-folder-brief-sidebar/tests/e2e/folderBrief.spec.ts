@@ -24,6 +24,14 @@ async function createTestFolder(request: APIRequestContext): Promise<void> {
     method: 'MKCOL',
     headers: { Authorization: `Basic ${auth}` }
   })
+  // Add a child file so the composable's empty-folder guard does not short-circuit
+  // the LLM call — without children the panel shows "This folder is empty." and never
+  // calls the LLM endpoint.
+  await request.fetch(`/remote.php/dav/files/admin/${TEST_FOLDER}/sample.txt`, {
+    method: 'PUT',
+    data: 'Sample file for E2E test',
+    headers: { 'Content-Type': 'text/plain', Authorization: `Basic ${auth}` }
+  })
 }
 
 test.describe('AI Folder Brief sidebar panel', () => {
