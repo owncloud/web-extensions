@@ -1,7 +1,7 @@
 import { ref, type Ref } from 'vue'
-import { useAuthStore, useClientService, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
+import { useClientService, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
-import { useLlm, type LlmConfig, type LlmStatus } from './useLlm'
+import { useLLM, type LLMConfig, type LLMStatus } from './useLLM'
 import { parseCSV } from '../utils/csv-parse'
 
 const MAX_COLUMNS = 30
@@ -33,7 +33,7 @@ export interface InsightsResult {
 }
 
 export interface UseInsightsResult {
-  status: Ref<LlmStatus>
+  status: Ref<LLMStatus>
   isAnalyzing: Ref<boolean>
   insightsResult: Ref<InsightsResult | null>
   panelError: Ref<string | null>
@@ -58,12 +58,11 @@ function numericRange(samples: string[]): { min?: string; max?: string } {
 }
 
 export function useInsights(
-  llmConfig: LlmConfig | null,
+  llmConfig: LLMConfig | null,
   resource: Ref<InsightsResource | null | undefined>
 ): UseInsightsResult {
   const { $gettext, current: gettextLanguage } = useGettext()
-  const { status, config, ensureReady } = useLlm(llmConfig)
-  const authStore = useAuthStore()
+  const llm = useLLM(llmConfig)
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
   const userStore = useUserStore()
@@ -72,31 +71,39 @@ export function useInsights(
   const panelError = ref<string | null>(null)
   const insightsResult = ref<InsightsResult | null>(null)
 
-  function buildHeaders(): Record<string, string> {
-    const h: Record<string, string> = { 'Content-Type': 'application/json' }
-    const token = authStore.accessToken
-    if (token) h['Authorization'] = `Bearer ${token}`
-    return h
-  }
-
-  function aiErrorMessage(statusCode: number): string {
-    if (statusCode === 401 || statusCode === 403) {
+  function handleLlmError(err: unknown): string {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      return $gettext('The AI service did not respond in time. Please try again later.')
+    }
+    if (err instanceof TypeError) {
       return $gettext(
-        'Access to the AI service was denied. Your session may have expired — try reloading the page.'
+        'Could not reach the AI service. Check your network connection and try again.'
       )
     }
-    if (statusCode === 404) {
-      return $gettext(
-        'The AI endpoint could not be found. Check the endpoint URL in admin settings.'
-      )
+    if (err instanceof Error) {
+      const match = /LLM request failed: (\d+)/.exec(err.message)
+      if (match) {
+        const code = parseInt(match[1], 10)
+        if (code === 401 || code === 403) {
+          return $gettext(
+            'Access to the AI service was denied. Your session may have expired — try reloading the page.'
+          )
+        }
+        if (code === 404) {
+          return $gettext(
+            'The AI endpoint could not be found. Check the endpoint URL in admin settings.'
+          )
+        }
+        if (code === 429) {
+          return $gettext('The AI service is currently busy. Please try again in a moment.')
+        }
+        if (code >= 500) {
+          return $gettext('The AI service is temporarily unavailable. Please try again later.')
+        }
+      }
+      return err.message
     }
-    if (statusCode === 429) {
-      return $gettext('The AI service is currently busy. Please try again in a moment.')
-    }
-    if (statusCode >= 500) {
-      return $gettext('The AI service is temporarily unavailable. Please try again later.')
-    }
-    return $gettext('The AI service returned an unexpected response. Please try again.')
+    return $gettext('Something went wrong while analyzing the file. Please try again.')
   }
 
   function getUserLanguage(): string {
@@ -128,26 +135,6 @@ export function useInsights(
       throw new Error($gettext('The file appears to be empty or has no recognizable columns.'))
     }
 
-    const cfg = config.value
-    if (!cfg) {
-      throw new Error($gettext('Admin needs to configure the AI endpoint.'))
-    }
-
-    // Same-origin check — the proxy validates the oCIS token; forwarding it cross-origin leaks credentials
-    let endpointOrigin: string
-    try {
-      endpointOrigin = new URL(cfg.endpoint).origin
-    } catch {
-      endpointOrigin = ''
-    }
-    if (endpointOrigin !== window.location.origin) {
-      throw new Error(
-        $gettext(
-          'The AI endpoint must be on the same server as ownCloud. Cross-origin requests are not supported.'
-        )
-      )
-    }
-
     // Cap columns and build compact column summaries for the prompt
     const cappedHeaders = preview.headers.slice(0, MAX_COLUMNS)
     const cappedColumns = preview.columns.slice(0, MAX_COLUMNS)
@@ -166,43 +153,25 @@ export function useInsights(
     })
 
     const lang = getUserLanguage()
-    const base = cfg.endpoint.replace(/\/$/, '')
+    const promptContent = [
+      `Analyze the following CSV/spreadsheet file "${res.name ?? 'this file'}".`,
+      `Respond in the language with BCP 47 tag "${lang}".`,
+      'Respond with a JSON object with exactly three keys:',
+      '"columnTypes": an array of objects with "column" (string) and "type" (string) fields — the confirmed type for each column (number, date, boolean, or string).',
+      '"ranges": an array of objects with "column" (string) and optional "min" and "max" (strings) — include only numeric or date columns.',
+      '"observations": an array of 2-3 plain strings, each one natural-language observation about the data.',
+      'Return only the JSON object. No markdown, no code fences, no extra text.',
+      '\n\nColumn summaries:\n' + JSON.stringify(columnSummaries)
+    ].join(' ')
 
-    const r = await fetch(`${base}/chat/completions`, {
-      method: 'POST',
-      headers: buildHeaders(),
-      signal: AbortSignal.timeout(30_000),
-      body: JSON.stringify({
-        model: cfg.model,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              `Analyze the following CSV/spreadsheet file "${res.name ?? 'this file'}".`,
-              `Respond in the language with BCP 47 tag "${lang}".`,
-              'Respond with a JSON object with exactly three keys:',
-              '"columnTypes": an array of objects with "column" (string) and "type" (string) fields — the confirmed type for each column (number, date, boolean, or string).',
-              '"ranges": an array of objects with "column" (string) and optional "min" and "max" (strings) — include only numeric or date columns.',
-              '"observations": an array of 2-3 plain strings, each one natural-language observation about the data.',
-              'Return only the JSON object. No markdown, no code fences, no extra text.',
-              '\n\nColumn summaries:\n' + JSON.stringify(columnSummaries)
-            ].join(' ')
-          }
-        ],
-        response_format: { type: 'json_object' },
-        max_tokens: 512
-      })
+    const responseText = await llm.complete([{ role: 'user', content: promptContent }], {
+      maxTokens: 512,
+      responseFormat: { type: 'json_object' }
     })
 
-    if (!r.ok) {
-      throw new Error(aiErrorMessage(r.status))
-    }
-
-    const data = (await r.json()) as { choices?: Array<{ message?: { content?: string } }> }
-    const text = data.choices?.[0]?.message?.content ?? '{}'
     let parsed: Record<string, unknown>
     try {
-      parsed = JSON.parse(text) as Record<string, unknown>
+      parsed = JSON.parse(responseText) as Record<string, unknown>
     } catch {
       parsed = {}
     }
@@ -231,11 +200,7 @@ export function useInsights(
     }
 
     const toObservations = (val: unknown): string[] =>
-      Array.isArray(val)
-        ? val
-            .map((s) => String(s).trim())
-            .filter(Boolean)
-        : []
+      Array.isArray(val) ? val.map((s) => String(s).trim()).filter(Boolean) : []
 
     return {
       columnTypes: toColumnInsights(parsed.columnTypes),
@@ -244,32 +209,30 @@ export function useInsights(
     }
   }
 
+  function ensureReady(): Promise<void> {
+    // useLLM sets status synchronously at initialisation; nothing to do here
+    return Promise.resolve()
+  }
+
   async function triggerInsights(): Promise<void> {
-    if (status.value === 'unconfigured') return
+    if (llm.status.value === 'cross-origin') {
+      panelError.value = $gettext(
+        'The AI endpoint must be on the same server as ownCloud. Cross-origin requests are not supported.'
+      )
+      return
+    }
+    if (llm.status.value !== 'ready') return
 
     isAnalyzing.value = true
     panelError.value = null
     try {
       insightsResult.value = await fetchInsights()
     } catch (err) {
-      if (err instanceof DOMException && err.name === 'TimeoutError') {
-        panelError.value = $gettext(
-          'The AI service did not respond in time. Please try again later.'
-        )
-      } else if (err instanceof TypeError) {
-        panelError.value = $gettext(
-          'Could not reach the AI service. Check your network connection and try again.'
-        )
-      } else {
-        panelError.value =
-          err instanceof Error
-            ? err.message
-            : $gettext('Something went wrong while analyzing the file. Please try again.')
-      }
+      panelError.value = handleLlmError(err)
     } finally {
       isAnalyzing.value = false
     }
   }
 
-  return { status, isAnalyzing, insightsResult, panelError, triggerInsights, ensureReady }
+  return { status: llm.status, isAnalyzing, insightsResult, panelError, triggerInsights, ensureReady }
 }
