@@ -1,10 +1,6 @@
 import { ref, type Ref } from 'vue'
 import { useAuthStore } from '@ownclouders/web-pkg'
 
-// LLMConfig is sourced from the oCIS admin-configured extension config.
-// endpoint must be the same-origin ai-llm-proxy URL — never a direct external LLM URL.
-// The proxy validates the oCIS access token and forwards the request with its own LLM_API_KEY.
-// apiKey must NOT appear here: the LLM credential is a server-side proxy concern only.
 export interface LLMConfig {
   endpoint: string
   model: string
