@@ -13,12 +13,12 @@ describe('parseCSV', () => {
   })
 
   it('handles quoted fields containing commas', () => {
-    const { headers, columns } = parseCSV('city,label\n"Portland, OR",home')
+    const { columns } = parseCSV('city,label\n"Portland, OR",home')
     expect(columns[0]).toEqual(['Portland, OR'])
   })
 
   it('unescapes doubled double-quotes inside quoted fields (RFC-4180)', () => {
-    const { headers, columns } = parseCSV('note\n"say ""hello"""')
+    const { columns } = parseCSV('note\n"say ""hello"""')
     expect(columns[0]).toEqual(['say "hello"'])
   })
 
@@ -40,5 +40,19 @@ describe('parseCSV', () => {
     const { headers, columns } = parseCSV('x\ty\n10\t20', '\t')
     expect(headers).toEqual(['x', 'y'])
     expect(columns[0]).toEqual(['10'])
+  })
+
+  it('handles quoted fields with internal newlines (RFC-4180 embedded newlines)', () => {
+    const csv = 'name,bio\nAlice,"Line one\nLine two"'
+    const { headers, columns } = parseCSV(csv)
+    expect(headers).toEqual(['name', 'bio'])
+    expect(columns[0]).toEqual(['Alice'])
+    expect(columns[1]).toEqual(['Line one\nLine two'])
+  })
+
+  it('handles a single-column CSV', () => {
+    const { headers, columns } = parseCSV('value\nalpha\nbeta\ngamma')
+    expect(headers).toEqual(['value'])
+    expect(columns[0]).toEqual(['alpha', 'beta', 'gamma'])
   })
 })
