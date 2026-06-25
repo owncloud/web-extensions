@@ -108,9 +108,14 @@ export function formatDateForKQL(date: string): string | null {
   }
 
   // Try to parse other formats (e.g., "January 15, 2024", timestamps)
+  // Use local date parts instead of toISOString() to avoid UTC-offset shift
+  // (toISOString() returns UTC, which can be a day behind in negative-offset zones)
   const d = new Date(trimmed)
   if (!isNaN(d.getTime())) {
-    return d.toISOString().split('T')[0]
+    const yyyy = d.getFullYear()
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd}`
   }
 
   return null
