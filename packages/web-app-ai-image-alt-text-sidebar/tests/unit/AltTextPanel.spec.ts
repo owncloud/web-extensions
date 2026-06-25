@@ -164,11 +164,11 @@ describe('AltTextPanel', () => {
   it('resets state and reloads stored text when resource id changes', async () => {
     setupAltTextMock({ status: 'vision-ready', altText: 'old text' })
     setupStorageMock({ storedText: 'old stored' })
-    const wrapper = createWrapper({ resource: { id: 'file-1', path: '/a.jpg', spaceId: 's1' } })
+    const wrapper = createWrapper({ resource: { id: 'file-1', path: '/a.jpg' } })
     await flushPromises()
     loadStoredTextMock.mockClear()
     resetMock.mockClear()
-    await wrapper.setProps({ resource: { id: 'file-2', path: '/b.jpg', spaceId: 's1' } })
+    await wrapper.setProps({ resource: { id: 'file-2', path: '/b.jpg' } })
     await flushPromises()
     expect(resetMock).toHaveBeenCalledTimes(1)
     expect(loadStoredTextMock).toHaveBeenCalledTimes(1)
