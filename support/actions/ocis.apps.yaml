@@ -19,3 +19,9 @@ web-app-version-changelog:
     llm:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+web-app-ai-data-insights-sidebar:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
