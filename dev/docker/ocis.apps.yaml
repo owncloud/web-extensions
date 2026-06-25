@@ -26,6 +26,12 @@ version-changelog:
       endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
 
+ai-folder-brief-sidebar:
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
+
 ai-sensitive-data-scanner:
   config:
     llm:

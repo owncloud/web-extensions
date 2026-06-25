@@ -98,6 +98,8 @@ jobs:
           - ai-llm-proxy
           - web-app-version-changelog
           - web-app-group-management
+          - web-app-file-comments
+          - web-app-ai-folder-brief-sidebar
           - web-app-ai-sensitive-data-scanner
     steps:
       - name: Checkout code

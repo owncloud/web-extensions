@@ -47,6 +47,8 @@ services:
       - ./packages/web-app-chat-with-file/dist:/web/apps/chat-with-file
       - ./packages/web-app-version-changelog/dist:/web/apps/version-changelog
       - ./packages/web-app-group-management/dist:/web/apps/group-management
+      - ./packages/web-app-file-comments/dist:/web/apps/file-comments
+      - ./packages/web-app-ai-folder-brief-sidebar/dist:/web/apps/ai-folder-brief-sidebar
       - ./packages/web-app-ai-sensitive-data-scanner/dist:/web/apps/ai-sensitive-data-scanner
     depends_on:
       - traefik

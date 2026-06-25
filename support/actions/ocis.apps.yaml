@@ -20,6 +20,12 @@ web-app-version-changelog:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
 
+web-app-ai-folder-brief-sidebar:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
+
 web-app-ai-sensitive-data-scanner:
   config:
     llm:
