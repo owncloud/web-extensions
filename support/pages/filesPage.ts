@@ -61,6 +61,7 @@ export class FilesPage {
     if (await sidebarCloseBtn.isVisible()) {
       await sidebarCloseBtn.click()
     }
+    await this.page.locator('.has-item-context-menu tr').first().waitFor({ state: 'visible' })
     await this.selectAllCheckbox.check()
     await this.deleteBtn.click()
   }
