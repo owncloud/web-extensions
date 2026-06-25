@@ -230,9 +230,9 @@ describe('usePhotos', () => {
 
   describe('formatDateKey', () => {
     it('should format day key with full date', () => {
-      const result = formatDateKey('2026-01-15', 'day')
+      const result = formatDateKey('2026-01-15', 'day', 'en')
       expect(result).toContain('2026')
-      expect(result).toContain('January') // or localized month
+      expect(result).toContain('January')
     })
 
     it('should return "Today" for today\'s date', () => {
