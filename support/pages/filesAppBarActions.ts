@@ -35,7 +35,9 @@ export class FilesAppBar {
         }
       })()
     ])
-    await this.closeUploadDialogBtn.click()
+    if (await this.closeUploadDialogBtn.isVisible()) {
+      await this.closeUploadDialogBtn.click()
+    }
     await expect(this.newResourceContextMenu).not.toBeVisible()
     await expect(this.uploadResourceContextMenu).not.toBeVisible()
   }
