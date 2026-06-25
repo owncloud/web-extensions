@@ -26,7 +26,7 @@ export default defineWebApplication({
         extensionPointIds: ['global.files.sidebar'],
         panel: {
           name: APP_ID,
-          icon: 'folder-info',
+          icon: 'sparkling-2',
           title: () => $pgettext('Sidebar panel tab title', 'Folder Brief'),
           isVisible: ({ items }: { items?: Array<{ isFolder?: boolean }> }) =>
             items?.length === 1 && items[0]?.isFolder === true,

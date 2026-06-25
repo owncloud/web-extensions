@@ -34,7 +34,7 @@ export function useFolderBrief(
   llmConfig: LlmConfig | null,
   resource: Ref<FolderResource | null | undefined>
 ): UseFolderBriefResult {
-  const { $gettext, current: gettextLanguage } = useGettext()
+  const { $gettext, $ngettext, current: gettextLanguage } = useGettext()
   const { status, config, ensureReady, buildHeaders } = useLlm(llmConfig)
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
@@ -82,6 +82,22 @@ export function useFolderBrief(
     return 'other'
   }
 
+  function formatCategory(cat: string, n: number): string {
+    const s = String(n)
+    switch (cat) {
+      case 'folder': return $ngettext('%{n} folder', '%{n} folders', n, { n: s })
+      case 'image': return $ngettext('%{n} image', '%{n} images', n, { n: s })
+      case 'video': return $ngettext('%{n} video', '%{n} videos', n, { n: s })
+      case 'audio': return $ngettext('%{n} audio file', '%{n} audio files', n, { n: s })
+      case 'PDF': return $ngettext('%{n} PDF', '%{n} PDFs', n, { n: s })
+      case 'text': return $ngettext('%{n} text file', '%{n} text files', n, { n: s })
+      case 'spreadsheet': return $ngettext('%{n} spreadsheet', '%{n} spreadsheets', n, { n: s })
+      case 'presentation': return $ngettext('%{n} presentation', '%{n} presentations', n, { n: s })
+      case 'document': return $ngettext('%{n} document', '%{n} documents', n, { n: s })
+      default: return $ngettext('%{n} file', '%{n} files', n, { n: s })
+    }
+  }
+
   function buildStaticBrief(children: Resource[]): BriefResult {
     if (children.length === 0) {
       return { summary: $gettext('This folder is empty.'), isStatic: true }
@@ -93,9 +109,9 @@ export function useFolderBrief(
     }
     const parts = Object.entries(counts)
       .sort((a, b) => b[1] - a[1])
-      .map(([cat, n]) => `${n} ${cat}${n !== 1 ? 's' : ''}`)
+      .map(([cat, n]) => formatCategory(cat, n))
     const folderName = resource.value?.name ?? $gettext('This folder')
-    const summary = `${folderName} contains ${parts.join(', ')}.`
+    const summary = $gettext('%{name} contains %{items}.', { name: folderName, items: parts.join(', ') })
     return { summary, isStatic: true }
   }
 
@@ -196,7 +212,7 @@ export function useFolderBrief(
       }
 
       if (children.length === 0) {
-        briefResult.value = { summary: $gettext('This folder is empty.'), isStatic: false }
+        briefResult.value = { summary: $gettext('This folder is empty.'), isStatic: true }
         return
       }
 
