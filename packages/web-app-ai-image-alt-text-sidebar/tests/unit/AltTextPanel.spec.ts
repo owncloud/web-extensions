@@ -168,7 +168,7 @@ describe('AltTextPanel', () => {
     await flushPromises()
     loadStoredTextMock.mockClear()
     resetMock.mockClear()
-    await wrapper.setProps({ resource: { id: 'file-2', path: '/b.jpg' } })
+    await wrapper.setProps({ resource: { id: 'file-2', path: '/b.jpg', spaceId: 's1' } })
     await flushPromises()
     expect(resetMock).toHaveBeenCalledTimes(1)
     expect(loadStoredTextMock).toHaveBeenCalledTimes(1)
