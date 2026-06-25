@@ -148,26 +148,26 @@ importers:
         version: 12.4.1
       '@ownclouders/web-pkg':
         specifier: ^12.4.1
-        version: 12.4.1(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.35(typescript@5.9.3))
+        version: 12.4.1(@vue/compiler-sfc@3.5.38)(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: ^3.4.0
-        version: 3.5.35(typescript@5.9.3)
+        version: 3.5.38(typescript@5.9.3)
       vue3-gettext:
         specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.35)(vue@3.5.35(typescript@5.9.3))
+        version: 2.4.0(@vue/compiler-sfc@3.5.38)(vue@3.5.38(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.4.1
-        version: 12.4.1(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.35(typescript@5.9.3))
+        version: 12.4.1(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.38(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.4.1
-        version: 12.4.1(@ownclouders/web-pkg@12.4.1(@vue/compiler-sfc@3.5.35)(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.35(typescript@5.9.3)))(@vue/compiler-sfc@3.5.35)(@vue/test-utils@2.4.10(@vue/compiler-dom@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vitest@1.6.1(@types/node@24.13.2)(happy-dom@20.9.0)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.35(typescript@5.9.3))
+        version: 12.4.1(@ownclouders/web-pkg@12.4.1(@vue/compiler-sfc@3.5.38)(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.38(typescript@5.9.3)))(@vue/compiler-sfc@3.5.38)(@vue/test-utils@2.4.11(@vue/compiler-dom@3.5.38)(@vue/server-renderer@3.5.38(vue@3.5.38(typescript@5.9.3)))(vue@3.5.38(typescript@5.9.3)))(pinia@3.0.4(typescript@5.9.3)(vue@3.5.38(typescript@5.9.3)))(typescript@5.9.3)(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vitest@1.6.1(@types/node@24.13.2)(happy-dom@20.10.6)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.38(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.43.0
         version: 1.60.0
       '@vitejs/plugin-vue':
         specifier: ^5.0.0
-        version: 5.2.4(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.35(typescript@5.9.3))
+        version: 5.2.4(vite@5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.38(typescript@5.9.3))
       eslint:
         specifier: ^8.57.0
         version: 8.57.1
@@ -179,7 +179,7 @@ importers:
         version: 5.4.21(@types/node@24.13.2)(sass-embedded@1.100.0)(sass@1.100.0)
       vitest:
         specifier: ^1.5.0
-        version: 1.6.1(@types/node@24.13.2)(happy-dom@20.9.0)(sass-embedded@1.100.0)(sass@1.100.0)
+        version: 1.6.1(@types/node@24.13.2)(happy-dom@20.10.6)(sass-embedded@1.100.0)(sass@1.100.0)
 
   packages/web-app-ai-image-alt-text-sidebar:
     dependencies:
