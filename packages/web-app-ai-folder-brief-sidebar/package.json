@@ -1,36 +1,33 @@
 {
-  "name": "web-app-file-comments",
+  "name": "web-app-ai-folder-brief-sidebar",
   "version": "0.1.0",
   "private": true,
-  "description": "Markdown file comments stored in oCIS WebDAV metadata",
+  "description": "AI Folder Brief Sidebar — sidebarPanel extension that summarises folder contents",
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
     "build": "vite build",
     "build:w": "vite build --watch --mode development",
     "check:types": "vue-tsc --noEmit",
+    "lint": "../../node_modules/.bin/eslint 'src/**/*.{ts,vue}' --color",
+    "test": "vitest run --passWithNoTests",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2",
-    "dompurify": "^3.4.3",
-    "js-yaml": "^4.1.0",
-    "marked": "^17.0.6",
+    "@ownclouders/web-client": "^12.4.1",
+    "@ownclouders/web-pkg": "^12.4.1",
     "vue": "^3.4.0",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.3.2",
-    "@ownclouders/web-test-helpers": "^12.3.2",
+    "@ownclouders/extension-sdk": "^12.4.1",
+    "@ownclouders/web-test-helpers": "^12.4.1",
     "@playwright/test": "^1.43.0",
-    "@types/js-yaml": "^4.0.9",
     "@vitejs/plugin-vue": "^5.0.0",
     "eslint": "^8.57.0",
     "typescript": "^5.4.0",
     "vite": "^5.2.0",
-    "jsdom": "^29.1.1",
     "vitest": "^1.5.0"
   }
 }
