@@ -21,15 +21,23 @@ export class FilesAppBar {
   async uploadFile(file: string) {
     await this.uploadBtn.click()
     const realPath = fileURLToPath(new URL(`../filesForUpload/${file}`, import.meta.url))
+    const replaceBtn = this.page.getByRole('button', { name: 'Replace' })
     await Promise.all([
       this.page.waitForResponse(
         (resp) =>
           [201, 204].includes(resp.status()) &&
           ['POST', 'PUT', 'PATCH'].includes(resp.request().method())
       ),
-      this.uploadFileBtn.setInputFiles(realPath)
+      (async () => {
+        await this.uploadFileBtn.setInputFiles(realPath)
+        if (await replaceBtn.isVisible()) {
+          await replaceBtn.click()
+        }
+      })()
     ])
-    await this.closeUploadDialogBtn.click()
+    if (await this.closeUploadDialogBtn.isVisible()) {
+      await this.closeUploadDialogBtn.click()
+    }
     await expect(this.newResourceContextMenu).not.toBeVisible()
     await expect(this.uploadResourceContextMenu).not.toBeVisible()
   }

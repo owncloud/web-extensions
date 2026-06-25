@@ -1,6 +1,5 @@
 import { test, type Page, type APIRequestContext, expect } from '@playwright/test'
-import { createContext, closeContext } from '../../../../support/helpers/actorHelper'
-import { LoginPage } from '../../../../support/pages/loginPage'
+import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
 import { GroupManagementPage } from '../../../../support/pages/groupManagementPage'
 
 const TEST_GROUP = 'e2e group management'
@@ -28,28 +27,14 @@ async function deleteTestGroup(request: APIRequestContext): Promise<void> {
 
 test.describe('Group Management', () => {
   test.beforeEach(async ({ browser, request }) => {
-    const { page } = await createContext(browser)
-    const loginPage = new LoginPage(page)
-    await page.goto('/')
-    await Promise.all([
-      page.waitForResponse(
-        (resp) =>
-          resp.url().endsWith('logon') &&
-          resp.status() === 200 &&
-          resp.request().method() === 'POST'
-      ),
-      loginPage.login('admin', 'admin')
-    ])
+    const { page } = await loginAsUser(browser, 'admin', 'admin')
     adminPage = page
     await deleteTestGroup(request)
   })
 
   test.afterEach(async ({ request }) => {
     await deleteTestGroup(request)
-    const context = adminPage.context()
-    const loginPage = new LoginPage(adminPage)
-    await loginPage.logout()
-    await closeContext(context)
+    await logout(adminPage)
   })
 
   test('renders the group management app', async () => {

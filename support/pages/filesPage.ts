@@ -49,25 +49,107 @@ export class FilesPage {
   }
 
   async deleteAllFromPersonal() {
+    await this.navigateToPersonal()
     const closeUploadBar = this.page.locator('#close-upload-bar-btn')
     if (await closeUploadBar.isVisible()) {
       await closeUploadBar.click()
     }
-    await this.appSwitcherButton.click()
-    await this.files.click()
     const sidebarCloseBtn = this.page
       .locator('[data-testid="app-sidebar"]')
       .getByLabel('Close file sidebar')
     if (await sidebarCloseBtn.isVisible()) {
       await sidebarCloseBtn.click()
     }
+    await this.page.locator('.has-item-context-menu tr').first().waitFor({ state: 'visible' })
+    const resources = this.page.locator('.has-item-context-menu [data-test-resource-name]')
     await this.selectAllCheckbox.check()
     await this.deleteBtn.click()
+    await resources.first().waitFor({ state: 'detached' })
   }
 
   async openFolder(folder: string) {
     const folderLocator = this.getResourceNameSelector(folder)
     await folderLocator.click()
+  }
+
+  async navigateToPersonal() {
+    await this.page.goto('/files/spaces/personal')
+    await this.page.locator('#files-view').waitFor({ state: 'visible' })
+  }
+
+  async listResourceNames(): Promise<string[]> {
+    const names = await this.page
+      .locator('.has-item-context-menu [data-test-resource-name]')
+      .evaluateAll((elements) =>
+        elements
+          .map((element) => element.getAttribute('data-test-resource-name'))
+          .filter((name): name is string => Boolean(name))
+      )
+    return [...new Set(names)].sort()
+  }
+
+  async closeSidebar() {
+    const closeButton = this.page.getByTestId('app-sidebar').getByLabel('Close file sidebar')
+    if (await closeButton.isVisible()) {
+      await closeButton.click()
+    }
+  }
+
+  async rename(resource: string, inputName: string): Promise<string> {
+    await this.closeSidebar()
+    await this.openFileContextMenu(resource)
+    await this.page.locator('.oc-files-actions-rename-trigger').click()
+    const modal = this.page.locator('.oc-modal')
+    const input = modal.locator('.oc-text-input')
+    await input.fill(inputName)
+    const [moveResponse] = await Promise.all([
+      this.page.waitForResponse(
+        (response) => response.status() === 201 && response.request().method() === 'MOVE'
+      ),
+      modal.getByRole('button', { name: 'Rename', exact: true }).click()
+    ])
+    const destination = decodeURIComponent(moveResponse.request().headers().destination)
+    const renamedResource = new URL(destination).pathname.split('/').pop()
+    if (!renamedResource) {
+      throw new Error(`Invalid rename destination: ${destination}`)
+    }
+    await this.page.reload()
+    await this.getResourceNameSelector(renamedResource).waitFor({
+      state: 'visible',
+      timeout: 10_000
+    })
+    return renamedResource
+  }
+
+  async createFolder(name: string) {
+    const createMenuButton = this.page.locator('#new-file-menu-btn')
+    if (await createMenuButton.isVisible()) {
+      await createMenuButton.click()
+    }
+    await this.page.locator('#new-folder-btn:visible').click()
+    const modal = this.page.locator('.oc-modal')
+    await modal.locator('.oc-text-input').fill(name)
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) => response.status() === 201 && response.request().method() === 'MKCOL'
+      ),
+      modal.getByRole('button', { name: 'Create', exact: true }).click()
+    ])
+  }
+
+  async cutAndPasteInto(resource: string, folder: string) {
+    await this.closeSidebar()
+    await this.openFileContextMenu(resource)
+    await this.page
+      .locator('[id^="context-menu-drop"]:visible .oc-files-actions-move-trigger')
+      .click()
+    await this.openFolder(folder)
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) => response.status() === 201 && response.request().method() === 'MOVE'
+      ),
+      this.page.locator('.paste-files-btn').click()
+    ])
   }
 
   async openJsonFile(jsonFIle: string) {

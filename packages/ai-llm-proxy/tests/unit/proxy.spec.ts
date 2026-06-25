@@ -7,7 +7,8 @@ import {
   checkRateLimit,
   rateLimitWindows,
   readBody,
-  BodyTooLargeError
+  BodyTooLargeError,
+  isOriginAllowed
 } from '../../src/index.js'
 
 // ---------------------------------------------------------------------------
@@ -153,5 +154,38 @@ describe('readBody', () => {
     const req = makeStream(['a'.repeat(50)])
     const body = await readBody(req, 50)
     expect(body.length).toBe(50)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// isOriginAllowed
+// ---------------------------------------------------------------------------
+
+describe('isOriginAllowed', () => {
+  const expected = 'https://cloud.example.test'
+
+  it('allows a request whose Origin matches the expected origin', () => {
+    expect(isOriginAllowed('https://cloud.example.test', expected)).toBe(true)
+  })
+
+  it('rejects a request from a different origin', () => {
+    expect(isOriginAllowed('https://evil.example.test', expected)).toBe(false)
+  })
+
+  it('rejects an origin that differs only by scheme', () => {
+    expect(isOriginAllowed('http://cloud.example.test', expected)).toBe(false)
+  })
+
+  it('rejects an origin that differs only by port', () => {
+    expect(isOriginAllowed('https://cloud.example.test:8443', expected)).toBe(false)
+  })
+
+  it('allows a request with no Origin header (non-browser client, still token-gated)', () => {
+    expect(isOriginAllowed(undefined, expected)).toBe(true)
+  })
+
+  it('does not enforce when no expected origin is configured', () => {
+    expect(isOriginAllowed('https://anything.example.test', '')).toBe(true)
+    expect(isOriginAllowed(undefined, '')).toBe(true)
   })
 })

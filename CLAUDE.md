@@ -70,7 +70,7 @@ Extensions register capabilities via the `extensions` array returned from `defin
 - **`@ownclouders/web-client`** — typed WebDAV/API client, `Resource` types
 - **`@ownclouders/extension-sdk`** — Vite `defineConfig` wrapper for extension builds
 - **`@ownclouders/web-test-helpers`** — `mount()` + `defaultPlugins()` for Vitest
-- **`vue3-gettext`** — i18n; use `$gettext`/`$pgettext` in templates and `useGettext()` in setup
+- **`vue3-gettext`** — i18n; use `$gettext`/`$pgettext`/`$ngettext` in templates and `useGettext()` in setup
 
 ### AI extensions
 
@@ -84,7 +84,7 @@ All UI must use the ownCloud Design System components from `@ownclouders/web-pkg
 
 ### Translations
 
-All user-facing strings must be wrapped with `$gettext()` or `$pgettext()`. The `gettext.config.cjs` at the repo root configures extraction. Translation files live in each package's `l10n/` directory. Translations are managed via Transifex and synced automatically — do not edit `.po` files or `translations.json` by hand.
+All user-facing strings must be wrapped with `$gettext()`, `$pgettext()`, or `$ngettext()` (for count-aware plurals). The `gettext.config.cjs` at the repo root configures extraction. Translation files live in each package's `l10n/` directory. Translations are managed via Transifex and synced automatically — do not edit `.po` files or `translations.json` by hand.
 
 ### Docker Compose / CSP
 
@@ -92,7 +92,11 @@ The `docker-compose.yml` mounts each extension's `dist/` directory into the oCIS
 
 ### App configuration (`ocis.apps.yaml`)
 
-`dev/docker/ocis.apps.yaml` and `support/actions/ocis.apps.yaml` supply per-app config (e.g. LLM endpoint, companion URL) to oCIS. The **key for each entry must match the mount target directory**, not the package directory name or the app's internal `applicationId`. For example, the mount `./packages/web-app-chat-with-file/dist:/web/apps/chat-with-file` requires the key `chat-with-file`, not `web-app-chat-with-file`.
+`dev/docker/ocis.apps.yaml` and `support/actions/ocis.apps.yaml` supply per-app config (e.g. LLM endpoint, companion URL) to oCIS. The **key for each entry must match the mount target directory**, not the package directory name or the app's internal `applicationId`.
+
+These two files use different conventions because their mounts differ:
+- **`dev/docker/ocis.apps.yaml`** (used by `docker-compose.yml`) — mounts strip the `web-app-` prefix (e.g. `./packages/web-app-chat-with-file/dist:/web/apps/chat-with-file`), so the key is `chat-with-file`.
+- **`support/actions/ocis.apps.yaml`** (used by CI at `.github/workflows/test.yml`) — the workflow mounts using `${{matrix.app}}` verbatim as the target directory (e.g. `/apps/web-app-chat-with-file`), so the key is `web-app-chat-with-file`.
 
 ## Adding a New Extension
 

@@ -9,8 +9,8 @@ import type { Resource } from '@ownclouders/web-client'
  * Used throughout the search extension for proper type safety
  */
 export interface SearchResource extends Resource {
-  /** Space/drive ID */
-  spaceId?: string
+  /** Space/drive ID (required by the base Resource type since web-client 12.4.x) */
+  spaceId: string
   /** Drive alias (e.g., 'personal/home') */
   driveAlias?: string
   /** Parent folder ID */

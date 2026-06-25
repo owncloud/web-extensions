@@ -13,13 +13,13 @@
     "test:e2e": "pnpm playwright test"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2",
+    "@ownclouders/web-client": "^12.4.1",
+    "@ownclouders/web-pkg": "^12.4.1",
     "@zip.js/zip.js": "2.8.26"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.3.2",
-    "@ownclouders/web-test-helpers": "^12.3.2",
+    "@ownclouders/extension-sdk": "^12.4.1",
+    "@ownclouders/web-test-helpers": "^12.4.1",
     "@uppy/core": "^5.2.0",
     "p-queue": "^9.3.0",
     "uuid": "^14.0.0",
