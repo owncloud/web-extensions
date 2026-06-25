@@ -1,0 +1,34 @@
+{
+  "name": "web-app-ai-sensitive-data-scanner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI Sensitive Data Scanner (Batch) — batch-action extension for scanning files for PII, credentials, and confidential text",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "build:w": "vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "lint": "../../node_modules/.bin/eslint 'src/**/*.{ts,vue}' --color",
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.3.2",
+    "@ownclouders/web-pkg": "^12.3.2",
+    "pdfjs-dist": "^6.0.227",
+    "vue": "^3.4.0",
+    "vue3-gettext": "^2.4.0"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.3.2",
+    "@ownclouders/web-test-helpers": "^12.3.2",
+    "@playwright/test": "^1.43.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.2.0",
+    "vitest": "^1.5.0"
+  }
+}
