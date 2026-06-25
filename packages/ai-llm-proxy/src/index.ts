@@ -8,6 +8,20 @@ const PORT = parseInt(process.env.PORT ?? '3030', 10)
 const LLM_ENDPOINT = (process.env.LLM_ENDPOINT ?? '').replace(/\/$/, '')
 const LLM_API_KEY = process.env.LLM_API_KEY ?? ''
 const OCIS_URL = (process.env.OCIS_URL ?? '').replace(/\/$/, '')
+/**
+ * Origin (scheme://host:port) permitted to call the proxy, derived from
+ * OCIS_URL. Empty when OCIS_URL is unset or unparseable, in which case the
+ * origin gate cannot be enforced (the server refuses to start without
+ * OCIS_URL outside tests, so this only matters in unit tests).
+ */
+const ALLOWED_ORIGIN = (() => {
+  if (!OCIS_URL) return ''
+  try {
+    return new URL(OCIS_URL).origin
+  } catch {
+    return ''
+  }
+})()
 /** When set, overrides the model field sent by the client. */
 const LLM_MODEL = process.env.LLM_MODEL ?? ''
 /** Hard ceiling on max_tokens forwarded to the LLM (default 4 096). */
@@ -167,6 +181,32 @@ function setCorsHeaders(res: http.ServerResponse): void {
   res.setHeader('Access-Control-Max-Age', '86400')
 }
 
+/**
+ * Authoritative server-side origin check.
+ *
+ * CORS response headers (set by `setCorsHeaders`) are advisory and enforced
+ * only by the browser, so they cannot stop a non-browser or hostile client
+ * from reaching the LLM. This is the server-side gate that actually rejects
+ * requests from an unexpected origin.
+ *
+ * A cross-origin browser request always carries an `Origin` header (and so
+ * does a same-origin non-GET request, which is what the oCIS web extensions
+ * issue), so a genuine call from the oCIS UI always presents
+ * `Origin: <OCIS_URL origin>`. Any other present origin is a cross-site
+ * request and is rejected. A request with no `Origin` header cannot be a
+ * cross-site browser request and is still gated by the mandatory oCIS bearer
+ * token, so it is allowed through to token validation.
+ *
+ * @param origin   the incoming request's `Origin` header value, if any
+ * @param expected the allowed origin (scheme://host:port); empty disables the check
+ * @returns true when the request may proceed
+ */
+export function isOriginAllowed(origin: string | undefined, expected: string): boolean {
+  if (!expected) return true
+  if (origin !== undefined && origin !== expected) return false
+  return true
+}
+
 function sendJson(res: http.ServerResponse, status: number, body: unknown): void {
   const payload = JSON.stringify(body)
   res.writeHead(status, { 'Content-Type': 'application/json' })
@@ -190,6 +230,15 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
   // Only POST /v1/chat/completions
   if (req.method !== 'POST' || req.url !== '/v1/chat/completions') {
     sendJson(res, 404, { error: 'Not found' })
+    return
+  }
+
+  // Authoritative server-side origin check (CORS headers above are advisory).
+  // Reject cross-site requests before doing any work.
+  const originHeader = req.headers['origin']
+  const origin = Array.isArray(originHeader) ? originHeader[0] : originHeader
+  if (!isOriginAllowed(origin, ALLOWED_ORIGIN)) {
+    sendJson(res, 403, { error: 'Origin not allowed' })
     return
   }
 
