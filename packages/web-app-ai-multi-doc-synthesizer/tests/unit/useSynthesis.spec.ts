@@ -58,11 +58,11 @@ function setupMocks({
       getFileContents: getFileContentsMock,
       putFileContents: putFileContentsMock
     }
-  } as ReturnType<typeof useClientService>)
+  } as any)
 
   vi.mocked(useSpacesStore).mockReturnValue({
     getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
-  } as ReturnType<typeof useSpacesStore>)
+  } as any)
 
   const completeMock = vi.fn().mockResolvedValue('summary text')
   const completeJSONMock = vi.fn().mockResolvedValue(SYNTHESIS_RESPONSE)
@@ -130,10 +130,10 @@ describe('useSynthesis', () => {
       })
       vi.mocked(useClientService).mockReturnValue({
         webdav: { getFileContents: getFileContentsMock, putFileContents: vi.fn() }
-      } as ReturnType<typeof useClientService>)
+      } as any)
       vi.mocked(useSpacesStore).mockReturnValue({
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
-      } as ReturnType<typeof useSpacesStore>)
+      } as any)
       vi.mocked(useLLM).mockReturnValue({
         complete: vi.fn().mockResolvedValue('ok'),
         completeJSON: vi.fn().mockResolvedValue(SYNTHESIS_RESPONSE)
@@ -224,10 +224,10 @@ describe('useSynthesis', () => {
           getFileContents: vi.fn().mockResolvedValue({ response: { data: 'text' } }),
           putFileContents: vi.fn()
         }
-      } as ReturnType<typeof useClientService>)
+      } as any)
       vi.mocked(useSpacesStore).mockReturnValue({
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
-      } as ReturnType<typeof useSpacesStore>)
+      } as any)
       vi.mocked(useLLM).mockReturnValue({
         complete: vi.fn(),
         completeJSON: completeJSONMock
@@ -264,10 +264,10 @@ describe('useSynthesis', () => {
           getFileContents: vi.fn().mockRejectedValue(new TypeError('Failed to fetch')),
           putFileContents: vi.fn()
         }
-      } as ReturnType<typeof useClientService>)
+      } as any)
       vi.mocked(useSpacesStore).mockReturnValue({
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
-      } as ReturnType<typeof useSpacesStore>)
+      } as any)
       vi.mocked(useLLM).mockReturnValue({
         complete: vi.fn(),
         completeJSON: vi.fn()

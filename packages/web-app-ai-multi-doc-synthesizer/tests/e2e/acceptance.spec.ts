@@ -74,18 +74,16 @@ test('"Synthesize" is hidden when fewer than 2 files are selected', async () => 
 // Bullet 3: "Synthesize" is hidden when LLM endpoint is not configured.
 test('"Synthesize" is hidden when LLM endpoint is not configured', async () => {
   // On an unconfigured installation the extension hides the action entirely.
-  // Run this test against an oCIS instance without the llm config key.
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
   await file2.check()
 
-  // With no config the button must not appear.
   expect(await page.locator('button:text("Synthesize")').count()).toBe(0)
 })
 
-// Bullet 4: Clicking "Synthesize" opens the overlay panel.
-test('clicking "Synthesize" opens the synthesis overlay', async () => {
+// Bullet 4: Clicking "Synthesize" opens the synthesis modal.
+test('clicking "Synthesize" opens the synthesis modal', async () => {
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
@@ -93,12 +91,13 @@ test('clicking "Synthesize" opens the synthesis overlay', async () => {
 
   await page.locator('button:text("Synthesize")').click()
 
-  const overlay = page.locator('[data-testid="synthesis-overlay"]')
-  await expect(overlay).toBeVisible()
+  // The oc-modal dialog should be visible
+  const modal = page.locator('[role="dialog"]')
+  await expect(modal).toBeVisible()
 })
 
-// Bullet 5: Overlay shows shared themes from the mocked proxy response.
-test('overlay panel displays shared themes section', async () => {
+// Bullet 5: Modal shows shared themes from the mocked proxy response.
+test('synthesis modal displays shared themes section', async () => {
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
@@ -114,8 +113,8 @@ test('overlay panel displays shared themes section', async () => {
   expect(await themesSection.locator('li').count()).toBeGreaterThan(0)
 })
 
-// Bullet 6: Overlay shows key differences.
-test('overlay panel displays key differences section', async () => {
+// Bullet 6: Modal shows key differences.
+test('synthesis modal displays key differences section', async () => {
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
@@ -131,8 +130,8 @@ test('overlay panel displays key differences section', async () => {
   expect(await diffsSection.locator('li').count()).toBeGreaterThan(0)
 })
 
-// Bullet 7: Overlay shows action items.
-test('overlay panel displays action items section', async () => {
+// Bullet 7: Modal shows action items.
+test('synthesis modal displays action items section', async () => {
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
@@ -148,7 +147,7 @@ test('overlay panel displays action items section', async () => {
   expect(await actionItemsSection.locator('li').count()).toBeGreaterThan(0)
 })
 
-// Bullet 8: LLM request carries the user's oCIS bearer token, not a provider API key.
+// Bullet 8: LLM requests carry the user's oCIS bearer token, not a provider API key.
 test('LLM requests are sent to ai-llm-proxy with a bearer token', async () => {
   const proxyRequests: { url: string; authorization: string | null }[] = []
 
@@ -175,12 +174,9 @@ test('LLM requests are sent to ai-llm-proxy with a bearer token', async () => {
     .locator('[data-testid="synthesis-result"]')
     .waitFor({ state: 'visible', timeout: 30_000 })
 
-  // At least one request must have hit the proxy
   expect(proxyRequests.length).toBeGreaterThan(0)
-  // Every request must carry a bearer token (the oCIS access token)
   for (const req of proxyRequests) {
     expect(req.authorization).toMatch(/^Bearer /i)
-    // The token must NOT be an empty or placeholder string
     const token = req.authorization!.replace(/^Bearer /i, '')
     expect(token.length).toBeGreaterThan(10)
   }
@@ -201,7 +197,6 @@ test('user can copy the synthesis result to clipboard', async () => {
   const copyBtn = page.locator('[data-testid="synthesis-copy-btn"]')
   await expect(copyBtn).toBeVisible()
   await copyBtn.click()
-  // Button label changes to "Copied!" after click
   await expect(copyBtn).toContainText('Copied')
 })
 
@@ -221,25 +216,26 @@ test('user can save synthesis result as a new Markdown file', async () => {
   await expect(saveBtn).toBeVisible()
   await saveBtn.click()
 
-  // A success message appears with the saved file path
   const successMsg = page.locator('[data-testid="synthesis-save-success"]')
   await expect(successMsg).toBeVisible({ timeout: 15_000 })
-  // Path now includes date + time: synthesis-YYYY-MM-DD-HHMMSS.md
+  // Path includes date + time: synthesis-YYYY-MM-DD-HHMMSS.md
   await expect(successMsg).toContainText('synthesis-')
 })
 
-// Bullet 11: Overlay can be dismissed with Escape key.
-test('overlay is dismissed when Escape is pressed', async () => {
+// Bullet 11: Modal can be dismissed with the modal close button.
+test('synthesis modal is dismissed when the close button is clicked', async () => {
   const file1 = page.locator('[data-testid="resource-table-select"]').nth(0)
   const file2 = page.locator('[data-testid="resource-table-select"]').nth(1)
   await file1.check()
   await file2.check()
   await page.locator('button:text("Synthesize")').click()
 
-  const overlay = page.locator('[data-testid="synthesis-overlay"]')
-  await expect(overlay).toBeVisible()
+  const modal = page.locator('[role="dialog"]')
+  await expect(modal).toBeVisible()
 
-  await page.keyboard.press('Escape')
+  // oc-modal provides a close button
+  const closeBtn = modal.locator('button[aria-label="Close"], button:text("Close"), .oc-modal-close')
+  await closeBtn.click()
 
-  await expect(overlay).not.toBeVisible()
+  await expect(modal).not.toBeVisible()
 })

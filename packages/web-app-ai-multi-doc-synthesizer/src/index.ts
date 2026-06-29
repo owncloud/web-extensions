@@ -1,10 +1,9 @@
-import { defineWebApplication } from '@ownclouders/web-pkg'
+import { defineWebApplication, useModals } from '@ownclouders/web-pkg'
 import type { ActionExtension, FileActionOptions } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import type { Resource } from '@ownclouders/web-client'
-import App from './App.vue'
-import { overlayOpen, overlayResources, overlayLlmConfig } from './state'
+import SynthesisPanel from './components/SynthesisPanel.vue'
 import type { SynthesisResource } from './composables/useSynthesis'
 import { isSupportedFile } from './utils/file-support'
 import type { LLMConfig } from './composables/useLLM'
@@ -16,6 +15,7 @@ const APP_ID = 'ai-multi-doc-synthesizer'
 export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $pgettext } = useGettext()
+    const { dispatchModal } = useModals()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
     // No apiKey in config — the proxy authenticates with the provider.
@@ -44,9 +44,15 @@ export default defineWebApplication({
             )
           },
           handler: ({ resources }: FileActionOptions) => {
-            overlayResources.value = resources as SynthesisResource[]
-            overlayLlmConfig.value = llmConfig
-            overlayOpen.value = true
+            dispatchModal({
+              title: $pgettext('Document synthesis modal title', 'Document Synthesis'),
+              hideConfirmButton: true,
+              customComponent: SynthesisPanel,
+              customComponentAttrs: () => ({
+                resources: resources as SynthesisResource[],
+                llmConfig
+              })
+            })
           }
         }
       } as ActionExtension
@@ -63,7 +69,5 @@ export default defineWebApplication({
       extensions,
       translations
     }
-  },
-
-  rootComponent: App
+  }
 })
