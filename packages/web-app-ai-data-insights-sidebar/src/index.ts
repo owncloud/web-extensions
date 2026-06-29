@@ -68,10 +68,7 @@ export default defineWebApplication({
 
     return {
       appInfo: {
-        name: $pgettext(
-          'AI CSV / Spreadsheet Insights Sidebar extension name',
-          'AI CSV / Spreadsheet Insights Sidebar'
-        ),
+        name: $pgettext('AI CSV/TSV Insights Sidebar extension name', 'AI CSV/TSV Insights Sidebar'),
         id: APP_ID
       },
       extensions

@@ -1,4 +1,4 @@
-# AI CSV / Spreadsheet Insights Sidebar
+# AI CSV/TSV Insights Sidebar
 
 Adds an **Insights** sidebar panel and an **Insights** context-menu action for
 CSV and TSV files. On demand it downloads the file via WebDAV, parses it
@@ -6,6 +6,10 @@ client-side (headers plus up to the first 200 rows), and sends a compact
 structured preview to an admin-configured, OpenAI-compatible LLM endpoint. The
 panel renders detected column types, value ranges for numeric columns, and
 2–3 natural-language observations about the data.
+
+Files larger than 5 MB are rejected before fetching to avoid buffering large
+files in memory. The first analysis per session shows a consent disclosure
+informing the user that file contents will be sent to the configured AI service.
 
 No LLM provider is bundled and no API keys are embedded in the browser —
 the endpoint is fully operator-controlled (BYO-LLM).

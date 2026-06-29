@@ -6,6 +6,31 @@ import { parseCSV } from '../utils/csv-parse'
 
 const MAX_COLUMNS = 30
 const MAX_SAMPLES = 5
+const MAX_FILE_BYTES = 5 * 1024 * 1024 // 5 MB
+
+// ISO-8601 date prefix: YYYY-MM-DD — intentionally strict to avoid false positives
+// like '5', 'Q1', or plain numbers being tagged as dates.
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}/
+
+// Session-level consent flag: resets on full page reload.
+// Once the user confirms, we don't ask again for the rest of the SPA session.
+let sessionConsentGiven = false
+
+/**
+ * Resets the session consent flag.
+ * Intended only for test isolation — do not call in production code.
+ */
+export function _resetSessionConsentForTesting(): void {
+  sessionConsentGiven = false
+}
+
+/**
+ * Sets the session consent flag to true, bypassing the consent dialog.
+ * Intended only for test isolation — do not call in production code.
+ */
+export function _giveSessionConsentForTesting(): void {
+  sessionConsentGiven = true
+}
 
 export interface InsightsResource {
   id?: string
@@ -13,6 +38,7 @@ export interface InsightsResource {
   extension?: string
   storageId?: string
   path?: string
+  size?: number
 }
 
 export interface ColumnInsight {
@@ -37,7 +63,10 @@ export interface UseInsightsResult {
   isAnalyzing: Ref<boolean>
   insightsResult: Ref<InsightsResult | null>
   panelError: Ref<string | null>
+  showConsentDialog: Ref<boolean>
   triggerInsights: () => Promise<void>
+  confirmConsent: () => Promise<void>
+  denyConsent: () => void
   ensureReady: () => Promise<void>
 }
 
@@ -46,8 +75,9 @@ function inferType(samples: string[]): string {
   if (nonEmpty.length === 0) return 'string'
   const boolValues = new Set(['true', 'false', 'yes', 'no', '1', '0'])
   if (nonEmpty.every((s) => boolValues.has(s.toLowerCase()))) return 'boolean'
+  // Check date before number: ISO_DATE_RE is strict enough not to match bare numbers.
+  if (nonEmpty.every((s) => ISO_DATE_RE.test(s))) return 'date'
   if (nonEmpty.every((s) => !isNaN(parseFloat(s)) && isFinite(Number(s)))) return 'number'
-  if (nonEmpty.every((s) => !isNaN(Date.parse(s)))) return 'date'
   return 'string'
 }
 
@@ -70,6 +100,7 @@ export function useInsights(
   const isAnalyzing = ref(false)
   const panelError = ref<string | null>(null)
   const insightsResult = ref<InsightsResult | null>(null)
+  const showConsentDialog = ref(false)
 
   function handleLlmError(err: unknown): string {
     if (err instanceof DOMException && err.name === 'TimeoutError') {
@@ -116,6 +147,15 @@ export function useInsights(
       throw new Error($gettext('Resource location not available'))
     }
 
+    // File-size guard: reject before fetching to avoid buffering large files in memory.
+    if (res.size !== undefined && res.size > MAX_FILE_BYTES) {
+      throw new Error(
+        $gettext(
+          'This file is too large to analyze (limit: 5 MB). Only CSV/TSV files up to 5 MB are supported.'
+        )
+      )
+    }
+
     const space = spacesStore.getSpace(res.storageId)
     if (!space) {
       throw new Error($gettext('Could not resolve file space'))
@@ -154,7 +194,7 @@ export function useInsights(
 
     const lang = getUserLanguage()
     const promptContent = [
-      `Analyze the following CSV/spreadsheet file "${res.name ?? 'this file'}".`,
+      `Analyze the following CSV/TSV file "${res.name ?? 'this file'}".`,
       `Respond in the language with BCP 47 tag "${lang}".`,
       'Respond with a JSON object with exactly three keys:',
       '"columnTypes": an array of objects with "column" (string) and "type" (string) fields — the confirmed type for each column (number, date, boolean, or string).',
@@ -214,15 +254,7 @@ export function useInsights(
     return Promise.resolve()
   }
 
-  async function triggerInsights(): Promise<void> {
-    if (llm.status.value === 'cross-origin') {
-      panelError.value = $gettext(
-        'The AI endpoint must be on the same server as ownCloud. Cross-origin requests are not supported.'
-      )
-      return
-    }
-    if (llm.status.value !== 'ready') return
-
+  async function doAnalyze(): Promise<void> {
     isAnalyzing.value = true
     panelError.value = null
     try {
@@ -234,5 +266,42 @@ export function useInsights(
     }
   }
 
-  return { status: llm.status, isAnalyzing, insightsResult, panelError, triggerInsights, ensureReady }
+  async function triggerInsights(): Promise<void> {
+    if (llm.status.value === 'cross-origin') {
+      panelError.value = $gettext(
+        'The AI endpoint must be on the same server as ownCloud. Cross-origin requests are not supported.'
+      )
+      return
+    }
+    if (llm.status.value !== 'ready') return
+
+    if (!sessionConsentGiven) {
+      showConsentDialog.value = true
+      return
+    }
+
+    await doAnalyze()
+  }
+
+  async function confirmConsent(): Promise<void> {
+    sessionConsentGiven = true
+    showConsentDialog.value = false
+    await doAnalyze()
+  }
+
+  function denyConsent(): void {
+    showConsentDialog.value = false
+  }
+
+  return {
+    status: llm.status,
+    isAnalyzing,
+    insightsResult,
+    panelError,
+    showConsentDialog,
+    triggerInsights,
+    confirmConsent,
+    denyConsent,
+    ensureReady
+  }
 }

@@ -1,4 +1,5 @@
 import { ref, type Ref } from 'vue'
+import { useAuthStore } from '@ownclouders/web-pkg'
 
 export interface LLMConfig {
   endpoint: string
@@ -21,11 +22,11 @@ export interface CompletionOptions {
 export interface UseLLMReturn {
   status: Ref<LLMStatus>
   complete(messages: ChatMessage[], opts?: CompletionOptions): Promise<string>
-  stream(messages: ChatMessage[], onChunk: (chunk: string) => void): Promise<void>
 }
 
 export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
   const status = ref<LLMStatus>('unconfigured')
+  const authStore = useAuthStore()
 
   if (cfg) {
     let endpointOrigin: string
@@ -37,6 +38,15 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     status.value = endpointOrigin === window.location.origin ? 'ready' : 'cross-origin'
   }
 
+  function buildHeaders(): Record<string, string> {
+    const h: Record<string, string> = { 'Content-Type': 'application/json' }
+    const token = authStore.accessToken
+    if (token) {
+      h['Authorization'] = `Bearer ${token}`
+    }
+    return h
+  }
+
   async function complete(messages: ChatMessage[], opts: CompletionOptions = {}): Promise<string> {
     if (!cfg || status.value !== 'ready') {
       throw new Error('LLM is not configured or endpoint is not same-origin')
@@ -44,7 +54,7 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const base = cfg.endpoint.replace(/\/$/, '')
     const r = await fetch(`${base}/chat/completions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: buildHeaders(),
       signal: AbortSignal.timeout(60_000),
       body: JSON.stringify({
         model: cfg.model,
@@ -59,39 +69,5 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     return d.choices[0]?.message?.content ?? ''
   }
 
-  async function stream(messages: ChatMessage[], onChunk: (chunk: string) => void): Promise<void> {
-    if (!cfg || status.value !== 'ready') {
-      throw new Error('LLM is not configured or endpoint is not same-origin')
-    }
-    const base = cfg.endpoint.replace(/\/$/, '')
-    const r = await fetch(`${base}/chat/completions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(60_000),
-      body: JSON.stringify({ model: cfg.model, messages, stream: true, max_tokens: 1024 })
-    })
-    if (!r.ok) throw new Error(`LLM stream failed: ${r.status}`)
-    const reader = r.body!.getReader()
-    const decoder = new TextDecoder()
-    let buf = ''
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) break
-      buf += decoder.decode(value, { stream: true })
-      const lines = buf.split('\n')
-      buf = lines.pop() ?? ''
-      for (const line of lines) {
-        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue
-        try {
-          const data = JSON.parse(line.slice(6)) as { choices: { delta: { content?: string } }[] }
-          const chunk = data.choices[0]?.delta?.content
-          if (chunk) onChunk(chunk)
-        } catch {
-          /* malformed SSE chunk */
-        }
-      }
-    }
-  }
-
-  return { status, complete, stream }
+  return { status, complete }
 }

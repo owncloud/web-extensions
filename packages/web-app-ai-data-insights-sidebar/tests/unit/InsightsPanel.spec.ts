@@ -27,18 +27,24 @@ const OcButton = {
 
 const triggerInsightsMock = vi.fn()
 const ensureReadyMock = vi.fn().mockResolvedValue(undefined)
+const confirmConsentMock = vi.fn().mockResolvedValue(undefined)
+const denyConsentMock = vi.fn()
 
 function setupUseInsightsMock({
   isAnalyzing = false,
   insightsResult = null as InsightsResult | null,
-  panelError = null as string | null
+  panelError = null as string | null,
+  showConsentDialog = false
 } = {}) {
   vi.mocked(useInsights).mockReturnValue({
     status: ref('ready' as const),
     isAnalyzing: ref(isAnalyzing),
     insightsResult: ref(insightsResult),
     panelError: ref(panelError),
+    showConsentDialog: ref(showConsentDialog),
     triggerInsights: triggerInsightsMock,
+    confirmConsent: confirmConsentMock,
+    denyConsent: denyConsentMock,
     ensureReady: ensureReadyMock
   })
 }
@@ -57,6 +63,8 @@ describe('InsightsPanel', () => {
   beforeEach(() => {
     triggerInsightsMock.mockReset()
     ensureReadyMock.mockReset().mockResolvedValue(undefined)
+    confirmConsentMock.mockReset().mockResolvedValue(undefined)
+    denyConsentMock.mockReset()
     setupUseInsightsMock()
   })
 
@@ -82,6 +90,64 @@ describe('InsightsPanel', () => {
       const wrapper = createWrapper()
       await flushPromises()
       expect(wrapper.findAllComponents(OcButton)).toHaveLength(0)
+    })
+  })
+
+  describe('consent dialog state', () => {
+    it('shows the consent dialog when showConsentDialog is true', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      expect(wrapper.find('[data-testid="ai-insights-consent"]').exists()).toBe(true)
+    })
+
+    it('hides the idle/result/error content while consent dialog is shown', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      expect(wrapper.find('.ai-insights-error').exists()).toBe(false)
+      expect(wrapper.find('.ai-insights-table').exists()).toBe(false)
+      // The idle state paragraph should not be visible (it uses ai-insights-placeholder)
+      expect(wrapper.find('p.ai-insights-placeholder').exists()).toBe(false)
+      // Re-analyze button row should not be visible
+      expect(wrapper.find('.oc-flex.oc-flex-right').exists()).toBe(false)
+    })
+
+    it('shows two buttons in the consent dialog: Send to AI and Cancel', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      const consent = wrapper.find('[data-testid="ai-insights-consent"]')
+      const buttons = consent.findAllComponents(OcButton)
+      expect(buttons).toHaveLength(2)
+      expect(buttons[0].text()).toContain('Send to AI')
+      expect(buttons[1].text()).toContain('Cancel')
+    })
+
+    it('calls confirmConsent when Send to AI is clicked', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      const buttons = wrapper.find('[data-testid="ai-insights-consent"]').findAllComponents(OcButton)
+      await buttons[0].trigger('click')
+      expect(confirmConsentMock).toHaveBeenCalledTimes(1)
+    })
+
+    it('calls denyConsent when Cancel is clicked', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      const buttons = wrapper.find('[data-testid="ai-insights-consent"]').findAllComponents(OcButton)
+      await buttons[1].trigger('click')
+      expect(denyConsentMock).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows the consent disclosure text', async () => {
+      setupUseInsightsMock({ showConsentDialog: true })
+      const wrapper = createWrapper()
+      await flushPromises()
+      const consent = wrapper.find('[data-testid="ai-insights-consent"]')
+      expect(consent.text()).toContain('AI service')
     })
   })
 
@@ -218,6 +284,14 @@ describe('InsightsPanel', () => {
       const wrapper = createWrapper()
       await flushPromises()
       expect(wrapper.find('.oc-flex.oc-flex-right').exists()).toBe(false)
+    })
+
+    it('idle description mentions CSV/TSV (not spreadsheet)', async () => {
+      setupUseInsightsMock()
+      const wrapper = createWrapper()
+      await flushPromises()
+      const idle = wrapper.find('.oc-flex.oc-flex-center')
+      expect(idle.find('p').text().toLowerCase()).toContain('csv/tsv')
     })
   })
 

@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
+
+// Mock @ownclouders/web-pkg before importing useLLM so useAuthStore is available.
+vi.mock('@ownclouders/web-pkg', () => ({
+  useAuthStore: vi.fn(() => ({ accessToken: 'test-token' }))
+}))
+
 import { useLLM } from '../../src/composables/useLLM'
 import type { LLMConfig } from '../../src/composables/useLLM'
+import { useAuthStore } from '@ownclouders/web-pkg'
 
 // In the happy-dom test environment, window.location.origin is 'http://localhost:3000'
 const SAME_ORIGIN = window.location.origin
@@ -91,6 +98,50 @@ describe('useLLM', () => {
       const body = JSON.parse(fetchMock.mock.calls[0][1].body)
       expect(body.model).toBe('test-model')
       expect(body.messages).toEqual([{ role: 'user', content: 'test' }])
+    })
+
+    it('sends the Authorization Bearer header with the oCIS access token', async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => ({ choices: [{ message: { content: 'ok' } }] })
+      })
+      vi.stubGlobal('fetch', fetchMock)
+      vi.mocked(useAuthStore).mockReturnValue({ accessToken: 'my-ocis-token' } as any)
+
+      const { complete } = useLLM(SAME_ORIGIN_CONFIG)
+      await complete([{ role: 'user', content: 'test' }])
+
+      const headers = fetchMock.mock.calls[0][1].headers
+      expect(headers['Authorization']).toBe('Bearer my-ocis-token')
+    })
+
+    it('sends Content-Type: application/json', async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => ({ choices: [{ message: { content: 'ok' } }] })
+      })
+      vi.stubGlobal('fetch', fetchMock)
+
+      const { complete } = useLLM(SAME_ORIGIN_CONFIG)
+      await complete([{ role: 'user', content: 'test' }])
+
+      const headers = fetchMock.mock.calls[0][1].headers
+      expect(headers['Content-Type']).toBe('application/json')
+    })
+
+    it('does not send Authorization header when accessToken is falsy', async () => {
+      const fetchMock = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => ({ choices: [{ message: { content: 'ok' } }] })
+      })
+      vi.stubGlobal('fetch', fetchMock)
+      vi.mocked(useAuthStore).mockReturnValue({ accessToken: '' } as any)
+
+      const { complete } = useLLM(SAME_ORIGIN_CONFIG)
+      await complete([{ role: 'user', content: 'test' }])
+
+      const headers = fetchMock.mock.calls[0][1].headers
+      expect(headers['Authorization']).toBeUndefined()
     })
 
     it('throws with the HTTP status code on a non-ok response', async () => {
