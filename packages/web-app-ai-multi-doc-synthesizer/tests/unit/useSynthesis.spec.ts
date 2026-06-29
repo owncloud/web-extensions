@@ -8,7 +8,10 @@ vi.mock('@ownclouders/web-pkg', () => ({
 }))
 
 vi.mock('vue3-gettext', () => ({
-  useGettext: vi.fn(() => ({ $gettext: (s: string) => s }))
+  useGettext: vi.fn(() => ({
+    $gettext: (s: string) => s,
+    $ngettext: (_s: string, p: string, _n: number) => p
+  }))
 }))
 
 vi.mock('../../src/composables/useLLM', () => ({
@@ -20,7 +23,7 @@ import type { SynthesisResource } from '../../src/composables/useSynthesis'
 import { useLLM } from '../../src/composables/useLLM'
 import { useClientService, useSpacesStore } from '@ownclouders/web-pkg'
 
-const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'test-model' }
+const BASE_CONFIG = { endpoint: 'http://localhost:9200/ai-llm-proxy/v1', model: 'test-model' }
 const MOCK_SPACE = { id: 'space-1' }
 
 const SYNTHESIS_RESPONSE = {
@@ -41,8 +44,6 @@ function makeResources(count = 2): SynthesisResource[] {
 
 function setupMocks({
   fileContent = 'File content.',
-  llmResponse = JSON.stringify(SYNTHESIS_RESPONSE),
-  caps = null as { structuredOutput: boolean; toolUse: boolean; contextTokens: number; streaming: boolean } | null,
   putFileOk = true
 } = {}) {
   const getFileContentsMock = vi.fn().mockResolvedValue({
@@ -63,14 +64,12 @@ function setupMocks({
     getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
   } as ReturnType<typeof useSpacesStore>)
 
-  const completeMock = vi.fn().mockResolvedValue(llmResponse)
+  const completeMock = vi.fn().mockResolvedValue('summary text')
   const completeJSONMock = vi.fn().mockResolvedValue(SYNTHESIS_RESPONSE)
 
   vi.mocked(useLLM).mockReturnValue({
-    capabilities: ref(caps),
     complete: completeMock,
-    completeJSON: completeJSONMock,
-    stream: vi.fn()
+    completeJSON: completeJSONMock
   })
 
   return { getFileContentsMock, putFileContentsMock, completeMock, completeJSONMock }
@@ -136,10 +135,8 @@ describe('useSynthesis', () => {
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
       } as ReturnType<typeof useSpacesStore>)
       vi.mocked(useLLM).mockReturnValue({
-        capabilities: ref(null),
         complete: vi.fn().mockResolvedValue('ok'),
-        completeJSON: vi.fn().mockResolvedValue(SYNTHESIS_RESPONSE),
-        stream: vi.fn()
+        completeJSON: vi.fn().mockResolvedValue(SYNTHESIS_RESPONSE)
       })
 
       const resources = ref<SynthesisResource[]>(makeResources())
@@ -154,29 +151,9 @@ describe('useSynthesis', () => {
   })
 
   describe('tier selection', () => {
-    it('uses two-pass when capabilities are null (unknown context)', async () => {
-      const { completeJSONMock, completeMock } = setupMocks({ caps: null })
-      const resources = ref<SynthesisResource[]>(makeResources(2))
-      const { triggerSynthesis } = useSynthesis(BASE_CONFIG, resources)
-
-      await triggerSynthesis()
-
-      // Two-pass: complete() for summaries, completeJSON() for final merge
-      expect(completeMock).toHaveBeenCalled()
-      expect(completeJSONMock).toHaveBeenCalled()
-    })
-
-    it('uses single-pass when context is large enough for all content', async () => {
-      const largeCaps = {
-        structuredOutput: true,
-        toolUse: false,
-        contextTokens: 128_000,
-        streaming: false
-      }
-      const { completeJSONMock, completeMock } = setupMocks({
-        caps: largeCaps,
-        fileContent: 'Short.'
-      })
+    it('uses single-pass when combined file content is small (≤ 8000 chars)', async () => {
+      // 'Short.' × 2 files = 12 chars total — well under 8000-char limit
+      const { completeJSONMock, completeMock } = setupMocks({ fileContent: 'Short.' })
       const resources = ref<SynthesisResource[]>(makeResources(2))
       const { triggerSynthesis } = useSynthesis(BASE_CONFIG, resources)
 
@@ -187,22 +164,42 @@ describe('useSynthesis', () => {
       expect(completeMock).not.toHaveBeenCalled()
     })
 
-    it('uses two-pass when context is too small for all content', async () => {
-      const smallCaps = {
-        structuredOutput: false,
-        toolUse: false,
-        contextTokens: 100, // tiny; guaranteed too small
-        streaming: false
-      }
-      const { completeJSONMock, completeMock } = setupMocks({ caps: smallCaps })
+    it('uses two-pass when combined content exceeds 8000 chars', async () => {
+      // 5000-char content × 2 files = 10000 chars total — over the 8000-char limit
+      const largeContent = 'x'.repeat(5000)
+      const { completeJSONMock, completeMock } = setupMocks({ fileContent: largeContent })
       const resources = ref<SynthesisResource[]>(makeResources(2))
       const { triggerSynthesis } = useSynthesis(BASE_CONFIG, resources)
 
       await triggerSynthesis()
 
-      // Two-pass: complete() per file + completeJSON() for merge
+      // Two-pass: complete() per file for summaries + completeJSON() for merge
       expect(completeMock).toHaveBeenCalled()
       expect(completeJSONMock).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe('truncation warning', () => {
+    it('sets truncationWarning when a file exceeds 10000 chars', async () => {
+      const oversizedContent = 'x'.repeat(11_000)
+      setupMocks({ fileContent: oversizedContent })
+      const resources = ref<SynthesisResource[]>(makeResources(2))
+      const { triggerSynthesis, truncationWarning } = useSynthesis(BASE_CONFIG, resources)
+
+      await triggerSynthesis()
+
+      expect(truncationWarning.value).not.toBeNull()
+      expect(truncationWarning.value).toMatch(/truncated/i)
+    })
+
+    it('does not set truncationWarning when files are within limit', async () => {
+      setupMocks({ fileContent: 'Short file.' })
+      const resources = ref<SynthesisResource[]>(makeResources(2))
+      const { triggerSynthesis, truncationWarning } = useSynthesis(BASE_CONFIG, resources)
+
+      await triggerSynthesis()
+
+      expect(truncationWarning.value).toBeNull()
     })
   })
 
@@ -232,10 +229,8 @@ describe('useSynthesis', () => {
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
       } as ReturnType<typeof useSpacesStore>)
       vi.mocked(useLLM).mockReturnValue({
-        capabilities: ref({ structuredOutput: true, toolUse: false, contextTokens: 128_000, streaming: false }),
         complete: vi.fn(),
-        completeJSON: completeJSONMock,
-        stream: vi.fn()
+        completeJSON: completeJSONMock
       })
 
       const resources = ref<SynthesisResource[]>(makeResources())
@@ -274,10 +269,8 @@ describe('useSynthesis', () => {
         getSpace: vi.fn().mockReturnValue(MOCK_SPACE)
       } as ReturnType<typeof useSpacesStore>)
       vi.mocked(useLLM).mockReturnValue({
-        capabilities: ref(null),
         complete: vi.fn(),
-        completeJSON: vi.fn(),
-        stream: vi.fn()
+        completeJSON: vi.fn()
       })
 
       const resources = ref<SynthesisResource[]>(makeResources())
@@ -290,7 +283,7 @@ describe('useSynthesis', () => {
   })
 
   describe('saveAsMarkdown', () => {
-    it('writes a markdown file at the correct path', async () => {
+    it('writes a markdown file at the correct path with timestamp', async () => {
       const { putFileContentsMock } = setupMocks()
       const resources = ref<SynthesisResource[]>(makeResources())
       const { triggerSynthesis, saveAsMarkdown } = useSynthesis(BASE_CONFIG, resources)
@@ -299,7 +292,8 @@ describe('useSynthesis', () => {
       const savedPath = await saveAsMarkdown()
 
       expect(putFileContentsMock).toHaveBeenCalledOnce()
-      expect(savedPath).toMatch(/synthesis-\d{4}-\d{2}-\d{2}\.md$/)
+      // Path includes date and time: synthesis-YYYY-MM-DD-HHMMSS.md
+      expect(savedPath).toMatch(/synthesis-\d{4}-\d{2}-\d{2}-\d{6}\.md$/)
     })
 
     it('saved markdown content includes all result sections', async () => {
