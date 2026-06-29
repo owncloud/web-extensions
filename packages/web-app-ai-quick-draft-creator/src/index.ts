@@ -1,9 +1,10 @@
 import { defineWebApplication, useModals, useResourcesStore, useUserStore } from '@ownclouders/web-pkg'
 import type { ActionExtension } from '@ownclouders/web-pkg'
-import { computed, storeToRefs } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import type { LLMConfig } from './composables/useLLM'
 import DraftCreatorModal from './components/DraftCreatorModal.vue'
+import translations from '../l10n/translations.json'
 
 const APP_ID = 'ai-quick-draft-creator'
 
@@ -12,22 +13,21 @@ export default defineWebApplication({
     const { $pgettext } = useGettext()
     const { dispatchModal, removeModal } = useModals()
     const resourcesStore = useResourcesStore()
-    const { currentFolder } = storeToRefs(resourcesStore)
     const userStore = useUserStore()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
+    // apiKey is intentionally omitted — the ai-llm-proxy holds the provider key server-side.
+    // The browser authenticates to the proxy with the user's oCIS OIDC token.
     const llmConfig: LLMConfig | null =
       rawLlm?.endpoint && rawLlm?.model
-        ? { endpoint: rawLlm.endpoint, model: rawLlm.model, apiKey: rawLlm.apiKey }
+        ? { endpoint: rawLlm.endpoint, model: rawLlm.model }
         : null
 
     function canUpload(): boolean {
-      return !!(currentFolder.value?.canUpload({ user: userStore.user }))
+      return !!(resourcesStore.currentFolder?.canUpload({ user: userStore.user }))
     }
 
     function openModal(): void {
-      // dispatchModal returns the modal object; capture it for closure use in attrs/onCancel.
-      // customComponentAttrs is called lazily at render time, so `modal` is resolved.
       const modal = dispatchModal({
         title: $pgettext('Modal title for AI draft creator', 'Create a draft'),
         hideActions: true,
@@ -61,6 +61,7 @@ export default defineWebApplication({
         name: $pgettext('AI Quick Draft Creator extension name', 'AI Quick Draft Creator'),
         id: APP_ID
       },
+      translations,
       extensions
     }
   }

@@ -36,23 +36,26 @@
     </div>
 
     <div class="draft-creator-modal__actions oc-flex oc-flex-right oc-mt-m">
-      <button
-        class="oc-button oc-button-m oc-button-outline oc-mr-s"
+      <oc-button
+        appearance="outline"
+        class="oc-mr-s"
         :disabled="creating"
         data-testid="draft-cancel"
         @click="$emit('cancel')"
       >
         {{ $gettext('Cancel') }}
-      </button>
-      <button
-        class="oc-button oc-button-m oc-button-primary"
+      </oc-button>
+      <oc-button
+        appearance="filled"
+        variation="primary"
         :disabled="creating || !description.trim()"
         data-testid="draft-create"
         @click="handleCreate"
       >
+        <oc-spinner v-if="creating" size="small" :aria-label="$gettext('Creating draft…')" />
         <span v-if="creating">{{ $gettext('Creating…') }}</span>
         <span v-else>{{ $gettext('Create draft') }}</span>
-      </button>
+      </oc-button>
     </div>
   </div>
 </template>

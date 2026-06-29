@@ -10,6 +10,7 @@ vi.mock('../../src/composables/useLLM', () => ({
 }))
 
 vi.mock('@ownclouders/web-pkg', () => ({
+  useAuthStore: vi.fn().mockReturnValue({ accessToken: 'mock-token' }),
   useClientService: vi.fn(),
   useResourcesStore: vi.fn(),
   useSpacesStore: vi.fn(),
@@ -23,10 +24,10 @@ vi.mock('@ownclouders/web-client', () => ({
 import { useDraftCreator } from '../../src/composables/useDraftCreator'
 import { useLLM } from '../../src/composables/useLLM'
 import { useClientService, useResourcesStore, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
-import type { LLMConfig, LLMCapabilities } from '../../src/composables/useLLM'
+import type { LLMConfig, CompletionOptions, ChatMessage } from '../../src/composables/useLLM'
 
 const BASE_CONFIG: LLMConfig = {
-  endpoint: 'http://localhost/ai/v1',
+  endpoint: 'https://localhost:9200/ai-llm-proxy/v1',
   model: 'test-model'
 }
 
@@ -34,7 +35,6 @@ let putFileContentsMock: ReturnType<typeof vi.fn>
 let completeMock: ReturnType<typeof vi.fn>
 
 function setupMocks({
-  caps = null as LLMCapabilities | null,
   canUpload = true,
   currentFolderPath = '/Documents',
   storageId = 'space-1',
@@ -44,20 +44,17 @@ function setupMocks({
   putFileContentsMock = vi.fn().mockResolvedValue({})
 
   vi.mocked(useLLM).mockReturnValue({
-    capabilities: ref(caps),
-    complete: completeMock,
-    completeJSON: vi.fn(),
-    stream: vi.fn()
+    complete: completeMock as unknown as (messages: ChatMessage[], opts?: CompletionOptions) => Promise<string>
   })
 
   vi.mocked(useClientService).mockReturnValue({
     webdav: { putFileContents: putFileContentsMock }
-  } as ReturnType<typeof useClientService>)
+  } as unknown as ReturnType<typeof useClientService>)
 
   const mockSpace = spaceFound ? { id: storageId } : null
   vi.mocked(useSpacesStore).mockReturnValue({
     getSpace: vi.fn().mockReturnValue(mockSpace)
-  } as ReturnType<typeof useSpacesStore>)
+  } as unknown as ReturnType<typeof useSpacesStore>)
 
   vi.mocked(useUserStore).mockReturnValue({
     user: { id: 'user-1' }
@@ -69,7 +66,7 @@ function setupMocks({
       storageId,
       canUpload: () => canUpload
     }
-  } as ReturnType<typeof useResourcesStore>)
+  } as unknown as ReturnType<typeof useResourcesStore>)
 }
 
 describe('useDraftCreator', () => {
@@ -128,24 +125,13 @@ describe('useDraftCreator', () => {
       expect(result).toMatch(/\.txt$/)
     })
 
-    it('uses rich (tier-1) prompt when toolUse capability is true', async () => {
-      setupMocks({ caps: { toolUse: true, structuredOutput: false, contextTokens: 4096, streaming: false } })
+    it('filename includes a timestamp suffix to prevent same-day collisions', async () => {
+      setupMocks()
       const { createDraft } = useDraftCreator(BASE_CONFIG)
-      await createDraft('project brief for new feature', 'markdown')
+      const result = await createDraft('project brief', 'markdown')
 
-      const callArgs = completeMock.mock.calls[0]
-      const userMessage = callArgs[0].find((m: { role: string; content: string }) => m.role === 'user')
-      expect(userMessage.content).toContain('placeholder')
-    })
-
-    it('uses simple (tier-2) prompt when capabilities are null (probe not done)', async () => {
-      setupMocks({ caps: null })
-      const { createDraft } = useDraftCreator(BASE_CONFIG)
-      await createDraft('budget overview', 'markdown')
-
-      const callArgs = completeMock.mock.calls[0]
-      const userMessage = callArgs[0].find((m: { role: string; content: string }) => m.role === 'user')
-      expect(userMessage.content).not.toContain('placeholder')
+      // Filename should contain the date AND a time component (HH-mm-ss)
+      expect(result).toMatch(/\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/)
     })
 
     it('sets error and returns null when LLM throws', async () => {
@@ -175,6 +161,16 @@ describe('useDraftCreator', () => {
 
       const callArgs = putFileContentsMock.mock.calls[0]
       expect(callArgs[1].path).toContain('/Projects/Alpha/')
+    })
+
+    it('passes the full prompt including description to the LLM', async () => {
+      setupMocks()
+      const { createDraft } = useDraftCreator(BASE_CONFIG)
+      await createDraft('budget review for Q3', 'markdown')
+
+      const callArgs = completeMock.mock.calls[0]
+      const userMessage = callArgs[0].find((m: { role: string }) => m.role === 'user')
+      expect(userMessage.content).toContain('budget review for Q3')
     })
   })
 })
