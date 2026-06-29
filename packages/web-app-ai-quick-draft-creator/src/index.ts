@@ -1,4 +1,4 @@
-import { defineWebApplication, useModals, useResourcesStore, useUserStore } from '@ownclouders/web-pkg'
+import { defineWebApplication, useModals } from '@ownclouders/web-pkg'
 import type { ActionExtension } from '@ownclouders/web-pkg'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -12,8 +12,6 @@ export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $pgettext } = useGettext()
     const { dispatchModal, removeModal } = useModals()
-    const resourcesStore = useResourcesStore()
-    const userStore = useUserStore()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
     // apiKey is intentionally omitted — the ai-llm-proxy holds the provider key server-side.
@@ -22,10 +20,6 @@ export default defineWebApplication({
       rawLlm?.endpoint && rawLlm?.model
         ? { endpoint: rawLlm.endpoint, model: rawLlm.model }
         : null
-
-    function canUpload(): boolean {
-      return !!(resourcesStore.currentFolder?.canUpload({ user: userStore.user }))
-    }
 
     function openModal(): void {
       const modal = dispatchModal({
@@ -49,7 +43,7 @@ export default defineWebApplication({
           name: `${APP_ID}-create-draft`,
           icon: 'draft',
           label: () => $pgettext('Upload menu action label', 'Draft from description'),
-          isVisible: () => llmConfig !== null && canUpload(),
+          isVisible: () => llmConfig !== null,
           handler: () => openModal(),
           class: `oc-files-actions-${APP_ID}`
         }
