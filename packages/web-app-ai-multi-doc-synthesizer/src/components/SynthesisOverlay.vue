@@ -16,149 +16,162 @@
         aria-modal="true"
         aria-labelledby="synthesis-title"
       >
-      <div class="synthesis-panel">
-        <div class="synthesis-header">
-          <h2 id="synthesis-title" class="synthesis-title">
-            {{ $gettext('Document Synthesis') }}
-          </h2>
-          <button
-            class="synthesis-close"
-            :aria-label="$gettext('Close synthesis panel')"
-            @click="$emit('close')"
-          >
-            ✕
-          </button>
-        </div>
-
-        <div class="synthesis-body">
-          <!-- Unconfigured -->
-          <div
-            v-if="!llmConfig"
-            class="synthesis-placeholder"
-            data-testid="synthesis-unconfigured"
-          >
-            {{
-              $gettext(
-                'Document synthesis is not set up yet. Contact your administrator to configure an AI endpoint.'
-              )
-            }}
+        <div class="synthesis-panel">
+          <div class="synthesis-header">
+            <h2 id="synthesis-title" class="synthesis-title">
+              {{ $gettext('Document Synthesis') }}
+            </h2>
+            <oc-button
+              class="synthesis-close"
+              :aria-label="$gettext('Close synthesis panel')"
+              appearance="raw"
+              @click="$emit('close')"
+            >
+              <oc-icon name="close" />
+            </oc-button>
           </div>
 
-          <!-- Loading -->
-          <div
-            v-else-if="isSynthesizing"
-            class="synthesis-placeholder"
-            data-testid="synthesis-loading"
-          >
-            {{ $gettext('Synthesizing documents…') }}
-          </div>
+          <div class="synthesis-body">
+            <!-- Truncation warning -->
+            <oc-info-drop
+              v-if="truncationWarning"
+              class="oc-mb-s"
+              :text="truncationWarning"
+              data-testid="synthesis-truncation-warning"
+            />
 
-          <!-- Error -->
-          <div
-            v-else-if="panelError"
-            class="synthesis-error"
-            role="alert"
-            data-testid="synthesis-error"
-          >
-            {{ panelError }}
-            <div class="synthesis-actions oc-mt-s">
-              <button class="synthesis-btn synthesis-btn--primary" @click="triggerSynthesis">
-                {{ $pgettext('Button to retry synthesis', 'Try again') }}
-              </button>
+            <!-- Unconfigured -->
+            <div
+              v-if="!llmConfig"
+              class="synthesis-placeholder"
+              data-testid="synthesis-unconfigured"
+            >
+              {{
+                $gettext(
+                  'Document synthesis is not set up yet. Contact your administrator to configure an AI endpoint.'
+                )
+              }}
+            </div>
+
+            <!-- Loading -->
+            <div
+              v-else-if="isSynthesizing"
+              class="synthesis-placeholder"
+              data-testid="synthesis-loading"
+            >
+              <oc-spinner :aria-label="$gettext('Synthesizing documents…')" />
+              <span class="oc-ml-s">{{ $gettext('Synthesizing documents…') }}</span>
+            </div>
+
+            <!-- Error -->
+            <div
+              v-else-if="panelError"
+              class="synthesis-error"
+              role="alert"
+              data-testid="synthesis-error"
+            >
+              {{ panelError }}
+              <div class="synthesis-actions oc-mt-s">
+                <oc-button
+                  variation="primary"
+                  data-testid="synthesis-retry-btn"
+                  @click="triggerSynthesis"
+                >
+                  {{ $pgettext('Button to retry synthesis', 'Try again') }}
+                </oc-button>
+              </div>
+            </div>
+
+            <!-- Result -->
+            <div v-else-if="synthesisResult" data-testid="synthesis-result">
+              <section v-if="synthesisResult.themes.length > 0" class="synthesis-section">
+                <h3 class="synthesis-section-title" data-testid="synthesis-themes-heading">
+                  {{ $gettext('Shared Themes') }}
+                </h3>
+                <ul class="synthesis-list" data-testid="synthesis-themes">
+                  <li v-for="theme in synthesisResult.themes" :key="theme">{{ theme }}</li>
+                </ul>
+              </section>
+
+              <section v-if="synthesisResult.differences.length > 0" class="synthesis-section">
+                <h3 class="synthesis-section-title" data-testid="synthesis-differences-heading">
+                  {{ $gettext('Key Differences') }}
+                </h3>
+                <ul class="synthesis-list" data-testid="synthesis-differences">
+                  <li v-for="diff in synthesisResult.differences" :key="diff">{{ diff }}</li>
+                </ul>
+              </section>
+
+              <section v-if="synthesisResult.actionItems.length > 0" class="synthesis-section">
+                <h3 class="synthesis-section-title" data-testid="synthesis-action-items-heading">
+                  {{ $gettext('Action Items') }}
+                </h3>
+                <ul class="synthesis-list" data-testid="synthesis-action-items">
+                  <li v-for="item in synthesisResult.actionItems" :key="item">{{ item }}</li>
+                </ul>
+              </section>
+            </div>
+
+            <!-- Idle (configured but not yet run) -->
+            <div v-else-if="llmConfig" class="synthesis-idle" data-testid="synthesis-idle">
+              <p class="synthesis-placeholder">
+                {{ $gettext('Ready to synthesize the selected documents.') }}
+              </p>
+              <oc-button
+                variation="primary"
+                class="oc-mt-m"
+                data-testid="synthesis-trigger-btn"
+                @click="triggerSynthesis"
+              >
+                {{ $pgettext('Button to start document synthesis', 'Synthesize') }}
+              </oc-button>
             </div>
           </div>
 
-          <!-- Result -->
-          <div v-else-if="synthesisResult" data-testid="synthesis-result">
-            <section v-if="synthesisResult.themes.length > 0" class="synthesis-section">
-              <h3 class="synthesis-section-title" data-testid="synthesis-themes-heading">
-                {{ $gettext('Shared Themes') }}
-              </h3>
-              <ul class="synthesis-list" data-testid="synthesis-themes">
-                <li v-for="theme in synthesisResult.themes" :key="theme">{{ theme }}</li>
-              </ul>
-            </section>
-
-            <section v-if="synthesisResult.differences.length > 0" class="synthesis-section">
-              <h3 class="synthesis-section-title" data-testid="synthesis-differences-heading">
-                {{ $gettext('Key Differences') }}
-              </h3>
-              <ul class="synthesis-list" data-testid="synthesis-differences">
-                <li v-for="diff in synthesisResult.differences" :key="diff">{{ diff }}</li>
-              </ul>
-            </section>
-
-            <section v-if="synthesisResult.actionItems.length > 0" class="synthesis-section">
-              <h3 class="synthesis-section-title" data-testid="synthesis-action-items-heading">
-                {{ $gettext('Action Items') }}
-              </h3>
-              <ul class="synthesis-list" data-testid="synthesis-action-items">
-                <li v-for="item in synthesisResult.actionItems" :key="item">{{ item }}</li>
-              </ul>
-            </section>
-          </div>
-
-          <!-- Idle (configured but not yet run) -->
-          <div v-else-if="llmConfig" class="synthesis-idle" data-testid="synthesis-idle">
-            <p class="synthesis-placeholder">
-              {{ $gettext('Ready to synthesize the selected documents.') }}
-            </p>
-            <button
-              class="synthesis-btn synthesis-btn--primary oc-mt-m"
-              data-testid="synthesis-trigger-btn"
+          <!-- Action bar shown when result is available -->
+          <div
+            v-if="synthesisResult && !panelError"
+            class="synthesis-footer"
+            data-testid="synthesis-footer"
+          >
+            <oc-button
+              :disabled="isCopying"
+              data-testid="synthesis-copy-btn"
+              @click="handleCopy"
+            >
+              {{
+                isCopying
+                  ? $pgettext('Button label while copying synthesis result', 'Copied!')
+                  : $pgettext('Button to copy synthesis result to clipboard', 'Copy to clipboard')
+              }}
+            </oc-button>
+            <oc-button
+              :disabled="isSaving"
+              data-testid="synthesis-save-btn"
+              @click="handleSave"
+            >
+              {{
+                isSaving
+                  ? $pgettext('Button label while saving synthesis result', 'Saving…')
+                  : $pgettext('Button to save synthesis result as Markdown', 'Save as Markdown')
+              }}
+            </oc-button>
+            <oc-button
+              variation="primary"
+              data-testid="synthesis-regenerate-btn"
               @click="triggerSynthesis"
             >
-              {{ $pgettext('Button to start document synthesis', 'Synthesize') }}
-            </button>
+              {{ $pgettext('Button to re-run synthesis', 'Regenerate') }}
+            </oc-button>
+          </div>
+
+          <div v-if="saveError" class="synthesis-error oc-mt-xs" role="alert">
+            {{ saveError }}
+          </div>
+          <div v-if="saveSuccess" class="synthesis-success oc-mt-xs" data-testid="synthesis-save-success">
+            {{ saveSuccess }}
           </div>
         </div>
-
-        <!-- Action bar shown when result is available -->
-        <div
-          v-if="synthesisResult && !panelError"
-          class="synthesis-footer"
-          data-testid="synthesis-footer"
-        >
-          <button
-            class="synthesis-btn"
-            :disabled="isCopying"
-            data-testid="synthesis-copy-btn"
-            @click="handleCopy"
-          >
-            {{
-              isCopying
-                ? $pgettext('Button label while copying synthesis result', 'Copied!')
-                : $pgettext('Button to copy synthesis result to clipboard', 'Copy to clipboard')
-            }}
-          </button>
-          <button
-            class="synthesis-btn"
-            :disabled="isSaving"
-            data-testid="synthesis-save-btn"
-            @click="handleSave"
-          >
-            {{
-              isSaving
-                ? $pgettext('Button label while saving synthesis result', 'Saving…')
-                : $pgettext('Button to save synthesis result as Markdown', 'Save as Markdown')
-            }}
-          </button>
-          <button
-            class="synthesis-btn synthesis-btn--primary"
-            data-testid="synthesis-regenerate-btn"
-            @click="triggerSynthesis"
-          >
-            {{ $pgettext('Button to re-run synthesis', 'Regenerate') }}
-          </button>
-        </div>
-
-        <div v-if="saveError" class="synthesis-error oc-mt-xs" role="alert">
-          {{ saveError }}
-        </div>
-        <div v-if="saveSuccess" class="synthesis-success oc-mt-xs" data-testid="synthesis-save-success">
-          {{ saveSuccess }}
-        </div>
-      </div>
       </div>
     </div>
   </Teleport>
@@ -192,8 +205,14 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleGlobalKeydown)
 })
 
-const { isSynthesizing, synthesisResult, panelError, triggerSynthesis, saveAsMarkdown } =
-  useSynthesis(props.llmConfig, toRef(props, 'resources'))
+const {
+  isSynthesizing,
+  synthesisResult,
+  panelError,
+  truncationWarning,
+  triggerSynthesis,
+  saveAsMarkdown
+} = useSynthesis(props.llmConfig, toRef(props, 'resources'))
 
 const isCopying = ref(false)
 const isSaving = ref(false)
@@ -307,19 +326,7 @@ onMounted(() => {
 }
 
 .synthesis-close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
   color: var(--oc-color-text-muted, #6f6f6f);
-  padding: 4px 8px;
-  border-radius: 4px;
-  line-height: 1;
-}
-
-.synthesis-close:hover {
-  background: var(--oc-color-background-muted, #f4f4f4);
-  color: var(--oc-color-text-default, inherit);
 }
 
 .synthesis-body {
@@ -329,6 +336,8 @@ onMounted(() => {
 }
 
 .synthesis-placeholder {
+  display: flex;
+  align-items: center;
   color: var(--oc-color-text-muted, #6f6f6f);
   font-style: italic;
   font-size: 0.9rem;
@@ -387,41 +396,5 @@ onMounted(() => {
 .synthesis-actions {
   display: flex;
   gap: 8px;
-}
-
-.synthesis-btn {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  font-size: 0.875rem;
-  font-family: inherit;
-  border: 1px solid var(--oc-color-input-border, #ccc);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--oc-color-text-default, inherit);
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    border-color 0.15s;
-}
-
-.synthesis-btn:hover:not(:disabled) {
-  background: var(--oc-color-background-muted, #f4f4f4);
-}
-
-.synthesis-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.synthesis-btn--primary {
-  background: var(--oc-color-swatch-primary-default, #0d6efd);
-  border-color: var(--oc-color-swatch-primary-default, #0d6efd);
-  color: #fff;
-}
-
-.synthesis-btn--primary:hover:not(:disabled) {
-  background: var(--oc-color-swatch-primary-hover, #0b5ed7);
-  border-color: var(--oc-color-swatch-primary-hover, #0b5ed7);
 }
 </style>

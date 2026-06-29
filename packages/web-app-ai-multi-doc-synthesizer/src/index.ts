@@ -8,6 +8,7 @@ import { overlayOpen, overlayResources, overlayLlmConfig } from './state'
 import type { SynthesisResource } from './composables/useSynthesis'
 import { isSupportedFile } from './utils/file-support'
 import type { LLMConfig } from './composables/useLLM'
+import translations from '../l10n/translations.json'
 
 const SUPPORTED_EXTS = ['txt', 'md']
 const APP_ID = 'ai-multi-doc-synthesizer'
@@ -17,9 +18,10 @@ export default defineWebApplication({
     const { $pgettext } = useGettext()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
+    // No apiKey in config — the proxy authenticates with the provider.
     const llmConfig: LLMConfig | null =
       rawLlm?.endpoint && rawLlm?.model
-        ? { endpoint: rawLlm.endpoint, model: rawLlm.model, apiKey: rawLlm.apiKey }
+        ? { endpoint: rawLlm.endpoint, model: rawLlm.model }
         : null
 
     const extensions = computed(() => [
@@ -58,7 +60,8 @@ export default defineWebApplication({
         ),
         id: APP_ID
       },
-      extensions
+      extensions,
+      translations
     }
   },
 
