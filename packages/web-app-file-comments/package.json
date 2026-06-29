@@ -13,18 +13,18 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2",
+    "@ownclouders/web-client": "^12.4.2",
+    "@ownclouders/web-pkg": "^12.4.2",
     "dompurify": "^3.4.3",
     "js-yaml": "^4.1.0",
     "marked": "^17.0.6",
-    "vue": "^3.4.0",
+    "vue": "^3.5.39",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.3.2",
-    "@ownclouders/web-test-helpers": "^12.3.2",
-    "@playwright/test": "^1.43.0",
+    "@ownclouders/extension-sdk": "^12.4.2",
+    "@ownclouders/web-test-helpers": "^12.4.2",
+    "@playwright/test": "^1.61.1",
     "@types/js-yaml": "^4.0.9",
     "@vitejs/plugin-vue": "^5.0.0",
     "eslint": "^8.57.0",
