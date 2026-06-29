@@ -1,7 +1,7 @@
 import { defineConfig } from '@ownclouders/extension-sdk'
 
 export default defineConfig({
-  name: 'ai-multi-doc-synthesizer',
+  name: 'web-app-ai-multi-doc-synthesizer',
   server: {
     port: 9731, // Increment this port number for each new extension.
   },
