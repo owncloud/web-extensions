@@ -1,6 +1,5 @@
-import { defineWebApplication, useModals } from '@ownclouders/web-pkg'
-import type { ActionExtension } from '@ownclouders/web-pkg'
-import { computed } from 'vue'
+import { defineWebApplication, useModals, useUserStore } from '@ownclouders/web-pkg'
+import type { ApplicationInformation } from '@ownclouders/web-pkg'
 import { useGettext } from 'vue3-gettext'
 import type { LLMConfig } from './composables/useLLM'
 import DraftCreatorModal from './components/DraftCreatorModal.vue'
@@ -12,6 +11,7 @@ export default defineWebApplication({
   setup({ applicationConfig }) {
     const { $pgettext } = useGettext()
     const { dispatchModal, removeModal } = useModals()
+    const userStore = useUserStore()
 
     const rawLlm = applicationConfig?.llm as Record<string, string> | undefined
     // apiKey is intentionally omitted — the ai-llm-proxy holds the provider key server-side.
@@ -34,29 +34,25 @@ export default defineWebApplication({
       })
     }
 
-    const extensions = computed<ActionExtension[]>(() => [
-      {
-        id: `${APP_ID}.upload-menu-action`,
-        type: 'action',
-        extensionPointIds: ['app.files.upload-menu'],
-        action: {
-          name: `${APP_ID}-create-draft`,
-          icon: 'draft',
-          label: () => $pgettext('Upload menu action label', 'Draft from description'),
-          isVisible: () => llmConfig !== null,
-          handler: () => openModal(),
-          class: `oc-files-actions-${APP_ID}`
+    const appInfo: ApplicationInformation = {
+      name: $pgettext('AI Quick Draft Creator extension name', 'AI Quick Draft Creator'),
+      id: APP_ID,
+      extensions: [
+        {
+          newFileMenu: {
+            menuTitle: () => $pgettext('New file menu item', 'Draft from description'),
+            isVisible: ({ currentFolder }) =>
+              llmConfig !== null && !!(currentFolder?.canUpload({ user: userStore.user }))
+          },
+          customHandler: () => openModal(),
+          icon: 'draft'
         }
-      } as ActionExtension
-    ])
+      ]
+    }
 
     return {
-      appInfo: {
-        name: $pgettext('AI Quick Draft Creator extension name', 'AI Quick Draft Creator'),
-        id: APP_ID
-      },
-      translations,
-      extensions
+      appInfo,
+      translations
     }
   }
 })

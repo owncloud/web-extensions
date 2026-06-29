@@ -1,18 +1,25 @@
 import { test, expect, Page } from '@playwright/test'
 import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
 
-const DRAFT_MENU_ITEM = '[data-action="ai-quick-draft-creator-create-draft"]'
+const NEW_FILE_MENU_BTN = '#new-file-menu-btn'
+const NEW_FILE_MENU_DROP = '#new-file-menu-drop'
+const DRAFT_MENU_ITEM_TEXT = 'Draft from description'
 const DESCRIPTION_INPUT = '[data-testid="draft-description"]'
 const FORMAT_SELECT = '[data-testid="draft-format"]'
 const CREATE_BTN = '[data-testid="draft-create"]'
 const CANCEL_BTN = '[data-testid="draft-cancel"]'
-const UPLOAD_MENU_BTN = '#upload-menu-btn'
-const UPLOAD_MENU_DROP = '#upload-menu-drop'
 
 // Proxy base URL as configured in ocis.apps.yaml (same-origin path).
 const PROXY_BASE = '**/ai-llm-proxy/v1/**'
 
 let adminPage: Page
+
+async function openNewFileMenu(page: Page) {
+  await page.goto('/files/spaces/personal')
+  await page.locator('#files-view').waitFor({ state: 'visible' })
+  await page.locator(NEW_FILE_MENU_BTN).click()
+  await page.locator(NEW_FILE_MENU_DROP).waitFor({ state: 'visible' })
+}
 
 test.beforeEach(async ({ browser }) => {
   const admin = await loginAsUser(browser, 'admin', 'admin')
@@ -50,30 +57,24 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('"Draft from description" item appears in upload menu when LLM is configured', async () => {
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
+test('"Draft from description" item appears in new file menu when LLM is configured', async () => {
+  await openNewFileMenu(adminPage)
 
-  const draftItem = adminPage.locator(DRAFT_MENU_ITEM)
+  const draftItem = adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT)
   await expect(draftItem).toBeVisible()
 })
 
 test('clicking the action opens a modal with description textarea and format selector', async () => {
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
-  await adminPage.locator(DRAFT_MENU_ITEM).click()
+  await openNewFileMenu(adminPage)
+  await adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT).click()
 
   await expect(adminPage.locator(DESCRIPTION_INPUT)).toBeVisible()
   await expect(adminPage.locator(FORMAT_SELECT)).toBeVisible()
 })
 
 test('format selector offers Markdown and Plain text options', async () => {
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
-  await adminPage.locator(DRAFT_MENU_ITEM).click()
+  await openNewFileMenu(adminPage)
+  await adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT).click()
 
   const formatSelect = adminPage.locator(FORMAT_SELECT)
   await expect(formatSelect).toBeVisible()
@@ -84,10 +85,8 @@ test('format selector offers Markdown and Plain text options', async () => {
 })
 
 test('"Create draft" button is disabled until description is entered', async () => {
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
-  await adminPage.locator(DRAFT_MENU_ITEM).click()
+  await openNewFileMenu(adminPage)
+  await adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT).click()
 
   const createBtn = adminPage.locator(CREATE_BTN)
   await expect(createBtn).toBeVisible()
@@ -98,10 +97,8 @@ test('"Create draft" button is disabled until description is entered', async () 
 })
 
 test('cancel button closes the modal', async () => {
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
-  await adminPage.locator(DRAFT_MENU_ITEM).click()
+  await openNewFileMenu(adminPage)
+  await adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT).click()
 
   await expect(adminPage.locator(CANCEL_BTN)).toBeVisible()
   await adminPage.locator(CANCEL_BTN).click()
@@ -122,10 +119,8 @@ test('happy path: fills description, clicks Create draft, proxy is called, modal
     })
   })
 
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
-  await adminPage.locator(DRAFT_MENU_ITEM).click()
+  await openNewFileMenu(adminPage)
+  await adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT).click()
 
   await adminPage.locator(DESCRIPTION_INPUT).fill('Q3 budget review for EMEA team')
   await adminPage.locator(CREATE_BTN).click()
@@ -138,11 +133,9 @@ test('happy path: fills description, clicks Create draft, proxy is called, modal
 
 test('menu item is absent when LLM is not configured', async () => {
   // When llmConfig is null, isVisible() returns false and the menu item is not rendered.
-  // This test verifies the upload menu can open without errors and no broken UI is shown.
-  await adminPage.goto('/')
-  await adminPage.locator(UPLOAD_MENU_BTN).click()
-  await adminPage.locator(UPLOAD_MENU_DROP).waitFor({ state: 'visible' })
+  // This test verifies the new file menu can open without errors and no broken UI is shown.
+  await openNewFileMenu(adminPage)
 
-  // The upload menu itself must be functional (no JS errors from the extension).
-  await expect(adminPage.locator(UPLOAD_MENU_DROP)).toBeVisible()
+  // The new file menu itself must be functional (no JS errors from the extension).
+  await expect(adminPage.locator(NEW_FILE_MENU_DROP)).toBeVisible()
 })
