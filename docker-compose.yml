@@ -50,6 +50,7 @@ services:
       - ./packages/web-app-file-comments/dist:/web/apps/file-comments
       - ./packages/web-app-ai-folder-brief-sidebar/dist:/web/apps/ai-folder-brief-sidebar
       - ./packages/web-app-ai-sensitive-data-scanner/dist:/web/apps/ai-sensitive-data-scanner
+      - ./packages/web-app-ai-data-insights-sidebar/dist:/web/apps/ai-data-insights-sidebar
     depends_on:
       - traefik
 
