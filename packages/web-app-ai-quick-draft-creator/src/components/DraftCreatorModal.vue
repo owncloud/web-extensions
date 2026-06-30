@@ -12,7 +12,9 @@
         id="draft-description"
         v-model="description"
         class="oc-input draft-creator-modal__description"
-        :placeholder="$gettext('e.g. Q3 budget review for EMEA team, include agenda and action-items table')"
+        :placeholder="
+          $gettext('e.g. Q3 budget review for EMEA team, include agenda and action-items table')
+        "
         rows="4"
         :disabled="creating"
         data-testid="draft-description"
@@ -38,7 +40,7 @@
     <div class="draft-creator-modal__actions oc-flex oc-flex-right oc-mt-m">
       <oc-button
         appearance="outline"
-        class="oc-mr-s"
+        class="oc-mr-s oc-modal-body-actions-cancel"
         :disabled="creating"
         data-testid="draft-cancel"
         @click="$emit('cancel')"
@@ -63,6 +65,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
+import { useFileActions } from '@ownclouders/web-pkg'
 import { useDraftCreator, type DraftFormat } from '../composables/useDraftCreator'
 import type { LLMConfig } from '../composables/useLLM'
 
@@ -81,11 +84,13 @@ const description = ref('')
 const format = ref<DraftFormat>('markdown')
 
 const { creating, error, createDraft } = useDraftCreator(props.llmConfig)
+const { triggerDefaultAction } = useFileActions()
 
 async function handleCreate(): Promise<void> {
-  const filename = await createDraft(description.value.trim(), format.value)
-  if (filename) {
+  const result = await createDraft(description.value.trim(), format.value)
+  if (result) {
     emit('confirm')
+    triggerDefaultAction({ space: result.space, resources: [result.resource] })
   }
 }
 </script>

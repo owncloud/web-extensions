@@ -1,16 +1,21 @@
 import { ref, type Ref } from 'vue'
 import { useClientService, useResourcesStore, useSpacesStore, useUserStore } from '@ownclouders/web-pkg'
-import { urlJoin } from '@ownclouders/web-client'
+import { urlJoin, type Resource, type SpaceResource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { useLLM, type LLMConfig } from './useLLM'
 
 export type DraftFormat = 'markdown' | 'plain'
 
+export interface CreatedDraft {
+  resource: Resource
+  space: SpaceResource
+}
+
 export interface UseDraftCreatorResult {
   creating: Ref<boolean>
   error: Ref<string | null>
   canCreate: () => boolean
-  createDraft: (description: string, format: DraftFormat) => Promise<string | null>
+  createDraft: (description: string, format: DraftFormat) => Promise<CreatedDraft | null>
 }
 
 function buildPrompt(description: string, format: DraftFormat): string {
@@ -66,7 +71,7 @@ export function useDraftCreator(llmConfig: LLMConfig | null): UseDraftCreatorRes
     return !!(folder?.canUpload({ user: userStore.user }))
   }
 
-  async function createDraft(description: string, format: DraftFormat): Promise<string | null> {
+  async function createDraft(description: string, format: DraftFormat): Promise<CreatedDraft | null> {
     if (!llmConfig || !llm) {
       error.value = $gettext('LLM is not configured.')
       return null
@@ -104,9 +109,9 @@ export function useDraftCreator(llmConfig: LLMConfig | null): UseDraftCreatorRes
       const filename = deriveFilename(description, format)
       const filePath = urlJoin(currentFolder.path, filename)
 
-      await clientService.webdav.putFileContents(space, { path: filePath, content })
+      const resource = await clientService.webdav.putFileContents(space, { path: filePath, content })
 
-      return filename
+      return { resource, space }
     } catch (err) {
       error.value =
         err instanceof Error

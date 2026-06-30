@@ -43,14 +43,6 @@ test.beforeEach(async ({ browser }) => {
       })
     })
   })
-
-  // Intercept WebDAV PUT so the test does not require a real oCIS server.
-  await adminPage.route('**/dav/**', (route) => {
-    if (route.request().method() === 'PUT') {
-      return route.fulfill({ status: 201 })
-    }
-    return route.continue()
-  })
 })
 
 test.afterEach(async () => {

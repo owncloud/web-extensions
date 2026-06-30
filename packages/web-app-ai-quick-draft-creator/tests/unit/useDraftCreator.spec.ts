@@ -40,7 +40,7 @@ function setupMocks({
   spaceFound = true
 } = {}) {
   completeMock = vi.fn().mockResolvedValue('Generated document content')
-  putFileContentsMock = vi.fn().mockResolvedValue({})
+  putFileContentsMock = vi.fn().mockResolvedValue({ id: 'file-1', path: '/Documents/draft.md' })
 
   vi.mocked(useLLM).mockReturnValue({
     complete: completeMock as unknown as (messages: ChatMessage[], opts?: CompletionOptions) => Promise<string>
@@ -110,7 +110,9 @@ describe('useDraftCreator', () => {
       expect(completeMock).toHaveBeenCalledOnce()
       expect(putFileContentsMock).toHaveBeenCalledOnce()
       expect(result).toBeTruthy()
-      expect(result).toMatch(/\.md$/)
+      expect(result).toHaveProperty('resource')
+      expect(result).toHaveProperty('space')
+      expect(putFileContentsMock.mock.calls[0][1].path).toMatch(/\.md$/)
       expect(error.value).toBeNull()
       expect(creating.value).toBe(false)
     })
@@ -118,19 +120,19 @@ describe('useDraftCreator', () => {
     it('saves as plain text when format is plain', async () => {
       setupMocks()
       const { createDraft } = useDraftCreator(BASE_CONFIG)
-      const result = await createDraft('incident report', 'plain')
+      await createDraft('incident report', 'plain')
 
       expect(putFileContentsMock).toHaveBeenCalledOnce()
-      expect(result).toMatch(/\.txt$/)
+      expect(putFileContentsMock.mock.calls[0][1].path).toMatch(/\.txt$/)
     })
 
     it('filename includes a timestamp suffix to prevent same-day collisions', async () => {
       setupMocks()
       const { createDraft } = useDraftCreator(BASE_CONFIG)
-      const result = await createDraft('project brief', 'markdown')
+      await createDraft('project brief', 'markdown')
 
       // Filename should contain the date AND a time component (HH-mm-ss)
-      expect(result).toMatch(/\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/)
+      expect(putFileContentsMock.mock.calls[0][1].path).toMatch(/\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}/)
     })
 
     it('sets error and returns null when LLM throws', async () => {
