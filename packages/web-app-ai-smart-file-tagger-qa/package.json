@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2"
+    "@ownclouders/web-pkg": "^12.3.2",
+    "pdfjs-dist": "^6.1.200"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "12.3.2",
