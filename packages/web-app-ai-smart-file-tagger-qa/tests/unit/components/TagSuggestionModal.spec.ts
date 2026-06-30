@@ -12,22 +12,16 @@ vi.mock('vue3-gettext', () => ({
   })
 }))
 
-vi.mock('@ownclouders/web-pkg', () => ({
-  useModals: vi.fn()
-}))
-
 import { useTagSuggestions } from '../../../src/composables/useTagSuggestions.js'
 import type {
   TagSuggestionsStatus,
   TagSuggestion,
   TagResource
 } from '../../../src/composables/useTagSuggestions.js'
-import { useModals } from '@ownclouders/web-pkg'
 import type { LLMConfig } from '../../../src/composables/useLLM.js'
 
 const fetchSuggestionsMock = vi.fn().mockResolvedValue(undefined)
 const applyTagsMock = vi.fn().mockResolvedValue(undefined)
-const removeModalMock = vi.fn()
 
 function setupUseTagSuggestionsMock({
   status = 'unconfigured' as TagSuggestionsStatus,
@@ -65,8 +59,6 @@ describe('TagSuggestionModal', () => {
   beforeEach(() => {
     fetchSuggestionsMock.mockReset().mockResolvedValue(undefined)
     applyTagsMock.mockReset().mockResolvedValue(undefined)
-    removeModalMock.mockReset()
-    vi.mocked(useModals).mockReturnValue({ removeModal: removeModalMock } as any)
     setupUseTagSuggestionsMock()
   })
 
@@ -111,12 +103,11 @@ describe('TagSuggestionModal', () => {
       expect(fetchSuggestionsMock).toHaveBeenCalledTimes(1)
     })
 
-    it('hides the confirm/dismiss actions while generating', async () => {
+    it('keeps the modal-provided confirm action disabled while generating', async () => {
       setupUseTagSuggestionsMock({ status: 'loading', isGenerating: true })
       const wrapper = createWrapper()
       await flushPromises()
-      expect(wrapper.find('[data-testid="tag-suggestion-confirm"]').exists()).toBe(false)
-      expect(wrapper.find('[data-testid="tag-suggestion-dismiss"]').exists()).toBe(false)
+      expect(wrapper.emitted('update:confirmDisabled')?.at(-1)).toEqual([true])
     })
   })
 
@@ -175,66 +166,51 @@ describe('TagSuggestionModal', () => {
   })
 
   describe('confirm', () => {
-    it('calls applyTags when "Apply tags" is clicked', async () => {
+    it('exposes onConfirm, which calls applyTags', async () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
       setupUseTagSuggestionsMock({ status: 'ready', tags })
       const wrapper = createWrapper()
       await flushPromises()
 
-      await wrapper.find('[data-testid="tag-suggestion-confirm"]').trigger('click')
-      await flushPromises()
+      await (wrapper.vm as unknown as { onConfirm(): Promise<void> }).onConfirm()
 
       expect(applyTagsMock).toHaveBeenCalledTimes(1)
     })
 
-    it('removes the modal after applyTags resolves', async () => {
-      const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
+    it('emits update:confirmDisabled(false) once a tag is selected', async () => {
+      const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: false }]
       setupUseTagSuggestionsMock({ status: 'ready', tags })
-      const wrapper = createWrapper({ modal: { id: 'modal-1', title: 'Suggest Tags' } })
+      const wrapper = createWrapper()
       await flushPromises()
+      expect(wrapper.emitted('update:confirmDisabled')?.at(-1)).toEqual([true])
 
-      await wrapper.find('[data-testid="tag-suggestion-confirm"]').trigger('click')
-      await flushPromises()
+      await wrapper.find('.tag-suggestion-chip').trigger('click')
 
-      expect(removeModalMock).toHaveBeenCalledWith('modal-1')
+      expect(wrapper.emitted('update:confirmDisabled')?.at(-1)).toEqual([false])
     })
 
-    it('disables the confirm button when no tags are selected', async () => {
+    it('keeps confirm disabled when no tags are selected', async () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: false }]
       setupUseTagSuggestionsMock({ status: 'ready', tags })
       const wrapper = createWrapper()
       await flushPromises()
 
-      const button = wrapper.find('[data-testid="tag-suggestion-confirm"]')
-      expect(button.attributes('disabled')).toBeDefined()
+      expect(wrapper.emitted('update:confirmDisabled')?.at(-1)).toEqual([true])
     })
 
-    it('shows a fallback error and keeps the modal open when applyTags rejects', async () => {
+    it('shows a fallback error and rethrows so the modal framework keeps the dialog open when applyTags rejects', async () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
       applyTagsMock.mockRejectedValueOnce(new Error('Could not reach the AI service.'))
       setupUseTagSuggestionsMock({ status: 'ready', tags })
       const wrapper = createWrapper({ modal: { id: 'modal-2', title: 'Suggest Tags' } })
       await flushPromises()
 
-      await wrapper.find('[data-testid="tag-suggestion-confirm"]').trigger('click')
+      await expect(
+        (wrapper.vm as unknown as { onConfirm(): Promise<void> }).onConfirm()
+      ).rejects.toThrow('Could not reach the AI service.')
       await flushPromises()
 
       expect(wrapper.find('.tag-suggestion-error').text()).toBe('Could not reach the AI service.')
-      expect(removeModalMock).not.toHaveBeenCalled()
-    })
-  })
-
-  describe('dismiss', () => {
-    it('removes the modal without calling applyTags', async () => {
-      const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
-      setupUseTagSuggestionsMock({ status: 'ready', tags })
-      const wrapper = createWrapper({ modal: { id: 'modal-3', title: 'Suggest Tags' } })
-      await flushPromises()
-
-      await wrapper.find('[data-testid="tag-suggestion-dismiss"]').trigger('click')
-
-      expect(removeModalMock).toHaveBeenCalledWith('modal-3')
-      expect(applyTagsMock).not.toHaveBeenCalled()
     })
   })
 

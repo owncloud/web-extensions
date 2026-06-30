@@ -50,13 +50,18 @@ test('suggests tags for an uploaded text file and applies the confirmed selectio
 
   await expect(tagger.modal).toBeVisible()
 
+  // The modal opens immediately while still loading: fetchSuggestions() has two async
+  // round trips left (WebDAV file content, then the mocked LLM call) before chips render.
+  // Wait for the first chip rather than reading .count() immediately, which doesn't retry.
+  await expect(tagger.chips.first()).toBeVisible()
+
   const chipCount = await tagger.chips.count()
   expect(chipCount).toBeGreaterThanOrEqual(1)
 
   const firstChip = tagger.chips.first()
-  await expect(firstChip).toHaveClass(/tag-suggestion-chip-selected/)
-  await firstChip.click()
   await expect(firstChip).not.toHaveClass(/tag-suggestion-chip-selected/)
+  await firstChip.click()
+  await expect(firstChip).toHaveClass(/tag-suggestion-chip-selected/)
 
   await tagger.confirmBtn.click()
 

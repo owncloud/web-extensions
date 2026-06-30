@@ -14,8 +14,10 @@ export class TagSuggestionPage {
     this.suggestTagsAction = this.page.getByTestId('action-label').filter({ hasText: 'Suggest tags' })
     this.modal = this.page.getByRole('dialog').filter({ hasText: 'Suggest Tags' })
     this.chips = this.modal.getByTestId('tag-suggestion-chips').locator('.tag-suggestion-chip')
-    this.confirmBtn = this.modal.getByTestId('tag-suggestion-confirm')
-    this.dismissBtn = this.modal.getByTestId('tag-suggestion-dismiss')
+    // Confirm/Cancel are rendered by the modal framework itself (declared via
+    // dispatchModal's confirmText / the default Cancel), not by this component.
+    this.confirmBtn = this.modal.getByRole('button', { name: 'Apply tags' })
+    this.dismissBtn = this.modal.getByRole('button', { name: 'Cancel' })
   }
 
   /** Opens the context menu for a resource and clicks the "Suggest tags" action. */
