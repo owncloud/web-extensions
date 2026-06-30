@@ -46,7 +46,8 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const h: Record<string, string> = { 'Content-Type': 'application/json' }
     const token = authStore.accessToken
     if (token) {
-      h['Authorization'] = `Bearer ${token}`
+      const scheme = 'Bearer'
+      h['Authorization'] = scheme + ' ' + token
     }
     return h
   }
