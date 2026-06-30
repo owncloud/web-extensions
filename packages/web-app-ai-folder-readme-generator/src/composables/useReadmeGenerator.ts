@@ -1,9 +1,11 @@
-import { ref, type Ref } from 'vue'
+import { createApp, ref, type Ref } from 'vue'
 import { useClientService, useUserStore } from '@ownclouders/web-pkg'
-import { useGettext } from 'vue3-gettext'
+import { useGettext, createGettext } from 'vue3-gettext'
+import { OcButton } from '@ownclouders/design-system/components'
 import { urlJoin, type Resource, type SpaceResource } from '@ownclouders/web-client'
 import { useLLM, type ChatMessage, type LLMConfig, type LLMStatus } from './useLLM'
 import { isSampleableFile } from '../utils/file-support'
+import OverwriteDialog from '../components/OverwriteDialog.vue'
 
 const README_FILENAME = 'README.md'
 const MAX_SAMPLE_FILES = 10
@@ -29,9 +31,37 @@ export interface FileSample {
 
 export interface UseReadmeGeneratorOptions {
   // Invoked when the folder already contains a README.md; resolving false aborts
-  // generation. Defaults to always confirming — a real confirmation dialog is wired
-  // in by the caller once one exists.
+  // generation. Defaults to mounting OverwriteDialog.vue as a standalone Vue app —
+  // pass a custom implementation (e.g. in tests) to bypass the DOM mount.
   confirmOverwrite?: (existing: Resource) => Promise<boolean>
+}
+
+// OverwriteDialog.vue is rendered outside any sidebarPanel/route component tree (this
+// extension registers a context-menu action only), so there is no existing Vue app to
+// teleport the dialog into. A standalone app is mounted into a div appended to
+// document.body and torn down once the user responds.
+function mountOverwriteDialog(language: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    const app = createApp(OverwriteDialog, {
+      onConfirm: () => settle(true),
+      onCancel: () => settle(false)
+    })
+
+    function settle(result: boolean) {
+      app.unmount()
+      container.remove()
+      resolve(result)
+    }
+
+    // The standalone app does not inherit the host app's plugins, so the design
+    // system component and gettext context are installed locally.
+    app.use(createGettext({ defaultLanguage: language, silent: true }))
+    app.component('OcButton', OcButton)
+    app.mount(container)
+  })
 }
 
 export interface UseReadmeGeneratorResult {
@@ -121,11 +151,11 @@ export function useReadmeGenerator(
   const isGenerating = ref(false)
   const error = ref<string | null>(null)
 
-  const confirmOverwrite = options.confirmOverwrite ?? (() => Promise.resolve(true))
-
   function getUserLanguage(): string {
     return userStore.user?.preferredLanguage || gettextLanguage
   }
+
+  const confirmOverwrite = options.confirmOverwrite ?? (() => mountOverwriteDialog(getUserLanguage()))
 
   async function sampleTextFiles(space: SpaceResource, children: Resource[]): Promise<FileSample[]> {
     const samples: FileSample[] = []
