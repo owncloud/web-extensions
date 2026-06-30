@@ -22,6 +22,7 @@
   "devDependencies": {
     "@ownclouders/extension-sdk": "12.3.2",
     "@ownclouders/tsconfig": "0.0.6",
+    "@ownclouders/web-test-helpers": "^12.3.2",
     "@types/node": "22.19.19",
     "@vue/test-utils": "^2.4.6",
     "eslint": "9.39.4",
