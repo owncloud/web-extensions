@@ -49,7 +49,7 @@ function createWrapper(
   props: {
     resource?: TagResource | null
     llmConfig?: LLMConfig | null
-    modal?: { id: string }
+    modal?: { id: string; title: string }
   } = {}
 ) {
   return mount(TagSuggestionModal, {
@@ -190,7 +190,7 @@ describe('TagSuggestionModal', () => {
     it('removes the modal after applyTags resolves', async () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
       setupUseTagSuggestionsMock({ status: 'ready', tags })
-      const wrapper = createWrapper({ modal: { id: 'modal-1' } })
+      const wrapper = createWrapper({ modal: { id: 'modal-1', title: 'Suggest Tags' } })
       await flushPromises()
 
       await wrapper.find('[data-testid="tag-suggestion-confirm"]').trigger('click')
@@ -213,7 +213,7 @@ describe('TagSuggestionModal', () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
       applyTagsMock.mockRejectedValueOnce(new Error('Could not reach the AI service.'))
       setupUseTagSuggestionsMock({ status: 'ready', tags })
-      const wrapper = createWrapper({ modal: { id: 'modal-2' } })
+      const wrapper = createWrapper({ modal: { id: 'modal-2', title: 'Suggest Tags' } })
       await flushPromises()
 
       await wrapper.find('[data-testid="tag-suggestion-confirm"]').trigger('click')
@@ -228,7 +228,7 @@ describe('TagSuggestionModal', () => {
     it('removes the modal without calling applyTags', async () => {
       const tags: TagSuggestion[] = [{ name: 'invoice', confidence: 0.8, selected: true }]
       setupUseTagSuggestionsMock({ status: 'ready', tags })
-      const wrapper = createWrapper({ modal: { id: 'modal-3' } })
+      const wrapper = createWrapper({ modal: { id: 'modal-3', title: 'Suggest Tags' } })
       await flushPromises()
 
       await wrapper.find('[data-testid="tag-suggestion-dismiss"]').trigger('click')
