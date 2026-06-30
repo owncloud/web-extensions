@@ -46,7 +46,8 @@ test('"Synthesize" appears in batch bar when 2 supported files are selected', as
 
 test('"Synthesize" is hidden when fewer than 2 files are selected', async () => {
   const filesPage = new FilesPage(adminPage)
-  await filesPage.page.locator('[data-testid="resource-table-select"]').first().check()
+  // nth(1) skips the <thead> row; force:true bypasses hover-only visibility.
+  await filesPage.page.locator('.has-item-context-menu tr').nth(1).getByRole('checkbox').check({ force: true })
   await expect(adminPage.getByRole('button', { name: 'Synthesize' })).not.toBeVisible()
 })
 
@@ -140,8 +141,17 @@ test('LLM requests are sent to ai-llm-proxy with a bearer token', async () => {
 })
 
 test('user can copy the synthesis result to clipboard', async () => {
-  // Grant clipboard permissions so navigator.clipboard.writeText works headlessly.
-  await adminPage.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  // Grant clipboard permissions where the browser supports it.
+  // Firefox/WebKit don't expose these via grantPermissions, so we also mock
+  // navigator.clipboard.writeText directly to make the test cross-browser.
+  try {
+    await adminPage.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  } catch {
+    // Firefox / WebKit don't support these permission names; fall through.
+  }
+  await adminPage.evaluate(() => {
+    navigator.clipboard.writeText = () => Promise.resolve()
+  })
 
   const filesPage = new FilesPage(adminPage)
   await filesPage.selectAllCheckbox.check()
@@ -183,10 +193,7 @@ test('synthesis modal is dismissed when the close button is clicked', async () =
   const modal = adminPage.locator('[role="dialog"]')
   await expect(modal).toBeVisible()
 
-  const closeBtn = modal.locator(
-    'button[aria-label="Close"], button:text("Close"), .oc-modal-close'
-  )
-  await closeBtn.click()
+  await adminPage.locator('.oc-modal-body-actions-cancel').click()
 
   await expect(modal).not.toBeVisible()
 })
