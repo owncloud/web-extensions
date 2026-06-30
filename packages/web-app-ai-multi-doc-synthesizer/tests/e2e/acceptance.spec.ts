@@ -27,13 +27,6 @@ test.beforeEach(async ({ browser }) => {
     })
   )
 
-  await adminPage.route('**/dav/**', (route) => {
-    if (route.request().method() === 'PUT') {
-      return route.fulfill({ status: 201 })
-    }
-    return route.continue()
-  })
-
   const appBar = new FilesAppBar(adminPage)
   await appBar.uploadFile('test-document.txt')
   await appBar.uploadFile('test-document.md')
@@ -190,7 +183,9 @@ test('synthesis modal is dismissed when the close button is clicked', async () =
   const modal = adminPage.locator('[role="dialog"]')
   await expect(modal).toBeVisible()
 
-  const closeBtn = modal.locator('button[aria-label="Close"], button:text("Close"), .oc-modal-close')
+  const closeBtn = modal.locator(
+    'button[aria-label="Close"], button:text("Close"), .oc-modal-close'
+  )
   await closeBtn.click()
 
   await expect(modal).not.toBeVisible()
