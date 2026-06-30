@@ -11,7 +11,10 @@ export class TagSuggestionPage {
 
   constructor(page: Page) {
     this.page = page
-    this.suggestTagsAction = this.page.getByTestId('action-label').filter({ hasText: 'Suggest tags' })
+    this.suggestTagsAction = this.page
+      .locator('[id^="context-menu-drop"]:visible')
+      .getByTestId('action-label')
+      .filter({ hasText: 'Suggest tags' })
     this.modal = this.page.getByRole('dialog').filter({ hasText: 'Suggest Tags' })
     this.chips = this.modal.getByTestId('tag-suggestion-chips').locator('.tag-suggestion-chip')
     this.confirmBtn = this.modal.getByTestId('tag-suggestion-confirm')
