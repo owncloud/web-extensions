@@ -324,6 +324,9 @@ importers:
       '@ownclouders/web-pkg':
         specifier: ^12.3.2
         version: 12.4.2(@vue/compiler-sfc@3.5.39)(esbuild@0.27.7)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.39(typescript@5.9.3))
+      pdfjs-dist:
+        specifier: ^6.1.200
+        version: 6.1.200
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: 12.3.2
