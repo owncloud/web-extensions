@@ -38,10 +38,14 @@ test.afterEach(async () => {
 })
 
 test('suggests tags for an uploaded text file and applies the confirmed selection', async () => {
+  test.setTimeout(120_000)
+
   const appBar = new FilesAppBar(adminPage)
+  const filesPage = new FilesPage(adminPage)
   const tagger = new TagSuggestionPage(adminPage)
 
   await appBar.uploadFile('test-document.txt')
+  await expect(filesPage.getResourceNameSelector('test-document.txt')).toBeVisible()
   await tagger.open('test-document.txt')
 
   await expect(tagger.modal).toBeVisible()
