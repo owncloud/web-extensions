@@ -17,21 +17,21 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
+// None of these tests call FilesPage.navigateToPersonal() mid-test: it does a hard
+// page.goto(), which re-bootstraps the SPA (and the extension's async-loaded app
+// config) and can race the "Generate README" visibility check — see
+// AiReadmeGeneratorPage.goToPersonalRoot() for the in-app alternative used below.
+// loginAsUser() already lands on Personal, so no initial navigation is needed either.
+
 test('"Generate README" is visible for folders and hidden for files', async () => {
   const appBar = new FilesAppBar(adminPage)
   const files = new FilesPage(adminPage)
   const readme = new AiReadmeGeneratorPage(adminPage)
 
-  await files.navigateToPersonal()
   await appBar.uploadFile('test-document.txt')
   expect(await readme.isGenerateActionVisible('test-document.txt')).toBe(false)
 
   await files.createFolder('Project Docs')
-  // A freshly created folder is inserted into the list optimistically and does not
-  // reliably carry a populated `isFolder` flag until the listing is re-fetched from
-  // the server (see the same workaround in FilesPage.rename()). Reload so the
-  // context-menu check below sees the real, PROPFIND-backed resource.
-  await files.navigateToPersonal()
   expect(await readme.isGenerateActionVisible('Project Docs')).toBe(true)
 })
 
@@ -61,9 +61,7 @@ test('clicking "Generate README" writes README.md into the folder via the mocked
     })
   )
 
-  await files.navigateToPersonal()
   await files.createFolder('Mocked README Folder')
-  await files.navigateToPersonal()
 
   await Promise.all([
     adminPage.waitForResponse(
@@ -83,14 +81,12 @@ test('the overwrite dialog is shown and generation is skipped when README.md alr
   const files = new FilesPage(adminPage)
   const readme = new AiReadmeGeneratorPage(adminPage)
 
-  await files.navigateToPersonal()
   await files.createFolder('Existing README Folder')
-  await files.navigateToPersonal()
   await files.openFolder('Existing README Folder')
   await readme.uploadExistingReadme()
   await expect(readme.readmeEntry()).toBeVisible()
 
-  await files.navigateToPersonal()
+  await readme.goToPersonalRoot()
   await readme.clickGenerate('Existing README Folder')
 
   await expect(readme.overwriteDialog).toBeVisible()

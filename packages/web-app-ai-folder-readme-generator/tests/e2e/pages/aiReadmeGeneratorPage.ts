@@ -51,6 +51,21 @@ export class AiReadmeGeneratorPage {
     return new FilesPage(this.page).getResourceNameSelector('README.md')
   }
 
+  // FilesPage.navigateToPersonal() does a hard page.goto(), which re-bootstraps the
+  // whole SPA (and with it every extension's setup()). The app config — including
+  // this extension's `llm` block — is fetched asynchronously after that bootstrap, so
+  // a context-menu check performed right after such a reload can race ahead of the
+  // config and see this action as permanently unconfigured for the rest of that page
+  // load. Navigating back to Personal via the in-app breadcrumb avoids a reload
+  // entirely, keeping the already-initialized extension (and its already-resolved
+  // config) alive.
+  async goToPersonalRoot(): Promise<void> {
+    await this.page
+      .getByRole('navigation', { name: 'Breadcrumbs' })
+      .getByRole('button', { name: 'Personal', exact: true })
+      .click()
+  }
+
   /** Uploads the bundled README.md fixture into the currently open folder. */
   async uploadExistingReadme(): Promise<void> {
     const fixturePath = fileURLToPath(new URL('../fixtures/README.md', import.meta.url))
