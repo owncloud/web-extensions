@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        entryFileNames: 'index.js',
+        entryFileNames: 'ai-smart-file-tagger-qa.js',
       },
     },
   },
