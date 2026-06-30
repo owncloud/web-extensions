@@ -32,7 +32,10 @@ export default defineWebApplication({
           handler: ({ resources }: FileActionOptions) => {
             dispatchModal({
               title: $pgettext('Tag suggestion modal title', 'Suggest Tags'),
-              hideConfirmButton: true,
+              confirmText: $pgettext(
+                'Button to apply the selected tag suggestions to the file',
+                'Apply tags'
+              ),
               customComponent: TagSuggestionModal,
               customComponentAttrs: () => ({
                 resource: resources?.[0] ?? null,

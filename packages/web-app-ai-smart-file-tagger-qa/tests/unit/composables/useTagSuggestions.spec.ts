@@ -12,7 +12,8 @@ vi.mock('vue3-gettext', () => ({
 
 vi.mock('@ownclouders/web-pkg', () => ({
   useClientService: vi.fn(),
-  useSpacesStore: vi.fn()
+  useSpacesStore: vi.fn(),
+  useResourcesStore: vi.fn()
 }))
 
 vi.mock('../../../src/composables/useLLM', () => ({
@@ -22,7 +23,7 @@ vi.mock('../../../src/composables/useLLM', () => ({
 import { useTagSuggestions } from '../../../src/composables/useTagSuggestions'
 import type { TagResource } from '../../../src/composables/useTagSuggestions'
 import { useLLM } from '../../../src/composables/useLLM'
-import { useClientService, useSpacesStore } from '@ownclouders/web-pkg'
+import { useClientService, useResourcesStore, useSpacesStore } from '@ownclouders/web-pkg'
 
 const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'test-model' }
 
@@ -64,6 +65,19 @@ function setupClientServiceMock({ fileContents = 'Document content here.' } = {}
     getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
   } as any)
   return { getFileContents, assignTags }
+}
+
+function setupResourcesStoreMock({
+  resources = [] as Array<{ id: string; tags?: string[] }>,
+  currentFolder = null as { id: string; tags?: string[] } | null
+} = {}) {
+  const updateResourceField = vi.fn()
+  vi.mocked(useResourcesStore).mockReturnValue({
+    resources,
+    currentFolder,
+    updateResourceField
+  } as any)
+  return { updateResourceField }
 }
 
 function createInstance(
@@ -149,8 +163,8 @@ describe('useTagSuggestions', () => {
 
       expect(instance.status.value).toBe('ready')
       expect(instance.tags.value).toEqual([
-        { name: 'quarterly-report', confidence: 0.92, selected: true },
-        { name: 'finance', confidence: 1, selected: true }
+        { name: 'quarterly-report', confidence: 0.92, selected: false },
+        { name: 'finance', confidence: 1, selected: false }
       ])
     })
 
@@ -162,7 +176,7 @@ describe('useTagSuggestions', () => {
       const instance = createInstance()
       await instance.fetchSuggestions()
 
-      expect(instance.tags.value).toEqual([{ name: 'invoice', confidence: 0.5, selected: true }])
+      expect(instance.tags.value).toEqual([{ name: 'invoice', confidence: 0.5, selected: false }])
     })
 
     it('caps the number of suggested tags at five', async () => {
@@ -192,16 +206,49 @@ describe('useTagSuggestions', () => {
 
       expect(instance.status.value).toBe('ready')
       expect(instance.tags.value).toEqual([
-        { name: 'invoices', confidence: null, selected: true },
-        { name: 'quarterly-report', confidence: null, selected: true },
-        { name: 'project-x', confidence: null, selected: true },
-        { name: 'tax-document', confidence: null, selected: true }
+        { name: 'invoices', confidence: null, selected: false },
+        { name: 'quarterly-report', confidence: null, selected: false },
+        { name: 'project-x', confidence: null, selected: false },
+        { name: 'tax-document', confidence: null, selected: false }
+      ])
+    })
+
+    it('strips leading list numbering from a numbered-list response', async () => {
+      const completeMock = setupUseLLMMock()
+      completeMock.mockResolvedValue('1. waffle\n2. despair\n3. sarcasm\n4. absurdity\n5. humor')
+      setupClientServiceMock()
+
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('ready')
+      expect(instance.tags.value).toEqual([
+        { name: 'waffle', confidence: null, selected: false },
+        { name: 'despair', confidence: null, selected: false },
+        { name: 'sarcasm', confidence: null, selected: false },
+        { name: 'absurdity', confidence: null, selected: false },
+        { name: 'humor', confidence: null, selected: false }
       ])
     })
 
     it('sets an error when no usable tags can be parsed from the response', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('   ')
+      setupClientServiceMock()
+
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('error')
+      expect(instance.tags.value).toEqual([])
+      expect(instance.error.value).toMatch(/no tags/i)
+    })
+
+    it('does not mangle valid JSON that lacks a usable tags array into garbage chips', async () => {
+      const completeMock = setupUseLLMMock()
+      completeMock.mockResolvedValue(
+        '{"file-type":"text","content-type":"plain-text","encoding":"utf-8"}'
+      )
       setupClientServiceMock()
 
       const instance = createInstance()
@@ -225,10 +272,11 @@ describe('useTagSuggestions', () => {
         })
       )
       const { assignTags } = setupClientServiceMock()
+      setupResourcesStoreMock({ resources: [{ id: 'f1', tags: [] }] })
 
       const instance = createInstance()
       await instance.fetchSuggestions()
-      instance.tags.value[1].selected = false
+      instance.tags.value[0].selected = true
       await instance.applyTags()
 
       expect(assignTags).toHaveBeenCalledWith({
@@ -237,22 +285,65 @@ describe('useTagSuggestions', () => {
       })
     })
 
+    it('updates the resources store so the file list/sidebar reflect the new tags without a page refresh', async () => {
+      const completeMock = setupUseLLMMock()
+      completeMock.mockResolvedValue(JSON.stringify({ tags: [{ name: 'invoice', confidence: 0.9 }] }))
+      setupClientServiceMock()
+      const { updateResourceField } = setupResourcesStoreMock({
+        resources: [{ id: 'f1', tags: ['existing-tag'] }]
+      })
+
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+      instance.tags.value[0].selected = true
+      await instance.applyTags()
+
+      expect(updateResourceField).toHaveBeenCalledWith({
+        id: 'f1',
+        field: 'tags',
+        value: ['existing-tag', 'invoice']
+      })
+    })
+
+    it('falls back to the current folder when the resource is not in the resources list', async () => {
+      const completeMock = setupUseLLMMock()
+      completeMock.mockResolvedValue(JSON.stringify({ tags: [{ name: 'invoice', confidence: 0.9 }] }))
+      setupClientServiceMock()
+      const { updateResourceField } = setupResourcesStoreMock({
+        resources: [],
+        currentFolder: { id: 'f1', tags: ['existing-tag'] }
+      })
+
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+      instance.tags.value[0].selected = true
+      await instance.applyTags()
+
+      expect(updateResourceField).toHaveBeenCalledWith({
+        id: 'f1',
+        field: 'tags',
+        value: ['existing-tag', 'invoice']
+      })
+    })
+
     it('does not call the Graph API when no tags are selected', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue(JSON.stringify({ tags: [{ name: 'invoice', confidence: 0.9 }] }))
       const { assignTags } = setupClientServiceMock()
+      const { updateResourceField } = setupResourcesStoreMock()
 
       const instance = createInstance()
       await instance.fetchSuggestions()
-      instance.tags.value[0].selected = false
       await instance.applyTags()
 
       expect(assignTags).not.toHaveBeenCalled()
+      expect(updateResourceField).not.toHaveBeenCalled()
     })
 
     it('rejects when the resource has no usable id', async () => {
       setupUseLLMMock()
       setupClientServiceMock()
+      setupResourcesStoreMock()
 
       const instance = createInstance({ ...TEXT_RESOURCE, id: undefined, fileId: undefined })
 

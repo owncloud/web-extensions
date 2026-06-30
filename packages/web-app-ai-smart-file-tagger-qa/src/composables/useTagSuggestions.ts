@@ -2,7 +2,8 @@ import { ref, type Ref } from 'vue'
 import * as pdfjs from 'pdfjs-dist'
 import * as pdfjsWorker from 'pdfjs-dist/build/pdf.worker.min.mjs'
 import type { TextItem } from 'pdfjs-dist/types/src/display/api'
-import { useClientService, useSpacesStore } from '@ownclouders/web-pkg'
+import { useClientService, useResourcesStore, useSpacesStore } from '@ownclouders/web-pkg'
+import type { Resource } from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { useLLM, type LLMConfig } from './useLLM'
 import { isSupportedForContentExtraction, getFileMimeType } from '../utils/file-support'
@@ -44,6 +45,7 @@ export function useTagSuggestions(
   const llm = useLLM(llmConfig)
   const clientService = useClientService()
   const spacesStore = useSpacesStore()
+  const resourcesStore = useResourcesStore()
 
   const status = ref<TagSuggestionsStatus>(llmConfig ? 'loading' : 'unconfigured')
   const tags = ref<TagSuggestion[]>([])
@@ -104,7 +106,7 @@ export function useTagSuggestions(
         `File name: "${res?.name ?? 'unknown'}"`,
         `File content:\n${content}`,
         `Return ONLY a JSON object: {"tags":[{"name":"tag-name","confidence":0.9},...]}`,
-        `Each tag: max 30 chars, lowercase, no spaces (use hyphens). No markdown, no explanation.`
+        `Each tag: max 30 chars, lowercase, no spaces (use hyphens). No markdown, no explanation, no numbering or bullets.`
       ].join('\n')
     }
     return [
@@ -120,25 +122,34 @@ export function useTagSuggestions(
     const clean = text.replace(/^```[a-z]*\n?/m, '').replace(/```\s*$/m, '').trim()
     try {
       const parsed = JSON.parse(clean) as { tags?: Array<{ name?: string; confidence?: number }> }
-      if (Array.isArray(parsed.tags) && parsed.tags.length > 0) {
+      if (Array.isArray(parsed.tags)) {
         return parsed.tags
-          .filter((t) => typeof t.name === 'string' && t.name.trim().length > 0)
+          .filter((t) => typeof t?.name === 'string' && t.name.trim().length > 0)
           .map((t) => ({
             name: t.name!.trim().toLowerCase().replace(/\s+/g, '-').slice(0, 30),
             confidence: typeof t.confidence === 'number' ? Math.min(1, Math.max(0, t.confidence)) : null,
-            selected: true
+            selected: false
           }))
           .slice(0, 5)
       }
-    } catch { /* fall through to plain-text parse */ }
+      // Valid JSON but not the expected {"tags":[...]} shape — do not fall through to the
+      // plain-text splitter, which would mangle the raw JSON into unusable chips.
+      return []
+    } catch { /* not JSON — fall through to plain-text parse */ }
 
     // Plain-text fallback: split by comma, newline, or semicolon
     return text
       .split(/[,\n;]+/)
-      .map((s) => s.replace(/^[-*•\s"'`#]+|["'`\s]+$/g, '').toLowerCase().replace(/\s+/g, '-'))
+      .map((s) =>
+        s
+          .replace(/^\s*\d+[.)]\s*/, '')
+          .replace(/^[-*•\s"'`#]+|["'`\s]+$/g, '')
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+      )
       .filter((s) => s.length > 0 && s.length <= 30)
       .slice(0, 5)
-      .map((name) => ({ name, confidence: null, selected: true }))
+      .map((name) => ({ name, confidence: null, selected: false }))
   }
 
   async function fetchSuggestions(): Promise<void> {
@@ -204,6 +215,19 @@ export function useTagSuggestions(
     await clientService.graphAuthenticated.tags.assignTags({
       resourceId,
       tags: selectedTagNames
+    })
+
+    // assignTags is additive server-side and doesn't return the updated resource, so merge
+    // with whatever tags the store already has for it rather than overwriting with only the
+    // newly-applied ones.
+    const existing = [...resourcesStore.resources, resourcesStore.currentFolder].find(
+      (r) => r?.id === resourceId
+    )
+    const mergedTags = Array.from(new Set([...(existing?.tags ?? []), ...selectedTagNames]))
+    resourcesStore.updateResourceField<Resource>({
+      id: resourceId,
+      field: 'tags',
+      value: mergedTags
     })
   }
 
