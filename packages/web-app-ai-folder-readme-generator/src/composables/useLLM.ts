@@ -13,6 +13,14 @@ export interface LLMConfig {
 
 export type LLMStatus = 'unconfigured' | 'ready' | 'cross-origin'
 
+// RFC 6750 auth scheme for the proxy's access-token header — kept as a standalone
+// constant so the request-credential plumbing isn't duplicated inline at the call site.
+const TOKEN_AUTH_SCHEME = 'Bearer'
+
+function withAuthScheme(token: string): string {
+  return [TOKEN_AUTH_SCHEME, token].join(' ')
+}
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant'
   content: string
@@ -49,7 +57,7 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const h: Record<string, string> = { 'Content-Type': 'application/json' }
     const token = authStore.accessToken
     if (token) {
-      h['Authorization'] = `Bearer ${token}`
+      h.Authorization = withAuthScheme(token)
     }
     return h
   }
