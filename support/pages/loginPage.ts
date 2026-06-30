@@ -7,6 +7,8 @@ export class LoginPage {
   readonly loginBtn: Locator
   readonly myAccount: Locator
   readonly logoutBtn: Locator
+  readonly modalBackground: Locator
+  readonly modalCancelBtn: Locator
 
   constructor(page: Page) {
     this.page = page
@@ -15,6 +17,8 @@ export class LoginPage {
     this.loginBtn = this.page.getByRole('button', { name: 'Log in' })
     this.myAccount = this.page.getByLabel('My Account')
     this.logoutBtn = this.page.locator('#oc-topbar-account-logout')
+    this.modalBackground = this.page.locator('.oc-modal-background')
+    this.modalCancelBtn = this.page.locator('.oc-modal-body-actions-cancel')
   }
 
   async login(username: string, password: string) {
@@ -24,6 +28,10 @@ export class LoginPage {
   }
 
   async logout() {
+    if (await this.modalBackground.isVisible()) {
+      await this.modalCancelBtn.click()
+    }
+
     await this.myAccount.click()
     await this.logoutBtn.click()
   }

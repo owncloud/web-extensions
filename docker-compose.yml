@@ -44,6 +44,7 @@ services:
       - ./packages/web-app-unzip/dist:/web/apps/unzip
       - ./packages/web-app-ai-doc-summary/dist:/web/apps/ai-doc-summary
       - ./packages/web-app-ai-image-alt-text-sidebar/dist:/web/apps/ai-image-alt-text-sidebar
+      - ./packages/web-app-ai-quick-draft-creator/dist:/web/apps/ai-quick-draft-creator
       - ./packages/web-app-chat-with-file/dist:/web/apps/chat-with-file
       - ./packages/web-app-version-changelog/dist:/web/apps/version-changelog
       - ./packages/web-app-group-management/dist:/web/apps/group-management
