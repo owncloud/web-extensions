@@ -1,25 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ref } from 'vue'
-import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 
 vi.mock('pdfjs-dist', () => ({
   getDocument: vi.fn()
 }))
 vi.mock('pdfjs-dist/build/pdf.worker.min.mjs', () => ({}))
 
+vi.mock('vue3-gettext', () => ({
+  useGettext: () => ({ $gettext: (s: string) => s })
+}))
+
+vi.mock('@ownclouders/web-pkg', () => ({
+  useClientService: vi.fn(),
+  useSpacesStore: vi.fn()
+}))
+
 vi.mock('../../../src/composables/useLLM', () => ({
   useLLM: vi.fn()
 }))
 
-vi.mock('@ownclouders/web-pkg', async () => {
-  const actual = await vi.importActual<typeof import('@ownclouders/web-pkg')>('@ownclouders/web-pkg')
-  return { ...actual, useSpacesStore: vi.fn() }
-})
-
 import { useTagSuggestions } from '../../../src/composables/useTagSuggestions'
 import type { TagResource } from '../../../src/composables/useTagSuggestions'
 import { useLLM } from '../../../src/composables/useLLM'
-import { useSpacesStore } from '@ownclouders/web-pkg'
+import { useClientService, useSpacesStore } from '@ownclouders/web-pkg'
 
 const BASE_CONFIG = { endpoint: 'http://llm.local/v1', model: 'test-model' }
 
@@ -50,33 +53,24 @@ function setupUseLLMMock({ status = 'ready', complete = vi.fn() } = {}) {
   return complete
 }
 
-function getWrapper(
-  setup: (result: ReturnType<typeof useTagSuggestions>) => void,
-  {
-    resource = TEXT_RESOURCE as TagResource | null,
-    llmConfig = BASE_CONFIG as typeof BASE_CONFIG | null,
-    fileContents = 'Document content here.'
-  } = {}
-) {
-  const mocks = { ...defaultComponentMocks() }
-  mocks.$clientService.webdav.getFileContents.mockResolvedValue({
-    response: { data: fileContents }
-  })
-  mocks.$clientService.graphAuthenticated.tags.assignTags.mockResolvedValue(undefined)
-
-  const mockSpace = { id: 'space-1' }
-  vi.mocked(useSpacesStore).mockReturnValue({
-    getSpace: vi.fn().mockReturnValue(mockSpace)
+function setupClientServiceMock({ fileContents = 'Document content here.' } = {}) {
+  const getFileContents = vi.fn().mockResolvedValue({ response: { data: fileContents } })
+  const assignTags = vi.fn().mockResolvedValue(undefined)
+  vi.mocked(useClientService).mockReturnValue({
+    webdav: { getFileContents },
+    graphAuthenticated: { tags: { assignTags } }
   } as any)
+  vi.mocked(useSpacesStore).mockReturnValue({
+    getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
+  } as any)
+  return { getFileContents, assignTags }
+}
 
-  return getComposableWrapper(
-    () => {
-      const resourceRef = ref(resource)
-      const instance = useTagSuggestions(resourceRef, llmConfig)
-      setup(instance)
-    },
-    { mocks, provide: mocks }
-  )
+function createInstance(
+  resource: TagResource | null = TEXT_RESOURCE,
+  llmConfig: typeof BASE_CONFIG | null = BASE_CONFIG
+) {
+  return useTagSuggestions(ref(resource), llmConfig)
 }
 
 describe('useTagSuggestions', () => {
@@ -88,92 +82,51 @@ describe('useTagSuggestions', () => {
     it('sends the file content in the prompt for content-extraction-eligible files', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('{"tags":[{"name":"finance","confidence":0.9}]}')
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            const [messages] = completeMock.mock.calls[0]
-            expect(messages[0].content).toContain('File content:\nDocument content here.')
-            expect(messages[0].content).toContain('File name: "report.txt"')
-            expect(messages[0].content).not.toContain('File type:')
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      const [messages] = completeMock.mock.calls[0]
+      expect(messages[0].content).toContain('File content:\nDocument content here.')
+      expect(messages[0].content).toContain('File name: "report.txt"')
+      expect(messages[0].content).not.toContain('File type:')
     })
 
     it('fetches the file content via WebDAV for content mode', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('{"tags":[{"name":"finance","confidence":0.9}]}')
+      const { getFileContents } = setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        const mocks = { ...defaultComponentMocks() }
-        mocks.$clientService.webdav.getFileContents.mockResolvedValue({
-          response: { data: 'Document content here.' }
-        })
-        vi.mocked(useSpacesStore).mockReturnValue({
-          getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
-        } as any)
+      const instance = createInstance()
+      await instance.fetchSuggestions()
 
-        getComposableWrapper(
-          () => {
-            const resourceRef = ref(TEXT_RESOURCE)
-            const instance = useTagSuggestions(resourceRef, BASE_CONFIG)
-            instance.fetchSuggestions().then(() => {
-              expect(mocks.$clientService.webdav.getFileContents).toHaveBeenCalledTimes(1)
-              resolve()
-            })
-          },
-          { mocks, provide: mocks }
-        )
-      })
+      expect(getFileContents).toHaveBeenCalledTimes(1)
     })
 
     it('sends only the file name and MIME type for files not eligible for content extraction', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('{"tags":[{"name":"photo","confidence":0.8}]}')
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper(
-          (instance) => {
-            instance.fetchSuggestions().then(() => {
-              const [messages] = completeMock.mock.calls[0]
-              expect(messages[0].content).toContain('File name: "photo.png"')
-              expect(messages[0].content).toContain('File type: image/png')
-              expect(messages[0].content).not.toContain('File content:')
-              resolve()
-            })
-          },
-          { resource: IMAGE_RESOURCE }
-        )
-      })
+      const instance = createInstance(IMAGE_RESOURCE)
+      await instance.fetchSuggestions()
+
+      const [messages] = completeMock.mock.calls[0]
+      expect(messages[0].content).toContain('File name: "photo.png"')
+      expect(messages[0].content).toContain('File type: image/png')
+      expect(messages[0].content).not.toContain('File content:')
     })
 
     it('does not call WebDAV when the file is not eligible for content extraction', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('{"tags":[{"name":"photo","confidence":0.8}]}')
+      const { getFileContents } = setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        const mocks = { ...defaultComponentMocks() }
-        mocks.$clientService.webdav.getFileContents.mockResolvedValue({
-          response: { data: 'unused' }
-        })
-        vi.mocked(useSpacesStore).mockReturnValue({
-          getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
-        } as any)
+      const instance = createInstance(IMAGE_RESOURCE)
+      await instance.fetchSuggestions()
 
-        getComposableWrapper(
-          () => {
-            const resourceRef = ref(IMAGE_RESOURCE)
-            const instance = useTagSuggestions(resourceRef, BASE_CONFIG)
-            instance.fetchSuggestions().then(() => {
-              expect(mocks.$clientService.webdav.getFileContents).not.toHaveBeenCalled()
-              resolve()
-            })
-          },
-          { mocks, provide: mocks }
-        )
-      })
+      expect(getFileContents).not.toHaveBeenCalled()
     })
   })
 
@@ -189,33 +142,27 @@ describe('useTagSuggestions', () => {
           ]
         })
       )
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('ready')
-            expect(instance.tags.value).toEqual([
-              { name: 'quarterly-report', confidence: 0.92, selected: true },
-              { name: 'finance', confidence: 1, selected: true }
-            ])
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('ready')
+      expect(instance.tags.value).toEqual([
+        { name: 'quarterly-report', confidence: 0.92, selected: true },
+        { name: 'finance', confidence: 1, selected: true }
+      ])
     })
 
     it('strips markdown code fences before parsing JSON', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('```json\n{"tags":[{"name":"invoice","confidence":0.5}]}\n```')
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.tags.value).toEqual([{ name: 'invoice', confidence: 0.5, selected: true }])
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.tags.value).toEqual([{ name: 'invoice', confidence: 0.5, selected: true }])
     })
 
     it('caps the number of suggested tags at five', async () => {
@@ -225,15 +172,12 @@ describe('useTagSuggestions', () => {
           tags: Array.from({ length: 8 }, (_, i) => ({ name: `tag-${i}`, confidence: 0.5 }))
         })
       )
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.tags.value).toHaveLength(5)
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.tags.value).toHaveLength(5)
     })
   })
 
@@ -241,37 +185,31 @@ describe('useTagSuggestions', () => {
     it('splits a non-JSON response into tags by comma, newline, and semicolon', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('Invoices, Quarterly Report; project-x\ntax-document')
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('ready')
-            expect(instance.tags.value).toEqual([
-              { name: 'invoices', confidence: null, selected: true },
-              { name: 'quarterly-report', confidence: null, selected: true },
-              { name: 'project-x', confidence: null, selected: true },
-              { name: 'tax-document', confidence: null, selected: true }
-            ])
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('ready')
+      expect(instance.tags.value).toEqual([
+        { name: 'invoices', confidence: null, selected: true },
+        { name: 'quarterly-report', confidence: null, selected: true },
+        { name: 'project-x', confidence: null, selected: true },
+        { name: 'tax-document', confidence: null, selected: true }
+      ])
     })
 
     it('sets an error when no usable tags can be parsed from the response', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue('   ')
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('error')
-            expect(instance.tags.value).toEqual([])
-            expect(instance.error.value).toMatch(/no tags/i)
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('error')
+      expect(instance.tags.value).toEqual([])
+      expect(instance.error.value).toMatch(/no tags/i)
     })
   })
 
@@ -286,87 +224,39 @@ describe('useTagSuggestions', () => {
           ]
         })
       )
+      const { assignTags } = setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        const mocks = { ...defaultComponentMocks() }
-        mocks.$clientService.webdav.getFileContents.mockResolvedValue({
-          response: { data: 'Document content here.' }
-        })
-        mocks.$clientService.graphAuthenticated.tags.assignTags.mockResolvedValue(undefined)
-        vi.mocked(useSpacesStore).mockReturnValue({
-          getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
-        } as any)
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+      instance.tags.value[1].selected = false
+      await instance.applyTags()
 
-        getComposableWrapper(
-          () => {
-            const resourceRef = ref(TEXT_RESOURCE)
-            const instance = useTagSuggestions(resourceRef, BASE_CONFIG)
-            instance
-              .fetchSuggestions()
-              .then(() => {
-                instance.tags.value[1].selected = false
-                return instance.applyTags()
-              })
-              .then(() => {
-                expect(mocks.$clientService.graphAuthenticated.tags.assignTags).toHaveBeenCalledWith({
-                  resourceId: 'f1',
-                  tags: ['invoice']
-                })
-                resolve()
-              })
-          },
-          { mocks, provide: mocks }
-        )
+      expect(assignTags).toHaveBeenCalledWith({
+        resourceId: 'f1',
+        tags: ['invoice']
       })
     })
 
     it('does not call the Graph API when no tags are selected', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockResolvedValue(JSON.stringify({ tags: [{ name: 'invoice', confidence: 0.9 }] }))
+      const { assignTags } = setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        const mocks = { ...defaultComponentMocks() }
-        mocks.$clientService.webdav.getFileContents.mockResolvedValue({
-          response: { data: 'Document content here.' }
-        })
-        vi.mocked(useSpacesStore).mockReturnValue({
-          getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
-        } as any)
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+      instance.tags.value[0].selected = false
+      await instance.applyTags()
 
-        getComposableWrapper(
-          () => {
-            const resourceRef = ref(TEXT_RESOURCE)
-            const instance = useTagSuggestions(resourceRef, BASE_CONFIG)
-            instance
-              .fetchSuggestions()
-              .then(() => {
-                instance.tags.value[0].selected = false
-                return instance.applyTags()
-              })
-              .then(() => {
-                expect(mocks.$clientService.graphAuthenticated.tags.assignTags).not.toHaveBeenCalled()
-                resolve()
-              })
-          },
-          { mocks, provide: mocks }
-        )
-      })
+      expect(assignTags).not.toHaveBeenCalled()
     })
 
     it('rejects when the resource has no usable id', async () => {
       setupUseLLMMock()
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper(
-          (instance) => {
-            instance.applyTags().catch((err) => {
-              expect(err).toBeInstanceOf(Error)
-              resolve()
-            })
-          },
-          { resource: { ...TEXT_RESOURCE, id: undefined, fileId: undefined } }
-        )
-      })
+      const instance = createInstance({ ...TEXT_RESOURCE, id: undefined, fileId: undefined })
+
+      await expect(instance.applyTags()).rejects.toBeInstanceOf(Error)
     })
   })
 
@@ -374,79 +264,61 @@ describe('useTagSuggestions', () => {
     it('surfaces a 401 failure from the LLM request', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockRejectedValue(new Error('LLM request failed: 401 Unauthorized'))
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('error')
-            expect(instance.error.value).toBe('LLM request failed: 401 Unauthorized')
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('error')
+      expect(instance.error.value).toBe('LLM request failed: 401 Unauthorized')
     })
 
     it('surfaces a 429 rate-limit failure from the LLM request', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockRejectedValue(new Error('LLM request failed: 429 Too Many Requests'))
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('error')
-            expect(instance.error.value).toBe('LLM request failed: 429 Too Many Requests')
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('error')
+      expect(instance.error.value).toBe('LLM request failed: 429 Too Many Requests')
     })
 
     it('sets a network error message on a network failure', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockRejectedValue(new TypeError('Failed to fetch'))
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.status.value).toBe('error')
-            expect(instance.error.value).toMatch(/network|connection/i)
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.status.value).toBe('error')
+      expect(instance.error.value).toMatch(/network|connection/i)
     })
 
     it('clears isGenerating after a failure', async () => {
       const completeMock = setupUseLLMMock()
       completeMock.mockRejectedValue(new TypeError('Failed to fetch'))
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper((instance) => {
-          instance.fetchSuggestions().then(() => {
-            expect(instance.isGenerating.value).toBe(false)
-            resolve()
-          })
-        })
-      })
+      const instance = createInstance()
+      await instance.fetchSuggestions()
+
+      expect(instance.isGenerating.value).toBe(false)
     })
   })
 
   describe('unconfigured guard', () => {
     it('does not call the LLM when no config is provided', async () => {
       const completeMock = setupUseLLMMock({ status: 'unconfigured' })
+      setupClientServiceMock()
 
-      await new Promise<void>((resolve) => {
-        getWrapper(
-          (instance) => {
-            instance.fetchSuggestions().then(() => {
-              expect(completeMock).not.toHaveBeenCalled()
-              expect(instance.status.value).toBe('unconfigured')
-              resolve()
-            })
-          },
-          { llmConfig: null }
-        )
-      })
+      const instance = createInstance(TEXT_RESOURCE, null)
+      await instance.fetchSuggestions()
+
+      expect(completeMock).not.toHaveBeenCalled()
+      expect(instance.status.value).toBe('unconfigured')
     })
   })
 })

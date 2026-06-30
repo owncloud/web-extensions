@@ -1,14 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ref } from 'vue'
-import { flushPromises, mount, defaultPlugins } from '@ownclouders/web-test-helpers'
+import { flushPromises, mount } from '@vue/test-utils'
 import TagSuggestionModal from '../../../src/components/TagSuggestionModal.vue'
 
 vi.mock('../../../src/composables/useTagSuggestions')
 
-vi.mock('@ownclouders/web-pkg', async () => {
-  const actual = await vi.importActual<typeof import('@ownclouders/web-pkg')>('@ownclouders/web-pkg')
-  return { ...actual, useModals: vi.fn() }
-})
+vi.mock('vue3-gettext', () => ({
+  useGettext: () => ({
+    $gettext: (s: string) => s,
+    $pgettext: (_context: string, s: string) => s
+  })
+}))
+
+vi.mock('@ownclouders/web-pkg', () => ({
+  useModals: vi.fn()
+}))
 
 import { useTagSuggestions } from '../../../src/composables/useTagSuggestions.js'
 import type {
@@ -51,8 +57,7 @@ function createWrapper(
       resource: null,
       llmConfig: null,
       ...props
-    },
-    global: { plugins: [...defaultPlugins()] }
+    }
   })
 }
 
