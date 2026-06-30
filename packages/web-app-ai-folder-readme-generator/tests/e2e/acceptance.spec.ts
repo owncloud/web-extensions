@@ -27,6 +27,11 @@ test('"Generate README" is visible for folders and hidden for files', async () =
   expect(await readme.isGenerateActionVisible('test-document.txt')).toBe(false)
 
   await files.createFolder('Project Docs')
+  // A freshly created folder is inserted into the list optimistically and does not
+  // reliably carry a populated `isFolder` flag until the listing is re-fetched from
+  // the server (see the same workaround in FilesPage.rename()). Reload so the
+  // context-menu check below sees the real, PROPFIND-backed resource.
+  await files.navigateToPersonal()
   expect(await readme.isGenerateActionVisible('Project Docs')).toBe(true)
 })
 
@@ -58,6 +63,7 @@ test('clicking "Generate README" writes README.md into the folder via the mocked
 
   await files.navigateToPersonal()
   await files.createFolder('Mocked README Folder')
+  await files.navigateToPersonal()
 
   await Promise.all([
     adminPage.waitForResponse(
@@ -79,6 +85,7 @@ test('the overwrite dialog is shown and generation is skipped when README.md alr
 
   await files.navigateToPersonal()
   await files.createFolder('Existing README Folder')
+  await files.navigateToPersonal()
   await files.openFolder('Existing README Folder')
   await readme.uploadExistingReadme()
   await expect(readme.readmeEntry()).toBeVisible()
