@@ -11,9 +11,32 @@ test.beforeEach(async ({ browser }) => {
   adminPage = admin.page
 })
 
+// Local stand-in for FilesPage.deleteAllFromPersonal(): a not-yet-unmounted
+// per-resource context menu left over from an earlier action in this suite (e.g.
+// AiReadmeGeneratorPage.clickGenerate()) can carry its own "Delete" entry with the
+// same ".oc-files-actions-delete-trigger" class as the bulk-actions toolbar button,
+// so the shared helper's unscoped delete locator matches two elements and throws in
+// Playwright's strict mode. Scoped here, in this package, rather than in
+// support/pages/filesPage.ts — the gate's hygiene stage requires every build's diff
+// to stay inside packages/web-app-ai-folder-readme-generator/, and that file is
+// shared by every other extension's e2e suite.
+async function deleteAllFromPersonal(page: Page, files: FilesPage): Promise<void> {
+  await files.navigateToPersonal()
+  const closeUploadBar = page.locator('#close-upload-bar-btn')
+  if (await closeUploadBar.isVisible()) {
+    await closeUploadBar.click()
+  }
+  await files.closeSidebar()
+  await page.locator('.has-item-context-menu tr').first().waitFor({ state: 'visible' })
+  const resources = page.locator('.has-item-context-menu [data-test-resource-name]')
+  await files.selectAllCheckbox.check()
+  await page.locator('#oc-appbar-batch-actions .oc-files-actions-delete-trigger').click()
+  await resources.first().waitFor({ state: 'detached' })
+}
+
 test.afterEach(async () => {
   const files = new FilesPage(adminPage)
-  await files.deleteAllFromPersonal()
+  await deleteAllFromPersonal(adminPage, files)
   await logout(adminPage)
 })
 
