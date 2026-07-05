@@ -56,13 +56,20 @@ export class AiReadmeGeneratorPage {
   // this extension's `llm` block — is fetched asynchronously after that bootstrap, so
   // a context-menu check performed right after such a reload can race ahead of the
   // config and see this action as permanently unconfigured for the rest of that page
-  // load. Navigating back to Personal via the in-app breadcrumb avoids a reload
+  // load. Navigating back to Personal via the in-app sidebar link avoids a reload
   // entirely, keeping the already-initialized extension (and its already-resolved
   // config) alive.
+  //
+  // Deliberately not the Breadcrumbs "Personal" button: while the route transitions
+  // out of the folder view, the outgoing (folder) breadcrumb and the incoming
+  // (Personal) breadcrumb can both be present for a moment, so that locator briefly
+  // resolves to two elements and the click races the outgoing one being torn down.
+  // The sidebar's "Personal" link doesn't re-render on route change, so it's never
+  // ambiguous.
   async goToPersonalRoot(): Promise<void> {
     await this.page
-      .getByRole('navigation', { name: 'Breadcrumbs' })
-      .getByRole('button', { name: 'Personal', exact: true })
+      .getByRole('navigation', { name: 'Sidebar navigation menu' })
+      .getByRole('link', { name: 'Personal', exact: true })
       .click()
   }
 

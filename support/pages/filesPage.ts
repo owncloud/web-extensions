@@ -16,7 +16,11 @@ export class FilesPage {
     this.page = page
     this.extractHereBtn = this.page.locator('.context-menu .oc-files-actions-unzip-archive')
     this.selectAllCheckbox = this.page.getByLabel('Select all')
-    this.deleteBtn = this.page.locator('.oc-files-actions-delete-trigger')
+    // Scoped to the bulk-actions toolbar: a not-yet-unmounted per-resource context
+    // menu (e.g. left behind by an extension action that opened one earlier in the
+    // same test) can carry its own "Delete" entry with the same trigger class,
+    // which makes the unscoped selector match two elements and fail in strict mode.
+    this.deleteBtn = this.page.locator('#oc-appbar-batch-actions .oc-files-actions-delete-trigger')
     this.owncloudLogo = this.page.locator('.oc-logo-image')
     this.jsonViewerBtn = this.page.locator('.oc-files-actions-json-viewer-trigger')
     this.jsonViewerSelector = this.page.locator('#json-viewer')

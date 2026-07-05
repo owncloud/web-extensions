@@ -37,7 +37,7 @@ export default defineWebApplication({
             llmConfig !== null && resources?.length === 1 && isFolder(resources[0]),
           handler: async ({ space, resources }: FileActionOptions) => {
             const resource = resources[0]
-            await generate(space, resource)
+            const written = await generate(space, resource)
             if (error.value) {
               showErrorMessage({
                 title: $pgettext(
@@ -46,6 +46,10 @@ export default defineWebApplication({
                 ),
                 errors: [new Error(error.value)]
               })
+              return
+            }
+            if (!written) {
+              // User cancelled the overwrite-confirmation dialog — nothing was written.
               return
             }
             showMessage({
