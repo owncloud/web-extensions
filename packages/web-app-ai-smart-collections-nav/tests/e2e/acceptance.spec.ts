@@ -100,16 +100,25 @@ test.describe('AI Smart Collections Nav Item', () => {
   })
 
   test.afterEach(async () => {
-    const files = new FilesPage(adminPage)
-    await files.navigateToPersonal()
-    const anyResource = files.page.locator('.has-item-context-menu [data-test-resource-name]').first()
-    if (await anyResource.isVisible().catch(() => false)) {
-      await files.deleteAllFromPersonal()
+    // Best-effort cleanup: if a previous step in this test left the page in a broken state
+    // (e.g. a slow multi-request flow tripped the test timeout), still attempt logout so a
+    // dead session doesn't carry into the next test, even if the file cleanup itself can't run.
+    try {
+      const files = new FilesPage(adminPage)
+      await files.navigateToPersonal()
+      const anyResource = files.page
+        .locator('.has-item-context-menu [data-test-resource-name]')
+        .first()
+      if (await anyResource.isVisible().catch(() => false)) {
+        await files.deleteAllFromPersonal()
+      }
+    } finally {
+      await logout(adminPage).catch(() => undefined)
     }
-    await logout(adminPage)
   })
 
   test('"Collections" entry appears in the Application Switcher and opens the collections view', async () => {
+    test.setTimeout(60_000)
     const files = new FilesPage(adminPage)
     const collections = new CollectionsViewPage(adminPage)
 
@@ -131,6 +140,10 @@ test.describe('AI Smart Collections Nav Item', () => {
   test('opening Collections clusters recent files into AI-inferred thematic collections', async ({
     request
   }) => {
+    // Generous timeout: this flow does real network work — space discovery, a REPORT search,
+    // per-file excerpt GETs, then an LLM call — on top of the Application Switcher's own
+    // cold-start wait, which the default 30s test budget doesn't reliably cover.
+    test.setTimeout(90_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'json')
 
@@ -146,6 +159,8 @@ test.describe('AI Smart Collections Nav Item', () => {
   test('clicking a collection card filters the view to that collection\'s files', async ({
     request
   }) => {
+    // Generous timeout: see the previous test — full recent-files + clustering round trip.
+    test.setTimeout(90_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'json')
 
@@ -164,6 +179,9 @@ test.describe('AI Smart Collections Nav Item', () => {
   test('falls back to lenient line parsing when the LLM does not return valid JSON', async ({
     request
   }) => {
+    // Generous timeout: see the first "clusters recent files" test — full recent-files +
+    // clustering round trip.
+    test.setTimeout(90_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'lenient')
 
