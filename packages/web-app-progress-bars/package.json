@@ -13,13 +13,13 @@
     "test:e2e": "pnpm playwright test"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.4.2",
-    "@ownclouders/web-test-helpers": "^12.4.2",
+    "@ownclouders/extension-sdk": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^12.5.0",
     "@vueuse/core": "^14.3.0",
     "vue": "^3.5.39",
     "vue3-gettext": "^2.4.0"
   },
   "dependencies": {
-    "@ownclouders/web-pkg": "^12.4.2"
+    "@ownclouders/web-pkg": "^12.5.0"
   }
 }
