@@ -132,9 +132,11 @@ test.describe('AI Smart Collections Nav Item', () => {
     await collections.menuItem.click()
 
     await expect(collections.view).toBeVisible()
+    // Generous timeout: fetchRecentFiles' WebDAV REPORT search has its own internal 30s
+    // timeout per space, so a cold backend can legitimately take close to that long here.
     await expect(
       adminPage.getByText('No recent files were found to group into collections.')
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({ timeout: 35_000 })
   })
 
   test('opening Collections clusters recent files into AI-inferred thematic collections', async ({
@@ -143,7 +145,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     // Generous timeout: this flow does real network work — space discovery, a REPORT search,
     // per-file excerpt GETs, then an LLM call — on top of the Application Switcher's own
     // cold-start wait, which the default 30s test budget doesn't reliably cover.
-    test.setTimeout(90_000)
+    test.setTimeout(120_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'json')
 
@@ -160,7 +162,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     request
   }) => {
     // Generous timeout: see the previous test — full recent-files + clustering round trip.
-    test.setTimeout(90_000)
+    test.setTimeout(120_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'json')
 
@@ -181,7 +183,7 @@ test.describe('AI Smart Collections Nav Item', () => {
   }) => {
     // Generous timeout: see the first "clusters recent files" test — full recent-files +
     // clustering round trip.
-    test.setTimeout(90_000)
+    test.setTimeout(120_000)
     await createSeedFiles(request)
     await mockClusteringResponse(adminPage, 'lenient')
 

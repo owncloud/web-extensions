@@ -201,12 +201,14 @@ export function useRecentFiles(): UseRecentFilesResult {
       const { response } = await clientService.webdav.getFileContents(
         space,
         { path: entry.path },
-        { responseType: 'text' }
+        { responseType: 'text', signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) }
       )
       const text = response.data
       return typeof text === 'string' ? text : undefined
     } catch {
-      // Excerpting is best-effort — a fetch failure just means no excerpt for this file.
+      // Excerpting is best-effort — a fetch failure (including a timeout) just means no
+      // excerpt for this file, mirroring searchSpace's REPORT call: every network call here
+      // must be boundable, or one slow/hanging file blocks the whole Promise.all below.
       return undefined
     }
   }
