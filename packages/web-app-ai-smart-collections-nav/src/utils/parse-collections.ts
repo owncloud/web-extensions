@@ -51,7 +51,11 @@ export function parseLenientCollectionLines(raw: string): CollectionAssignment[]
     const line = rawLine.trim()
     if (!line) continue
 
-    const match = line.match(/^(.+?)\s*[:,-]\s*(.+)$/)
+    // Colon/comma are matched first since they're unambiguous. A bare hyphen is only treated
+    // as a delimiter when surrounded by whitespace ("fileId - collection") — real fileIds
+    // routinely contain embedded hyphens (e.g. UUID-based oCIS ids), and matching those would
+    // split the fileId itself apart instead of finding the intended separator.
+    const match = line.match(/^(.+?)\s*[:,]\s*(.+)$/) ?? line.match(/^(.+?)\s+-\s+(.+)$/)
     if (!match) continue
 
     const fileId = match[1].trim().replace(/^[-*\d.)\s]+/, '')

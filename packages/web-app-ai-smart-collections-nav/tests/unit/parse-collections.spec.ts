@@ -96,6 +96,21 @@ describe('parseLenientCollectionLines', () => {
     expect(parseLenientCollectionLines('f1,Invoices')).toEqual([{ fileId: 'f1', collection: 'Invoices' }])
   })
 
+  it('does not split on hyphens embedded in the fileId itself', () => {
+    const raw = 'seed-invoice-1: Invoices\nseed-contract-1: Contracts\nseed-notes-1: Meeting notes'
+    expect(parseLenientCollectionLines(raw)).toEqual([
+      { fileId: 'seed-invoice-1', collection: 'Invoices' },
+      { fileId: 'seed-contract-1', collection: 'Contracts' },
+      { fileId: 'seed-notes-1', collection: 'Meeting notes' }
+    ])
+  })
+
+  it('still splits on a "fileId - collection" separator when the fileId contains hyphens', () => {
+    expect(parseLenientCollectionLines('seed-invoice-1 - Invoices')).toEqual([
+      { fileId: 'seed-invoice-1', collection: 'Invoices' }
+    ])
+  })
+
   it('strips leading bullet/numbering punctuation from the fileId', () => {
     expect(parseLenientCollectionLines('- f1: Invoices')).toEqual([{ fileId: 'f1', collection: 'Invoices' }])
     expect(parseLenientCollectionLines('* f1: Invoices')).toEqual([{ fileId: 'f1', collection: 'Invoices' }])
