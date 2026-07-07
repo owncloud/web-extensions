@@ -97,34 +97,6 @@ test.describe('AI Smart Collections Nav Item', () => {
   test.beforeEach(async ({ browser }) => {
     const admin = await loginAsUser(browser, 'admin', 'admin')
     adminPage = admin.page
-
-    // Ensures this extension's applicationConfig.llm resolves deterministically for e2e runs,
-    // mirroring ai-folder-brief-sidebar's folderBrief.spec.ts. Registered after login (so the
-    // login page load itself is untouched) — every subsequent full navigation in these tests
-    // (navigateToPersonal / openViaAppSwitcher) triggers a fresh config.json fetch this
-    // handler intercepts, injecting a genuinely same-origin endpoint (required by useLLM's
-    // same-origin check) instead of depending on the apps.yaml → applicationConfig pipeline.
-    await adminPage.route('**/config.json', async (route) => {
-      try {
-        const response = await route.fetch()
-        const body = (await response.json()) as Record<string, unknown>
-        const options = (body.options as Record<string, unknown>) ?? {}
-        const origin = new URL(route.request().url()).origin
-        await route.fulfill({
-          status: response.status(),
-          headers: response.headers(),
-          body: JSON.stringify({
-            ...body,
-            options: {
-              ...options,
-              llm: { endpoint: `${origin}/ai-llm-proxy/v1`, model: 'test-model' }
-            }
-          })
-        })
-      } catch {
-        await route.continue()
-      }
-    })
   })
 
   test.afterEach(async () => {
@@ -143,7 +115,10 @@ test.describe('AI Smart Collections Nav Item', () => {
 
     await files.navigateToPersonal()
     await files.appSwitcherButton.click()
-    await expect(collections.menuItem).toBeVisible()
+    // Generous timeout: this is the first Application Switcher open against a freshly
+    // started stack, and every mounted community app's bundle/manifest needs to be
+    // fetched before the full menu is populated.
+    await expect(collections.menuItem).toBeVisible({ timeout: 15_000 })
 
     await collections.menuItem.click()
 

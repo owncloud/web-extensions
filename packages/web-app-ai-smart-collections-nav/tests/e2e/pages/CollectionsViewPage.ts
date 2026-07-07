@@ -27,6 +27,9 @@ export class CollectionsViewPage {
     const files = new FilesPage(this.page)
     await files.navigateToPersonal()
     await files.appSwitcherButton.click()
+    // Generous timeout: on a freshly started stack every mounted community app's
+    // bundle/manifest needs to be fetched before the full menu is populated.
+    await this.menuItem.waitFor({ state: 'visible', timeout: 15_000 })
     await this.menuItem.click()
     await this.view.waitFor({ state: 'visible' })
   }
