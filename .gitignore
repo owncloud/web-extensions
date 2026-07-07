@@ -28,3 +28,7 @@ playwright-report/
 # Claude Code
 .claude/
 scripts/
+
+# Stray debug artifact accidentally created while working on ai-smart-collections-nav;
+# could not be removed with rm/mv/git-clean, which are unavailable in the repair sandbox.
+/scratch-debug.cjs
