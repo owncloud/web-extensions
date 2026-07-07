@@ -1,5 +1,5 @@
 import { defineWebApplication } from '@ownclouders/web-pkg'
-import type { AppMenuItemExtension, SidebarNavExtension } from '@ownclouders/web-pkg'
+import type { AppMenuItemExtension } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -39,26 +39,16 @@ export default defineWebApplication({
       }
     ]
 
-    // Registers a Files-app-left-nav "Collections" entry per the spec's extension_point
-    // (app.files.navItems). Confirmed against a live gate run that the installed web-pkg
-    // (12.4.2) never renders it — the extension point id doesn't appear anywhere in its
-    // bundle, and the Files app's real sidebar nav lists only its four built-in items with
-    // no "Collections" entry. Kept for forward-compatibility (harmless no-op today), but an
-    // appMenuItem is also registered below as the actual, working entry point — the same
-    // proven mechanism draw-io/group-management/advanced-search use.
-    const extensions = computed<(SidebarNavExtension | AppMenuItemExtension)[]>(() => [
-      {
-        id: `${APP_ID}.navItem`,
-        type: 'sidebarNav',
-        extensionPointIds: ['app.files.navItems'],
-        navItem: {
-          name: () => appInfo.name,
-          icon: appInfo.icon,
-          route: { name: `${APP_ID}-main` },
-          isVisible: () => llmConfig !== null,
-          priority: 30
-        }
-      },
+    // The spec's originally requested location — a Files-app-left-nav "Collections" entry
+    // via the app.files.navItems/sidebarNav extension point — was tried first, then dropped:
+    // a live gate run confirmed the installed web-pkg (12.4.2) never renders it (the
+    // extension point id doesn't appear anywhere in its bundle, and the Files app's real
+    // sidebar nav lists only its four built-in items). Registering it *alongside* an
+    // appMenuItem also caused the appMenuItem itself to stop appearing in the Application
+    // Switcher in a live gate run — every other extension in this repo that registers an
+    // appMenuItem returns a single-type extensions array, so this follows that exact,
+    // proven shape (draw-io/group-management) instead of mixing extension types.
+    const extensions = computed<AppMenuItemExtension[]>(() => [
       {
         id: `app.${APP_ID}.menuItem`,
         type: 'appMenuItem',
