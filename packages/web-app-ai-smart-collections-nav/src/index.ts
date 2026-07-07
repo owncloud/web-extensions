@@ -1,5 +1,5 @@
 import { defineWebApplication } from '@ownclouders/web-pkg'
-import type { SidebarNavExtension } from '@ownclouders/web-pkg'
+import type { AppMenuItemExtension, SidebarNavExtension } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
 import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
@@ -39,10 +39,14 @@ export default defineWebApplication({
       }
     ]
 
-    // Contributes a "Collections" entry to the Files app's own left nav (a materially
-    // different location than the global app switcher's appMenuItem), so users can browse
-    // AI-inferred thematic groups without leaving the Files app's navigation shell.
-    const extensions = computed<SidebarNavExtension[]>(() => [
+    // Registers a Files-app-left-nav "Collections" entry per the spec's extension_point
+    // (app.files.navItems). Confirmed against a live gate run that the installed web-pkg
+    // (12.4.2) never renders it — the extension point id doesn't appear anywhere in its
+    // bundle, and the Files app's real sidebar nav lists only its four built-in items with
+    // no "Collections" entry. Kept for forward-compatibility (harmless no-op today), but an
+    // appMenuItem is also registered below as the actual, working entry point — the same
+    // proven mechanism draw-io/group-management/advanced-search use.
+    const extensions = computed<(SidebarNavExtension | AppMenuItemExtension)[]>(() => [
       {
         id: `${APP_ID}.navItem`,
         type: 'sidebarNav',
@@ -54,6 +58,15 @@ export default defineWebApplication({
           isVisible: () => llmConfig !== null,
           priority: 30
         }
+      },
+      {
+        id: `app.${APP_ID}.menuItem`,
+        type: 'appMenuItem',
+        label: () => appInfo.name,
+        color: appInfo.color,
+        icon: appInfo.icon,
+        priority: 30,
+        path: `/${APP_ID}`
       }
     ])
 

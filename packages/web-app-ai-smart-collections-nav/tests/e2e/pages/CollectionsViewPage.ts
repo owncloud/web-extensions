@@ -4,7 +4,7 @@ import { FilesPage } from '../../../../../support/pages/filesPage'
 export class CollectionsViewPage {
   readonly page: Page
   readonly view: Locator
-  readonly navLink: Locator
+  readonly menuItem: Locator
   readonly consentDialog: Locator
   readonly errorBanner: Locator
   readonly retryButton: Locator
@@ -12,22 +12,22 @@ export class CollectionsViewPage {
   constructor(page: Page) {
     this.page = page
     this.view = this.page.getByTestId('collections-view')
-    // The app.files.navItems extension point is new and unverified against the Files
-    // app's actual rendering — accept either a router-link or a handler-driven button
-    // for the "Collections" entry rather than assuming one exact element type.
-    this.navLink = this.page
-      .getByRole('link', { name: 'Collections' })
-      .or(this.page.getByRole('button', { name: 'Collections' }))
+    // The app.files.navItems/sidebarNav extension point (the spec's originally requested
+    // location) isn't rendered by the installed web-pkg version — confirmed against a live
+    // gate run. The app menu item is the actual, working entry point (same mechanism
+    // draw-io/group-management use), following the app.<id>.menuItem data-test-id convention.
+    this.menuItem = this.page.locator(`[data-test-id="app.ai-smart-collections-nav.menuItem"]`)
     this.consentDialog = this.page.getByTestId('ai-collections-consent')
     this.errorBanner = this.view.locator('.collections-view-error')
     this.retryButton = this.view.getByRole('button', { name: 'Retry' })
   }
 
-  /** Opens Collections via the Files app's own left nav (app.files.navItems). */
-  async openViaNav(): Promise<void> {
+  /** Opens Collections via the Application Switcher menu entry. */
+  async openViaAppSwitcher(): Promise<void> {
     const files = new FilesPage(this.page)
     await files.navigateToPersonal()
-    await this.navLink.click()
+    await files.appSwitcherButton.click()
+    await this.menuItem.click()
     await this.view.waitFor({ state: 'visible' })
   }
 

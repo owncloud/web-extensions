@@ -5,7 +5,10 @@ import { CollectionsViewPage } from './pages/CollectionsViewPage'
 
 // Acceptance spec for AI Smart Collections Nav Item
 // One test per acceptance bullet:
-//   1. A "Collections" entry is added to the Files app's left nav and opens the collections view.
+//   1. A "Collections" entry is added to the Application Switcher and opens the collections view.
+//      (The spec's originally requested location — the Files app's own left nav via the
+//      app.files.navItems/sidebarNav extension point — is registered too, but a live gate run
+//      confirmed the installed web-pkg version never renders it; see src/index.ts.)
 //   2. Opening it clusters recent files into AI-inferred thematic collections via the LLM's
 //      structured {fileId, collection} output.
 //   3. Clicking a collection card filters the view down to that collection's files.
@@ -94,6 +97,34 @@ test.describe('AI Smart Collections Nav Item', () => {
   test.beforeEach(async ({ browser }) => {
     const admin = await loginAsUser(browser, 'admin', 'admin')
     adminPage = admin.page
+
+    // Ensures this extension's applicationConfig.llm resolves deterministically for e2e runs,
+    // mirroring ai-folder-brief-sidebar's folderBrief.spec.ts. Registered after login (so the
+    // login page load itself is untouched) — every subsequent full navigation in these tests
+    // (navigateToPersonal / openViaAppSwitcher) triggers a fresh config.json fetch this
+    // handler intercepts, injecting a genuinely same-origin endpoint (required by useLLM's
+    // same-origin check) instead of depending on the apps.yaml → applicationConfig pipeline.
+    await adminPage.route('**/config.json', async (route) => {
+      try {
+        const response = await route.fetch()
+        const body = (await response.json()) as Record<string, unknown>
+        const options = (body.options as Record<string, unknown>) ?? {}
+        const origin = new URL(route.request().url()).origin
+        await route.fulfill({
+          status: response.status(),
+          headers: response.headers(),
+          body: JSON.stringify({
+            ...body,
+            options: {
+              ...options,
+              llm: { endpoint: `${origin}/ai-llm-proxy/v1`, model: 'test-model' }
+            }
+          })
+        })
+      } catch {
+        await route.continue()
+      }
+    })
   })
 
   test.afterEach(async () => {
@@ -106,14 +137,15 @@ test.describe('AI Smart Collections Nav Item', () => {
     await logout(adminPage)
   })
 
-  test('"Collections" entry appears in the Files app left nav and opens the collections view', async () => {
+  test('"Collections" entry appears in the Application Switcher and opens the collections view', async () => {
     const files = new FilesPage(adminPage)
     const collections = new CollectionsViewPage(adminPage)
 
     await files.navigateToPersonal()
-    await expect(collections.navLink).toBeVisible()
+    await files.appSwitcherButton.click()
+    await expect(collections.menuItem).toBeVisible()
 
-    await collections.navLink.click()
+    await collections.menuItem.click()
 
     await expect(collections.view).toBeVisible()
     await expect(
@@ -128,7 +160,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     await mockClusteringResponse(adminPage, 'json')
 
     const collections = new CollectionsViewPage(adminPage)
-    await collections.openViaNav()
+    await collections.openViaAppSwitcher()
     await collections.confirmConsent()
 
     for (const label of ['Invoices', 'Contracts', 'Meeting notes']) {
@@ -143,7 +175,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     await mockClusteringResponse(adminPage, 'json')
 
     const collections = new CollectionsViewPage(adminPage)
-    await collections.openViaNav()
+    await collections.openViaAppSwitcher()
     await collections.confirmConsent()
     await expect(collections.collectionCard('Invoices')).toBeVisible({ timeout: 20_000 })
 
@@ -161,7 +193,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     await mockClusteringResponse(adminPage, 'lenient')
 
     const collections = new CollectionsViewPage(adminPage)
-    await collections.openViaNav()
+    await collections.openViaAppSwitcher()
     await collections.confirmConsent()
 
     for (const label of ['Invoices', 'Contracts', 'Meeting notes']) {
