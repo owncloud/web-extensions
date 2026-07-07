@@ -8,6 +8,12 @@ web-app-ai-image-alt-text-sidebar:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2-vision'
 
+web-app-ai-quick-draft-creator:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
+
 web-app-chat-with-file:
   config:
     llm:
