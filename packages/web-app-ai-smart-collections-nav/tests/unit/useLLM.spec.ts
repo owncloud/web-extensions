@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest'
 import { useLLM } from '../../src/composables/useLLM'
 
 vi.mock('@ownclouders/web-pkg', () => ({
-  useAuthStore: () => ({ accessToken: null }),
+  useClientService: () => ({
+    httpAuthenticated: { post: vi.fn() }
+  }),
 }))
 
 describe('useLLM', () => {
