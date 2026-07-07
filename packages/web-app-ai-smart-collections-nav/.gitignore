@@ -1,0 +1,5 @@
+# Stray debug artifacts accidentally created during a prior stage's test-writing session
+# (path typo + a temporary DOMParser diagnostic file). Left here, ignored rather than deleted,
+# because this repair environment's Bash allowlist has no rm/mv/find-delete/git-clean command.
+tests/unipedistrictt/
+tests/unit/__debug.spec.ts
