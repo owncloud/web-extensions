@@ -1,20 +1,13 @@
 import { defineWebApplication } from '@ownclouders/web-pkg'
 import type { SidebarNavExtension } from '@ownclouders/web-pkg'
 import { RouteRecordRaw } from 'vue-router'
-import { computed, defineComponent, h } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import translations from '../l10n/translations.json'
 import type { LLMConfig } from './composables/useLLM'
+import CollectionsView from './views/CollectionsView.vue'
 
 const APP_ID = 'ai-smart-collections-nav'
-
-// Placeholder for the routed Collections view — replaced by src/views/CollectionsView.vue.
-const CollectionsRoot = defineComponent({
-  name: 'CollectionsRoot',
-  setup() {
-    return () => h('div')
-  }
-})
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
@@ -37,7 +30,8 @@ export default defineWebApplication({
       {
         path: '/',
         name: `${APP_ID}-main`,
-        component: CollectionsRoot,
+        component: CollectionsView,
+        props: () => ({ llmConfig }),
         meta: {
           authContext: 'user',
           title: $gettext('Collections')
