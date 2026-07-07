@@ -1,4 +1,4 @@
-import { test, type Page, type APIRequestContext, expect } from '@playwright/test'
+import { test, type Page, expect } from '@playwright/test'
 import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
 import { FilesPage } from '../../../../support/pages/filesPage'
 import { CollectionsViewPage } from './pages/CollectionsViewPage'
@@ -14,25 +14,23 @@ import { CollectionsViewPage } from './pages/CollectionsViewPage'
 //   3. Clicking a collection card filters the view down to that collection's files.
 //   4. Degrade ladder: when the LLM doesn't return valid structured JSON, the plain-text
 //      "one collection label per line" fallback is still parsed and rendered.
+//
+// The recent-files WebDAV REPORT search (useRecentFiles.ts) and the LLM proxy are both mocked
+// at the network boundary — repeated live-gate runs showed the real REPORT search against a
+// freshly started stack is slow/unreliable enough to invalidate the session mid-test (the same
+// class of problem the LLM mock already exists to avoid). Mocking it doesn't change what's under
+// test: parsing, clustering, consent-gating, and rendering are all real application code — only
+// the two external network dependencies (search backend, LLM) are stubbed.
 
 interface SeedFile {
+  fileId: string
   name: string
-  content: string
 }
 
 const SEED_FILES: SeedFile[] = [
-  {
-    name: 'invoice-march.txt',
-    content: 'Invoice #1042 for March consulting services. Amount due: $450.00.'
-  },
-  {
-    name: 'contract-acme.txt',
-    content: 'Service agreement between Acme Corp and the customer, effective Jan 1.'
-  },
-  {
-    name: 'standup-notes.txt',
-    content: 'Sprint planning notes: reviewed backlog, assigned action items to the team.'
-  }
+  { fileId: 'seed-invoice-1', name: 'invoice-march.pdf' },
+  { fileId: 'seed-contract-1', name: 'contract-acme.pdf' },
+  { fileId: 'seed-notes-1', name: 'standup-notes.pdf' }
 ]
 
 function collectionForName(name: string): string {
@@ -41,38 +39,67 @@ function collectionForName(name: string): string {
   return 'Meeting notes'
 }
 
-async function createSeedFiles(request: APIRequestContext): Promise<void> {
-  const auth = Buffer.from('admin:admin').toString('base64')
-  for (const file of SEED_FILES) {
-    await request.fetch(`/remote.php/dav/files/admin/${file.name}`, {
-      method: 'PUT',
-      data: file.content,
-      headers: { 'Content-Type': 'text/plain', Authorization: `Basic ${auth}` }
-    })
-  }
-}
+/**
+ * Mocks the recent-files WebDAV REPORT search (useRecentFiles.ts's searchSpace), returning
+ * `files` for the first space queried and an empty result for any other space, so a user with
+ * multiple spaces doesn't see the seed files duplicated once per space.
+ */
+async function mockRecentFilesResponse(page: Page, files: SeedFile[]): Promise<void> {
+  let served = false
+  await page.route('**/dav/spaces/*', async (route) => {
+    if (route.request().method() !== 'REPORT') {
+      await route.continue()
+      return
+    }
+    const spaceMatch = /\/dav\/spaces\/([^/?]+)/.exec(route.request().url())
+    const spaceId = spaceMatch ? decodeURIComponent(spaceMatch[1]) : 'personal'
+    const filesToServe = served ? [] : files
+    served = true
 
-/** Reads the `fileId: <id>, name: "<name>"` pairs useCollections embeds in its prompt. */
-function extractFilesFromPrompt(prompt: string): { fileId: string; name: string }[] {
-  const files: { fileId: string; name: string }[] = []
-  const pattern = /fileId:\s*([^\s,]+),\s*name:\s*"([^"]+)"/g
-  let match: RegExpExecArray | null
-  while ((match = pattern.exec(prompt))) {
-    files.push({ fileId: match[1], name: match[2] })
-  }
-  return files
+    const responses = filesToServe
+      .map(
+        (f) => `
+    <d:response>
+      <d:href>/dav/spaces/${spaceId}/${f.name}</d:href>
+      <d:propstat>
+        <d:prop>
+          <d:displayname>${f.name}</d:displayname>
+          <d:getcontenttype>application/pdf</d:getcontenttype>
+          <d:getcontentlength>12345</d:getcontentlength>
+          <d:getlastmodified>Mon, 01 Jan 2024 00:00:00 GMT</d:getlastmodified>
+          <oc:fileid>${f.fileId}</oc:fileid>
+        </d:prop>
+        <d:status>HTTP/1.1 200 OK</d:status>
+      </d:propstat>
+    </d:response>`
+      )
+      .join('')
+
+    await route.fulfill({
+      status: 207,
+      headers: { 'Content-Type': 'application/xml' },
+      body: `<?xml version="1.0" encoding="UTF-8"?>
+<d:multistatus xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">${responses}
+</d:multistatus>`
+    })
+  })
 }
 
 /**
  * Mocks the LLM proxy's chat/completions endpoint, deriving the clustering response from the
- * fileIds actually sent in the request (real oCIS fileIds can't be predicted ahead of time)
- * instead of hardcoding them.
+ * fileIds actually sent in the request instead of hardcoding them, so it stays consistent with
+ * whatever mockRecentFilesResponse served.
  */
 async function mockClusteringResponse(page: Page, format: 'json' | 'lenient'): Promise<void> {
   await page.route('**/chat/completions', async (route) => {
     const body = route.request().postDataJSON() as { messages: { content: string }[] }
     const prompt = body.messages[0]?.content ?? ''
-    const files = extractFilesFromPrompt(prompt)
+    const pattern = /fileId:\s*([^\s,]+),\s*name:\s*"([^"]+)"/g
+    const files: { fileId: string; name: string }[] = []
+    let match: RegExpExecArray | null
+    while ((match = pattern.exec(prompt))) {
+      files.push({ fileId: match[1], name: match[2] })
+    }
     const content =
       format === 'json'
         ? JSON.stringify({
@@ -100,25 +127,12 @@ test.describe('AI Smart Collections Nav Item', () => {
   })
 
   test.afterEach(async () => {
-    // Best-effort cleanup: if a previous step in this test left the page in a broken state
-    // (e.g. a slow multi-request flow tripped the test timeout), still attempt logout so a
-    // dead session doesn't carry into the next test, even if the file cleanup itself can't run.
-    try {
-      const files = new FilesPage(adminPage)
-      await files.navigateToPersonal()
-      const anyResource = files.page
-        .locator('.has-item-context-menu [data-test-resource-name]')
-        .first()
-      if (await anyResource.isVisible().catch(() => false)) {
-        await files.deleteAllFromPersonal()
-      }
-    } finally {
-      await logout(adminPage).catch(() => undefined)
-    }
+    await logout(adminPage).catch(() => undefined)
   })
 
   test('"Collections" entry appears in the Application Switcher and opens the collections view', async () => {
-    test.setTimeout(60_000)
+    await mockRecentFilesResponse(adminPage, [])
+
     const files = new FilesPage(adminPage)
     const collections = new CollectionsViewPage(adminPage)
 
@@ -132,21 +146,13 @@ test.describe('AI Smart Collections Nav Item', () => {
     await collections.menuItem.click()
 
     await expect(collections.view).toBeVisible()
-    // Generous timeout: fetchRecentFiles' WebDAV REPORT search has its own internal 30s
-    // timeout per space, so a cold backend can legitimately take close to that long here.
     await expect(
       adminPage.getByText('No recent files were found to group into collections.')
-    ).toBeVisible({ timeout: 35_000 })
+    ).toBeVisible({ timeout: 15_000 })
   })
 
-  test('opening Collections clusters recent files into AI-inferred thematic collections', async ({
-    request
-  }) => {
-    // Generous timeout: this flow does real network work — space discovery, a REPORT search,
-    // per-file excerpt GETs, then an LLM call — on top of the Application Switcher's own
-    // cold-start wait, which the default 30s test budget doesn't reliably cover.
-    test.setTimeout(120_000)
-    await createSeedFiles(request)
+  test('opening Collections clusters recent files into AI-inferred thematic collections', async () => {
+    await mockRecentFilesResponse(adminPage, SEED_FILES)
     await mockClusteringResponse(adminPage, 'json')
 
     const collections = new CollectionsViewPage(adminPage)
@@ -154,37 +160,28 @@ test.describe('AI Smart Collections Nav Item', () => {
     await collections.confirmConsent()
 
     for (const label of ['Invoices', 'Contracts', 'Meeting notes']) {
-      await expect(collections.collectionCard(label)).toBeVisible({ timeout: 20_000 })
+      await expect(collections.collectionCard(label)).toBeVisible({ timeout: 15_000 })
     }
   })
 
-  test('clicking a collection card filters the view to that collection\'s files', async ({
-    request
-  }) => {
-    // Generous timeout: see the previous test — full recent-files + clustering round trip.
-    test.setTimeout(120_000)
-    await createSeedFiles(request)
+  test('clicking a collection card filters the view to that collection\'s files', async () => {
+    await mockRecentFilesResponse(adminPage, SEED_FILES)
     await mockClusteringResponse(adminPage, 'json')
 
     const collections = new CollectionsViewPage(adminPage)
     await collections.openViaAppSwitcher()
     await collections.confirmConsent()
-    await expect(collections.collectionCard('Invoices')).toBeVisible({ timeout: 20_000 })
+    await expect(collections.collectionCard('Invoices')).toBeVisible({ timeout: 15_000 })
 
     await collections.openCollection('Invoices')
 
     await expect(collections.fileListHeading('Invoices')).toBeVisible()
-    await expect(collections.fileRow('invoice-march.txt')).toBeVisible()
-    await expect(collections.fileRow('contract-acme.txt')).not.toBeVisible()
+    await expect(collections.fileRow('invoice-march.pdf')).toBeVisible()
+    await expect(collections.fileRow('contract-acme.pdf')).not.toBeVisible()
   })
 
-  test('falls back to lenient line parsing when the LLM does not return valid JSON', async ({
-    request
-  }) => {
-    // Generous timeout: see the first "clusters recent files" test — full recent-files +
-    // clustering round trip.
-    test.setTimeout(120_000)
-    await createSeedFiles(request)
+  test('falls back to lenient line parsing when the LLM does not return valid JSON', async () => {
+    await mockRecentFilesResponse(adminPage, SEED_FILES)
     await mockClusteringResponse(adminPage, 'lenient')
 
     const collections = new CollectionsViewPage(adminPage)
@@ -192,7 +189,7 @@ test.describe('AI Smart Collections Nav Item', () => {
     await collections.confirmConsent()
 
     for (const label of ['Invoices', 'Contracts', 'Meeting notes']) {
-      await expect(collections.collectionCard(label)).toBeVisible({ timeout: 20_000 })
+      await expect(collections.collectionCard(label)).toBeVisible({ timeout: 15_000 })
     }
   })
 })
