@@ -15,14 +15,14 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.4.2",
-    "@ownclouders/web-pkg": "^12.4.2",
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.4.2",
+    "@ownclouders/extension-sdk": "^12.5.0",
     "@ownclouders/tsconfig": "0.0.6",
-    "@ownclouders/web-test-helpers": "^12.4.2",
+    "@ownclouders/web-test-helpers": "^12.5.0",
     "@types/node": "22.19.19",
     "@vue/test-utils": "^2.4.6",
     "eslint": "9.39.4",
@@ -32,6 +32,6 @@
     "vitest": "4.1.7",
     "vue": "^3.5.39",
     "vue-router": "^5.0.7",
-    "vue-tsc": "3.3.2"
+    "vue-tsc": "3.3.7"
   }
 }
