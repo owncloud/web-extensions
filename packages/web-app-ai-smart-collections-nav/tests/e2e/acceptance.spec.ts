@@ -192,4 +192,41 @@ test.describe('AI Smart Collections Nav Item', () => {
       await expect(collections.collectionCard(label)).toBeVisible({ timeout: 15_000 })
     }
   })
+
+  test('does not call the LLM before consent, not at all on denial, and only after confirming', async () => {
+    await mockRecentFilesResponse(adminPage, SEED_FILES)
+    let completionsCalls = 0
+    await adminPage.route('**/chat/completions', async (route) => {
+      completionsCalls++
+      const body = route.request().postDataJSON() as { messages: { content: string }[] }
+      const prompt = body.messages[0]?.content ?? ''
+      const pattern = /fileId:\s*([^\s,]+),\s*name:\s*"([^"]+)"/g
+      const assignments: { fileId: string; collection: string }[] = []
+      let match: RegExpExecArray | null
+      while ((match = pattern.exec(prompt))) {
+        assignments.push({ fileId: match[1], collection: collectionForName(match[2]) })
+      }
+      await route.fulfill({
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ choices: [{ message: { content: JSON.stringify({ assignments }) } }] })
+      })
+    })
+
+    const collections = new CollectionsViewPage(adminPage)
+    await collections.openViaAppSwitcher()
+    await expect(collections.consentDialog).toBeVisible()
+    expect(completionsCalls).toBe(0)
+
+    await collections.denyConsent()
+    await expect(
+      adminPage.getByText('Grouping was cancelled. No file data was sent to the AI service.')
+    ).toBeVisible()
+    expect(completionsCalls).toBe(0)
+
+    await collections.retryGroupingAfterDenial()
+    await collections.confirmConsent()
+    await expect(collections.collectionCard('Invoices')).toBeVisible({ timeout: 15_000 })
+    expect(completionsCalls).toBeGreaterThan(0)
+  })
 })

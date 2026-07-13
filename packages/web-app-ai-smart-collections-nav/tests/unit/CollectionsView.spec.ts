@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { mount, flushPromises } from '@vue/test-utils'
 import CollectionsView from '../../src/views/CollectionsView.vue'
 import CollectionFileList from '../../src/components/CollectionFileList.vue'
+import ConsentDialog from '../../src/components/ConsentDialog.vue'
 
 vi.mock('../../src/composables/useRecentFiles')
 vi.mock('../../src/composables/useCollections')
@@ -23,8 +24,10 @@ vi.mock('vue3-gettext', () => ({
 
 import { useRecentFiles } from '../../src/composables/useRecentFiles'
 import { useCollections } from '../../src/composables/useCollections'
+import { _resetSessionConsentForTesting } from '../../src/composables/useConsent'
 import type { RecentFile } from '../../src/composables/useRecentFiles'
 import type { Collection } from '../../src/composables/useCollections'
+import type { LLMStatus } from '../../src/composables/useLLM'
 
 // Minimal OcButton stub that forwards click events, mirroring InsightsPanel.spec.ts's pattern.
 const OcButton = {
@@ -63,17 +66,18 @@ function setupRecentFiles({
 
 const clusterFilesMock = vi.fn()
 function setupCollections({
+  // Defaults to 'unconfigured', which makes startClustering() skip the consent dialog
+  // entirely and call clusterFiles() directly — most tests don't care about consent gating.
+  // Tests that do (see the 'consent gating' describe block) pass status: 'ready' explicitly
+  // and reset useConsent's real, module-scoped flag via _resetSessionConsentForTesting.
+  status = 'unconfigured' as LLMStatus,
   isClustering = false,
   collections = [] as Collection[],
   clusterError = null as string | null
 } = {}) {
   clusterFilesMock.mockReset().mockResolvedValue(undefined)
   vi.mocked(useCollections).mockReturnValue({
-    // 'unconfigured' makes startClustering() skip the consent dialog entirely and call
-    // clusterFiles() directly, so these tests don't depend on CollectionsView.vue's
-    // module-scoped, session-lifetime `sessionConsentGiven` flag (which persists across
-    // tests within this file and isn't exposed for resetting).
-    status: ref('unconfigured' as const),
+    status: ref(status),
     isClustering: ref(isClustering),
     collections: ref(collections),
     clusterError: ref(clusterError),
@@ -93,6 +97,7 @@ function createWrapper() {
 beforeEach(() => {
   setupRecentFiles()
   setupCollections()
+  _resetSessionConsentForTesting()
 })
 
 describe('CollectionsView', () => {
@@ -218,6 +223,56 @@ describe('CollectionsView', () => {
 
       expect(wrapper.find('.collections-grid').exists()).toBe(true)
       expect(wrapper.findAll('.collection-card')).toHaveLength(2)
+    })
+
+    it('renders the grid alongside an inline error notice when partial results and a cluster error are both present', async () => {
+      setupRecentFiles({ files })
+      setupCollections({ collections, clusterError: 'Some files could not be grouped: boom' })
+      const wrapper = createWrapper()
+      await flushPromises()
+
+      expect(wrapper.find('.collections-grid').exists()).toBe(true)
+      expect(wrapper.findAll('.collection-card')).toHaveLength(2)
+      expect(wrapper.find('.collections-view-inline-error').text()).toContain(
+        'Some files could not be grouped: boom'
+      )
+    })
+  })
+
+  describe('consent gating', () => {
+    it('shows the consent dialog and does not call clusterFiles before consent is given', async () => {
+      setupRecentFiles({ files: [makeFile()] })
+      setupCollections({ status: 'ready' })
+      const wrapper = createWrapper()
+      await flushPromises()
+
+      expect(wrapper.findComponent(ConsentDialog).exists()).toBe(true)
+      expect(clusterFilesMock).not.toHaveBeenCalled()
+    })
+
+    it('does not call clusterFiles when consent is denied, and shows the cancelled message', async () => {
+      setupRecentFiles({ files: [makeFile()] })
+      setupCollections({ status: 'ready' })
+      const wrapper = createWrapper()
+      await flushPromises()
+
+      await wrapper.findComponent(ConsentDialog).vm.$emit('deny')
+      await flushPromises()
+
+      expect(clusterFilesMock).not.toHaveBeenCalled()
+      expect(wrapper.text()).toContain('Grouping was cancelled. No file data was sent to the AI service.')
+    })
+
+    it('calls clusterFiles after consent is confirmed', async () => {
+      setupRecentFiles({ files: [makeFile()] })
+      setupCollections({ status: 'ready' })
+      const wrapper = createWrapper()
+      await flushPromises()
+
+      await wrapper.findComponent(ConsentDialog).vm.$emit('confirm')
+      await flushPromises()
+
+      expect(clusterFilesMock).toHaveBeenCalledTimes(1)
     })
   })
 })

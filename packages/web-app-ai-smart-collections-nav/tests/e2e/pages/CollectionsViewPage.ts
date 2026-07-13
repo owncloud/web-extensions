@@ -39,6 +39,16 @@ export class CollectionsViewPage {
     await this.consentDialog.getByRole('button', { name: 'Group my files' }).click()
   }
 
+  async denyConsent(): Promise<void> {
+    await this.consentDialog.waitFor({ state: 'visible' })
+    await this.consentDialog.getByRole('button', { name: 'Cancel' }).click()
+  }
+
+  /** Clicks the "Group my files" retry button shown after a denial — re-opens the consent dialog. */
+  async retryGroupingAfterDenial(): Promise<void> {
+    await this.view.getByRole('button', { name: 'Group my files' }).click()
+  }
+
   collectionCard(label: string): Locator {
     return this.view.getByRole('button', { name: `View collection "${label}"` })
   }

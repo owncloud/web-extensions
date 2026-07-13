@@ -21,7 +21,7 @@
       <ConsentDialog @confirm="onConsentConfirm" @deny="onConsentDeny" />
     </template>
 
-    <template v-else-if="errorMessage">
+    <template v-else-if="errorMessage && collections.length === 0">
       <div class="collections-view-placeholder" role="alert">
         <p class="collections-view-error">{{ errorMessage }}</p>
         <oc-button size="small" variant="primary" @click="loadAndCluster">
@@ -50,6 +50,9 @@
     </template>
 
     <template v-else-if="collections.length">
+      <p v-if="errorMessage" class="collections-view-error collections-view-inline-error" role="alert">
+        {{ errorMessage }}
+      </p>
       <div class="collections-grid">
         <CollectionCard
           v-for="collection in collections"
@@ -74,18 +77,12 @@
   </div>
 </template>
 
-<script lang="ts">
-// Session-level consent flag: resets on full page reload. Mirrors the pattern used by
-// ai-data-insights-sidebar's useInsights.ts — once the user confirms, we don't ask again
-// for the rest of the SPA session.
-let sessionConsentGiven = false
-</script>
-
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import { useRecentFiles, type RecentFile } from '../composables/useRecentFiles'
 import { useCollections, type Collection } from '../composables/useCollections'
+import { hasSessionConsent, giveSessionConsent } from '../composables/useConsent'
 import type { LLMConfig } from '../composables/useLLM'
 import CollectionCard from '../components/CollectionCard.vue'
 import CollectionFileList from '../components/CollectionFileList.vue'
@@ -131,7 +128,7 @@ async function startClustering(files: RecentFile[]): Promise<void> {
     await clusterFiles(files)
     return
   }
-  if (!sessionConsentGiven) {
+  if (!hasSessionConsent()) {
     showConsent.value = true
     return
   }
@@ -149,7 +146,7 @@ async function loadAndCluster(): Promise<void> {
 }
 
 async function onConsentConfirm(): Promise<void> {
-  sessionConsentGiven = true
+  giveSessionConsent()
   showConsent.value = false
   await clusterFiles(recentFiles.value)
 }
@@ -192,6 +189,10 @@ onMounted(loadAndCluster)
 
 .collections-view-error {
   color: var(--oc-color-swatch-danger-default);
+}
+
+.collections-view-inline-error {
+  margin: 0 0 var(--oc-space-medium) 0;
 }
 
 .collections-grid {
