@@ -41,7 +41,7 @@ export default defineWebApplication({
 
     // The spec's originally requested location — a Files-app-left-nav "Collections" entry
     // via the app.files.navItems/sidebarNav extension point — was tried first, then dropped:
-    // a live gate run confirmed the installed web-pkg (12.4.2) never renders it (the
+    // a live gate run confirmed the installed web-pkg (^12.4.2 range) never renders it (the
     // extension point id doesn't appear anywhere in its bundle, and the Files app's real
     // sidebar nav lists only its four built-in items). Registering it *alongside* an
     // appMenuItem also caused the appMenuItem itself to stop appearing in the Application

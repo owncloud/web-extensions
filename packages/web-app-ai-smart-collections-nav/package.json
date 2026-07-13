@@ -1,7 +1,7 @@
 {
   "name": "web-app-ai-smart-collections-nav",
   "version": "0.1.0",
-  "description": "CANDIDATE",
+  "description": "AI Smart Collections — appMenuItem extension that clusters recent files into AI-inferred thematic groups",
   "license": "Apache-2.0",
   "author": "ownCloud",
   "type": "module",
