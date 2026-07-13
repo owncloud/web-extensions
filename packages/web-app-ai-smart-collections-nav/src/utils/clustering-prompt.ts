@@ -5,12 +5,20 @@ export interface ClusterableFile {
 }
 
 /**
+ * Collapses whitespace and replaces embedded double quotes with a Unicode look-alike so
+ * user-controlled file names/excerpts can never break out of a double-quoted prompt field.
+ */
+function sanitizeForPrompt(value: string): string {
+  return value.replace(/\s+/g, ' ').replace(/"/g, '”').trim()
+}
+
+/**
  * Plain-text fallback format instructions, shared between the structured prompt (as an
  * embedded fallback the model can use if it cannot produce JSON) and any standalone use.
  * One line per file: "fileId: collection label".
  */
 export function buildLenientClusteringPrompt(files: ClusterableFile[]): string {
-  const fileList = files.map((f) => `${f.fileId}\t${f.name}`).join('\n')
+  const fileList = files.map((f) => `${f.fileId}\t${sanitizeForPrompt(f.name)}`).join('\n')
   return [
     'If you cannot produce valid JSON, respond instead with one line per file in the exact',
     'format `fileId: collection label` (no extra punctuation, no markdown). Every file must',
@@ -29,8 +37,8 @@ export function buildLenientClusteringPrompt(files: ClusterableFile[]): string {
 export function buildClusteringPrompt(files: ClusterableFile[], lang: string): string {
   const fileList = files
     .map((f) => {
-      const excerpt = f.excerpt ? ` — excerpt: "${f.excerpt.replace(/\s+/g, ' ').trim()}"` : ''
-      return `- fileId: ${f.fileId}, name: "${f.name}"${excerpt}`
+      const excerpt = f.excerpt ? ` — excerpt: "${sanitizeForPrompt(f.excerpt)}"` : ''
+      return `- fileId: ${f.fileId}, name: "${sanitizeForPrompt(f.name)}"${excerpt}`
     })
     .join('\n')
 

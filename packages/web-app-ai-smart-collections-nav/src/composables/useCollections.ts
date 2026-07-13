@@ -140,10 +140,15 @@ export function useCollections(llmConfig: LLMConfig | null): UseCollectionsResul
       for (const batch of chunk(files, MAX_FILES_PER_BATCH)) {
         const assignments = await clusterBatch(batch)
         mergeAssignments(assignmentsByFileId, assignments)
+        // Commit after every batch so a later batch's failure can't discard already-clustered results.
+        collections.value = toCollections(assignmentsByFileId)
       }
-      collections.value = toCollections(assignmentsByFileId)
     } catch (err) {
-      clusterError.value = handleLlmError(err)
+      const message = handleLlmError(err)
+      clusterError.value =
+        collections.value.length > 0
+          ? $gettext('Some files could not be grouped: %{message}', { message })
+          : message
     } finally {
       isClustering.value = false
     }
