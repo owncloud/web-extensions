@@ -296,6 +296,24 @@ describe('useRecentFiles', () => {
       expect(error.value).toBeNull()
     })
 
+    it('sets an outage error when every space fails, distinct from a genuinely empty result', async () => {
+      setupSpaces([{ id: 'space-1' }, { id: 'space-2' }])
+      requestMock.mockRejectedValue(new DOMException('The operation timed out.', 'TimeoutError'))
+      const { fetchRecentFiles, error } = useRecentFiles()
+      const files = await fetchRecentFiles()
+      expect(files).toEqual([])
+      expect(error.value).toMatch(/could not reach any of your spaces/i)
+    })
+
+    it('leaves the error ref null when every space succeeds but genuinely has no files', async () => {
+      setupSpaces([{ id: 'space-1' }, { id: 'space-2' }])
+      requestMock.mockResolvedValue({ data: multistatusXml([]) })
+      const { fetchRecentFiles, error } = useRecentFiles()
+      const files = await fetchRecentFiles()
+      expect(files).toEqual([])
+      expect(error.value).toBeNull()
+    })
+
     it('sets the error ref and returns an empty array when reading spaces throws unexpectedly', async () => {
       vi.mocked(useSpacesStore).mockReturnValue({
         get spaces(): never {
@@ -358,6 +376,19 @@ describe('useRecentFiles', () => {
       const files = await fetchRecentFiles()
       expect(getFileContentsMock).toHaveBeenCalled()
       expect(files[0].excerpt).toBe('Some file content')
+    })
+
+    it('requests only a byte range of the file instead of downloading the full body', async () => {
+      requestMock.mockResolvedValue({
+        data: multistatusXml([
+          { href: '/dav/spaces/space-1/notes.txt', displayname: 'notes.txt', fileId: 'n1', size: 50 }
+        ])
+      })
+      getFileContentsMock.mockResolvedValue({ response: { data: 'Some file content' } })
+      const { fetchRecentFiles } = useRecentFiles()
+      await fetchRecentFiles()
+      const [, , options] = getFileContentsMock.mock.calls[0]
+      expect(options.headers.Range).toMatch(/^bytes=0-\d+$/)
     })
 
     it('leaves excerpt undefined (without throwing) when the excerpt fetch fails', async () => {

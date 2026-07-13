@@ -31,6 +31,10 @@ const TEXT_EXCERPT_EXTENSIONS = new Set([
 
 const REQUEST_TIMEOUT_MS = 30_000
 
+// Byte budget for the ranged excerpt fetch below — comfortably covers MAX_EXCERPT_CHARS (200,
+// see useCollections.ts) worth of UTF-8 text with margin for multi-byte characters.
+const EXCERPT_FETCH_BYTE_LIMIT = 1024
+
 export interface RecentFile {
   fileId: string
   name: string
@@ -168,23 +172,18 @@ export function useRecentFiles(): UseRecentFilesResult {
   </d:prop>
 </oc:search-files>`
 
-    try {
-      const response = await clientService.httpAuthenticated.request({
-        method: 'REPORT',
-        url: `${serverUrl}/dav/spaces/${encodeURIComponent(space.id as string)}`,
-        headers: { 'Content-Type': 'application/xml' },
-        data: searchBody,
-        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
-      })
-      const xmlText =
-        typeof response.data === 'string'
-          ? response.data
-          : new XMLSerializer().serializeToString(response.data)
-      return parseSearchResponse(xmlText, space.id as string)
-    } catch {
-      // One space failing to answer must not take down discovery for the rest — skip it.
-      return []
-    }
+    const response = await clientService.httpAuthenticated.request({
+      method: 'REPORT',
+      url: `${serverUrl}/dav/spaces/${encodeURIComponent(space.id as string)}`,
+      headers: { 'Content-Type': 'application/xml' },
+      data: searchBody,
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+    })
+    const xmlText =
+      typeof response.data === 'string'
+        ? response.data
+        : new XMLSerializer().serializeToString(response.data)
+    return parseSearchResponse(xmlText, space.id as string)
   }
 
   async function fetchExcerpt(
@@ -201,10 +200,16 @@ export function useRecentFiles(): UseRecentFilesResult {
       const { response } = await clientService.webdav.getFileContents(
         space,
         { path: entry.path },
-        { responseType: 'text', signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) }
+        {
+          responseType: 'text',
+          headers: { Range: `bytes=0-${EXCERPT_FETCH_BYTE_LIMIT - 1}` },
+          signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+        }
       )
       const text = response.data
-      return typeof text === 'string' ? text : undefined
+      // A byte-range request can split a trailing multi-byte UTF-8 character, which some text
+      // decoders surface as a replacement character — trim it since only a display excerpt.
+      return typeof text === 'string' ? text.replace(/�+$/, '') : undefined
     } catch {
       // Excerpting is best-effort — a fetch failure (including a timeout) just means no
       // excerpt for this file, mirroring searchSpace's REPORT call: every network call here
@@ -223,13 +228,22 @@ export function useRecentFiles(): UseRecentFilesResult {
         return []
       }
 
-      const bySpace = await Promise.all(spaces.map((space) => searchSpace(space)))
+      // One space failing to answer must not take down discovery for the rest — settle each
+      // space independently and only skip the ones that actually failed.
+      const settled = await Promise.allSettled(spaces.map((space) => searchSpace(space)))
+      const failedCount = settled.filter((result) => result.status === 'rejected').length
+      const bySpace = settled.map((result) => (result.status === 'fulfilled' ? result.value : []))
       const spaceById = new Map(spaces.map((space) => [space.id as string, space]))
 
       const merged = bySpace
         .flat()
         .sort((a, b) => Date.parse(b.mdate || '') - Date.parse(a.mdate || ''))
         .slice(0, MAX_RECENT_FILES)
+
+      if (failedCount > 0 && failedCount === spaces.length && merged.length === 0) {
+        error.value = $gettext('Could not reach any of your spaces. Please try again later.')
+        return []
+      }
 
       const withExcerpts = await Promise.all(
         merged.map(async (entry) => {
