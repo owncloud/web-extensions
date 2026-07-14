@@ -71,21 +71,33 @@ export interface UseReadmeGeneratorResult {
   generate: (space: SpaceResource, resource: Resource) => Promise<Resource | undefined>
 }
 
+// Strips line breaks so LLM-generated content can't inject extra Markdown
+// structural elements (headings, table rows, etc.) into single-line contexts.
+function stripNewlines(s: string): string {
+  return s.replace(/[\r\n]+/g, ' ').trim()
+}
+
+// GFM table cells additionally need `|` escaped, since an unescaped pipe
+// would split the cell and corrupt the table row.
+function escapeMdCell(s: string): string {
+  return stripNewlines(s).replace(/\|/g, '\\|')
+}
+
 export function renderMarkdown(json: ReadmeJson): string {
-  const lines: string[] = [`# ${json.headline}`]
+  const lines: string[] = [`# ${stripNewlines(json.headline)}`]
 
   if (json.subheadline) {
-    lines.push('', `## ${json.subheadline}`)
+    lines.push('', `## ${stripNewlines(json.subheadline)}`)
   }
 
   if (json.purpose) {
-    lines.push('', '## Overview', '', json.purpose)
+    lines.push('', '## Overview', '', stripNewlines(json.purpose))
   }
 
   if (json.key_files.length > 0) {
     lines.push('', '## Key Files', '', '| File | Description |', '| --- | --- |')
     for (const file of json.key_files) {
-      lines.push(`| ${file.name} | ${file.description} |`)
+      lines.push(`| ${escapeMdCell(file.name)} | ${escapeMdCell(file.description)} |`)
     }
   }
 

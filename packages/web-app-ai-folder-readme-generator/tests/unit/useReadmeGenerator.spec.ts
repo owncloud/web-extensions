@@ -109,6 +109,34 @@ describe('renderMarkdown', () => {
     const markdown = renderMarkdown({ ...VALID_README_JSON, usage_notes: [] })
     expect(markdown).not.toContain('## Usage')
   })
+
+  it('escapes pipe characters in key file table cells', () => {
+    const markdown = renderMarkdown({
+      ...VALID_README_JSON,
+      key_files: [{ name: 'a | b.txt', description: 'contains a | pipe' }]
+    })
+    expect(markdown).toContain('| a \\| b.txt | contains a \\| pipe |')
+  })
+
+  it('strips newlines from key file table cells so rows cannot be broken', () => {
+    const markdown = renderMarkdown({
+      ...VALID_README_JSON,
+      key_files: [{ name: 'notes.txt', description: 'line one\nline two' }]
+    })
+    expect(markdown).toContain('| notes.txt | line one line two |')
+  })
+
+  it('strips newlines from headline, subheadline and purpose', () => {
+    const markdown = renderMarkdown({
+      ...VALID_README_JSON,
+      headline: 'Title\n# Injected heading',
+      subheadline: 'Sub\nline',
+      purpose: 'Para\n| a | b |'
+    })
+    expect(markdown).toContain('# Title # Injected heading')
+    expect(markdown).toContain('## Sub line')
+    expect(markdown).toContain('Para | a | b |')
+  })
 })
 
 describe('useReadmeGenerator', () => {
