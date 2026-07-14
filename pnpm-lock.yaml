@@ -236,18 +236,18 @@ importers:
   packages/web-app-ai-folder-readme-generator:
     dependencies:
       '@ownclouders/design-system':
-        specifier: ^12.3.2
+        specifier: ^12.5.0
         version: 12.5.0(@vue/compiler-sfc@3.5.40)(esbuild@0.27.7)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.40(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))
       '@ownclouders/web-client':
-        specifier: ^12.3.2
+        specifier: ^12.5.0
         version: 12.5.0
       '@ownclouders/web-pkg':
-        specifier: ^12.3.2
+        specifier: ^12.5.0
         version: 12.5.0(@vue/compiler-sfc@3.5.40)(esbuild@0.27.7)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
-        specifier: 12.3.2
-        version: 12.3.2(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))
+        specifier: ^12.5.0
+        version: 12.5.0(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))
       '@ownclouders/tsconfig':
         specifier: 0.0.6
         version: 0.0.6
@@ -2098,11 +2098,6 @@ packages:
     resolution: {integrity: sha512-X4T7IKilPNUuOTxVaQLtHmhNuLCFzHAAG/lDGfzP+b+2eam0eRp7IqM0te0/BRFSCmA2ErQEJw/JLUXge7kjzw==}
     peerDependencies:
       eslint: ^9.39.2
-
-  '@ownclouders/extension-sdk@12.3.2':
-    resolution: {integrity: sha512-xveSn17DrYLbnpZCMBo3RWLYD8a5vsxkQls7iUU4Nki5tiqyyvwmPDJ7Z8NlFakZ8MKHuNJfovZ0uTskaT07oA==}
-    peerDependencies:
-      vite: ^5 || ^6.0.0 || ^7.0.0
 
   '@ownclouders/extension-sdk@12.5.0':
     resolution: {integrity: sha512-1K8wylxz8Tt15qx7Ujhn9EFnnLN+kLPVW6U7MpMAOu2FdyYoU76KWyb+vjST8gPSO9MwEkWV8dP3tJnvwwosaw==}
@@ -6934,14 +6929,6 @@ snapshots:
       - '@typescript-eslint/eslint-plugin'
       - supports-color
       - vue-eslint-parser
-
-  '@ownclouders/extension-sdk@12.3.2(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))':
-    dependencies:
-      '@vitejs/plugin-vue': 6.0.7(vite@7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.40(typescript@5.9.3))
-      rollup-plugin-serve: 3.0.0
-      vite: 7.2.2(@types/node@22.19.19)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0)
-    transitivePeerDependencies:
-      - vue
 
   '@ownclouders/extension-sdk@12.5.0(vite@5.4.21(@types/node@26.1.1)(sass-embedded@1.100.0)(sass@1.100.0))(vue@3.5.40(typescript@5.9.3))':
     dependencies:

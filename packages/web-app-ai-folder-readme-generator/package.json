@@ -1,7 +1,7 @@
 {
   "name": "web-app-ai-folder-readme-generator",
   "version": "0.1.0",
-  "description": "CANDIDATE",
+  "description": "AI Folder README Generator — context-action extension that writes a generated README.md describing a folder's contents",
   "license": "Apache-2.0",
   "author": "ownCloud",
   "type": "module",
@@ -15,12 +15,12 @@
     "test:e2e": "pnpm playwright test"
   },
   "dependencies": {
-    "@ownclouders/design-system": "^12.3.2",
-    "@ownclouders/web-client": "^12.3.2",
-    "@ownclouders/web-pkg": "^12.3.2"
+    "@ownclouders/design-system": "^12.5.0",
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "12.3.2",
+    "@ownclouders/extension-sdk": "^12.5.0",
     "@ownclouders/tsconfig": "0.0.6",
     "@types/node": "22.19.19",
     "@vue/test-utils": "^2.4.6",
