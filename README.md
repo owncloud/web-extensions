@@ -34,7 +34,7 @@ Follow the steps below to install and develop extensions.
 
 ### Installation (oCIS Deployment Example)
 
-Extensions can be enabled in the [ocis_full deployment example](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full) with minimal configuration. See the [admin docs](https://doc.owncloud.com/ocis/next/depl-examples/ubuntu-compose/ubuntu-compose-prod.html) for detailed instructions.
+Extensions can be enabled in the [ocis_full deployment example](https://github.com/owncloud/ocis/tree/master/deployments/examples/ocis_full) with minimal configuration. See the [admin docs](https://doc.owncloud.com/ocis/next/admin/depl-examples/ubuntu-compose/ubuntu-compose-prod.html) for detailed instructions.
 
 ### Manual Installation
 
