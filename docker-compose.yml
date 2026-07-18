@@ -39,6 +39,7 @@ services:
       - ./packages/web-app-external-sites/tests/config/manifest.json:/web/apps/external-sites/manifest.json
       - ./packages/web-app-importer/dist:/web/apps/importer
       - ./packages/web-app-json-viewer/dist:/web/apps/json-viewer
+      - ./packages/web-app-epub-library/dist:/web/apps/epub-library
       - ./packages/web-app-photo-addon/dist:/web/apps/photo-addon
       - ./packages/web-app-progress-bars/dist:/web/apps/progress-bars
       - ./packages/web-app-unzip/dist:/web/apps/unzip

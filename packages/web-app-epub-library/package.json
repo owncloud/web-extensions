@@ -1,0 +1,26 @@
+{
+  "name": "web-app-epub-library",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A bookshelf-style EPUB library for ownCloud Web",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0",
+    "@zip.js/zip.js": "2.8.26"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^12.5.0",
+    "vue": "^3.5.39",
+    "vue-router": "^5.1.0",
+    "vue3-gettext": "^2.4.0"
+  }
+}
