@@ -1,0 +1,26 @@
+{
+  "name": "web-app-vim-nav",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ownCloud Vim Navigation",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:e2e": "pnpm playwright test"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^12.5.0",
+    "@vueuse/core": "^14.3.0",
+    "vue": "^3.5.39",
+    "vue3-gettext": "^2.4.0"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0"
+  }
+}

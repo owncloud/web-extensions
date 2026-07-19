@@ -54,6 +54,7 @@ services:
       - ./packages/web-app-ai-data-insights-sidebar/dist:/web/apps/ai-data-insights-sidebar
       - ./packages/web-app-ai-multi-doc-synthesizer/dist:/web/apps/ai-multi-doc-synthesizer
       - ./packages/web-app-ai-smart-file-tagger-qa/dist:/web/apps/ai-smart-file-tagger-qa
+      - ./packages/web-app-vim-nav/dist:/web/apps/vim-nav
     depends_on:
       - traefik
 
