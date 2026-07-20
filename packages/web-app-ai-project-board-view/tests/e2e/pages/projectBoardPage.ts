@@ -10,7 +10,7 @@ export class ProjectBoardPage {
   constructor(page: Page) {
     this.page = page
     this.board = this.page.getByTestId('project-board-view')
-    this.viewModeButton = this.page.getByRole('button', { name: 'Status Board' })
+    this.viewModeButton = this.page.getByRole('button', { name: 'Status Board', exact: true })
     this.rerunButton = this.board.getByTestId('project-board-rerun')
   }
 
