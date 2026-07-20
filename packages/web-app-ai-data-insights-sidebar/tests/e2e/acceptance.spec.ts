@@ -12,6 +12,11 @@ test.beforeEach(async ({ browser }) => {
 })
 
 test.afterEach(async () => {
+  // Remove any route handlers registered during the test before the cleanup
+  // navigation. A request-interception handler left active across page.goto
+  // intermittently crashes webkit's network layer with "WebKit encountered an
+  // internal error"; the tests only need the mock while the panel is open.
+  await adminPage.unrouteAll({ behavior: 'ignoreErrors' })
   const filesPage = new FilesPage(adminPage)
   await filesPage.deleteAllFromPersonal()
   await logout(adminPage)

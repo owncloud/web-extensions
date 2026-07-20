@@ -56,7 +56,9 @@ export class AiDataInsightsSidebarPage {
       ),
       uploadInput.setInputFiles(fixturePath)
     ])
-    await closeBtn.click()
+    if (await closeBtn.isVisible()) {
+      await closeBtn.click()
+    }
     await expect(newFileMenuDrop).not.toBeVisible()
     await expect(uploadMenuDrop).not.toBeVisible()
     return 'sample.csv'
