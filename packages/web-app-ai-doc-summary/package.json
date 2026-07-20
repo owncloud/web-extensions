@@ -16,7 +16,7 @@
     "@ownclouders/web-client": "^12.5.0",
     "@ownclouders/web-pkg": "^12.5.0",
     "pdfjs-dist": "^6.1.200",
-    "vue": "^3.5.39",
+    "vue": "^3.5.40",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
