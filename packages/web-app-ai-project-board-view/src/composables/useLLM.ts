@@ -20,6 +20,7 @@ export interface ChatMessage {
 export interface CompletionOptions {
   maxTokens?: number
   temperature?: number
+  responseFormat?: { type: 'json_object' | 'text' }
 }
 
 export interface UseLLMReturn {
@@ -66,7 +67,8 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
         model: cfg.model,
         messages,
         max_tokens: opts.maxTokens ?? 1024,
-        temperature: opts.temperature ?? 0.7
+        temperature: opts.temperature ?? 0.7,
+        ...(opts.responseFormat && { response_format: opts.responseFormat })
       })
     })
     if (!r.ok) throw new Error(`LLM request failed: ${r.status} ${r.statusText}`)
