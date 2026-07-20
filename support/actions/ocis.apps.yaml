@@ -61,3 +61,9 @@ web-app-ai-smart-collections-nav:
     llm:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+web-app-ai-folder-readme-generator:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
