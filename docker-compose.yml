@@ -58,6 +58,7 @@ services:
       - ./packages/web-app-ai-smart-collections-nav/dist:/web/apps/ai-smart-collections-nav
       - ./packages/web-app-ai-folder-readme-generator/dist:/web/apps/ai-folder-readme-generator
       - ./packages/web-app-jupyter/dist:/web/apps/jupyter
+      - ./packages/web-app-ai-project-board-view/dist:/web/apps/ai-project-board-view
     depends_on:
       - traefik
 
