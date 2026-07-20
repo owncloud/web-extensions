@@ -55,3 +55,9 @@ ai-multi-doc-synthesizer:
     llm:
       endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+ai-smart-file-tagger-qa:
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
