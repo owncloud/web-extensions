@@ -1,18 +1,12 @@
 import { defineWebApplication } from '@ownclouders/web-pkg'
 import type { FolderViewExtension } from '@ownclouders/web-pkg'
-import { computed, defineComponent, h } from 'vue'
+import { computed } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import type { LLMConfig } from './composables/useLLM'
+import ProjectBoardView from './components/ProjectBoardView.vue'
 import translations from '../l10n/translations.json'
 
 const APP_ID = 'ai-project-board-view'
-
-// Placeholder for the FolderView's required `component` field until ProjectBoardView.vue
-// is built (a later stage of this extension's build); replaced there.
-const ProjectBoardViewPlaceholder = defineComponent({
-  name: 'ProjectBoardViewPlaceholder',
-  render: () => h('div')
-})
 
 export default defineWebApplication({
   setup({ applicationConfig }) {
@@ -34,7 +28,7 @@ export default defineWebApplication({
           label: $pgettext('Folder view mode', 'Status Board'),
           icon: { name: 'grid', fillType: 'line' },
           isScrollable: true,
-          component: ProjectBoardViewPlaceholder,
+          component: ProjectBoardView,
           componentAttrs: () => ({ llmConfig })
         }
       } as FolderViewExtension
