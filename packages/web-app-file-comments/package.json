@@ -18,7 +18,7 @@
     "dompurify": "^3.4.12",
     "js-yaml": "^5.2.1",
     "marked": "^18.0.6",
-    "vue": "^3.5.39",
+    "vue": "^3.5.40",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
