@@ -3,8 +3,9 @@ import { useAuthStore } from '@ownclouders/web-pkg'
 
 // LLMConfig is sourced from the oCIS admin-configured extension config.
 // endpoint must be the same-origin ai-llm-proxy URL — never a direct external LLM URL.
-// The proxy validates the oCIS access token and forwards the request with its own LLM_API_KEY.
-// apiKey must NOT appear here: the LLM credential is a server-side proxy concern only.
+// The proxy validates the oCIS access token and forwards the request using its own
+// server-side credential (configured directly on the proxy). No such secret field
+// belongs on this interface — the browser never sees it.
 export interface LLMConfig {
   endpoint: string  // same-origin ai-llm-proxy base URL (e.g. https://owncloud.example.com/ai-llm-proxy)
   model: string
