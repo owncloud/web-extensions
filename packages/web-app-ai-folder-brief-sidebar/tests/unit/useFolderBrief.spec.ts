@@ -65,7 +65,7 @@ function makeFetch(body: unknown, ok = true, statusCode = 200) {
 
 function getWrapper(setup: (result: ReturnType<typeof useFolderBrief>) => void) {
   const mocks = { ...defaultComponentMocks() }
-  mocks.$clientService.webdav.listFiles.mockResolvedValue({ resource: RESOURCE, children: CHILDREN })
+  mocks.$clientService.webdav.listFiles.mockResolvedValue({ resource: RESOURCE, children: CHILDREN } as any)
   vi.mocked(useSpacesStore).mockReturnValue({ getSpace: vi.fn().mockReturnValue({ id: 'space-1' }) } as any)
   vi.mocked(useUserStore).mockReturnValue({ user: { preferredLanguage: 'en' } } as any)
 
@@ -175,7 +175,7 @@ describe('useFolderBrief', () => {
   describe('empty folder', () => {
     it('shows a static "folder is empty" brief without calling fetch', async () => {
       const mocks = { ...defaultComponentMocks() }
-      mocks.$clientService.webdav.listFiles.mockResolvedValue({ resource: RESOURCE, children: [] })
+      mocks.$clientService.webdav.listFiles.mockResolvedValue({ resource: RESOURCE, children: [] } as any)
       vi.mocked(useSpacesStore).mockReturnValue({
         getSpace: vi.fn().mockReturnValue({ id: 'space-1' })
       } as any)

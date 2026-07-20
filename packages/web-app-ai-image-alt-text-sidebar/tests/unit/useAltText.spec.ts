@@ -53,7 +53,7 @@ function makeMocks() {
   const mocks = { ...defaultComponentMocks() }
   mocks.$clientService.webdav.getFileContents.mockResolvedValue({
     response: { data: new ArrayBuffer(8) }
-  })
+  } as any)
   vi.mocked(useSpacesStore).mockReturnValue({ getSpace: vi.fn().mockReturnValue({ id: 'space-1' }) } as any)
   return mocks
 }
