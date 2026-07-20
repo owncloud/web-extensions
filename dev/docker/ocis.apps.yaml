@@ -61,3 +61,9 @@ ai-smart-file-tagger-qa:
     llm:
       endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+ai-smart-collections-nav:
+  config:
+    llm:
+      endpoint: 'https://host.docker.internal:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'

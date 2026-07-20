@@ -55,3 +55,9 @@ web-app-ai-smart-file-tagger-qa:
     llm:
       endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
       model: 'llama3.2'
+
+web-app-ai-smart-collections-nav:
+  config:
+    llm:
+      endpoint: 'https://localhost:9200/ai-llm-proxy/v1'
+      model: 'llama3.2'
