@@ -22,7 +22,10 @@ export default defineWebApplication({
       {
         id: `${APP_ID}.board`,
         type: 'folderView',
-        extensionPointIds: ['app.files.folder-views.project-spaces'],
+        // `app.files.folder-views.project-spaces` is the *overview* of all project spaces
+        // (space tiles, no files) — the file listing inside an opened space, where this board
+        // actually renders, is the generic `app.files.folder-views.folder` extension point.
+        extensionPointIds: ['app.files.folder-views.folder'],
         folderView: {
           name: APP_ID,
           label: $pgettext('Folder view mode', 'Status Board'),
