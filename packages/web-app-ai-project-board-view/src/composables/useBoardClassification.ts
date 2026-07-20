@@ -9,7 +9,7 @@ import { DEFAULT_LANE, isLane, parseLaneLines, type Lane } from '../utils/lane'
 // Batched into a single prompt per classification run rather than one call per file, to keep
 // latency and request volume bounded for large project spaces. Files beyond the cap are left
 // unclassified and default to Draft via the `lanes` fallback (surfaced through `truncated`).
-const MAX_FILES = 60
+export const MAX_FILES = 60
 const MAX_PROMPT_EXCERPT_CHARS = 400
 
 export type BoardLanes = Record<Lane, Resource[]>
