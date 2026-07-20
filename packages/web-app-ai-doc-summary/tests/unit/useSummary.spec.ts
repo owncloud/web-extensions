@@ -50,7 +50,7 @@ function getWrapper(
   const mocks = { ...defaultComponentMocks() }
   mocks.$clientService.webdav.getFileContents.mockResolvedValue({
     response: { data: 'Document content here.' }
-  })
+  } as any)
 
   const mockSpace = { id: 'space-1' }
   vi.mocked(useSpacesStore).mockReturnValue({
