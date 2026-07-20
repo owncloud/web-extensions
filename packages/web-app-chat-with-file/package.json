@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "pdfjs-dist": "^6.1.200",
-    "vue3-gettext": "^2.4.0"
+    "vue3-gettext": "^4.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

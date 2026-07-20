@@ -30,7 +30,7 @@
     "vitest": "4.1.10",
     "vitest-mock-extended": "4.0.0",
     "vue-tsc": "3.3.7",
-    "vue3-gettext": "^2.4.0"
+    "vue3-gettext": "^4.0.1"
   },
   "packageManager": "pnpm@10.27.0",
   "pnpm": {
