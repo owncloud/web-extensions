@@ -9,10 +9,11 @@ import { useVimShortcutsHelp } from './useVimShortcutsHelp'
 import { useVimOpen } from './useVimOpen'
 import { useVimCreate } from './useVimCreate'
 import { useVimFileActions } from './useVimFileActions'
+import { useVimDetails } from './useVimDetails'
 
 const TRASH_ROUTE_NAME = 'files-trash-generic'
 const TWO_KEY_SEQUENCES = ['gg', 'dd', 'gp', 'gs', 'gd', 'go', 'nd', 'nf', 'nm', 'ns', 'yy', 'dw']
-const HANDLED_SINGLE_KEYS = new Set(['j', 'k', 'G', 'y', 'x', 'p', 'd', 'r', 'e', 'v', 'l', '/', '?', 'Escape'])
+const HANDLED_SINGLE_KEYS = new Set(['j', 'k', 'G', 'y', 'x', 'p', 'd', 'r', 'e', 'v', 'l', 'i', '/', '?', 'Escape'])
 
 const NON_TEXT_INPUT_TYPES = new Set([
   'checkbox',
@@ -59,6 +60,7 @@ export function useVimNav(): void {
   const { openSelected } = useVimOpen()
   const { createFolder, createFile, createSpaceModal } = useVimCreate()
   const { downloadSelected, duplicateSelected } = useVimFileActions()
+  const { toggleDetails } = useVimDetails()
   const modalsStore = useModals()
 
   const sequence = new KeySequence({
@@ -102,6 +104,9 @@ export function useVimNav(): void {
         break
       case 'l':
         openSelected()
+        break
+      case 'i':
+        toggleDetails()
         break
       case '/':
         focusSearchInput()

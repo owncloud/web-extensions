@@ -35,6 +35,7 @@ export default defineComponent({
           { key: 'G', description: $pgettext(ctx, 'Jump to last') },
           { key: 'gg', description: $pgettext(ctx, 'Jump to first') },
           { key: 'l', description: $pgettext(ctx, 'Open selected') },
+          { key: 'i', description: $pgettext(ctx, 'Toggle details sidebar') },
           { key: 'v', description: $pgettext(ctx, 'Toggle visual (multi-select) mode') }
         ]
       },
