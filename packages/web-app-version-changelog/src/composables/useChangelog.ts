@@ -87,8 +87,10 @@ export function useChangelog(llmConfig: LlmConfig | null | Ref<LlmConfig | null>
     const res = await fetch(`${base}/chat/completions`, {
       method: 'POST',
       headers: buildHeaders(),
-      // Must exceed the proxy's own upstream timeout (60s) plus margin for OIDC validation.
-      signal: AbortSignal.timeout(90_000),
+      // Generous safety-net ceiling, decoupled from the proxy's own (separately
+      // configurable) upstream timeout; only guards against the network or proxy
+      // never responding at all.
+      signal: AbortSignal.timeout(300_000),
       body: JSON.stringify({
         model: config.model,
         messages: [{ role: 'user', content: prompt }],
