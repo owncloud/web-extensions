@@ -48,14 +48,30 @@
                     }}
                   </button>
                   <div v-if="!message.applied || isDiffExpanded(index)">
-                    <div v-if="getDiff(index).length > 0" class="diff-block">
+                    <template v-if="getDiff(index).length > 0">
                       <div
-                        v-for="(line, li) in getDiff(index)"
-                        :key="li"
-                        class="diff-line"
-                        :class="`diff-line--${line.type}`"
-                      >{{ diffPrefix(line.type) }}{{ line.text }}</div>
-                    </div>
+                        class="diff-block"
+                        :class="{ 'diff-block--tall': isDiffHeightExpanded(index) }"
+                      >
+                        <div
+                          v-for="(line, li) in getDiff(index)"
+                          :key="li"
+                          class="diff-line"
+                          :class="`diff-line--${line.type}`"
+                        >{{ diffPrefix(line.type) }}{{ line.text }}</div>
+                      </div>
+                      <button
+                        v-if="isDiffLong(index)"
+                        class="diff-height-toggle"
+                        @click="toggleDiffHeight(index)"
+                      >
+                        {{
+                          isDiffHeightExpanded(index)
+                            ? $gettext('Collapse')
+                            : $gettext('Expand')
+                        }}
+                      </button>
+                    </template>
                     <div v-else class="diff-empty">{{ $gettext('No changes detected.') }}</div>
                   </div>
                 </div>
@@ -239,6 +255,24 @@ function getDiff(index: number): FlatLine[] {
   return messageDiffs.value[index] ?? []
 }
 
+const DIFF_LONG_THRESHOLD = 12
+
+function isDiffLong(index: number): boolean {
+  return getDiff(index).length > DIFF_LONG_THRESHOLD
+}
+
+const expandedDiffHeights = ref<number[]>([])
+
+function isDiffHeightExpanded(index: number): boolean {
+  return expandedDiffHeights.value.includes(index)
+}
+
+function toggleDiffHeight(index: number): void {
+  expandedDiffHeights.value = isDiffHeightExpanded(index)
+    ? expandedDiffHeights.value.filter((i) => i !== index)
+    : [...expandedDiffHeights.value, index]
+}
+
 const expandedDiffs = ref<number[]>([])
 
 function isDiffExpanded(index: number): boolean {
@@ -283,6 +317,7 @@ watch(
     if (newId && oldId && newId !== oldId) {
       mode.value = 'chat'
       diffCache.clear()
+      expandedDiffHeights.value = []
     }
   }
 )
@@ -386,6 +421,27 @@ onMounted(() => {
   overflow-x: auto;
   max-height: 260px;
   overflow-y: auto;
+}
+
+.diff-block--tall {
+  max-height: 600px;
+}
+
+.diff-height-toggle {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: inherit;
+  color: var(--oc-color-swatch-primary-default, #0d6efd);
+  padding: 4px 0;
+  text-align: center;
+}
+
+.diff-height-toggle:hover {
+  text-decoration: underline;
 }
 
 .diff-line {
