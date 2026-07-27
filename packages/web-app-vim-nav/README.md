@@ -9,6 +9,7 @@ A Vim-style keyboard navigation extension for ownCloud Infinite Scale.
 - **Vim navigation**: `j`/`k` to move up and down the file list
 - **Visual mode**: `v` to enter multi-select mode, extend selection with `j`/`k`/`G`/`gg`
 - **Quick open**: `l` to open a file or navigate into a folder
+- **Details**: `i` to toggle the details sidebar for the selected item
 - **Clipboard**: `y` copy, `x` cut, `p` paste
 - **Delete**: `dd` to delete selected items
 - **Download**: `dw` to download selected items
@@ -30,6 +31,7 @@ Press `?` at any time to open the full shortcuts reference dialog.
 | `G` | Jump to last |
 | `gg` | Jump to first |
 | `l` | Open selected |
+| `i` | Toggle details sidebar |
 | `v` | Toggle visual (multi-select) mode |
 | `y` | Copy |
 | `x` | Cut |
