@@ -40,12 +40,12 @@ export default defineWebApplication({
       extensions: [
         {
           newFileMenu: {
-            menuTitle: () => $pgettext('New file menu item', 'Draft from description'),
+            menuTitle: () => $pgettext('New file menu item', 'Generate a file with AI'),
             isVisible: ({ currentFolder }) =>
               llmConfig !== null && !!(currentFolder?.canUpload({ user: userStore.user }))
           },
           customHandler: () => openModal(),
-          icon: 'draft'
+          icon: 'sparkling-2'
         }
       ]
     }

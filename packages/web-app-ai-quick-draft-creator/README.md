@@ -1,12 +1,12 @@
 # web-app-ai-quick-draft-creator
 
-Adds a **"Draft from description"** entry to the oCIS Files upload menu. A modal lets the user describe the document they need; an LLM generates a well-structured draft and saves it as a new file in the current folder.
+Adds a **"Generate a file with AI"** entry to the oCIS Files upload menu. A modal lets the user describe the document they need; an LLM generates a well-structured draft and saves it as a new file in the current folder.
 
 **Extension point:** `app.files.upload-menu`
 
 ## What it does
 
-1. The user clicks the upload menu in Files and selects **Draft from description**.
+1. The user clicks the upload menu in Files and selects **Generate a file with AI**.
 2. A modal prompts for a document description and an output format (Markdown or plain text).
 3. The extension calls the `ai-llm-proxy` (same-origin) which validates the user's oCIS OIDC token and proxies the request to the configured LLM.
 4. The generated draft is written to the current folder via WebDAV. Filenames include a timestamp suffix (`slug-YYYY-MM-DD-HH-mm-ss.ext`) so same-day drafts never overwrite each other.
