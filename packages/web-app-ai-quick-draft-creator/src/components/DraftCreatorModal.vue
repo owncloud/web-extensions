@@ -1,9 +1,5 @@
 <template>
   <div class="draft-creator-modal">
-    <div v-if="error" class="draft-creator-modal__error oc-mt-s oc-text-error" role="alert">
-      {{ error }}
-    </div>
-
     <div class="oc-mb-m">
       <label class="oc-label" for="draft-description">
         {{ $gettext('Describe the document you need') }}
@@ -35,6 +31,10 @@
         <option value="markdown">{{ $gettext('Markdown') }}</option>
         <option value="plain">{{ $gettext('Plain text') }}</option>
       </select>
+    </div>
+
+    <div v-if="error" class="draft-creator-modal__error oc-mb-m" role="alert">
+      {{ error }}
     </div>
 
     <div class="draft-creator-modal__actions oc-flex oc-flex-right oc-mt-m">
@@ -94,3 +94,9 @@ async function handleCreate(): Promise<void> {
   }
 }
 </script>
+
+<style scoped>
+.draft-creator-modal__error {
+  color: var(--oc-color-danger, #c00);
+}
+</style>
