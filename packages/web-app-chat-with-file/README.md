@@ -83,6 +83,7 @@ stays server-side and never reaches the browser:
 | `LLM_MAX_TOKENS` | no | Hard ceiling on `max_tokens` forwarded to the LLM (default `4096`) |
 | `MAX_BODY_BYTES` | no | Maximum request body the proxy will buffer in bytes (default `131072` = 128 KiB) |
 | `RATE_LIMIT_RPM` | no | Maximum LLM requests per authenticated user per rolling minute (default `20`) |
+| `LLM_TIMEOUT_MS` | no | Timeout for the upstream LLM request in milliseconds (default `60000`) |
 | `PORT` | no | Listening port, default `3030` |
 | `NODE_TLS_REJECT_UNAUTHORIZED` | no | Set to `0` for dev stacks with self-signed certs |
 
