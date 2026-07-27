@@ -30,6 +30,8 @@ const LLM_MAX_TOKENS = parseInt(process.env.LLM_MAX_TOKENS ?? '4096', 10)
 const MAX_BODY_BYTES = parseInt(process.env.MAX_BODY_BYTES ?? '6291456', 10)
 /** Maximum LLM requests per user per rolling minute (default 20). */
 const RATE_LIMIT_RPM = parseInt(process.env.RATE_LIMIT_RPM ?? '20', 10)
+/** Timeout for the upstream LLM request in milliseconds (default 60 000). */
+const LLM_TIMEOUT_MS = parseInt(process.env.LLM_TIMEOUT_MS ?? '60000', 10)
 
 // ---------------------------------------------------------------------------
 // OIDC discovery — lazily fetched on first request, userinfo_endpoint cached
@@ -306,7 +308,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
       method: 'POST',
       headers: llmHeaders,
       body: JSON.stringify(sanitized),
-      signal: AbortSignal.timeout(60_000)
+      signal: AbortSignal.timeout(LLM_TIMEOUT_MS)
     })
   } catch (err) {
     console.error('[ai-llm-proxy] LLM request error:', err)
