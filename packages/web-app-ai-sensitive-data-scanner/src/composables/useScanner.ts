@@ -120,22 +120,58 @@ export function useScanner(llmConfig: LlmConfig | null, resources: Ref<ScanResou
     ].join('\n')
   }
 
-  function parseLlmResponse(rawContent: string): Pick<FileScanResult, 'findings' | 'narrative'> {
+  // Models are instructed to return raw JSON, but frequently wrap it in a markdown
+  // code fence (```json ... ``` or ``` ... ```) anyway. Strip that fence before parsing
+  // so we don't fall through to treating the whole fenced blob as narrative text.
+  const CODE_FENCE_RE = /^```(?:json)?\s*([\s\S]*?)\s*```$/i
+
+  function extractJsonCandidate(rawContent: string): string {
+    const trimmed = rawContent.trim()
+    const fenceMatch = trimmed.match(CODE_FENCE_RE)
+    if (fenceMatch) {
+      return fenceMatch[1].trim()
+    }
+    return trimmed
+  }
+
+  function tryParseFindings(candidate: string): ScanFinding[] | null {
     try {
-      const parsed = JSON.parse(rawContent) as { findings?: unknown[] }
+      const parsed = JSON.parse(candidate) as { findings?: unknown[] }
       if (Array.isArray(parsed.findings)) {
-        const findings = parsed.findings.filter(
+        return parsed.findings.filter(
           (f): f is ScanFinding =>
             typeof f === 'object' &&
             f !== null &&
             typeof (f as Record<string, unknown>).category === 'string' &&
             typeof (f as Record<string, unknown>).excerpt === 'string'
         )
-        return { findings, narrative: '' }
       }
     } catch {
-      // not valid JSON — store raw response as narrative (plain-text model fallback)
+      // not valid JSON
     }
+    return null
+  }
+
+  function parseLlmResponse(rawContent: string): Pick<FileScanResult, 'findings' | 'narrative'> {
+    const candidate = extractJsonCandidate(rawContent)
+
+    const directFindings = tryParseFindings(candidate)
+    if (directFindings) {
+      return { findings: directFindings, narrative: '' }
+    }
+
+    // Fall back to extracting the substring between the first "{" and last "}" in case
+    // the model added leading/trailing prose around the JSON object.
+    const firstBrace = candidate.indexOf('{')
+    const lastBrace = candidate.lastIndexOf('}')
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+      const braceFindings = tryParseFindings(candidate.slice(firstBrace, lastBrace + 1))
+      if (braceFindings) {
+        return { findings: braceFindings, narrative: '' }
+      }
+    }
+
+    // Genuinely not JSON — store raw response as narrative (plain-text model fallback)
     return { findings: [], narrative: rawContent }
   }
 
