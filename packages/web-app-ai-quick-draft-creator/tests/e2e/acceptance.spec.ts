@@ -3,7 +3,7 @@ import { loginAsUser, logout } from '../../../../support/helpers/authHelper'
 
 const NEW_FILE_MENU_BTN = '#new-file-menu-btn'
 const NEW_FILE_MENU_DROP = '#new-file-menu-drop'
-const DRAFT_MENU_ITEM_TEXT = 'Draft from description'
+const DRAFT_MENU_ITEM_TEXT = 'Generate a file with AI'
 const DESCRIPTION_INPUT = '[data-testid="draft-description"]'
 const FORMAT_SELECT = '[data-testid="draft-format"]'
 const CREATE_BTN = '[data-testid="draft-create"]'
@@ -49,7 +49,7 @@ test.afterEach(async () => {
   await logout(adminPage)
 })
 
-test('"Draft from description" item appears in new file menu when LLM is configured', async () => {
+test('"Generate a file with AI" item appears in new file menu when LLM is configured', async () => {
   await openNewFileMenu(adminPage)
 
   const draftItem = adminPage.locator(NEW_FILE_MENU_DROP).getByText(DRAFT_MENU_ITEM_TEXT)
