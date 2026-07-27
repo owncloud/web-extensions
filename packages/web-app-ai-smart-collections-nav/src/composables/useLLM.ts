@@ -83,7 +83,8 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
           temperature: opts.temperature ?? 0.7,
           ...(opts.responseFormat && { response_format: opts.responseFormat })
         },
-        { signal: AbortSignal.timeout(60_000) }
+        // Must exceed the proxy's own upstream timeout (60s) plus margin for OIDC validation.
+        { signal: AbortSignal.timeout(90_000) }
       )
       const d = response.data as { choices: { message: { content: string } }[] }
       return d.choices[0]?.message?.content ?? ''

@@ -120,6 +120,13 @@ export function useScanner(llmConfig: LlmConfig | null, resources: Ref<ScanResou
     ].join('\n')
   }
 
+  function handleLlmError(err: unknown): string {
+    if (err instanceof DOMException && err.name === 'TimeoutError') {
+      return $gettext('The AI service did not respond in time. Please try again later.')
+    }
+    return $gettext('The AI service returned an error. Please try again.')
+  }
+
   // Models are instructed to return raw JSON, but frequently wrap it in a markdown
   // code fence (```json ... ``` or ``` ... ```) anyway. Strip that fence before parsing
   // so we don't fall through to treating the whole fenced blob as narrative text.
@@ -242,13 +249,13 @@ export function useScanner(llmConfig: LlmConfig | null, resources: Ref<ScanResou
       const rawContent = data.choices?.[0]?.message?.content ?? '{}'
       const { findings, narrative } = parseLlmResponse(rawContent)
       scanResults.value[index] = { filename, state: 'done', findings, narrative, error: null }
-    } catch {
+    } catch (err) {
       scanResults.value[index] = {
         filename,
         state: 'error',
         findings: [],
         narrative: '',
-        error: $gettext('The AI service returned an error. Please try again.')
+        error: handleLlmError(err)
       }
     }
   }

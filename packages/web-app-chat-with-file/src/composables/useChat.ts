@@ -264,7 +264,8 @@ export function useChat(
       const res = await fetch(`${base}/chat/completions`, {
         method: 'POST',
         headers: buildHeaders(),
-        signal: AbortSignal.timeout(60_000),
+        // Must exceed the proxy's own upstream timeout (60s) plus margin for OIDC validation.
+        signal: AbortSignal.timeout(90_000),
         body: JSON.stringify({ model: cfg.model, messages: requestMessages, max_tokens: 4096 })
       })
 
