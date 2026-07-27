@@ -24,7 +24,7 @@
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.0",
     "@ownclouders/web-test-helpers": "^12.5.0",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "@vitejs/plugin-vue": "^5.0.0",
     "eslint": "^8.57.0",
     "typescript": "^5.4.0",

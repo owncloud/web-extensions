@@ -16,15 +16,15 @@
     "@ownclouders/web-client": "^12.5.0",
     "@ownclouders/web-pkg": "^12.5.0",
     "dompurify": "^3.4.12",
-    "js-yaml": "^5.2.1",
-    "marked": "^18.0.6",
+    "js-yaml": "^5.2.2",
+    "marked": "^18.0.7",
     "vue": "^3.5.40",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.0",
     "@ownclouders/web-test-helpers": "^12.5.0",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "@types/js-yaml": "^4.0.9",
     "@vitejs/plugin-vue": "^5.0.0",
     "eslint": "^8.57.0",
