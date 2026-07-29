@@ -60,7 +60,10 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const r = await fetch(`${base}/chat/completions`, {
       method: 'POST',
       headers: buildHeaders(),
-      signal: AbortSignal.timeout(60_000),
+      // Generous safety-net ceiling, decoupled from the proxy's own (separately
+      // configurable) upstream timeout; only guards against the network or proxy
+      // never responding at all.
+      signal: AbortSignal.timeout(300_000),
       body: JSON.stringify({
         model: cfg.model,
         messages,
@@ -81,7 +84,10 @@ export function useLLM(cfg: LLMConfig | null): UseLLMReturn {
     const r = await fetch(`${base}/chat/completions`, {
       method: 'POST',
       headers: buildHeaders(),
-      signal: AbortSignal.timeout(60_000),
+      // Generous safety-net ceiling, decoupled from the proxy's own (separately
+      // configurable) upstream timeout; only guards against the network or proxy
+      // never responding at all.
+      signal: AbortSignal.timeout(300_000),
       body: JSON.stringify({ model: cfg.model, messages, stream: true, max_tokens: 1024 })
     })
     if (!r.ok) throw new Error(`LLM stream failed: ${r.status}`)

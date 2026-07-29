@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { Readable } from 'node:stream'
+import { EventEmitter } from 'node:events'
 import type http from 'node:http'
 
 import {
@@ -8,7 +9,8 @@ import {
   rateLimitWindows,
   readBody,
   BodyTooLargeError,
-  isOriginAllowed
+  isOriginAllowed,
+  handleRequest
 } from '../../src/index.js'
 
 // ---------------------------------------------------------------------------
@@ -187,5 +189,212 @@ describe('isOriginAllowed', () => {
   it('does not enforce when no expected origin is configured', () => {
     expect(isOriginAllowed('https://anything.example.test', '')).toBe(true)
     expect(isOriginAllowed(undefined, '')).toBe(true)
+  })
+})
+
+// ---------------------------------------------------------------------------
+// handleRequest — client-disconnect aborts the outbound LLM fetch
+// ---------------------------------------------------------------------------
+
+/**
+ * A minimal http.IncomingMessage double: an EventEmitter carrying the
+ * headers/method/url handleRequest reads, plus manual 'data'/'end'/'close'
+ * emission so tests can drive the request lifecycle explicitly (a real
+ * Readable's autoDestroy would fire 'close' right after 'end', which would
+ * defeat the point of testing 'close' as a distinct disconnect signal).
+ */
+function makeMockReq(overrides: Partial<http.IncomingMessage> = {}): http.IncomingMessage {
+  const req = new EventEmitter() as unknown as http.IncomingMessage
+  Object.assign(req, {
+    method: 'POST',
+    url: '/v1/chat/completions',
+    headers: { authorization: 'Bearer test-token' },
+    ...overrides
+  })
+  return req
+}
+
+/**
+ * A minimal http.ServerResponse double. `writableEnded`/`destroyed` mirror
+ * the real flags `sendJson`/`handleRequest` check before writing; `end`
+ * flips `writableEnded` the way a real response would.
+ */
+function makeMockRes(): http.ServerResponse & { writeHead: ReturnType<typeof vi.fn> } {
+  const res = new EventEmitter() as unknown as http.ServerResponse & {
+    writeHead: ReturnType<typeof vi.fn>
+  }
+  Object.assign(res, {
+    statusCode: 200,
+    headersSent: false,
+    writableEnded: false,
+    destroyed: false,
+    setHeader: vi.fn(),
+    writeHead: vi.fn(),
+    write: vi.fn(),
+    end: vi.fn(function end(this: typeof res) {
+      this.writableEnded = true
+    })
+  })
+  return res
+}
+
+/** Emulates fetch's real abort semantics: rejects once the signal aborts. */
+function pendingUntilAborted(signal: AbortSignal): Promise<never> {
+  return new Promise((_resolve, reject) => {
+    signal.addEventListener('abort', () => {
+      const err = new Error('This operation was aborted')
+      err.name = 'AbortError'
+      reject(err)
+    })
+  })
+}
+
+/**
+ * handleRequest awaits two OIDC round-trips (discovery + userinfo) before it
+ * ever calls `readBody`, which is what attaches the 'data'/'end' listeners
+ * `req.emit(...)` needs a live listener for. Polling for the listener
+ * (rather than guessing a fixed number of microtask ticks) keeps the test
+ * from being coupled to handleRequest's exact internal await count.
+ */
+function waitForListener(emitter: EventEmitter, event: string): Promise<void> {
+  return new Promise((resolve) => {
+    const check = () => {
+      if (emitter.listenerCount(event) > 0) {
+        resolve()
+      } else {
+        setImmediate(check)
+      }
+    }
+    check()
+  })
+}
+
+describe('handleRequest — aborts the upstream LLM fetch on client disconnect', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    rateLimitWindows.clear()
+  })
+
+  it('aborts the outbound fetch signal when the client closes the connection mid-flight', async () => {
+    let capturedSignal: AbortSignal | undefined
+    let chatCompletionsCalled = false
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        if (url.includes('.well-known/openid-configuration')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ userinfo_endpoint: 'https://ocis.example.test/userinfo' })
+          })
+        }
+        if (url.includes('/userinfo')) {
+          return Promise.resolve({ ok: true, json: async () => ({ sub: 'user-close-test' }) })
+        }
+        if (url.includes('/chat/completions')) {
+          capturedSignal = init?.signal as AbortSignal
+          chatCompletionsCalled = true
+          return pendingUntilAborted(capturedSignal)
+        }
+        return Promise.reject(new Error(`unexpected fetch url: ${url}`))
+      })
+    )
+
+    const req = makeMockReq()
+    const res = makeMockRes()
+
+    const pending = handleRequest(req, res)
+
+    // handleRequest awaits OIDC discovery + userinfo before it ever attaches
+    // the body listeners, so wait for readBody's 'data' listener before
+    // emitting the body.
+    await waitForListener(req, 'data')
+    req.emit('data', Buffer.from(JSON.stringify({ model: 'test-model', messages: [] })))
+    req.emit('end')
+
+    // Wait until the outbound LLM fetch has actually been issued, then
+    // simulate the client disconnecting while it's still in flight.
+    await vi.waitFor(() => {
+      if (!chatCompletionsCalled) throw new Error('chat/completions not called yet')
+    })
+    req.emit('close')
+
+    await pending
+
+    expect(capturedSignal).toBeDefined()
+    expect(capturedSignal?.aborted).toBe(true)
+  })
+
+  it('does not attempt to write to the response once the client has disconnected', async () => {
+    let chatCompletionsCalled = false
+
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        if (url.includes('.well-known/openid-configuration')) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ userinfo_endpoint: 'https://ocis.example.test/userinfo' })
+          })
+        }
+        if (url.includes('/userinfo')) {
+          return Promise.resolve({ ok: true, json: async () => ({ sub: 'user-write-test' }) })
+        }
+        if (url.includes('/chat/completions')) {
+          chatCompletionsCalled = true
+          return pendingUntilAborted(init?.signal as AbortSignal)
+        }
+        return Promise.reject(new Error(`unexpected fetch url: ${url}`))
+      })
+    )
+
+    const req = makeMockReq()
+    const res = makeMockRes()
+
+    const pending = handleRequest(req, res)
+
+    await waitForListener(req, 'data')
+    req.emit('data', Buffer.from(JSON.stringify({ model: 'test-model', messages: [] })))
+    req.emit('end')
+
+    await vi.waitFor(() => {
+      if (!chatCompletionsCalled) throw new Error('chat/completions not called yet')
+    })
+
+    // The client's socket is gone: mark the response as no longer writable
+    // (mirrors what happens to a real http.ServerResponse sharing the same
+    // dead connection) and signal the disconnect.
+    res.writableEnded = true
+    res.destroyed = true
+    req.emit('close')
+
+    // Should resolve cleanly — no unhandled rejection/exception — and must
+    // not have attempted to write the 502 "Could not reach LLM endpoint"
+    // fallback to a response nobody can receive.
+    await expect(pending).resolves.toBeUndefined()
+    expect(res.writeHead).not.toHaveBeenCalled()
+    expect(res.end).not.toHaveBeenCalled()
+  })
+
+  it('attaches an error listener to the response, so a late write-after-close error cannot crash the process', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) => {
+        // Fails fast (missing auth header) so handleRequest returns quickly
+        // — this test only cares about the defensive res.on('error') guard
+        // that's installed unconditionally at the top of handleRequest.
+        return Promise.reject(new Error(`unexpected fetch url: ${url}`))
+      })
+    )
+
+    const req = makeMockReq({ headers: {} })
+    const res = makeMockRes()
+
+    await handleRequest(req, res)
+
+    // Node's EventEmitter throws synchronously when 'error' is emitted with
+    // no listener attached — asserting this does NOT throw proves
+    // handleRequest's `res.on('error', () => {})` guard is in place.
+    expect(() => res.emit('error', new Error('write after close'))).not.toThrow()
   })
 })

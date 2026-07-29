@@ -59,17 +59,30 @@ export function useLLM(cfg: LLMConfig): UseLLMReturn {
       )
     }
 
-    const r = await fetch(`${base}/chat/completions`, {
-      method: 'POST',
-      headers: buildHeaders(),
-      signal: AbortSignal.timeout(60_000),
-      body: JSON.stringify({
-        model: cfg.model,
-        messages,
-        max_tokens: opts.maxTokens ?? 2048,
-        temperature: opts.temperature ?? 0.7
+    let r: Response
+    try {
+      r = await fetch(`${base}/chat/completions`, {
+        method: 'POST',
+        headers: buildHeaders(),
+        // Generous safety-net ceiling, decoupled from the proxy's own (separately
+        // configurable) upstream timeout; only guards against the network or proxy
+        // never responding at all.
+        signal: AbortSignal.timeout(300_000),
+        body: JSON.stringify({
+          model: cfg.model,
+          messages,
+          max_tokens: opts.maxTokens ?? 2048,
+          temperature: opts.temperature ?? 0.7
+        })
       })
-    })
+    } catch (err) {
+      // A timeout abort rejects the fetch itself, before there's any Response to
+      // check .ok on — so this has to be caught here rather than below.
+      if (err instanceof DOMException && err.name === 'TimeoutError') {
+        throw new Error($gettext('The AI service did not respond in time. Please try again later.'))
+      }
+      throw err
+    }
 
     if (!r.ok) {
       const status = r.status

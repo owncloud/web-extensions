@@ -209,7 +209,15 @@ export function isOriginAllowed(origin: string | undefined, expected: string): b
   return true
 }
 
+/**
+ * Writes a JSON response, but no-ops when the client has already
+ * disconnected (`res.writableEnded`/`res.destroyed`) — writing to a response
+ * whose underlying socket is gone can emit an 'error' event on `res`, which
+ * would crash the process without a listener. See the `res.on('error', ...)`
+ * guard in `handleRequest` for the belt-and-suspenders backstop.
+ */
 function sendJson(res: http.ServerResponse, status: number, body: unknown): void {
+  if (res.writableEnded || res.destroyed) return
   const payload = JSON.stringify(body)
   res.writeHead(status, { 'Content-Type': 'application/json' })
   res.end(payload)
@@ -219,7 +227,27 @@ function sendJson(res: http.ServerResponse, status: number, body: unknown): void
 // Request handler
 // ---------------------------------------------------------------------------
 
-async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<void> {
+export async function handleRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+): Promise<void> {
+  // Defensive: once the client has disconnected (see the 'close' listener
+  // below), writing to `res` can emit an 'error' event on the response
+  // stream. Without a listener, an unhandled 'error' event on a stream
+  // crashes the whole process, so this is a no-op safety net regardless of
+  // where a write happens below.
+  res.on('error', () => {})
+
+  // Tracks whether the client is still there to receive a response, and
+  // lets us abort the outbound LLM fetch the moment it isn't. Node emits
+  // 'close' on the request once the underlying connection is terminated —
+  // whether that's a clean end, the client's own AbortSignal.timeout firing,
+  // or the tab/browser dropping the connection — so this is the one signal
+  // we need to stop doing (and paying for) work nobody will receive the
+  // result of.
+  const clientAbortController = new AbortController()
+  req.on('close', () => clientAbortController.abort())
+
   setCorsHeaders(res)
 
   // Preflight
@@ -304,11 +332,15 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
 
   let llmRes: Response
   try {
+    // Two independent reasons to give up on the outbound LLM call: it's
+    // taking too long (upstream timeout), or the client that asked for it
+    // is no longer there (clientAbortController, aborted from the 'close'
+    // listener above). Either one should stop the request.
     llmRes = await fetch(`${LLM_ENDPOINT}/chat/completions`, {
       method: 'POST',
       headers: llmHeaders,
       body: JSON.stringify(sanitized),
-      signal: AbortSignal.timeout(LLM_TIMEOUT_MS)
+      signal: AbortSignal.any([clientAbortController.signal, AbortSignal.timeout(LLM_TIMEOUT_MS)])
     })
   } catch (err) {
     console.error('[ai-llm-proxy] LLM request error:', err)
@@ -317,6 +349,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
   }
 
   const llmBody = await llmRes.text()
+  if (res.writableEnded || res.destroyed) return
   res.writeHead(llmRes.status, {
     'Content-Type': llmRes.headers.get('content-type') ?? 'application/json'
   })

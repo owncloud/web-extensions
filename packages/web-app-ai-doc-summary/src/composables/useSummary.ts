@@ -147,7 +147,10 @@ export function useSummary(
     const res = await fetch(`${base}/chat/completions`, {
       method: 'POST',
       headers: buildHeaders(),
-      signal: AbortSignal.timeout(30_000),
+      // Generous safety-net ceiling, decoupled from the proxy's own (separately
+      // configurable) upstream timeout; only guards against the network or proxy
+      // never responding at all.
+      signal: AbortSignal.timeout(300_000),
       body: JSON.stringify({
         model: cfg.model,
         messages: [
