@@ -15,11 +15,11 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "pdfjs-dist": "^6.1.200",
+    "pdfjs-dist": "^6.2.108",
     "vue3-gettext": "^2.4.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.1",
     "@ownclouders/eslint-config": "12.5.0",
     "@ownclouders/extension-sdk": "12.5.0",
     "@ownclouders/prettier-config": "0.0.1",
@@ -37,7 +37,7 @@
     "vitest": "4.1.10",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0",
-    "vue-tsc": "3.3.8"
+    "vue-tsc": "3.3.9"
   },
   "packageManager": "pnpm@10.34.1"
 }
