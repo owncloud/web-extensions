@@ -27,9 +27,9 @@
     "typescript": "5.9.3",
     "vite": "7.2.2",
     "vitest": "4.1.10",
-    "vue": "^3.4.21",
+    "vue": "^3.5.41",
     "vue-router": "^5.0.7",
-    "vue-tsc": "3.3.8",
+    "vue-tsc": "3.3.9",
     "vue3-gettext": "^2.4.0"
   }
 }
