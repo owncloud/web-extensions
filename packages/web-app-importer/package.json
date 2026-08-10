@@ -19,7 +19,7 @@
     "@uppy/google-drive": "^5.1.0",
     "@uppy/onedrive": "^5.1.0",
     "@uppy/webdav": "1.1.1",
-    "pinia": "^3.0.3"
+    "pinia": "^4.0.2"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.0",
