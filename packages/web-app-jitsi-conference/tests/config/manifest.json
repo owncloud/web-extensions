@@ -1,0 +1,9 @@
+{
+  "entrypoint": "jitsi-conference.js",
+  "config": {
+    "url": "https://owncloud.dev",
+    "jitsiAdminProxy": {
+      "endpoint": "https://host.docker.internal:9200/jitsi-admin-proxy/rooms"
+    }
+  }
+}

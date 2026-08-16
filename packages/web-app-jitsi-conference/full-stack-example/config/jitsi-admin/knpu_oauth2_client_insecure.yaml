@@ -1,0 +1,19 @@
+# This deployment's Keycloak sits behind Traefik's self-signed cert for
+# *.owncloud.test (see README: testing only, no real certs). Without this,
+# the server-side token exchange to Keycloak fails with cURL error 60
+# (unable to get local issuer certificate).
+#
+# knpu_oauth2_client's own "http_client_options.verify" is a dead end here:
+# league/oauth2-client's AbstractProvider only honors "verify" when a
+# "proxy" option is also set (see AbstractProvider::__construct - it's a
+# deliberate safety gate, not a bug). So instead we hand it our own
+# pre-configured Guzzle client, which bypasses that restriction entirely.
+# Tied to the same INSECURE flag already used elsewhere in this stack.
+services:
+    jitsi_admin_insecure_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - verify: '%env(not:INSECURE)%'
+
+knpu_oauth2_client:
+    http_client: jitsi_admin_insecure_http_client

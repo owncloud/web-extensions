@@ -1,0 +1,6 @@
+{
+  "entrypoint": "jitsi-conference.js",
+  "config": {
+    "url": ""
+  }
+}

@@ -57,6 +57,8 @@ services:
       - ./packages/web-app-vim-nav/dist:/web/apps/vim-nav
       - ./packages/web-app-ai-smart-collections-nav/dist:/web/apps/ai-smart-collections-nav
       - ./packages/web-app-ai-folder-readme-generator/dist:/web/apps/ai-folder-readme-generator
+      - ./packages/web-app-jitsi-conference/dist:/web/apps/jitsi-conference
+      - ./packages/web-app-jitsi-conference/tests/config/manifest.json:/web/apps/jitsi-conference/manifest.json
     depends_on:
       - traefik
 
@@ -80,6 +82,29 @@ services:
       traefik.http.routers.ai-llm-proxy.middlewares: ai-llm-proxy-strip,cors
       traefik.http.middlewares.ai-llm-proxy-strip.stripPrefix.prefixes: /ai-llm-proxy
       traefik.http.services.ai-llm-proxy.loadbalancer.server.port: 3030
+    depends_on:
+      - traefik
+
+  jitsi-admin-proxy:
+    build:
+      context: ./packages/jitsi-admin-proxy
+      dockerfile: Dockerfile
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    environment:
+      OCIS_URL: 'https://host.docker.internal:9200'
+      JITSI_ADMIN_URL: '${JITSI_ADMIN_URL:-}'
+      JITSI_ADMIN_API_KEY: '${JITSI_ADMIN_API_KEY:-}'
+      JITSI_ADMIN_SERVER: '${JITSI_ADMIN_SERVER:-}'
+      PORT: '3031'
+    labels:
+      traefik.enable: true
+      traefik.http.routers.jitsi-admin-proxy.tls: true
+      traefik.http.routers.jitsi-admin-proxy.rule: Host(`host.docker.internal`) && PathPrefix(`/jitsi-admin-proxy`)
+      traefik.http.routers.jitsi-admin-proxy.entrypoints: ocis
+      traefik.http.routers.jitsi-admin-proxy.middlewares: jitsi-admin-proxy-strip,cors
+      traefik.http.middlewares.jitsi-admin-proxy-strip.stripPrefix.prefixes: /jitsi-admin-proxy
+      traefik.http.services.jitsi-admin-proxy.loadbalancer.server.port: 3031
     depends_on:
       - traefik
 

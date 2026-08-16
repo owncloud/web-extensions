@@ -1,0 +1,8 @@
+jitsi-conference:
+  config:
+    url: "https://${JITSI_ADMIN_DOMAIN|jitsi.owncloud.test}"
+    # oCIS's ${VAR|default} templating only applies to top-level config values,
+    # not nested ones (confirmed empirically) - hardcode this by hand if you
+    # change OCIS_DOMAIN from its default.
+    jitsiAdminProxy:
+      endpoint: "https://ocis.owncloud.test/jitsi-admin-proxy/rooms"

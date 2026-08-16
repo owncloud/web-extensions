@@ -1,0 +1,393 @@
+---
+# Full, self-contained stack for exercising the jitsi-conference extension +
+# jitsi-admin-proxy end to end: oCIS, Keycloak (shared IdP for both oCIS and
+# jitsi-admin), jitsi-admin (its own MariaDB + websocket hub), LiveKit (as the
+# meeting backend jitsi-admin schedules rooms on) + LiveKit Meet (a browser
+# client to actually join a call), and Mailpit for the emails both Keycloak
+# and jitsi-admin send. See README.md in this directory before running this -
+# it documents required /etc/hosts entries and several non-obvious gotchas.
+#
+# This intentionally does NOT touch the repo's root docker-compose.yml (used
+# by every other package + CI) - Keycloak/OIDC and jitsi-admin's own vhost
+# needs don't fit that file's single-host, path-prefix, basic-auth-only
+# convention without changing it for everyone. Run this one standalone.
+x-jitsi-admin-app: &jitsi_admin_app
+  image: h2invent/jitsi-admin-main:latest
+  networks:
+    jitsi-example-net:
+  environment:
+    APACHE_DOCUMENT_ROOT: "public/"
+    APP_ENV: prod
+    APP_DEBUG: 0
+    APP_SECRET: ${JITSI_ADMIN_APP_SECRET:?set a real secret - see .env.example}
+    APP_SCHEME: https
+    INSECURE: ${INSECURE:-true}
+    TRUSTED_PROXIES: "127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    PUBLIC_URL: ${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+    DEFAULT_LANGUAGE: en
+    DATABASE_URL: mysql://jitsiadmin:${JITSI_ADMIN_DB_PASSWORD:?set a real password - see .env.example}@mariadb:3306/jitsiadmin?serverVersion=mariadb-11.4.0
+    MAILER_DSN: smtp://mailserver:1025
+    DEFAULT_EMAIL: jitsiadmin@${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+    OAUTH_KEYCLOAK_CLIENT_ID: jitsiadmin
+    OAUTH_KEYCLOAK_CLIENT_SECRET: ${JITSI_ADMIN_OIDC_CLIENT_SECRET:?set a real secret - see .env.example}
+    OAUTH_KEYCLOAK_SERVER: https://${KEYCLOAK_DOMAIN:-keycloak.owncloud.test}
+    OAUTH_KEYCLOAK_REALM: jitsiadmin
+    MERCURE_URL: http://websocket-ja:3000/.well-known/mercure
+    MERCURE_PUBLIC_URL: https://${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+    MERCURE_JWT_SECRET: ${JITSI_ADMIN_MERCURE_JWT_SECRET:?set a real secret - see .env.example}
+    WEBSOCKET_SECRET: ${JITSI_ADMIN_MERCURE_JWT_SECRET:?set a real secret - see .env.example}
+    MESSENGER_TRANSPORT_DSN: doctrine://default
+    CRON_SCHEDULE_1: "* * * * *"
+    CRON_COMMAND_1: "php /var/www/html/bin/console cron:run"
+    # IMPORTANT: must match the user Apache actually serves requests as in
+    # this image (uid 1000 "docker", not root/www-data) - otherwise the
+    # cron-triggered console command creates var/log/prod.log as root, and
+    # the web process can no longer append to it. Every request that logs
+    # anything then 500s while requests that don't log anything (e.g. static
+    # pages) keep working, which makes this LOOK like an intermittent bug
+    # instead of the permissions issue it actually is. Verify the actual
+    # user by running `id` inside a shell in the running container if this
+    # image's user ever changes.
+    CRON_USER_1: docker
+  restart: unless-stopped
+
+services:
+  traefik:
+    image: traefik:v3.6.10
+    networks:
+      jitsi-example-net:
+    command:
+      - "--log.level=${TRAEFIK_LOG_LEVEL:-ERROR}"
+      - "--certificatesResolvers.http.acme.email=${TRAEFIK_ACME_MAIL:-example@example.org}"
+      - "--certificatesResolvers.http.acme.storage=/certs/acme.json"
+      - "--certificatesResolvers.http.acme.httpChallenge.entryPoint=http"
+      - "--entryPoints.http.address=:80"
+      - "--entryPoints.http.http.redirections.entryPoint.to=https"
+      - "--entryPoints.http.http.redirections.entryPoint.scheme=https"
+      - "--entryPoints.https.address=:443"
+      - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedByDefault=false"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "certs:/certs"
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------- oCIS ---
+  ocis:
+    image: owncloud/ocis-rolling:latest
+    entrypoint: /bin/sh
+    command: ["-c", "ocis init || true && ocis server"]
+    networks:
+      jitsi-example-net:
+    environment:
+      OCIS_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
+      OCIS_LOG_LEVEL: error
+      IDM_ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      # Keycloak IDP config - same pattern as ocis_full_deploy's keycloak.yml
+      PROXY_AUTOPROVISION_ACCOUNTS: "true"
+      PROXY_ROLE_ASSIGNMENT_DRIVER: "oidc"
+      OCIS_OIDC_ISSUER: https://${KEYCLOAK_DOMAIN:-keycloak.owncloud.test}/realms/${KEYCLOAK_REALM:-oCIS}
+      PROXY_OIDC_REWRITE_WELLKNOWN: "true"
+      WEB_OIDC_CLIENT_ID: web
+      PROXY_USER_OIDC_CLAIM: "preferred_username"
+      PROXY_USER_CS3_CLAIM: "username"
+      OCIS_EXCLUDE_RUN_SERVICES: "idp"
+      GRAPH_ASSIGN_DEFAULT_USER_ROLE: "false"
+      GRAPH_USERNAME_MATCH: "none"
+      KEYCLOAK_DOMAIN: ${KEYCLOAK_DOMAIN:-keycloak.owncloud.test}
+      WEB_OIDC_SCOPE: "openid profile email acr"
+      OCIS_INSECURE: "${INSECURE:-true}"
+      WEB_ASSET_APPS_PATH: /web/apps
+      WEB_UI_CONFIG_FILE: /web/config.json
+      NOTIFICATIONS_SMTP_HOST: mailserver
+      NOTIFICATIONS_SMTP_PORT: 1025
+      NOTIFICATIONS_SMTP_SENDER: "oCIS notifications <notifications@${OCIS_DOMAIN:-ocis.owncloud.test}>"
+      NOTIFICATIONS_SMTP_INSECURE: "true"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ocis.entrypoints=https"
+      - "traefik.http.routers.ocis.rule=Host(`${OCIS_DOMAIN:-ocis.owncloud.test}`)"
+      - "traefik.http.routers.ocis.tls.certresolver=http"
+      - "traefik.http.services.ocis.loadbalancer.server.port=9200"
+    volumes:
+      - ocis-config:/etc/ocis
+      - ./ocis.apps.yaml:/etc/ocis/apps.yaml
+      # the extension's own build output - already built via `pnpm --filter
+      # jitsi-conference build` from the repo root, no separate build step here
+      - ../dist:/web/apps/jitsi-conference
+      - ../public/manifest.json:/web/apps/jitsi-conference/manifest.json
+    depends_on:
+      - traefik
+      - keycloak
+
+  # ------------------------------------------------------------ Keycloak ---
+  # Shared IdP for both oCIS and jitsi-admin (DECISIONS.md D2) - imports both
+  # realms into the same Keycloak so oCIS's demo users also work in jitsi-admin.
+  postgres:
+    image: postgres:alpine
+    networks:
+      jitsi-example-net:
+    volumes:
+      - keycloak_postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.5
+    networks:
+      jitsi-example-net:
+    command:
+      [
+        "start",
+        "--spi-connections-http-client-default-disable-trust-manager=${INSECURE:-true}",
+        "--import-realm",
+      ]
+    entrypoint: ["/bin/sh", "/opt/keycloak/bin/docker-entrypoint-override.sh"]
+    volumes:
+      - "./config/keycloak/docker-entrypoint-override.sh:/opt/keycloak/bin/docker-entrypoint-override.sh"
+      - "./config/keycloak/ocis-realm.dist.json:/opt/keycloak/data/import-dist/ocis-realm.json"
+      - "./config/keycloak/jitsiadmin-realm.dist.json:/opt/keycloak/data/import-dist/jitsiadmin-realm.json"
+    environment:
+      OCIS_DOMAIN: ${OCIS_DOMAIN:-ocis.owncloud.test}
+      KC_HOSTNAME: ${KEYCLOAK_DOMAIN:-keycloak.owncloud.test}
+      KC_DB: postgres
+      KC_DB_URL: "jdbc:postgresql://postgres:5432/keycloak"
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_PROXY_HEADERS: xforwarded
+      KC_HTTP_ENABLED: "true"
+      # jitsiadmin realm template placeholders (see docker-entrypoint-override.sh)
+      JITSI_ADMIN_DOMAIN: ${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+      JITSI_ADMIN_OIDC_CLIENT_SECRET: ${JITSI_ADMIN_OIDC_CLIENT_SECRET:?set a real secret - see .env.example}
+      JITSI_ADMIN_SMTP_HOST: mailserver
+      JITSI_ADMIN_SMTP_PORT: "1025"
+      JITSI_ADMIN_SMTP_USER: ""
+      JITSI_ADMIN_SMTP_PASSWORD: ""
+      JITSI_ADMIN_SMTP_FROM: jitsiadmin@${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.keycloak.entrypoints=https"
+      - "traefik.http.routers.keycloak.rule=Host(`${KEYCLOAK_DOMAIN:-keycloak.owncloud.test}`)"
+      - "traefik.http.routers.keycloak.tls.certresolver=http"
+      - "traefik.http.services.keycloak.loadbalancer.server.port=8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  # --------------------------------------------------------- jitsi-admin ---
+  mariadb:
+    image: mariadb:11.4
+    networks:
+      jitsi-example-net:
+    environment:
+      MARIADB_DATABASE: jitsiadmin
+      MARIADB_USER: jitsiadmin
+      MARIADB_PASSWORD: ${JITSI_ADMIN_DB_PASSWORD:?set a real password - see .env.example}
+      MARIADB_ROOT_PASSWORD: ${JITSI_ADMIN_DB_ROOT_PASSWORD:?set a real password - see .env.example}
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost", "-u", "root", "-p${JITSI_ADMIN_DB_ROOT_PASSWORD}"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - jitsi_admin_db:/var/lib/mysql
+    restart: unless-stopped
+
+  app-ja:
+    <<: *jitsi_admin_app
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "-i", "http://localhost:80/health/check"]
+      interval: 20s
+      timeout: 10s
+      start_period: 30s
+      retries: 10
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app-ja.entrypoints=https"
+      - "traefik.http.routers.app-ja.rule=Host(`${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}`)"
+      - "traefik.http.routers.app-ja.tls.certresolver=http"
+      - "traefik.http.services.app-ja.loadbalancer.server.port=80"
+      - "traefik.http.services.app-ja.loadbalancer.sticky=true"
+      - "traefik.http.services.app-ja.loadbalancer.sticky.cookie.name=jad"
+      - "traefik.http.services.app-ja.loadbalancer.sticky.cookie.secure=true"
+    volumes:
+      - jitsi_admin_theme_data:/var/www/html/theme
+      - jitsi_admin_image_upload:/var/www/html/public/uploads/images
+      - jitsi_admin_theme_assets:/var/www/html/public/theme
+      - jitsi_admin_recording_uploads:/var/www/html/data/recording
+      # Works around league/oauth2-client silently ignoring "verify: false"
+      # unless a "proxy" option is also set (a deliberate safety gate, not a
+      # bug - see AbstractProvider::__construct). Needed for the token
+      # exchange to Keycloak's self-signed cert to succeed. Only bites when
+      # INSECURE is actually true; harmless otherwise.
+      - "./config/jitsi-admin/knpu_oauth2_client_insecure.yaml:/var/www/html/config/packages/prod/knpu_oauth2_client_insecure.yaml:ro"
+
+  app-queu:
+    <<: *jitsi_admin_app
+    command: php /var/www/html/bin/console messenger:consume async --memory-limit=126m
+    depends_on:
+      app-ja:
+        condition: service_healthy
+    volumes:
+      - jitsi_admin_theme_data:/var/www/html/theme
+      - "./config/jitsi-admin/knpu_oauth2_client_insecure.yaml:/var/www/html/config/packages/prod/knpu_oauth2_client_insecure.yaml:ro"
+
+  websocket-ja:
+    image: h2invent/jitsi-admin-websocket:latest
+    hostname: websocket-ja
+    networks:
+      jitsi-example-net:
+    depends_on:
+      app-ja:
+        condition: service_healthy
+    environment:
+      MERCURE_JWT_SECRET: ${JITSI_ADMIN_MERCURE_JWT_SECRET:?set a real secret - see .env.example}
+      WEBSOCKET_SECRET: ${JITSI_ADMIN_MERCURE_JWT_SECRET:?set a real secret - see .env.example}
+      MERCURE_PUBLIC_URL: https://${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/healthz"]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+      start_period: 10s
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.websocket-ja.entrypoints=https"
+      - "traefik.http.routers.websocket-ja.rule=Host(`${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.websocket-ja.tls.certresolver=http"
+      - "traefik.http.services.websocket-ja.loadbalancer.server.port=3000"
+    volumes:
+      - jitsi_admin_caddy_data:/data
+      - jitsi_admin_caddy_config:/config
+    restart: unless-stopped
+
+  # ------------------------------------------------------------ LiveKit ---
+  # The meeting backend jitsi-admin schedules rooms on (register it as a
+  # "Server" in jitsi-admin's admin settings after this stack is up - that
+  # step can't be automated from a compose file, see README.md).
+  redis:
+    image: redis:7-alpine
+    networks:
+      jitsi-example-net:
+    volumes:
+      - livekit_redis_data:/data
+    restart: unless-stopped
+
+  livekit:
+    image: livekit/livekit-server:latest
+    command: --config /etc/livekit.yaml
+    networks:
+      jitsi-example-net:
+    depends_on:
+      - redis
+    environment:
+      LIVEKIT_KEYS: "${LIVEKIT_API_KEY:?set a real key - see .env.example}: ${LIVEKIT_API_SECRET:?set a real secret - see .env.example}"
+    volumes:
+      - "./config/livekit/livekit.yaml:/etc/livekit.yaml:ro"
+    ports:
+      # ICE-over-TCP fallback and the WebRTC media mux range - can't go
+      # through Traefik (raw RTP/ICE, not HTTP). NOTE: if you're on Docker
+      # Desktop (macOS/Windows), do NOT change this to LiveKit's "normal"
+      # port_range_start/end (e.g. 50000-60000) - Docker Desktop spawns one
+      # docker-proxy process per published port, and 10,000+ of them can
+      # grind the whole daemon to a halt badly enough that even unrelated
+      # containers become briefly unreachable. livekit.yaml's udp_port mux
+      # setting is deliberate, not a shortcut.
+      - "7881:7881"
+      - "7882-7889:7882-7889/udp"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.livekit.entrypoints=https"
+      - "traefik.http.routers.livekit.rule=Host(`${LIVEKIT_DOMAIN:-livekit.owncloud.test}`)"
+      - "traefik.http.routers.livekit.tls.certresolver=http"
+      - "traefik.http.services.livekit.loadbalancer.server.port=7880"
+    restart: unless-stopped
+
+  # LiveKit's official open source demo video-conferencing frontend
+  # (livekit-examples/meet) - lets you actually join a test room in a
+  # browser. Built from source since upstream ships no Dockerfile/image.
+  livekit-meet:
+    build:
+      context: ./config/livekit-meet
+    networks:
+      jitsi-example-net:
+    depends_on:
+      - livekit
+    environment:
+      LIVEKIT_API_KEY: ${LIVEKIT_API_KEY:?set a real key - see .env.example}
+      LIVEKIT_API_SECRET: ${LIVEKIT_API_SECRET:?set a real secret - see .env.example}
+      LIVEKIT_URL: wss://${LIVEKIT_DOMAIN:-livekit.owncloud.test}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.livekit-meet.entrypoints=https"
+      - "traefik.http.routers.livekit-meet.rule=Host(`${LIVEKIT_MEET_DOMAIN:-meet.owncloud.test}`)"
+      - "traefik.http.routers.livekit-meet.tls.certresolver=http"
+      - "traefik.http.services.livekit-meet.loadbalancer.server.port=3000"
+    restart: unless-stopped
+
+  # ---------------------------------------------------- jitsi-admin-proxy ---
+  # Same package as the repo root docker-compose.yml's jitsi-admin-proxy
+  # service, just re-pointed at this stack's own oCIS/jitsi-admin instead of
+  # host.docker.internal:9200.
+  jitsi-admin-proxy:
+    build:
+      context: ../../jitsi-admin-proxy
+      dockerfile: Dockerfile
+    networks:
+      jitsi-example-net:
+    environment:
+      PORT: "3031"
+      OCIS_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
+      JITSI_ADMIN_URL: https://${JITSI_ADMIN_DOMAIN:-jitsi.owncloud.test}
+      JITSI_ADMIN_API_KEY: ${JITSI_ADMIN_API_KEY:-}
+      JITSI_ADMIN_SERVER: ${JITSI_ADMIN_SERVER:-}
+      # oCIS/Keycloak/jitsi-admin all use self-signed certs in this example
+      # (INSECURE=true); Node's fetch() has no other way to trust them when
+      # validating oCIS tokens.
+      NODE_TLS_REJECT_UNAUTHORIZED: ${INSECURE:+0}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jitsi-admin-proxy.entrypoints=https"
+      - "traefik.http.routers.jitsi-admin-proxy.rule=Host(`${OCIS_DOMAIN:-ocis.owncloud.test}`) && PathPrefix(`/jitsi-admin-proxy`)"
+      - "traefik.http.routers.jitsi-admin-proxy.tls.certresolver=http"
+      - "traefik.http.middlewares.jitsi-admin-proxy-strip.stripprefix.prefixes=/jitsi-admin-proxy"
+      - "traefik.http.routers.jitsi-admin-proxy.middlewares=jitsi-admin-proxy-strip"
+      - "traefik.http.services.jitsi-admin-proxy.loadbalancer.server.port=3031"
+    restart: unless-stopped
+
+  # ------------------------------------------------------------- Mailpit ---
+  # Catches every email Keycloak/jitsi-admin would otherwise try to send
+  # (invites, password resets) - open http://localhost:8025 to read them.
+  mailserver:
+    image: axllent/mailpit:latest
+    networks:
+      jitsi-example-net:
+    ports:
+      - "8025:8025"
+    restart: unless-stopped
+
+volumes:
+  certs:
+  ocis-config:
+  keycloak_postgres_data:
+  jitsi_admin_db:
+  jitsi_admin_theme_data:
+  jitsi_admin_image_upload:
+  jitsi_admin_theme_assets:
+  jitsi_admin_recording_uploads:
+  jitsi_admin_caddy_data:
+  jitsi_admin_caddy_config:
+  livekit_redis_data:
+
+networks:
+  jitsi-example-net:

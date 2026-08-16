@@ -1,0 +1,23 @@
+# Non-secret settings only - the API key/secret pair is injected at container
+# start via the LIVEKIT_KEYS env var (see livekit.yml), never committed here.
+port: 7880
+
+redis:
+  address: redis-livekit:6379
+
+rtc:
+  # UDP mux: all WebRTC media multiplexes through this small, fixed set of ports
+  # instead of one port per possible simultaneous stream (port_range_start/end).
+  # Docker Desktop on macOS spawns a separate docker-proxy process per published
+  # port - publishing the "normal" 50000-60000 range (10k+ ports) grinds container
+  # start to a near-halt. A handful of muxed ports has no such cost and is
+  # LiveKit's own recommended setting for exactly this kind of environment.
+  udp_port: 7882-7889
+  # ICE-over-TCP fallback candidate. Per LiveKit's own docs this port cannot sit
+  # behind a load balancer/TLS - it's published directly on the host in livekit.yml.
+  tcp_port: 7881
+  # This deployment is local-only (every *.owncloud.test domain resolves to
+  # 127.0.0.1) - there's no NAT boundary between client and server for STUN-based
+  # external IP discovery to solve, so it's left disabled rather than advertising
+  # a misleading address.
+  use_external_ip: false
