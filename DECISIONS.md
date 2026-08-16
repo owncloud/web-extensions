@@ -1,8 +1,9 @@
 # DECISIONS.md — jitsi-admin oCIS Web Extension
 
 Status after Phase 0 archaeology (`ARCHAEOLOGY.md`). D1–D4 are now all resolved (see below); Phase 1
-has been implemented as `packages/web-app-jitsi-conference`. Phase 2 ("call all Space members") has
-also been implemented — see the "Phase 2" section at the end of this document.
+has been implemented as `packages/web-app-jitsi-conference`. Phase 2 ("call all Space members") and
+Phase 3 ("call all recipients of a file/folder") have also been implemented — see their sections
+below. Phase 4 remains out of scope.
 
 ---
 
@@ -207,7 +208,62 @@ the two functions making these calls (`createJitsiAdminRoom`/`inviteJitsiAdminPa
 small and isolated specifically so they're easy to correct once verified against a real deployment.
 See `packages/jitsi-admin-proxy/README.md`.
 
+### Not implemented (at the time Phase 2 shipped)
+
+Phase 3 (call all recipients of a file/folder) and Phase 4 (Collabora-plus-call layout) remained
+explicitly out of scope, per the original brief. Phase 3 has since been implemented — see below;
+Phase 4 remains out of scope.
+
+---
+
+## Phase 3 — "Call all recipients of a file/folder"
+
+### Extension point and UI (reused, not duplicated)
+
+The same `global.files.sidebar` `sidebarPanel` extension point Phase 2 uses for Spaces already
+covers regular files/folders — `web-pkg`'s generic `FileSideBar`/`ContextActions` components render
+it for any `Resource`, not just `SpaceResource` (§Phase 2 above). Rather than a second, separate
+extension point, `packages/web-app-jitsi-conference/src/extensions.ts` now registers a **second**
+`sidebarPanel` extension on the same point, gated by `!isSpaceResource(items[0])` instead of
+`isProjectSpaceResource(items[0])` — the two panels are mutually exclusive by construction (a
+selection is either a Space or it isn't) and share the same "Video call" title, icon, and
+`jitsiAdminProxy` config gate.
+
+**A real bug this surfaced during testing, worth recording:** `isSpaceResource` checks
+`resource.type === 'space'`, not `resource.driveType` (which is what `isProjectSpaceResource`
+checks). A test mock built with only `{ driveType: 'project' }` and no `type` field passes
+`isProjectSpaceResource` but fails `isSpaceResource` — confirmed by reading `@ownclouders/web-client`'s
+actual bundled implementation (`dist/*.cjs`), not just its type declarations, since the two guards
+check different fields entirely. Real `SpaceResource` objects built via `buildSpace()` always set
+both fields, so this was a test-mock gap, not a production bug — but it's a sharp edge worth flagging
+for anyone else mocking a `SpaceResource` in this codebase.
+
+### Recipient resolution (LibreGraph, confirmed locally)
+
+`GraphPermissions.listPermissions(driveId, itemId)` (already present in the locally-installed
+`@ownclouders/web-client@12.5.0` types) returns a resource's shares. Each `CollaboratorShare` carries
+a numeric `shareType` and a `sharedWith: Identity`; the package also exports a `ShareTypes` class
+(`ShareTypes.user`/`.group`/`.link`/`.guest`/`.remote`, each with a stable `.value`) so filtering
+never needs a magic number. Only shares with `shareType === ShareTypes.user.value` are resolved to an
+invitable email (another `GraphUsers.getUser(id, { select: ['mail'] })` call per recipient, same as
+Phase 2) — **group shares, public links, guest shares, and `ShareTypes.remote` (federated/OCM) shares
+are all skipped**, exactly matching the brief's own guidance to scope Phase 3 to same-instance
+individual recipients first and flag OCM as a follow-up rather than attempt it silently.
+
+### Shared plumbing, not duplicated logic
+
+The room-provisioning/error-handling core (proxy call, bearer header, timeout/error classification,
+invited/skipped/failed reporting) was extracted out of `useSpaceCall` into a new
+`useJitsiCall(proxyConfig, roomName, resolveParticipants)` composable once there were two real call
+sites; `useSpaceCall` and the new `useFileCall` are now both thin wrappers supplying only how to name
+the room and how to resolve participants. `useSpaceCall`'s existing tests were re-run unchanged after
+the extraction to confirm it stayed behavior-preserving.
+
+### Sidecar
+
+No changes needed — `jitsi-admin-proxy` already accepts an arbitrary `roomName` +
+`participants[]` list; Phase 3 is a new caller of the same endpoint, not a new API surface.
+
 ### Not implemented
 
-Phase 3 (call all recipients of a file/folder) and Phase 4 (Collabora-plus-call layout) remain
-explicitly out of scope, per the original brief.
+Phase 4 (Collabora-plus-call layout) remains out of scope, per the original brief.

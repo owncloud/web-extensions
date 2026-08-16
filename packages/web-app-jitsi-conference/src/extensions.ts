@@ -3,15 +3,24 @@ import {
   ApplicationSetupOptions,
   SidebarPanelExtension
 } from '@ownclouders/web-pkg'
-import { isProjectSpaceResource, Resource, SpaceResource } from '@ownclouders/web-client'
+import {
+  isProjectSpaceResource,
+  isSpaceResource,
+  Resource,
+  SpaceResource
+} from '@ownclouders/web-client'
 import { useGettext } from 'vue3-gettext'
 import { computed } from 'vue'
 import { JitsiConferenceConfigSchema } from './types'
 import SpaceCallPanel from './components/SpaceCallPanel.vue'
+import FileCallPanel from './components/FileCallPanel.vue'
 
 const appId = 'jitsi-conference'
 
-type JitsiExtension = AppMenuItemExtension | SidebarPanelExtension<SpaceResource, Resource, Resource>
+type JitsiExtension =
+  | AppMenuItemExtension
+  | SidebarPanelExtension<SpaceResource, Resource, Resource>
+  | SidebarPanelExtension<Resource, Resource, Resource>
 
 export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
   const { $gettext } = useGettext()
@@ -53,6 +62,26 @@ export const extensions = ({ applicationConfig }: ApplicationSetupOptions) => {
           component: SpaceCallPanel,
           componentAttrs: ({ items }) => ({
             space: (items?.[0] as SpaceResource) ?? null,
+            proxyConfig: jitsiAdminProxy,
+            jitsiAdminUrl: url
+          })
+        }
+      })
+
+      // Same sidecar, same extension point, but for a regular file/folder's share
+      // recipients instead of a Space's members — see DECISIONS.md (Phase 3).
+      result.push({
+        id: `app.${appId}.fileCallPanel`,
+        type: 'sidebarPanel',
+        extensionPointIds: ['global.files.sidebar'],
+        panel: {
+          name: 'jitsi-conference-file-call',
+          icon: 'vidicon-line',
+          title: () => $gettext('Video call'),
+          isVisible: ({ items }) => items?.length === 1 && !isSpaceResource(items[0]),
+          component: FileCallPanel,
+          componentAttrs: ({ items }) => ({
+            resource: items?.[0] ?? null,
             proxyConfig: jitsiAdminProxy,
             jitsiAdminUrl: url
           })

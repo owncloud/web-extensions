@@ -40,7 +40,7 @@ describe('jitsi-conference extensions', () => {
     })
   })
 
-  it('renders a sidebar panel when the jitsi-admin-proxy is configured', () => {
+  it('renders both sidebar panels when the jitsi-admin-proxy is configured', () => {
     const endpoint = 'https://ocis.example.com/jitsi-admin-proxy/rooms'
     getWrapper({
       applicationConfig: {
@@ -48,16 +48,19 @@ describe('jitsi-conference extensions', () => {
         jitsiAdminProxy: { endpoint }
       },
       setup: (instance) => {
-        const panelExtension = unref(instance).find((e) => e.type === 'sidebarPanel') as
+        const panelExtensions = unref(instance).filter((e) => e.type === 'sidebarPanel') as (
           | SidebarPanelExtension<SpaceResource, Resource, Resource>
-          | undefined
-        expect(panelExtension).toBeDefined()
-        expect(panelExtension?.extensionPointIds).toEqual(['global.files.sidebar'])
+          | SidebarPanelExtension<Resource, Resource, Resource>
+        )[]
+        expect(panelExtensions).toHaveLength(2)
+        for (const panelExtension of panelExtensions) {
+          expect(panelExtension.extensionPointIds).toEqual(['global.files.sidebar'])
+        }
       }
     })
   })
 
-  it('only shows the sidebar panel for a single selected project space', () => {
+  it('only shows the Space panel for a single selected project space', () => {
     const endpoint = 'https://ocis.example.com/jitsi-admin-proxy/rooms'
     getWrapper({
       applicationConfig: {
@@ -65,16 +68,45 @@ describe('jitsi-conference extensions', () => {
         jitsiAdminProxy: { endpoint }
       },
       setup: (instance) => {
-        const panelExtension = unref(instance).find((e) => e.type === 'sidebarPanel') as
-          | SidebarPanelExtension<SpaceResource, Resource, Resource>
-          | undefined
+        const panelExtension = unref(instance).find(
+          (e) => e.type === 'sidebarPanel' && e.id.endsWith('.spaceCallPanel')
+        ) as SidebarPanelExtension<SpaceResource, Resource, Resource> | undefined
 
-        const space = mock<SpaceResource>({ driveType: 'project' })
+        // `type: 'space'` matters here: isSpaceResource checks `.type`, not
+        // `.driveType` (isProjectSpaceResource checks `.driveType` instead) —
+        // a real SpaceResource built via buildSpace() always has both.
+        const space = mock<SpaceResource>({ type: 'space', driveType: 'project' })
         const file = mock<Resource>()
 
         expect(panelExtension?.panel.isVisible({ items: [space] })).toBe(true)
         expect(panelExtension?.panel.isVisible({ items: [file] })).toBe(false)
         expect(panelExtension?.panel.isVisible({ items: [space, space] })).toBe(false)
+        expect(panelExtension?.panel.isVisible({ items: [] })).toBeFalsy()
+      }
+    })
+  })
+
+  it('only shows the file/folder panel for a single selected non-Space resource', () => {
+    const endpoint = 'https://ocis.example.com/jitsi-admin-proxy/rooms'
+    getWrapper({
+      applicationConfig: {
+        url: 'https://jitsi-admin.example.com',
+        jitsiAdminProxy: { endpoint }
+      },
+      setup: (instance) => {
+        const panelExtension = unref(instance).find(
+          (e) => e.type === 'sidebarPanel' && e.id.endsWith('.fileCallPanel')
+        ) as SidebarPanelExtension<Resource, Resource, Resource> | undefined
+
+        // `type: 'space'` matters here: isSpaceResource checks `.type`, not
+        // `.driveType` (isProjectSpaceResource checks `.driveType` instead) —
+        // a real SpaceResource built via buildSpace() always has both.
+        const space = mock<SpaceResource>({ type: 'space', driveType: 'project' })
+        const file = mock<Resource>()
+
+        expect(panelExtension?.panel.isVisible({ items: [file] })).toBe(true)
+        expect(panelExtension?.panel.isVisible({ items: [space] })).toBe(false)
+        expect(panelExtension?.panel.isVisible({ items: [file, file] })).toBe(false)
         expect(panelExtension?.panel.isVisible({ items: [] })).toBeFalsy()
       }
     })

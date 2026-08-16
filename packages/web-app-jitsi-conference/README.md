@@ -3,8 +3,10 @@
 Adds a "Start video call" entry to the ownCloud Web app menu that opens a self-hosted
 [H2-invent/jitsi-admin](https://github.com/H2-invent/jitsi-admin) instance in a new browser tab, so
 users can start or join a Jitsi Meet / LiveKit video call alongside oCIS. It also adds a "Video call"
-panel to a Space's details sidebar that creates a jitsi-admin room and invites the Space's individual
-members by email in one click (see "Calling all Space members" below).
+panel to the details sidebar — for a Space, it creates a jitsi-admin room and invites the Space's
+individual members by email in one click (see "Calling all Space members" below); for a regular file
+or folder, it does the same for that item's individual share recipients (see "Calling all recipients
+of a file or folder" below).
 
 ## Configuration
 
@@ -81,8 +83,25 @@ authenticates with a static, per-server API key rather than a forwarded end-user
 separate `jitsi-admin-proxy` sidecar, which is the only part of this feature that holds that key.
 Without `jitsiAdminProxy.endpoint` configured, the panel doesn't appear at all.
 
-Calling all recipients of a file/folder (rather than a Space's members) and federated (OCM)
-recipients are both out of scope for this extension.
+## Calling all recipients of a file or folder
+
+Opening the details sidebar for a regular file or folder (anything that isn't a Space) shows the
+same "Video call" panel with a "Call all recipients" button. Clicking it:
+
+1. Reads the item's share list via the LibreGraph `/permissions` endpoint and resolves only its
+   **direct, same-instance individual-user shares** to email addresses (another `/users/{id}`
+   lookup per recipient, same as the Space flow). **Group shares, public links, guest shares, and
+   federated/OCM shares are all skipped** — expanding a group's membership, and reaching a
+   federated recipient with no shared IdP, are both out of scope for this feature (the latter is
+   exactly the "OCM is a harder case" caveat this feature was designed around from the start). The
+   panel reports how many recipients were skipped this way.
+2. Calls the same `jitsi-admin-proxy` sidecar as the Space flow to create a room and invite each
+   resolved recipient by email.
+3. Lets the initiating user open jitsi-admin in a new tab, same as everywhere else in this
+   extension.
+
+This reuses the same `jitsiAdminProxy.endpoint` configuration and the same sidecar as "Calling all
+Space members" above — there is nothing extra to configure for this to also work on files/folders.
 
 ## Self-hosting
 
