@@ -57,6 +57,8 @@ services:
       - ./packages/web-app-vim-nav/dist:/web/apps/vim-nav
       - ./packages/web-app-ai-smart-collections-nav/dist:/web/apps/ai-smart-collections-nav
       - ./packages/web-app-ai-folder-readme-generator/dist:/web/apps/ai-folder-readme-generator
+      - ./packages/web-app-jitsi-conference/dist:/web/apps/jitsi-conference
+      - ./packages/web-app-jitsi-conference/tests/config/manifest.json:/web/apps/jitsi-conference/manifest.json
     depends_on:
       - traefik
 

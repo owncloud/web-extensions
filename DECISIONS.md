@@ -1,48 +1,38 @@
 # DECISIONS.md — jitsi-admin oCIS Web Extension
 
-Status after Phase 0 archaeology (`ARCHAEOLOGY.md`). Per the mission brief: Phase 1 implementation
-does not start until D1–D3 are either resolved or explicitly signed off with a known residual risk.
-**This document recommends holding Phase 1 pending a sign-off on D1** — see below.
+Status after Phase 0 archaeology (`ARCHAEOLOGY.md`). D1–D4 are now all resolved (see below); Phase 1
+has been implemented as `packages/web-app-jitsi-conference`.
 
 ---
 
 ## D1 — Iframe feasibility of the live call itself
 
-**Status: NOT resolved by archaeology. Requires either a live-deployment smoke test or explicit
-user sign-off to proceed on an unverified assumption.**
+**Status: Resolved — by design, not by empirical smoke test.** Sign-off: don't nest the live call in
+an iframe at all; open jitsi-admin top-level in a new browser tab instead.
 
 What archaeology found (`ARCHAEOLOGY.md` §1.3):
 - jitsi-admin's own dashboard/scheduling pages have no built-in `X-Frame-Options`/CSP
-  `frame-ancestors` — nothing in its own source blocks framing them. Good news for the *outer*
-  frame.
+  `frame-ancestors` — nothing in its own source blocks framing them.
 - jitsi-admin is itself an **embedder**: it puts the live Jitsi Meet room in an iframe via the
   official Jitsi Meet IFrame API (`external_api.js` / `JitsiMeetExternalAPI`), or points a LiveKit
-  "meetling" frontend at a JWT-authenticated URL. We would not need to write our own IFrame API
-  integration — jitsi-admin already does that internally.
-- But that means our extension's iframe would **nest inside** jitsi-admin's own internal
-  Jitsi/LiveKit iframe — two layers deep, not one. The only documented framing guidance found (a
-  2022-vintage wiki page, Jitsi-only, silent on LiveKit) shows H2-invent's own recommendation is to
-  widen `frame-ancestors` to *specific named domains*, never to arbitrary third parties. Whether an
-  operator's Jitsi Meet/LiveKit deployment permits our oCIS origin in that list is a runtime,
-  per-deployment configuration fact, not something guaranteed by the software.
-- Independently of framing headers, WebRTC camera/mic access requires a matching
-  `allow="camera *; microphone *"` Permissions-Policy attribute on **every** nested iframe in the
-  chain. We control our own outer iframe's `allow` attribute; we do not control the markup of
-  jitsi-admin's internal Jitsi/LiveKit iframe. Whether that inner iframe propagates permissions
-  correctly through a nested-once-more context cannot be determined from source alone.
+  "meetling" frontend at a JWT-authenticated URL.
+- Framing jitsi-admin inside our own iframe would therefore **nest our extension's iframe around
+  jitsi-admin's own internal Jitsi/LiveKit iframe** — two layers deep, not one — and the only
+  documented framing guidance found (a 2022-vintage wiki page, Jitsi-only, silent on LiveKit) shows
+  H2-invent's own recommendation is to widen `frame-ancestors` to *specific named domains*, never to
+  arbitrary third parties. WebRTC camera/mic access additionally requires a matching
+  `allow="camera *; microphone *"` attribute on **every** nested iframe in the chain, including one
+  we don't control (jitsi-admin's own internal frame).
 
-**Recommendation:** Phase 1 should implement the bare-iframe-of-jitsi-admin approach (no custom
-Jitsi Meet IFrame API code on our side — matches the `web-app-draw-io`/`web-app-external-sites`
-precedent architecturally), **but this must be verified empirically against a real jitsi-admin +
-Jitsi/LiveKit deployment before Phase 1 is considered done**, not just built and merged on faith. If
-that smoke test shows the live call cannot be framed (camera/mic blocked, or the conference host
-refuses `frame-ancestors`), the fallback is **not** a small fix — it would mean writing a direct
-integration against the Jitsi Meet IFrame API (or LiveKit client SDK) ourselves, bypassing
-jitsi-admin's own room-page shell entirely, which is a materially larger, different scope than
-Phase 1 as briefed. **Open question for the user/maintainers: do you have (or can you stand up) a
-test jitsi-admin + Jitsi/LiveKit deployment to validate this against before Phase 1 code is written,
-or should Phase 1 proceed on the bare-iframe assumption with this risk explicitly accepted and
-tested at the e2e stage?**
+**Resolution:** rather than resolve that risk empirically, we removed it by construction.
+`web-app-jitsi-conference`'s "Start video call" menu item has no `path` and only a `url` — following
+the `web-app-external-sites` `target: 'external'` convention already established in this repo, it
+opens jitsi-admin in a new top-level browser tab, never inside an oCIS iframe. jitsi-admin then runs
+its own (already-proven, single-layer) Jitsi Meet IFrame API / LiveKit embedding exactly as every
+existing jitsi-admin installation does today — no additional nesting is introduced, so there is
+nothing new to verify. A true embedded-iframe experience remains a possible future enhancement, but
+only for operators who have independently verified their jitsi-admin + Jitsi/LiveKit deployment
+permits nested `frame-ancestors`; it is not the default and not required for Phase 1.
 
 ---
 
@@ -116,25 +106,28 @@ question.**
 ## Additional items surfaced during archaeology (not part of D1–D4, but relevant)
 
 - **jitsi-admin's license is not fully confirmed** (`LICENSE` file vs. `composer.json`'s
-  `"proprietary"` field, `ARCHAEOLOGY.md` §1.2) — recommend resolving before any legal/compliance
-  sign-off, independent of the technical decisions above.
-- **The Phase 1 deployment-manifest deliverable (`jitsi-conference.yml`, mirroring `drawio.yml`)
-  belongs in `owncloud/ocis`, not `owncloud/web-extensions`** (`ARCHAEOLOGY.md` §2.5) —
-  `owncloud/web` was merged into `owncloud/ocis` on 2026-07-14 and is now archived, and the
-  `deployments/examples/ocis_full` tree lives under the merged repo. This session's GitHub tooling
-  is scoped to `owncloud/web-extensions` only, so that half of Phase 1 cannot be delivered as a PR
-  from this session without either widened repo scope or a separate follow-up in `owncloud/ocis`.
+  `"proprietary"` field, `ARCHAEOLOGY.md` §1.2). **Accepted as fine for a web-extension** — this
+  extension only links out to an operator-run jitsi-admin instance and ships no jitsi-admin code of
+  its own, so the license of jitsi-admin itself does not attach to this repo. No further action.
+- **The `drawio.yml`-style deployment manifest question is resolved: nothing needs to leave
+  `owncloud/web-extensions`.** Rather than authoring a separate manifest in the now-merged
+  `owncloud/ocis` repo, `web-app-jitsi-conference` is wired into this repo the same way
+  `web-app-draw-io` is: a `dist/` volume mount in `docker-compose.yml`, CSP entries in
+  `dev/docker/csp.yaml`, and local-dev config in `dev/docker/ocis.apps.yaml` /
+  `support/actions/ocis.apps.yaml`. A separate `owncloud/ocis` deployment-example PR remains a
+  possible future addition for production `ocis_full` deployments, but is not required to ship
+  Phase 1.
 - `docs/starting_guide.md` still references a `.drone.star` file that no longer exists in this repo
   (CI is now GitHub Actions, `.github/workflows/test.yml`) — a stale doc, not a blocker, flagged so
   Phase 1 doesn't waste time looking for it.
 
 ---
 
-## Recommendation
+## Phase 1 status
 
-Hold Phase 1 code for a decision on **D1** specifically: either (a) the user/maintainers confirm a
-live jitsi-admin + Jitsi/LiveKit test deployment exists or can be stood up to validate nested-iframe
-framing and WebRTC permission propagation before Phase 1 lands, or (b) the user explicitly accepts
-building Phase 1 on the bare-iframe assumption with validation deferred to Phase 1's own e2e-testing
-step (i.e., "build it, and we'll find out together whether the live call frames correctly"). D2–D4
-have clear, actionable answers above and do not block starting Phase 1 work once D1 is settled.
+Implemented as `packages/web-app-jitsi-conference` (see its `README.md` for user-facing
+configuration and design-decision documentation). Not yet added to the `.github/workflows/test.yml`
+`test` matrix or given an e2e test, per the brief's explicit "Playwright e2e can wait for Phase 1
+completion sign-off — don't gold-plate" — that job runs `test:e2e` unconditionally for every matrix
+entry, so adding this package before an e2e test exists would break CI. Unit tests, build, lint, and
+type-checking all pass locally.
