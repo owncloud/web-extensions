@@ -115,12 +115,17 @@ describe('isOriginAllowed', () => {
 // handleRequest — end to end, with jitsi-admin's API mocked
 // ---------------------------------------------------------------------------
 
+// No Origin header is set by default: isOriginAllowed only enforces a match
+// when the request actually carries one, so a request with none is always
+// origin-gate-agnostic — this keeps these tests independent of whatever
+// OCIS_URL happens to be set in the process running them (e.g. CI sets a
+// real one; ALLOWED_ORIGIN is derived from it at module-load time).
 function makeMockReq(overrides: Partial<http.IncomingMessage> = {}): http.IncomingMessage {
   const req = new EventEmitter() as unknown as http.IncomingMessage
   Object.assign(req, {
     method: 'POST',
     url: '/rooms',
-    headers: { authorization: 'Bearer test-token', origin: 'https://ocis.example.test' },
+    headers: { authorization: 'Bearer test-token' },
     ...overrides
   })
   return req
@@ -222,12 +227,13 @@ describe('handleRequest', () => {
 
   // Origin rejection itself is covered exhaustively by the isOriginAllowed
   // unit tests above; ALLOWED_ORIGIN is derived from OCIS_URL at module load
-  // time, which isn't set in this test process, so it can't be exercised
-  // end-to-end here without coupling the test to module-load-order.
+  // time (whatever the process running these tests happens to have set —
+  // e.g. CI sets a real one), so it isn't exercised end-to-end here to avoid
+  // coupling these tests to that ambient value.
 
   it('rejects a request with no Authorization header', async () => {
     stubOidcAndJitsiAdmin()
-    const req = makeMockReq({ headers: { origin: 'https://ocis.example.test' } })
+    const req = makeMockReq({ headers: {} })
     const res = makeMockRes()
     // No body is ever read on this path, so call handleRequest directly
     // rather than via sendRequest (which waits for the body-read listener).
