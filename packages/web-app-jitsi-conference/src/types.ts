@@ -4,5 +4,10 @@ export const JitsiConferenceConfigSchema = z.object({
   url: z.string().optional(),
   color: z.string().optional(),
   icon: z.string().optional(),
-  priority: z.number().optional()
+  priority: z.number().optional(),
+  jitsiAdminProxy: z
+    .object({
+      endpoint: z.string()
+    })
+    .optional()
 })

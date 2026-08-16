@@ -1,7 +1,8 @@
 # DECISIONS.md — jitsi-admin oCIS Web Extension
 
 Status after Phase 0 archaeology (`ARCHAEOLOGY.md`). D1–D4 are now all resolved (see below); Phase 1
-has been implemented as `packages/web-app-jitsi-conference`.
+has been implemented as `packages/web-app-jitsi-conference`. Phase 2 ("call all Space members") has
+also been implemented — see the "Phase 2" section at the end of this document.
 
 ---
 
@@ -112,11 +113,12 @@ question.**
 - **The `drawio.yml`-style deployment manifest question is resolved: nothing needs to leave
   `owncloud/web-extensions`.** Rather than authoring a separate manifest in the now-merged
   `owncloud/ocis` repo, `web-app-jitsi-conference` is wired into this repo the same way
-  `web-app-draw-io` is: a `dist/` volume mount in `docker-compose.yml`, CSP entries in
-  `dev/docker/csp.yaml`, and local-dev config in `dev/docker/ocis.apps.yaml` /
-  `support/actions/ocis.apps.yaml`. A separate `owncloud/ocis` deployment-example PR remains a
-  possible future addition for production `ocis_full` deployments, but is not required to ship
-  Phase 1.
+  `web-app-external-sites` is: a `dist/` volume mount in `docker-compose.yml` plus a
+  `tests/config/manifest.json` override mounted over it for local dev/CI. No CSP change was needed
+  — the "Start video call" link opens a new tab rather than an iframe or a cross-origin fetch, so
+  the default `frame-ancestors`/`connect-src` in `dev/docker/csp.yaml` already cover it. A separate
+  `owncloud/ocis` deployment-example PR remains a possible future addition for production
+  `ocis_full` deployments, but is not required to ship Phase 1.
 - `docs/starting_guide.md` still references a `.drone.star` file that no longer exists in this repo
   (CI is now GitHub Actions, `.github/workflows/test.yml`) — a stale doc, not a blocker, flagged so
   Phase 1 doesn't waste time looking for it.
@@ -131,3 +133,81 @@ configuration and design-decision documentation). Not yet added to the `.github/
 completion sign-off — don't gold-plate" — that job runs `test:e2e` unconditionally for every matrix
 entry, so adding this package before an e2e test exists would break CI. Unit tests, build, lint, and
 type-checking all pass locally.
+
+---
+
+## Phase 2 — "Call all Space members"
+
+### Extension point (verified, not assumed)
+
+The original brief flagged this as an open question: "likely `global.spaces.actions` or a
+spaces-context-menu equivalent — verify the actual extension point name during Phase 0, don't
+assume." A dedicated research pass against `owncloud/ocis`'s `web/` source (the merged frontend, see
+D3/ARCHAEOLOGY.md §2.5) found:
+
+- **The Spaces overview list's context menu is not third-party extensible at all.**
+  `web/packages/web-app-files/src/components/Spaces/SpaceContextActions.vue` is hardcoded to
+  built-in `useSpaceActions*` composables (rename, delete, disable, show members, etc.) and never
+  calls `useExtensionRegistry`/`requestExtensions`. There is no `global.spaces.*` extension point —
+  the grep-based absence found in the original archaeology (`ARCHAEOLOGY.md` §3, implicitly) was
+  correct, not a search-tooling gap.
+- **The generic, extensible `global.files.context-actions`/`global.files.sidebar` points (from
+  `web-pkg`'s `ContextActions.vue`/`FileSideBar.vue`) are used for file/folder rows
+  (`GenericSpace.vue`, `GenericTrash.vue`, `AppBar.vue`), not for Space rows in `Projects.vue`.**
+- **`global.files.sidebar` is the one extensible point that does reach a Space**: `Projects.vue`
+  (the Spaces list view) renders its details sidebar via the shared `FileSideBar` component, whose
+  `requestExtensions<SidebarPanelExtension<SpaceResource, Resource, Resource>>({ id:
+  'global.files.sidebar', ... })` call is generic over `SpaceResource` — the same point
+  `ai-doc-summary`/`chat-with-file` already use for their file-detail panels, just gated by
+  `isProjectSpaceResource(items[0])` instead of a file-extension check.
+
+**Resolution:** Phase 2 is implemented as a `sidebarPanel` extension on `global.files.sidebar`
+(`packages/web-app-jitsi-conference/src/extensions.ts`), not a context-menu `action` — because no
+context-menu extension point for Spaces exists to register one against.
+
+### Member listing (LibreGraph, confirmed locally)
+
+No external research was needed here: the locally-installed `@ownclouders/web-client@12.5.0`
+package's shipped type declarations confirm `SpaceResource.members: Record<string, SpaceMember>`
+(`SpaceMember = { grantedTo: SharePointIdentitySet, permissions, roleId }`) is already present on
+any Space resource obtained through the normal Files/Spaces app — no extra Graph call is needed to
+list members. `SharePointIdentitySet.user`/`.group` distinguishes individual-user grants from group
+grants; only the former can be resolved to an invitable email (via `GraphUsers.getUser(id, {
+select: ['mail'] })`), so **group grants are skipped** — expanding a group to its members' emails is
+explicitly out of scope for this feature (matches the brief's own precedent of scoping Phase 3's OCM
+handling out for a follow-up rather than silently attempting it).
+
+### Notification mechanism (resolved without needing oCIS's notification API)
+
+The brief asked for "notifies members (oCIS notification/SSE surface, or plain in-app link)".
+`@ownclouders/web-client`'s SSE module only exposes a `MESSAGE_TYPE.NOTIFICATION` enum for
+*receiving* system-generated events (share created, space member added, etc.) — there is no
+client-exposed API for a user to *create* an arbitrary notification targeted at another user, and
+whether oCIS's backend notification/userlog service even allows that (as opposed to only
+system-triggered notifications) was never confirmed. This was resolved without needing to answer
+that question: Phase 0's archaeology already established that jitsi-admin's own
+`RoomAddService::createUserFromUserUid()` sends invitation emails itself when a participant is added
+to a room (`ARCHAEOLOGY.md` §1.1). The `jitsi-admin-proxy` sidecar simply calls jitsi-admin's own
+`/api/v1/user` endpoint per resolved member — jitsi-admin does the notifying, oCIS's notification
+surface is never touched.
+
+### Sidecar (`packages/jitsi-admin-proxy`)
+
+New package, structured identically to `packages/ai-llm-proxy` (mandatory `Origin` check against
+`OCIS_URL`, oCIS OIDC bearer-token validation against `/userinfo`, per-user rate limiting). It is the
+only place the jitsi-admin `Server.apiKey` service credential lives, per D3.
+
+**Caveat, stated plainly rather than papered over:** the exact request/response field names used
+when calling jitsi-admin's `/api/v1/room` (`name`/`email`/`server`/`start`/`duration`) and
+`/api/v1/user` (`room`/`email`) are a best-effort reconstruction from Phase 0's source-reading of
+H2-invent/jitsi-admin's Symfony controllers — this has **not** been exercised against a live
+jitsi-admin instance, which wasn't available in this environment. The sidecar is built to fail
+cleanly (a clear error surfaced to the panel) rather than crash if these assumptions are wrong, and
+the two functions making these calls (`createJitsiAdminRoom`/`inviteJitsiAdminParticipant`) are kept
+small and isolated specifically so they're easy to correct once verified against a real deployment.
+See `packages/jitsi-admin-proxy/README.md`.
+
+### Not implemented
+
+Phase 3 (call all recipients of a file/folder) and Phase 4 (Collabora-plus-call layout) remain
+explicitly out of scope, per the original brief.

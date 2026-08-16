@@ -73,6 +73,18 @@ importers:
         specifier: 4.1.10
         version: 4.1.10(@types/node@24.13.3)(happy-dom@20.11.1)(jsdom@30.0.1)(vite@7.3.2(@types/node@24.13.3)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
 
+  packages/jitsi-admin-proxy:
+    devDependencies:
+      '@types/node':
+        specifier: ^24.13.3
+        version: 24.13.3
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+      vitest:
+        specifier: 4.1.10
+        version: 4.1.10(@types/node@24.13.3)(happy-dom@20.11.1)(jsdom@30.0.1)(vite@7.3.2(@types/node@24.13.3)(sass-embedded@1.100.0)(sass@1.100.0)(yaml@2.9.0))
+
   packages/web-app-advanced-search:
     dependencies:
       '@ownclouders/web-client':

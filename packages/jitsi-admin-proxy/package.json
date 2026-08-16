@@ -1,0 +1,23 @@
+{
+  "name": "jitsi-admin-proxy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Server-side proxy for the jitsi-conference extension — validates oCIS auth and provisions jitsi-admin rooms with the operator's Server API key",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --watch dist/index.js",
+    "start": "node dist/index.js",
+    "test:unit": "vitest run",
+    "test:e2e": "echo 'No E2E tests for jitsi-admin-proxy'"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "^5.4.0",
+    "vitest": "4.1.10"
+  }
+}

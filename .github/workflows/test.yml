@@ -97,6 +97,7 @@ jobs:
           - web-app-ai-image-alt-text-sidebar
           - web-app-chat-with-file
           - ai-llm-proxy
+          - jitsi-admin-proxy
           - web-app-version-changelog
           - web-app-group-management
           - web-app-file-comments

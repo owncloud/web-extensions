@@ -85,6 +85,29 @@ services:
     depends_on:
       - traefik
 
+  jitsi-admin-proxy:
+    build:
+      context: ./packages/jitsi-admin-proxy
+      dockerfile: Dockerfile
+    extra_hosts:
+      - host.docker.internal:${DOCKER_HOST:-host-gateway}
+    environment:
+      OCIS_URL: 'https://host.docker.internal:9200'
+      JITSI_ADMIN_URL: '${JITSI_ADMIN_URL:-}'
+      JITSI_ADMIN_API_KEY: '${JITSI_ADMIN_API_KEY:-}'
+      JITSI_ADMIN_SERVER: '${JITSI_ADMIN_SERVER:-}'
+      PORT: '3031'
+    labels:
+      traefik.enable: true
+      traefik.http.routers.jitsi-admin-proxy.tls: true
+      traefik.http.routers.jitsi-admin-proxy.rule: Host(`host.docker.internal`) && PathPrefix(`/jitsi-admin-proxy`)
+      traefik.http.routers.jitsi-admin-proxy.entrypoints: ocis
+      traefik.http.routers.jitsi-admin-proxy.middlewares: jitsi-admin-proxy-strip,cors
+      traefik.http.middlewares.jitsi-admin-proxy-strip.stripPrefix.prefixes: /jitsi-admin-proxy
+      traefik.http.services.jitsi-admin-proxy.loadbalancer.server.port: 3031
+    depends_on:
+      - traefik
+
   # tika is required for the photo and search extensions
   tika:
     image: apache/tika:latest-full

@@ -1,7 +1,9 @@
-import { AppMenuItemExtension, ApplicationSetupOptions } from '@ownclouders/web-pkg'
+import { AppMenuItemExtension, SidebarPanelExtension } from '@ownclouders/web-pkg'
 import { defaultComponentMocks, getComposableWrapper } from '@ownclouders/web-test-helpers'
 import { mock } from 'vitest-mock-extended'
 import { unref } from 'vue'
+import type { ApplicationSetupOptions } from '@ownclouders/web-pkg'
+import type { Resource, SpaceResource } from '@ownclouders/web-client'
 import { extensions } from '../../src/extensions'
 
 describe('jitsi-conference extensions', () => {
@@ -24,6 +26,56 @@ describe('jitsi-conference extensions', () => {
         // no `path` must be set: the call opens in a new tab, never inside an
         // oCIS-nested iframe, see DECISIONS.md (D1).
         expect(menuItem.path).toBeUndefined()
+      }
+    })
+  })
+
+  it('renders no sidebar panel when the jitsi-admin-proxy is not configured', () => {
+    getWrapper({
+      applicationConfig: { url: 'https://jitsi-admin.example.com' },
+      setup: (instance) => {
+        expect(unref(instance)).toHaveLength(1)
+        expect(unref(instance)[0].type).toBe('appMenuItem')
+      }
+    })
+  })
+
+  it('renders a sidebar panel when the jitsi-admin-proxy is configured', () => {
+    const endpoint = 'https://ocis.example.com/jitsi-admin-proxy/rooms'
+    getWrapper({
+      applicationConfig: {
+        url: 'https://jitsi-admin.example.com',
+        jitsiAdminProxy: { endpoint }
+      },
+      setup: (instance) => {
+        const panelExtension = unref(instance).find((e) => e.type === 'sidebarPanel') as
+          | SidebarPanelExtension<SpaceResource, Resource, Resource>
+          | undefined
+        expect(panelExtension).toBeDefined()
+        expect(panelExtension?.extensionPointIds).toEqual(['global.files.sidebar'])
+      }
+    })
+  })
+
+  it('only shows the sidebar panel for a single selected project space', () => {
+    const endpoint = 'https://ocis.example.com/jitsi-admin-proxy/rooms'
+    getWrapper({
+      applicationConfig: {
+        url: 'https://jitsi-admin.example.com',
+        jitsiAdminProxy: { endpoint }
+      },
+      setup: (instance) => {
+        const panelExtension = unref(instance).find((e) => e.type === 'sidebarPanel') as
+          | SidebarPanelExtension<SpaceResource, Resource, Resource>
+          | undefined
+
+        const space = mock<SpaceResource>({ driveType: 'project' })
+        const file = mock<Resource>()
+
+        expect(panelExtension?.panel.isVisible({ items: [space] })).toBe(true)
+        expect(panelExtension?.panel.isVisible({ items: [file] })).toBe(false)
+        expect(panelExtension?.panel.isVisible({ items: [space, space] })).toBe(false)
+        expect(panelExtension?.panel.isVisible({ items: [] })).toBeFalsy()
       }
     })
   })

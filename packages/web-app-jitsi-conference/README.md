@@ -2,13 +2,18 @@
 
 Adds a "Start video call" entry to the ownCloud Web app menu that opens a self-hosted
 [H2-invent/jitsi-admin](https://github.com/H2-invent/jitsi-admin) instance in a new browser tab, so
-users can start or join a Jitsi Meet / LiveKit video call alongside oCIS.
+users can start or join a Jitsi Meet / LiveKit video call alongside oCIS. It also adds a "Video call"
+panel to a Space's details sidebar that creates a jitsi-admin room and invites the Space's individual
+members by email in one click (see "Calling all Space members" below).
 
 ## Configuration
 
 ```
 "config": {
-  "url": "https://jitsi-admin.example.com"
+  "url": "https://jitsi-admin.example.com",
+  "jitsiAdminProxy": {
+    "endpoint": "https://ocis.example.com/jitsi-admin-proxy/rooms"
+  }
 }
 ```
 
@@ -20,6 +25,9 @@ users can start or join a Jitsi Meet / LiveKit video call alongside oCIS.
 - `icon` _(string, optional)_ — name of a [Remix Icon](https://remixicon.com/) for the menu item.
   Defaults to `vidicon-line`.
 - `priority` _(number, optional)_ — order of the menu item. Defaults to `30`.
+- `jitsiAdminProxy.endpoint` _(string, optional)_ — URL of the `jitsi-admin-proxy` sidecar (see
+  `../jitsi-admin-proxy/README.md`). Only when this is set does the "Video call" Space sidebar panel
+  (and the room-provisioning feature it drives) appear at all — there is no default here either.
 
 Please refer to [the Web app docs](https://owncloud.dev/services/web/#application-configuration)
 if you want to learn how to configure a Web app.
@@ -50,10 +58,31 @@ and oCIS never mints or forwards a token to jitsi-admin on the user's behalf. Co
   complete without a credential prompt, but it will still be a visible page navigation — there is
   no hidden or silent token exchange.
 
-Automating room creation for a Space's members or a file's recipients (calling jitsi-admin's
-`/api/v1/room` and `/api/v1/user` APIs) is out of scope for this extension: those endpoints
-authenticate with a static, per-server API key rather than a forwarded end-user token, so any such
-automation would need a small server-side component holding that key — not implemented here.
+## Calling all Space members
+
+Opening a Space's details sidebar shows a "Video call" panel (a `sidebarPanel` extension on
+`global.files.sidebar` — the Spaces overview's own right-click context menu is not third-party
+extensible, so this is the closest available extension point) with a "Call all members" button.
+Clicking it:
+
+1. Resolves the Space's **individual user members** to email addresses via the LibreGraph
+   `/users/{id}` endpoint. **Members granted access through a group are skipped** — resolving a
+   group to its individual members' emails is out of scope for this feature; the panel reports how
+   many members were skipped this way.
+2. Calls the `jitsi-admin-proxy` sidecar (see `../jitsi-admin-proxy/README.md`) to create a room in
+   jitsi-admin (owned by the calling user) and invite each resolved member by email. jitsi-admin
+   sends the invitation emails itself — this extension never talks to any oCIS notification API, and
+   doesn't need to.
+3. Lets the initiating user open jitsi-admin (the same `url` as the "Start video call" menu item, in
+   a new tab, per the design decision above) to actually start the room they just created.
+
+This requires jitsi-admin's room-provisioning API (`/api/v1/room`, `/api/v1/user`), which
+authenticates with a static, per-server API key rather than a forwarded end-user token — hence the
+separate `jitsi-admin-proxy` sidecar, which is the only part of this feature that holds that key.
+Without `jitsiAdminProxy.endpoint` configured, the panel doesn't appear at all.
+
+Calling all recipients of a file/folder (rather than a Space's members) and federated (OCM)
+recipients are both out of scope for this extension.
 
 ## Self-hosting
 
