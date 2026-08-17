@@ -1,5 +1,4 @@
 #!/bin/bash
-printenv
 # replace oCIS domain in keycloak realm import
 mkdir -p /opt/keycloak/data/import
 sed -e "s/ocis.owncloud.test/${OCIS_DOMAIN}/g" /opt/keycloak/data/import-dist/ocis-realm.json > /opt/keycloak/data/import/oCIS-realm.json
