@@ -16,7 +16,7 @@
     "@ownclouders/web-client": "^12.5.0",
     "@ownclouders/web-pkg": "^12.5.0",
     "dompurify": "^3.4.13",
-    "js-yaml": "^5.2.3",
+    "js-yaml": "^5.3.0",
     "marked": "^18.0.9",
     "vue": "^3.5.41",
     "vue3-gettext": "^2.4.0"
