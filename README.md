@@ -54,6 +54,7 @@ pnpm build                 # Build all extensions
 
 - [Starting Guide](docs/starting_guide.md)
 - [Release Workflow](docs/RELEASE_WORKFLOW.md)
+- [ai-llm-proxy](packages/ai-llm-proxy/README.md) -- LLM sidecar used by the AI extensions (setup, same-origin requirement, troubleshooting)
 - [ownCloud Web Extension System](https://owncloud.dev/clients/web/extension-system/)
 - [Loading Applications in oCIS](https://owncloud.dev/services/web/#loading-applications)
 
