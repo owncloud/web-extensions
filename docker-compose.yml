@@ -15,6 +15,7 @@ services:
       WEB_ASSET_APPS_PATH: /web/apps
       WEB_UI_CONFIG_FILE: /web/config.json
       PROXY_CSP_CONFIG_FILE_LOCATION: /etc/ocis/csp.yaml
+      AI_PROJECT_BOARD_VIEW_MODEL: '${AI_PROJECT_BOARD_VIEW_MODEL:-llama3.2}'
       # fulltext search
       SEARCH_EXTRACTOR_TYPE: tika
       SEARCH_EXTRACTOR_TIKA_TIKA_URL: http://tika:9998
