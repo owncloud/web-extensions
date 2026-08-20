@@ -68,6 +68,10 @@ The board reads `applicationConfig.llm` at startup. If `endpoint` or `model` is 
 Status Board view mode is still available but every file is shown in the Draft lane and no
 LLM calls are made.
 
+In the dev docker-compose stack, `dev/docker/ocis.apps.yaml` resolves `model` from the
+`AI_PROJECT_BOARD_VIEW_MODEL` environment variable (default `llama3.2`) — set it in a `.env`
+file or as a shell variable before running `docker compose up` to use a different model.
+
 ### `ai-llm-proxy` Sidecar
 
 The sidecar is configured entirely via environment variables — the LLM API key stays
