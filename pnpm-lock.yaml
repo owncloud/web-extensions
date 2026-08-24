@@ -178,8 +178,8 @@ importers:
         specifier: ^1.62.1
         version: 1.62.1
       '@vitejs/plugin-vue':
-        specifier: ^5.0.0
-        version: 5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^6.0.8
+        version: 6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
       eslint:
         specifier: ^9.8.0
         version: 9.8.0
@@ -218,8 +218,8 @@ importers:
         specifier: ^1.62.1
         version: 1.62.1
       '@vitejs/plugin-vue':
-        specifier: ^5.0.0
-        version: 5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^6.0.8
+        version: 6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
       eslint:
         specifier: ^9.8.0
         version: 9.8.0
@@ -313,8 +313,8 @@ importers:
         specifier: ^1.62.1
         version: 1.62.1
       '@vitejs/plugin-vue':
-        specifier: ^5.0.0
-        version: 5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^6.0.8
+        version: 6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
       eslint:
         specifier: ^9.8.0
         version: 9.8.0
@@ -460,8 +460,8 @@ importers:
         specifier: ^1.62.1
         version: 1.62.1
       '@vitejs/plugin-vue':
-        specifier: ^5.0.0
-        version: 5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^6.0.8
+        version: 6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
       eslint:
         specifier: ^9.8.0
         version: 9.8.0
@@ -764,8 +764,8 @@ importers:
         specifier: ^4.0.9
         version: 4.0.9
       '@vitejs/plugin-vue':
-        specifier: ^5.0.0
-        version: 5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
+        specifier: ^6.0.8
+        version: 6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))
       eslint:
         specifier: ^9.8.0
         version: 9.8.0
@@ -2570,15 +2570,15 @@ packages:
   '@vavt/util@2.1.2':
     resolution: {integrity: sha512-L3UbSJthJwr3wq0x93O5TrCepimrmVZaIl2ciZbeL18G5++gBhJXNhcH7RcVk/6rr3SavWOvwhig0mqRLoR7dw==}
 
-  '@vitejs/plugin-vue@5.2.4':
-    resolution: {integrity: sha512-7Yx/SXSOcQq5HiiV3orevHUFn+pmMB4cgbEkDYgnkUWb0WfeQ/wa2yFv6D5ICiCQOVpjA7vYDXrC7AGO8yjDHA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    peerDependencies:
-      vite: ^5.0.0 || ^6.0.0
-      vue: ^3.2.25
-
   '@vitejs/plugin-vue@6.0.7':
     resolution: {integrity: sha512-km+p+XdSz9Sxm5rqUbqcSfZYaAniKxWBj1KURl+Jr7UaPvvX7BmaWMdP69I5rrFDeQGyxAG7NXdc57vz+snhWg==}
+    engines: {node: ^20.19.0 || >=22.12.0}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
+      vue: ^3.2.25
+
+  '@vitejs/plugin-vue@6.0.8':
+    resolution: {integrity: sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       vite: ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -3273,8 +3273,8 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  electron-to-chromium@1.5.411:
-    resolution: {integrity: sha512-gglkxzokjHfawpGxq75XdBV2/l3BAPzrsMs70qgaZdTW5rpV1tC4MdgJVP9fN126bODA4ZJQkn1wryEzJyQXIg==}
+  electron-to-chromium@1.5.412:
+    resolution: {integrity: sha512-z4rMe3esBzlzovKHj4gxJnsCGZRK5l4baUvm+gCGJBPE+gsyUMKsuU9tnEUtI1dOebXz1ytAPGjvXhmQ7rIPwA==}
 
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
@@ -7330,11 +7330,6 @@ snapshots:
 
   '@vavt/util@2.1.2': {}
 
-  '@vitejs/plugin-vue@5.2.4(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))':
-    dependencies:
-      vite: 7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0)
-      vue: 3.5.41(typescript@5.9.3)
-
   '@vitejs/plugin-vue@6.0.7(vite@7.2.2(@types/node@24.13.3)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
@@ -7351,6 +7346,12 @@ snapshots:
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 7.3.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0)
+      vue: 3.5.41(typescript@5.9.3)
+
+  '@vitejs/plugin-vue@6.0.8(vite@7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0))(vue@3.5.41(typescript@5.9.3))':
+    dependencies:
+      '@rolldown/pluginutils': 1.0.1
+      vite: 7.2.2(@types/node@26.2.0)(sass-embedded@1.102.0)(sass@1.102.0)(yaml@2.9.0)
       vue: 3.5.41(typescript@5.9.3)
 
   '@vitest/expect@4.1.11':
@@ -7723,7 +7724,7 @@ snapshots:
     dependencies:
       baseline-browser-mapping: 2.11.16
       caniuse-lite: 1.0.30001809
-      electron-to-chromium: 1.5.411
+      electron-to-chromium: 1.5.412
       node-releases: 2.0.53
       update-browserslist-db: 1.3.1(browserslist@4.28.8)
 
@@ -8123,7 +8124,7 @@ snapshots:
       minimatch: 9.0.9
       semver: 7.8.5
 
-  electron-to-chromium@1.5.411: {}
+  electron-to-chromium@1.5.412: {}
 
   emoji-mart@5.6.0: {}
 
