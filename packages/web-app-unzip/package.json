@@ -15,7 +15,7 @@
   "dependencies": {
     "@ownclouders/web-client": "^12.5.0",
     "@ownclouders/web-pkg": "^12.5.0",
-    "@zip.js/zip.js": "2.8.54"
+    "@zip.js/zip.js": "2.8.60"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.0",
@@ -23,7 +23,7 @@
     "@uppy/core": "^5.2.0",
     "p-queue": "^9.3.3",
     "uuid": "^14.0.2",
-    "vue": "^3.5.41",
+    "vue": "^3.5.42",
     "vue3-gettext": "^2.4.0"
   }
 }
