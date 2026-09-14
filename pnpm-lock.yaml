@@ -819,8 +819,8 @@ importers:
         specifier: ^5.1.1
         version: 5.1.1(@uppy/core@5.2.0)
       '@uppy/google-drive':
-        specifier: ^5.1.0
-        version: 5.1.0(@uppy/core@5.2.0)
+        specifier: ^6.0.0
+        version: 6.0.0(@uppy/core@5.2.0)
       '@uppy/onedrive':
         specifier: ^5.1.0
         version: 5.1.0(@uppy/core@5.2.0)
@@ -2501,8 +2501,8 @@ packages:
     peerDependencies:
       '@uppy/core': 5.2.0
 
-  '@uppy/google-drive@5.1.0':
-    resolution: {integrity: sha512-avspyvCfQgpSvry8xXRIazUv9RhwyubSeDsg9BQaNR1BRFSw5PWVuoX7tIUyoDYtzA8TsxcYvqJuSm4HZYkQcA==}
+  '@uppy/google-drive@6.0.0':
+    resolution: {integrity: sha512-THdIuxpOQzXKCWlJYCdWRRnhhsPLe/QE9C80Vbja5J9AyTw76CmOCp8qYy5K+cg2HQ8glFtxHYWIkmMui6U0RQ==}
     peerDependencies:
       '@uppy/core': 5.2.0
 
@@ -4325,6 +4325,14 @@ packages:
 
   preact@10.29.7:
     resolution: {integrity: sha512-DCHYrK/B10yUD3ZjLfhZ3WIE/9Vf9VFUODcRE2dRomTYDpJk6z6L9wecSfhfE6M9ZTHUdyQkoC46arIDhEV84Q==}
+    peerDependencies:
+      preact-render-to-string: '>=5'
+    peerDependenciesMeta:
+      preact-render-to-string:
+        optional: true
+
+  preact@10.29.8:
+    resolution: {integrity: sha512-ej2aVZ+vZ8WO7tvlQWRM9N63A0KzF9q4mWJfDUHgYaIofWY9hu74QdnQrjoPMmZi2/nZ5gN0bJCQF49xQqx09Q==}
     peerDependencies:
       preact-render-to-string: '>=5'
     peerDependenciesMeta:
@@ -7171,13 +7179,10 @@ snapshots:
     transitivePeerDependencies:
       - preact-render-to-string
 
-  '@uppy/google-drive@5.1.0(@uppy/core@5.2.0)':
+  '@uppy/google-drive@6.0.0(@uppy/core@5.2.0)':
     dependencies:
-      '@uppy/companion-client': 5.1.1(@uppy/core@5.2.0)
       '@uppy/core': 5.2.0
-      '@uppy/provider-views': 5.2.2(@uppy/core@5.2.0)
-      '@uppy/utils': 7.2.0
-      preact: 10.29.2
+      preact: 10.29.8
     transitivePeerDependencies:
       - preact-render-to-string
 
@@ -9148,6 +9153,8 @@ snapshots:
   preact@10.29.2: {}
 
   preact@10.29.7: {}
+
+  preact@10.29.8: {}
 
   prelude-ls@1.2.1: {}
 
