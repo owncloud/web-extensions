@@ -1,0 +1,25 @@
+{
+  "name": "web-app-jupyter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Open .ipynb files in an external JupyterHub instance",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest",
+    "test:e2e": "pnpm playwright test"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^12.5.0",
+    "vue": "^3.5.42",
+    "vue3-gettext": "^2.4.0"
+  }
+}

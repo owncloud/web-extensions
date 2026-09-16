@@ -107,6 +107,7 @@ jobs:
           - web-app-ai-smart-file-tagger-qa
           - web-app-ai-smart-collections-nav
           - web-app-ai-folder-readme-generator
+          - web-app-jupyter
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

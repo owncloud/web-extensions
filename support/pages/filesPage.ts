@@ -9,6 +9,7 @@ export class FilesPage {
   readonly jsonViewerBtn: Locator
   readonly jsonViewerSelector: Locator
   readonly castFileActionBtn: Locator
+  readonly jupyterFileActionBtn: Locator
   readonly appSwitcherButton: Locator
   readonly files: Locator
 
@@ -21,6 +22,9 @@ export class FilesPage {
     this.jsonViewerBtn = this.page.locator('.oc-files-actions-json-viewer-trigger')
     this.jsonViewerSelector = this.page.locator('#json-viewer')
     this.castFileActionBtn = this.page.locator('[data-testid="action-label"] :text-is("Cast")')
+    this.jupyterFileActionBtn = this.page.locator(
+      '[data-testid="action-label"] :text-is("Open in Notebooks")'
+    )
     this.appSwitcherButton = this.page.locator('#_appSwitcherButton')
     this.files = this.page.locator('[data-test-id="app.files.menuItem"]')
   }

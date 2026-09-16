@@ -1,0 +1,7 @@
+{
+  "entrypoint": "jupyter.js",
+  "config": {
+    "serverUrl": "https://your-jupyter-hub-url/",
+    "serverRootPath": "notebooks_service/"
+  }
+}

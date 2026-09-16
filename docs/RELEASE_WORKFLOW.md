@@ -67,6 +67,7 @@ packages/web-app-unzip/package.json
 - `packages/web-app-external-sites/`
 - `packages/web-app-importer/`
 - `packages/web-app-json-viewer/`
+- `packages/web-app-jupyter/`
 - `packages/web-app-photo-addon/`
 - `packages/web-app-progress-bars/`
 - `packages/web-app-unzip/`
