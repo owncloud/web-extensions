@@ -102,7 +102,7 @@ Bug bounty: [YesWeHack ownCloud Program](https://yeswehack.com/programs/owncloud
 
 ## License
 
-This project is licensed under the [AGPL-3.0](LICENSE).
+This project is licensed under the [Apache License 2.0](LICENSE).
 
 ## About the ownCloud OSPO
 
@@ -117,21 +117,3 @@ community health, and sustainable collaboration between the open source communit
 - **ownCloud**: <https://owncloud.com>
 
 For questions about the OSPO or licensing, contact ospo@kiteworks.com.
-
-### License Migration to Apache 2.0
-
-The OSPO is driving a strategic relicensing of ownCloud repositories toward the
-[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), following
-the [Apache Software Foundation's third-party license policy](https://www.apache.org/legal/resolved.html).
-
-Individual repositories will migrate as their audit is completed. The LICENSE file
-in each repo reflects its **current** license status (not the target).
-
-**Current license: AGPL-3.0** (Category X per Apache policy -- cannot be included in Apache-2.0 works).
-
-Migration prerequisites for this repository:
-
-- **CLA/DCO coverage**: All past contributors must have signed agreements permitting relicensing
-- **Copyleft dependency audit**: All AGPL/GPL dependencies must be replaced or isolated
-- **KDE heritage review**: Any code with KDE-era copyrights requires legal analysis
-- **Complete relicensing**: AGPL-3.0 is a strong copyleft license; migration requires full relicensing of all files, not just a header change
