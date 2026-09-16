@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 
 export class FilesPage {
   readonly page: Page
@@ -126,11 +126,23 @@ export class FilesPage {
   }
 
   async createFolder(name: string) {
+    // Right after login (or a hard navigation), the space's resource permissions
+    // haven't loaded yet, so "New folder" briefly renders disabled ("You have no
+    // permission to create new files!") and gets re-rendered once permissions
+    // arrive. Waiting for #files-view first, then for the button to actually be
+    // enabled, avoids racing that load — relying on click()'s own actionability
+    // wait isn't enough because the re-render detaches the element mid-poll.
+    await this.page.locator('#files-view').waitFor({ state: 'visible' })
     const createMenuButton = this.page.locator('#new-file-menu-btn')
     if (await createMenuButton.isVisible()) {
       await createMenuButton.click()
     }
-    await this.page.locator('#new-folder-btn:visible').click()
+    const newFolderBtn = this.page.locator('#new-folder-btn:visible')
+    // Default expect() timeout (5s) is shorter than click()'s old implicit
+    // actionability wait (bounded only by the test timeout); give permissions
+    // the same generous budget so this doesn't just fail faster instead.
+    await expect(newFolderBtn).toBeEnabled({ timeout: 20_000 })
+    await newFolderBtn.click()
     const modal = this.page.locator('.oc-modal')
     await modal.locator('.oc-text-input').fill(name)
     await Promise.all([
