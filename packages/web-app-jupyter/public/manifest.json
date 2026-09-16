@@ -1,0 +1,6 @@
+{
+  "entrypoint": "jupyter.js",
+  "config": {
+    "serverUrl": "https://your-jupyter-hub-url/"
+  }
+}
