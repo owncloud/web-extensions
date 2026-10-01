@@ -40,5 +40,14 @@ export class FilesAppBar {
     }
     await expect(this.newResourceContextMenu).not.toBeVisible()
     await expect(this.uploadResourceContextMenu).not.toBeVisible()
+
+    // The server keeps a freshly uploaded resource in a "processing" state for a
+    // short while (e.g. content indexing), during which its selection checkbox is
+    // disabled. Wait for that to clear so callers can safely select the resource
+    // right after upload instead of racing against it.
+    const row = this.page
+      .locator('.has-item-context-menu tr')
+      .filter({ has: this.page.locator(`[data-test-resource-name="${file}"]`) })
+    await expect(row.getByRole('checkbox')).toBeEnabled({ timeout: 20_000 })
   }
 }
