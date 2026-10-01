@@ -6,7 +6,7 @@ A collection of supplementary ownCloud Web extensions maintained outside the mai
 
 - **Classification:** oCIS
 - **Activity Status:** Active
-- **License:** AGPL-3.0
+- **License:** Apache-2.0
 - **Language:** Vue.js, TypeScript
 
 ## Architecture & Key Paths
@@ -185,7 +185,6 @@ process.
 
 ## Important Constraints
 
-- **AGPL-3.0 copyleft license:** The OSPO Apache 2.0 migration requires auditing this copyleft license.
 - **Monorepo structure:** Each extension in `packages/` can be built and released independently.
 - **oCIS dependency:** Extensions require oCIS and ownCloud Web to function.
 - **Docker image:** Published as `owncloud/web-extensions` on Docker Hub.
