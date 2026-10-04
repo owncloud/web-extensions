@@ -19,7 +19,7 @@
   "devDependencies": {
     "@ownclouders/extension-sdk": "12.5.0",
     "@ownclouders/tsconfig": "0.0.6",
-    "@types/node": "24.13.6",
+    "@types/node": "24.19.0",
     "@vue/test-utils": "^2.5.1",
     "eslint": "9.8.0",
     "happy-dom": "^20.14.5",
