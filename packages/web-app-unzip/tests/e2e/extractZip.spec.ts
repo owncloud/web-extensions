@@ -29,8 +29,10 @@ test('extract zip file', async () => {
   // files are uploaded afterwards, and the open (still empty) folder view is not
   // refreshed when that upload finishes. Re-enter the folder (via in-app navigation,
   // a page reload would abort the running upload) until the files have arrived.
-  const logo = adminPage.getByRole('button', { name: 'logo-wide.png', exact: true })
-  const lorem = adminPage.getByRole('link', { name: 'lorem.txt', exact: true })
+  // Match by resource name rather than role: whether a file renders as a link or a
+  // button depends on which editor apps the oCIS/Web build ships for its type.
+  const logo = file.getResourceNameSelector('logo-wide.png')
+  const lorem = file.getResourceNameSelector('lorem.txt')
   await expect(async () => {
     await adminPage
       .getByRole('navigation', { name: 'Breadcrumbs' })
