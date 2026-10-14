@@ -24,22 +24,8 @@ test('extract zip file', async () => {
   await file.extractZip('data.zip')
 
   await file.openFolder('data')
-
-  // extractZip() only waits for the MKCOL creating the target folder; the extracted
-  // files are uploaded afterwards, and the open (still empty) folder view is not
-  // refreshed when that upload finishes. Re-enter the folder (via in-app navigation,
-  // a page reload would abort the running upload) until the files have arrived.
-  // Match by resource name rather than role: whether a file renders as a link or a
-  // button depends on which editor apps the oCIS/Web build ships for its type.
-  const logo = file.getResourceNameSelector('logo-wide.png')
-  const lorem = file.getResourceNameSelector('lorem.txt')
-  await expect(async () => {
-    await adminPage
-      .getByRole('navigation', { name: 'Breadcrumbs' })
-      .getByRole('link', { name: 'Personal' })
-      .click()
-    await file.openFolder('data')
-    await expect(logo).toBeVisible({ timeout: 2000 })
-    await expect(lorem).toBeVisible({ timeout: 2000 })
-  }).toPass({ timeout: 30_000 })
+  // Match by resource name, not role: whether a file renders as a link or a button
+  // depends on whether an editor app has registered for its type yet.
+  await expect(file.getResourceNameSelector('logo-wide.png')).toBeVisible()
+  await expect(file.getResourceNameSelector('lorem.txt')).toBeVisible()
 })
