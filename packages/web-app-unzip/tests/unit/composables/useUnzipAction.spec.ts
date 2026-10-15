@@ -110,10 +110,12 @@ describe('unzip action', () => {
       })
     })
     it('adds extracted files to the uppy upload queue and closes the zip reader eventually', async () => {
-      const zipBlob = new Blob()
+      const zipBlob = new Blob(['content'], { type: 'text/plain' })
+      const lastModDate = new Date('2024-01-02T03:04:05Z')
       const zipEntry = mock<zip.Entry>({
         encrypted: false,
         filename: 'filename',
+        lastModDate,
         getData: vi.fn().mockResolvedValue(zipBlob)
       })
       const zipWriterMock = mock<zip.BlobWriter>({})
@@ -133,8 +135,13 @@ describe('unzip action', () => {
               await unref(action).handler({ space, resources: [resource] })
 
               expect($uppyService.addFiles).toHaveBeenCalledWith([
-                expect.objectContaining({ data: zipBlob, name: zipEntry.filename })
+                expect.objectContaining({ name: zipEntry.filename })
               ])
+              // uppy derives the upload mtime from data.lastModified, a plain Blob would yield NaN
+              const [[[{ data }]]] = vi.mocked($uppyService.addFiles).mock.calls as any
+              expect(data).toBeInstanceOf(File)
+              expect(data.lastModified).toBe(lastModDate.getTime())
+              expect(data.size).toBe(zipBlob.size)
               expect($uppyService.setUploadFolder).toHaveBeenCalledWith(
                 expect.anything(),
                 rootFolder

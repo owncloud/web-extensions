@@ -24,6 +24,8 @@ test('extract zip file', async () => {
   await file.extractZip('data.zip')
 
   await file.openFolder('data')
-  await expect(adminPage.getByRole('button', { name: 'logo-wide.png' , exact:true })).toBeVisible()
-  await expect(adminPage.getByRole('link', { name: 'lorem.txt' ,exact:true })).toBeVisible()
+  // Match by resource name, not role: whether a file renders as a link or a button
+  // depends on whether an editor app has registered for its type yet.
+  await expect(file.getResourceNameSelector('logo-wide.png')).toBeVisible()
+  await expect(file.getResourceNameSelector('lorem.txt')).toBeVisible()
 })

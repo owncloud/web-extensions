@@ -93,9 +93,16 @@ export const useUnzipAction = () => {
               const name =
                 path === '.' ? result.filename : result.filename.substring(path.length + 1)
 
+              // Uppy derives the upload mtime from `data.lastModified`, which a plain
+              // Blob doesn't have (-> `mtime: NaN`, rejected by oCIS with a 400).
+              const file = new File([data], name, {
+                type: data.type,
+                lastModified: (result.lastModDate ?? new Date()).getTime()
+              })
+
               return {
                 name,
-                data,
+                data: file,
                 meta: {
                   ...(path !== '.' && { webkitRelativePath: urlJoin(path, name) }),
                   uploadId
