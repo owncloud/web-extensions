@@ -1,0 +1,29 @@
+{
+  "name": "space-report",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Admin status report of spaces, storage usage and orphaned spaces for ownCloud Web",
+  "license": "Apache-2.0",
+  "author": "Samuel Schumacher",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm vite build",
+    "build:w": "pnpm vite build --watch --mode development",
+    "check:types": "vue-tsc --noEmit",
+    "test:unit": "NODE_OPTIONS=--unhandled-rejections=throw vitest run",
+    "test:e2e": "pnpm playwright test"
+  },
+  "dependencies": {
+    "@ownclouders/web-client": "^12.5.0",
+    "@ownclouders/web-pkg": "^12.5.0",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.8"
+  },
+  "devDependencies": {
+    "@ownclouders/extension-sdk": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^12.5.0",
+    "vue": "^3.5.44",
+    "vue-router": "^5.4.0",
+    "vue3-gettext": "^2.4.0"
+  }
+}
