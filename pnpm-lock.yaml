@@ -96,7 +96,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       sass-embedded:
         specifier: ^1.105.1
         version: 1.105.1
@@ -151,7 +151,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -182,7 +182,7 @@ importers:
         version: 12.5.0(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.64.0
         version: 1.64.0
@@ -222,7 +222,7 @@ importers:
         version: 12.5.0(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.64.0
         version: 1.64.0
@@ -246,7 +246,7 @@ importers:
     dependencies:
       '@ownclouders/design-system':
         specifier: ^12.5.0
-        version: 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-client':
         specifier: ^12.5.0
         version: 12.5.0
@@ -289,7 +289,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -317,7 +317,7 @@ importers:
         version: 12.5.0(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.64.0
         version: 1.64.0
@@ -357,7 +357,7 @@ importers:
         version: 0.0.6
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@types/node':
         specifier: 24.19.2
         version: 24.19.2
@@ -384,7 +384,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -433,7 +433,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -464,7 +464,7 @@ importers:
         version: 12.5.0(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.64.0
         version: 1.64.0
@@ -528,7 +528,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -583,7 +583,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -605,7 +605,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@types/chromecast-caf-sender':
         specifier: ^1.0.8
         version: 1.0.11
@@ -678,7 +678,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -697,7 +697,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       qs:
         specifier: ^6.16.0
         version: 6.16.0
@@ -722,13 +722,13 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       vue:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
@@ -765,7 +765,7 @@ importers:
         version: 12.5.0(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@playwright/test':
         specifier: ^1.64.0
         version: 1.64.0
@@ -805,13 +805,13 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       vue:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
@@ -837,15 +837,15 @@ importers:
         specifier: 1.1.1
         version: 1.1.1(@uppy/core@5.2.0)
       pinia:
-        specifier: ^3.0.3
-        version: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.1.0
+        version: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.0
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@uppy/core':
         specifier: 5.2.0
         version: 5.2.0
@@ -873,7 +873,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       sass-embedded:
         specifier: ^1.105.1
         version: 1.105.1
@@ -898,7 +898,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       vue:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
@@ -923,7 +923,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@types/leaflet':
         specifier: ^1.9.22
         version: 1.9.22
@@ -935,7 +935,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
         specifier: ^2.4.0
         version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
@@ -951,7 +951,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.44(typescript@5.9.3))
@@ -979,7 +979,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@uppy/core':
         specifier: 5.2.0
         version: 5.2.0
@@ -1040,7 +1040,7 @@ importers:
         version: 3.5.44(typescript@5.9.3)
       vue-router:
         specifier: ^5.4.0
-        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+        version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue-tsc:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
@@ -1062,7 +1062,7 @@ importers:
         version: 12.5.0(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-test-helpers':
         specifier: ^12.5.0
-        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
+        version: 12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       '@vueuse/core':
         specifier: ^14.4.0
         version: 14.4.0(vue@3.5.44(typescript@5.9.3))
@@ -2908,8 +2908,8 @@ packages:
     resolution: {integrity: sha512-I3yl4r9QB5ZRY3XuJVEPfc2XhZO6YweFPI+UovAzn+8/hb3oJ6lnysaFcjVpkCPfVWFUDvoZ8kmVDP7WyRtYtQ==}
     engines: {node: '>= 0.6.0'}
 
-  baseline-browser-mapping@2.11.28:
-    resolution: {integrity: sha512-br0LOmjJqr6Rt4AEkadbcNf67Zpo7EPwKsWbjnRrJIa1QYFHQBqM4C7F2WTbV8ahTEcg1Eo+Y0aWjjORInYFyA==}
+  baseline-browser-mapping@2.11.29:
+    resolution: {integrity: sha512-YeesxhUmR4h5y5V8KF8iBCqJb8YFrBJ++XBTeGcWIaQOYXGN19JM0FoiOjAhwuDoln8owMgXcWBmgHtYSkky2w==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -3322,8 +3322,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  electron-to-chromium@1.5.453:
-    resolution: {integrity: sha512-9r/nz9akllr3SZsHUhfK10ktUH6j0Dbo3cKdh91khw0FvR6HhXGnATmOq5X8ena2aq4GXLQ1koh3nvKaQJaNmQ==}
+  electron-to-chromium@1.5.456:
+    resolution: {integrity: sha512-8hboqI6xesozteFb8aa7OGknvxUtTeRJLz0FoePysUEh/oWbddykIGdgpEJRbPRg/nIMfBf2DFos+H2MtvJl2A==}
 
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
@@ -4157,8 +4157,8 @@ packages:
     resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  node-releases@2.0.58:
-    resolution: {integrity: sha512-BdiKAgbfRlvfMq/XzO/AF9NPmaA8a+YpLAyAFTVFBj3gARrAIfWvNq7Q7NE4se3KgFu0KkrvQMxTS0XVnsGzHg==}
+  node-releases@2.0.59:
+    resolution: {integrity: sha512-5qr2okC4ItAI0hG5SaV0HoYMpnM/Y6+Oqr7AmPYy/2uEoGvS+GbSKLeRxSS1uAdu59yz0ouzcuXievSgg///WA==}
     engines: {node: '>=18'}
 
   nopt@10.0.1:
@@ -4321,6 +4321,16 @@ packages:
     resolution: {integrity: sha512-l7pqLUFTI/+ESXn6k3nu30ZIzW5E2WZF/LaHJEpoq6ElcLD+wduZoB2kBN19du6K/4FDpPMazY2wJr+IndBtQw==}
     peerDependencies:
       typescript: '>=4.5.0'
+      vue: ^3.5.11
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  pinia@4.1.0:
+    resolution: {integrity: sha512-+5/HMuVjYQfKlCD5xQ7zfXn1xUzYFEa7pd0DQK5SaMfZCaFRTHlaH/c02N1FoGOdlzSiwf5EOPgJx//1QDw6gw==}
+    peerDependencies:
+      '@vue/devtools-api': ^8.2.1
+      typescript: '>=5.6.0'
       vue: ^3.5.11
     peerDependenciesMeta:
       typescript:
@@ -6349,6 +6359,105 @@ snapshots:
       - vite
       - webpack
 
+  '@ownclouders/design-system@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))':
+    dependencies:
+      '@emoji-mart/data': 1.2.1
+      '@popperjs/core': 2.11.8
+      deepmerge: 4.3.1
+      emoji-mart: 5.6.0
+      focus-trap: 8.2.2
+      focus-trap-vue: 4.1.0(focus-trap@8.2.2)(vue@3.5.44(typescript@5.9.3))
+      fuse.js: 7.4.2
+      lodash-es: 4.18.1
+      luxon: 3.7.2
+      tippy.js: 6.3.7
+      vue: 3.5.44(typescript@5.9.3)
+      vue-inline-svg: 4.0.1(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-select: 4.0.0-beta.6(vue@3.5.44(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+      webfontloader: 1.6.28
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@pinia/colada'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - '@vue/compiler-sfc'
+      - bun-types-no-globals
+      - esbuild
+      - pinia
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
+  '@ownclouders/design-system@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))':
+    dependencies:
+      '@emoji-mart/data': 1.2.1
+      '@popperjs/core': 2.11.8
+      deepmerge: 4.3.1
+      emoji-mart: 5.6.0
+      focus-trap: 8.2.2
+      focus-trap-vue: 4.1.0(focus-trap@8.2.2)(vue@3.5.44(typescript@5.9.3))
+      fuse.js: 7.4.2
+      lodash-es: 4.18.1
+      luxon: 3.7.2
+      tippy.js: 6.3.7
+      vue: 3.5.44(typescript@5.9.3)
+      vue-inline-svg: 4.0.1(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-select: 4.0.0-beta.6(vue@3.5.44(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+      webfontloader: 1.6.28
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@pinia/colada'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - '@vue/compiler-sfc'
+      - bun-types-no-globals
+      - esbuild
+      - pinia
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
+  '@ownclouders/design-system@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))':
+    dependencies:
+      '@emoji-mart/data': 1.2.1
+      '@popperjs/core': 2.11.8
+      deepmerge: 4.3.1
+      emoji-mart: 5.6.0
+      focus-trap: 8.2.2
+      focus-trap-vue: 4.1.0(focus-trap@8.2.2)(vue@3.5.44(typescript@5.9.3))
+      fuse.js: 7.4.2
+      lodash-es: 4.18.1
+      luxon: 3.7.2
+      tippy.js: 6.3.7
+      vue: 3.5.44(typescript@5.9.3)
+      vue-inline-svg: 4.0.1(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-select: 4.0.0-beta.6(vue@3.5.44(typescript@5.9.3))
+      vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+      webfontloader: 1.6.28
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@pinia/colada'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - '@vue/compiler-sfc'
+      - bun-types-no-globals
+      - esbuild
+      - pinia
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
   '@ownclouders/eslint-config@12.5.0(@babel/core@7.29.7)(@typescript-eslint/eslint-plugin@8.63.0(@typescript-eslint/parser@8.63.0(eslint@9.8.0)(typescript@5.9.3))(eslint@9.8.0)(typescript@5.9.3))(eslint@9.8.0)(vue-eslint-parser@10.4.1(eslint@9.8.0))':
     dependencies:
       '@babel/eslint-parser': 7.29.7(@babel/core@7.29.7)(eslint@9.8.0)
@@ -6620,19 +6729,19 @@ snapshots:
       - vue
       - webpack
 
-  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
+  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.1
       '@casl/vue': 2.2.6(@casl/ability@6.8.1)(vue@3.5.44(typescript@5.9.3))
-      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-client': 12.5.0
       '@ownclouders/web-pkg': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
-      '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
+      '@pinia/testing': 1.0.3(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
       '@vue/test-utils': 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3))
       axios: 1.18.1
       vitest-mock-extended: 3.1.1(typescript@5.9.3)(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))
       vue: 3.5.44(typescript@5.9.3)
-      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
@@ -6653,19 +6762,19 @@ snapshots:
       - vitest
       - webpack
 
-  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
+  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.1
       '@casl/vue': 2.2.6(@casl/ability@6.8.1)(vue@3.5.44(typescript@5.9.3))
-      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-client': 12.5.0
       '@ownclouders/web-pkg': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
-      '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
+      '@pinia/testing': 1.0.3(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
       '@vue/test-utils': 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3))
       axios: 1.18.1
       vitest-mock-extended: 3.1.1(typescript@5.9.3)(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))
       vue: 3.5.44(typescript@5.9.3)
-      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
@@ -6686,19 +6795,19 @@ snapshots:
       - vitest
       - webpack
 
-  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
+  '@ownclouders/web-test-helpers@12.5.0(@ownclouders/web-pkg@12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)))(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))':
     dependencies:
       '@casl/ability': 6.8.1
       '@casl/vue': 2.2.6(@casl/ability@6.8.1)(vue@3.5.44(typescript@5.9.3))
-      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      '@ownclouders/design-system': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       '@ownclouders/web-client': 12.5.0
       '@ownclouders/web-pkg': 12.5.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
-      '@pinia/testing': 1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
+      '@pinia/testing': 1.0.3(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))
       '@vue/test-utils': 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3))
       axios: 1.18.1
       vitest-mock-extended: 3.1.1(typescript@5.9.3)(vitest@4.1.11(@types/node@26.6.5)(happy-dom@20.14.5)(jsdom@30.1.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)))
       vue: 3.5.44(typescript@5.9.3)
-      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
+      vue-router: 5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
@@ -6788,9 +6897,9 @@ snapshots:
     dependencies:
       pako: 1.0.11
 
-  '@pinia/testing@1.0.3(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))':
+  '@pinia/testing@1.0.3(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))':
     dependencies:
-      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
 
   '@playwright/test@1.64.0':
     dependencies:
@@ -7767,7 +7876,7 @@ snapshots:
 
   base64-arraybuffer@1.0.2: {}
 
-  baseline-browser-mapping@2.11.28: {}
+  baseline-browser-mapping@2.11.29: {}
 
   bidi-js@1.1.0:
     dependencies:
@@ -7792,10 +7901,10 @@ snapshots:
 
   browserslist@4.29.3:
     dependencies:
-      baseline-browser-mapping: 2.11.28
+      baseline-browser-mapping: 2.11.29
       caniuse-lite: 1.0.30001816
-      electron-to-chromium: 1.5.453
-      node-releases: 2.0.58
+      electron-to-chromium: 1.5.456
+      node-releases: 2.0.59
       update-browserslist-db: 1.3.4(browserslist@4.29.3)
 
   buffer-from@1.1.2: {}
@@ -8192,7 +8301,7 @@ snapshots:
       minimatch: 10.2.6
       semver: 7.8.5
 
-  electron-to-chromium@1.5.453: {}
+  electron-to-chromium@1.5.456: {}
 
   emoji-mart@5.6.0: {}
 
@@ -9071,7 +9180,7 @@ snapshots:
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
 
-  node-releases@2.0.58: {}
+  node-releases@2.0.59: {}
 
   nopt@10.0.1:
     dependencies:
@@ -9215,6 +9324,14 @@ snapshots:
   pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       '@vue/devtools-api': 7.7.9
+      vue: 3.5.44(typescript@5.9.3)
+    optionalDependencies:
+      typescript: 5.9.3
+
+  pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      '@vue/devtools-api': 8.2.1
+      nostics: 1.3.0
       vue: 3.5.44(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
@@ -10079,7 +10196,7 @@ snapshots:
     dependencies:
       vue: 3.5.44(typescript@5.9.3)
 
-  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       '@babel/generator': 7.29.7
       '@vue-macros/common': 3.1.3(vue@3.5.44(typescript@5.9.3))
@@ -10101,7 +10218,7 @@ snapshots:
       yaml: 2.9.0
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.44
-      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -10113,7 +10230,7 @@ snapshots:
       - vite
       - webpack
 
-  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       '@babel/generator': 7.29.7
       '@vue-macros/common': 3.1.3(vue@3.5.44(typescript@5.9.3))
@@ -10135,7 +10252,7 @@ snapshots:
       yaml: 2.9.0
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.44
-      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -10147,7 +10264,7 @@ snapshots:
       - vite
       - webpack
 
-  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+  vue-router@5.0.6(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
     dependencies:
       '@babel/generator': 7.29.7
       '@vue-macros/common': 3.1.3(vue@3.5.44(typescript@5.9.3))
@@ -10169,7 +10286,7 @@ snapshots:
       yaml: 2.9.0
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.44
-      pinia: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rspack/core'
@@ -10346,6 +10463,108 @@ snapshots:
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.44
       pinia: 3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      vite: 7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - webpack
+
+  vue-router@5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      '@vue-macros/common': 3.1.4(vue@3.5.44(typescript@5.9.3))
+      '@vue/devtools-api': 8.2.1
+      ast-walker-scope: 0.10.0
+      chokidar: 5.0.0
+      confbox: 0.3.1
+      local-pkg: 1.2.1
+      magic-string: 1.4.3
+      mlly: 1.8.2
+      muggle-string: 0.4.1
+      nostics: 1.3.0
+      pathe: 2.0.3
+      picomatch: 4.0.7
+      scule: 1.3.0
+      tinyglobby: 0.2.17
+      unplugin: 3.4.0(esbuild@0.28.1)(rollup@4.62.2)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))
+      unplugin-utils: 0.3.2
+      vue: 3.5.44(typescript@5.9.3)
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.5.44
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      vite: 7.2.2(@types/node@24.19.2)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - webpack
+
+  vue-router@5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      '@vue-macros/common': 3.1.4(vue@3.5.44(typescript@5.9.3))
+      '@vue/devtools-api': 8.2.1
+      ast-walker-scope: 0.10.0
+      chokidar: 5.0.0
+      confbox: 0.3.1
+      local-pkg: 1.2.1
+      magic-string: 1.4.3
+      mlly: 1.8.2
+      muggle-string: 0.4.1
+      nostics: 1.3.0
+      pathe: 2.0.3
+      picomatch: 4.0.7
+      scule: 1.3.0
+      tinyglobby: 0.2.17
+      unplugin: 3.4.0(esbuild@0.28.1)(rollup@4.62.2)(vite@7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))
+      unplugin-utils: 0.3.2
+      vue: 3.5.44(typescript@5.9.3)
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.5.44
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
+      vite: 7.2.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - esbuild
+      - rolldown
+      - rollup
+      - unloader
+      - webpack
+
+  vue-router@5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3)):
+    dependencies:
+      '@vue-macros/common': 3.1.4(vue@3.5.44(typescript@5.9.3))
+      '@vue/devtools-api': 8.2.1
+      ast-walker-scope: 0.10.0
+      chokidar: 5.0.0
+      confbox: 0.3.1
+      local-pkg: 1.2.1
+      magic-string: 1.4.3
+      mlly: 1.8.2
+      muggle-string: 0.4.1
+      nostics: 1.3.0
+      pathe: 2.0.3
+      picomatch: 4.0.7
+      scule: 1.3.0
+      tinyglobby: 0.2.17
+      unplugin: 3.4.0(esbuild@0.28.1)(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0))
+      unplugin-utils: 0.3.2
+      vue: 3.5.44(typescript@5.9.3)
+    optionalDependencies:
+      '@vue/compiler-sfc': 3.5.44
+      pinia: 4.1.0(@vue/devtools-api@8.2.1)(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3))
       vite: 7.3.2(@types/node@26.6.5)(sass-embedded@1.105.1)(sass@1.105.1)(yaml@2.9.0)
     transitivePeerDependencies:
       - '@farmfe/core'
