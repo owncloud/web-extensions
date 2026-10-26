@@ -5,6 +5,9 @@ on:
     tags:
       - '*-v*'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Parse release info
         id: release-info
@@ -34,13 +39,17 @@ jobs:
         uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.15.0
-          cache: pnpm
+          # No dependency cache in the release build: a tag build must not
+          # restore a cache that a branch build wrote.
+          package-manager-cache: false
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Build app
-        run: pnpm --filter ./packages/web-app-${{ steps.release-info.outputs.app }} build
+        run: pnpm --filter ./packages/web-app-${STEPS_RELEASE_INFO_OUTPUTS_APP} build
+        env:
+          STEPS_RELEASE_INFO_OUTPUTS_APP: ${{ steps.release-info.outputs.app }}
 
       - name: Upload built app
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -63,16 +72,19 @@ jobs:
 
       - name: Package app
         run: |
-          APP=${{ needs.build.outputs.app }}
-          VERSION=${{ needs.build.outputs.version }}
+          APP=${NEEDS_BUILD_OUTPUTS_APP}
+          VERSION=${NEEDS_BUILD_OUTPUTS_VERSION}
           cp -r packages/web-app-${APP}/dist ${APP}
           zip -r ${APP}-${VERSION}.zip ${APP}/
           md5sum ${APP}-${VERSION}.zip > md5sum.txt
           sha256sum ${APP}-${VERSION}.zip > sha256sum.txt
+        env:
+          NEEDS_BUILD_OUTPUTS_APP: ${{ needs.build.outputs.app }}
+          NEEDS_BUILD_OUTPUTS_VERSION: ${{ needs.build.outputs.version }}
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
+        with: # zizmor: ignore[superfluous-actions] the publish path only runs on a real release, CI cannot exercise a rewrite
           name: ${{ needs.build.outputs.app }} ${{ needs.build.outputs.version }}
           body: |
             ${{ needs.build.outputs.app }}-${{ needs.build.outputs.version }}
@@ -92,6 +104,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Download built app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
