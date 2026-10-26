@@ -26,6 +26,7 @@ Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/w
 - [web-app-jupyter](packages/web-app-jupyter/) -- Open .ipynb files in an external JupyterHub instance
 - [web-app-photo-addon](packages/web-app-photo-addon/) -- Photo enhancement features
 - [web-app-progress-bars](packages/web-app-progress-bars/) -- Upload/download progress bars
+- [web-app-space-report](packages/web-app-space-report/) -- Admin status report of spaces, storage usage and orphaned spaces (PDF/Markdown/CSV export)
 - [web-app-unzip](packages/web-app-unzip/) -- ZIP file extraction
 - [web-app-version-changelog](packages/web-app-version-changelog/) -- AI-generated changelog summaries for file version history
 - [web-app-vim-nav](packages/web-app-vim-nav/) -- Vim-style keyboard navigation, yank/cut/paste, and location switching for the file list
