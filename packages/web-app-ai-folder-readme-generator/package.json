@@ -20,8 +20,8 @@
     "@ownclouders/web-pkg": "^12.5.0"
   },
   "devDependencies": {
-    "@ownclouders/extension-sdk": "^12.5.0",
-    "@ownclouders/tsconfig": "0.0.6",
+    "@ownclouders/extension-sdk": "^12.5.1",
+    "@ownclouders/tsconfig": "0.0.7",
     "@types/node": "24.19.2",
     "@vue/test-utils": "^2.5.1",
     "eslint": "9.8.0",
