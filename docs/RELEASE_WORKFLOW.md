@@ -19,7 +19,6 @@ This guide explains how to release multiple app versions in the web-extensions m
       * [Wrong Commit Tagged](#wrong-commit-tagged)
    * [Quick Reference](#quick-reference)
    * [Files Modified in Each Release](#files-modified-in-each-release)
-   * [Docker Hub](#docker-hub)
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 
@@ -154,7 +153,6 @@ Each tag push triggers a separate build that:
 4. Creates a `.zip` artifact
 5. Creates a GitHub release
 6. Uploads the artifact to the release
-7. Builds and pushes a Docker image
 
 ### 8. Verify Releases
 
@@ -162,7 +160,6 @@ Once builds complete, check:
 
 - **GitHub Releases**: https://github.com/owncloud/web-extensions/releases
 - **GitHub Tags**: https://github.com/owncloud/web-extensions/tags
-- **Docker Hub**: https://hub.docker.com/r/owncloud/web-extensions
 
 ### 9. Deployment Examples
 
@@ -238,7 +235,6 @@ The CI/CD pipeline automatically:
 
 - Builds the apps
 - Creates GitHub releases with `.zip` artifacts
-- Builds Docker images
 
 You do **not** need to manually:
 
@@ -249,4 +245,4 @@ You do **not** need to manually:
 
 ## Docker Hub
 
-After successfully creating a new version, the relevant app image is made downloadable on [Docker Hub](https://hub.docker.com/r/owncloud/web-extensions/tags).
+Docker images are no longer built from this repository. They are built and published to [Docker Hub](https://hub.docker.com/r/owncloud/web-extensions/tags) from [owncloud-docker/web-extensions](https://github.com/owncloud-docker/web-extensions).

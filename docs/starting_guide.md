@@ -160,7 +160,7 @@ docker compose pull
 
 ## ocis_full Deployment Example 
 
-If a web-extension has been added or a new version been created, it is availabe as docker image on [Docker hub](https://hub.docker.com/r/owncloud/web-extensions). This image can then be used by ocis but must be added manually. To make the web-extension easily available to the public, the contributor can add it to the [ocis_full](https://github.com/owncloud/ocis/blob/master/deployments/examples/ocis_full) deployment example. This deployment example is maintained by the developers, regulary updated and checked, mentioned in the [release notes](https://doc.owncloud.com/ocis_release_notes.html) on changes and finally fully described in the [Admin Docs](https://doc.owncloud.com/ocis/next/depl-examples/ubuntu-compose/ubuntu-compose-prod.html).
+If a web-extension has been added or a new version been created, it is available as a docker image on [Docker hub](https://hub.docker.com/r/owncloud/web-extensions), built from [owncloud-docker/web-extensions](https://github.com/owncloud-docker/web-extensions). This image can then be used by ocis but must be added manually. To make the web-extension easily available to the public, the contributor can add it to the [ocis_full](https://github.com/owncloud/ocis/blob/master/deployments/examples/ocis_full) deployment example. This deployment example is maintained by the developers, regulary updated and checked, mentioned in the [release notes](https://doc.owncloud.com/ocis_release_notes.html) on changes and finally fully described in the [Admin Docs](https://doc.owncloud.com/ocis/next/depl-examples/ubuntu-compose/ubuntu-compose-prod.html).
 
 The relevant locations for changes in the `ocis_full` deployment example are:
 

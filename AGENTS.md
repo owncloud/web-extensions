@@ -19,7 +19,6 @@ A collection of supplementary ownCloud Web extensions maintained outside the mai
   see **AI extensions** below. Enumerate `packages/` rather than trusting a list
   in a doc; extensions are added often.
 - `docs/` — Documentation (starting guide, release workflow)
-- `docker/` — Docker build files
 - `dev/` — Development environment configuration, including
   `dev/docker/csp.yaml` and `dev/docker/ocis.apps.yaml`
 - `support/` — Support scripts
@@ -187,7 +186,7 @@ process.
 
 - **Monorepo structure:** Each extension in `packages/` can be built and released independently.
 - **oCIS dependency:** Extensions require oCIS and ownCloud Web to function.
-- **Docker image:** Published as `owncloud/web-extensions` on Docker Hub.
+- **Docker image:** Built and published as `owncloud/web-extensions` from [owncloud-docker/web-extensions](https://github.com/owncloud-docker/web-extensions), not from this repository.
 - **External dependencies:** Some extensions (draw.io, external sites) embed or connect to third-party services.
 
 
@@ -214,6 +213,5 @@ process.
 - This is a pnpm monorepo containing multiple independent web extensions.
 - Each extension in `packages/` has its own `package.json`, source code and build config.
 - The `docs/starting_guide.md` explains how to add new extensions to the repository.
-- Docker images bundle all extensions together for deployment.
 - Extensions register with the oCIS Web runtime via the extension system API.
 - Development environment uses Docker Compose with an oCIS backend.
