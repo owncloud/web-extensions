@@ -5,7 +5,6 @@ A status report of all spaces for admins, in the oCIS Web UI.
 - **Counts**
   - personal spaces
   - project spaces, including how many are disabled
-  - Vault spaces, if Vault mode is on
 - **Storage**
   - total used and total quota assigned
   - spaces without a quota (unlimited)
@@ -23,13 +22,12 @@ A status report of all spaces for admins, in the oCIS Web UI.
   - fullest spaces, measured against their quota
 - **Table** of every space: type, name, owner, used, quota, % full, last modified. It is sortable and searchable.
 - **Exports**, generated in the browser:
-  - **PDF**: A4 report with overview, key figures, top lists and the full space list, with page numbers. Built with jsPDF using the standard Helvetica font, so characters outside Latin-1 (e.g. Greek, CJK) print as `?`.
-  - **Markdown**: the same content as tables, e.g. for a wiki or ticket.
+  - **Markdown**: overview, key figures, top lists, orphaned spaces and the full space list as tables, e.g. for a wiki or ticket.
   - **CSV**: the rows currently shown in the table (respects filter/search).
-  - **Print**: the page itself.
-  - **Save to my files**: stores the PDF or Markdown report in your personal space, in the folder `Space reports` (configurable, created if missing). File names carry date and time; existing files are never overwritten.
+  - **Print**: the page itself, laid out for paper. Use the browser's "Save as PDF" to get a PDF.
+  - **Save to my files**: stores the Markdown report in your personal space, in the folder `Space reports` (configurable, created if missing). File names carry date and time; existing files are never overwritten.
 
-  PDF and Markdown always cover all spaces, regardless of the table filter.
+  Markdown always covers all spaces, regardless of the table filter.
 
 Tested against oCIS Web **12.5.0** (oCIS 8.x).
 
@@ -37,16 +35,16 @@ Tested against oCIS Web **12.5.0** (oCIS 8.x).
 
 - **Who sees it:** users with the `Drives.List.all` permission. It appears in the app switcher as **Space report**.
 - **Personal spaces of other users:** oCIS only lists them for accounts with full user-management permission, i.e. the Admin role. For other roles, the page shows a hint that the numbers are incomplete.
-- **MFA:** if MFA is enabled, opening the page requires it, the same as Admin Settings. That MFA-level session is also what makes Vault spaces listable. Without it, Vault is skipped with a note.
+- **MFA:** if MFA is enabled, opening the page requires it, the same as Admin Settings.
+- **Vault spaces** are not part of the report. They are served under a separate `/vault` route, which Web's Graph client does not address.
 
 ## Data source
 
-The page makes read-only calls to the "all drives" Graph endpoint, the same one Admin Settings uses:
+All calls go through Web's Graph client (`clientService.graphAuthenticated` from `@ownclouders/web-client`) and are read-only. Spaces come from the "all drives" endpoint, the same one Admin Settings uses:
 
 ```
 GET /graph/v1beta1/drives?$filter=driveType eq personal
 GET /graph/v1beta1/drives?$filter=driveType eq project
-GET /vault/graph/v1beta1/drives?...        # only if Vault mode is enabled
 ```
 
 - The orphan check additionally reads `GET /graph/v1.0/users` and `GET /graph/v1.0/groups?$expand=members`. oCIS reads these without paging, so an LDAP size limit can cut the lists short. Every owner or member missing from a list is therefore confirmed with a direct lookup (`/users/{id}`, `/groups/{id}`). Only a 404 counts as "gone"; lookup errors are reported as "not verified" and never counted as orphaned. At most 500 lookups per run (8 in parallel).
@@ -103,12 +101,11 @@ pnpm --filter space-report check:types
 
 To get a real orphan locally, delete a user directly in oCIS' built-in LDAP (IDM) rather than in Admin Settings, because deleting through oCIS also removes the personal space.
 
-| File                       | Purpose                                        |
-| -------------------------- | ---------------------------------------------- |
-| `src/report.ts`            | Normalising, aggregation, formatting, CSV      |
-| `src/orphans.ts`           | Orphan analysis                                |
-| `src/export.ts`            | Report content model + Markdown                |
-| `src/pdf.ts`               | PDF layout (jsPDF + jspdf-autotable, both MIT) |
-| `src/save.ts`              | Saving into the personal space (WebDAV)        |
-| `src/api.ts`               | Graph calls                                    |
-| `src/views/ReportView.vue` | The page                                       |
+| File                       | Purpose                                   |
+| -------------------------- | ----------------------------------------- |
+| `src/report.ts`            | Normalising, aggregation, formatting, CSV |
+| `src/orphans.ts`           | Orphan analysis                           |
+| `src/export.ts`            | Report content model + Markdown           |
+| `src/save.ts`              | Saving into the personal space (WebDAV)   |
+| `src/api.ts`               | Graph calls via web-client                |
+| `src/views/ReportView.vue` | The page                                  |

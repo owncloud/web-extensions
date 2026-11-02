@@ -1,4 +1,4 @@
-// Report documents (Markdown, PDF) built from the same data the page shows.
+// Report document (Markdown) built from the same data the page shows.
 import { SpaceKind, SpaceRow, Summary, formatBytes, formatPercent } from './report'
 import { ORPHAN_LABEL, summarizeOrphans } from './orphans'
 
@@ -7,7 +7,6 @@ export interface ReportMeta {
   generatedAt: Date
   generatedBy: string
   thresholdPercent: number
-  vault: 'ok' | 'disabled' | 'mfa-required' | 'error'
   /** false: other users' personal spaces were not visible to the caller */
   complete: boolean
   /** state of the orphan analysis; only 'ok' produces numbers */
@@ -24,19 +23,17 @@ export interface ReportData {
 
 const KIND_LABEL: Record<SpaceKind, string> = {
   personal: 'Personal',
-  project: 'Project',
-  'vault-personal': 'Vault personal',
-  'vault-project': 'Vault project'
+  project: 'Project'
 }
 
 export const isoDate = (d: Date) => d.toISOString().slice(0, 10)
 export const dateTime = (d: Date) => `${isoDate(d)} ${d.toTimeString().slice(0, 5)}`
 const shortDate = (s: string | null) => (s ? isoDate(new Date(s)) : '-')
 
-export const reportFileName = (meta: ReportMeta, ext: 'md' | 'pdf') =>
-  `space-report-${meta.server.replace(/[^\w.-]+/g, '_')}-${isoDate(meta.generatedAt)}.${ext}`
+export const reportFileName = (meta: ReportMeta) =>
+  `space-report-${meta.server.replace(/[^\w.-]+/g, '_')}-${isoDate(meta.generatedAt)}.md`
 
-/** Shared content model so Markdown and PDF always say the same thing. */
+/** Content model of the report, kept apart from the Markdown rendering. */
 export function sections({ meta, summary, rows }: ReportData) {
   const { byKind, total } = summary
   const personalUsed = rows
@@ -59,22 +56,17 @@ export function sections({ meta, summary, rows }: ReportData) {
       "Other users' personal spaces were not visible to the generating account; personal numbers are incomplete."
     )
   }
-  if (meta.vault === 'mfa-required')
-    notes.push('Vault spaces are not included (listing them requires an MFA session).')
-  if (meta.vault === 'error') notes.push('Vault spaces could not be loaded and are not included.')
   notes.push('"Used" is the usage oCIS reports against each space quota, not raw backend storage.')
 
   const overview: [string, string, string, string][] = [
     ['Type', 'Spaces', 'Used', 'Quota assigned'],
-    ...(['personal', 'project', 'vault-personal', 'vault-project'] as SpaceKind[])
-      .filter((k) => k === 'personal' || k === 'project' || meta.vault === 'ok')
-      .map((k): [string, string, string, string] => [
-        KIND_LABEL[k] + (byKind[k].disabled ? ` (${byKind[k].disabled} disabled)` : ''),
-        String(byKind[k].count),
-        formatBytes(byKind[k].used),
-        formatBytes(byKind[k].quotaAssigned) +
-          (byKind[k].unlimited ? ` (+${byKind[k].unlimited} unlimited)` : '')
-      ]),
+    ...(['personal', 'project'] as SpaceKind[]).map((k): [string, string, string, string] => [
+      KIND_LABEL[k] + (byKind[k].disabled ? ` (${byKind[k].disabled} disabled)` : ''),
+      String(byKind[k].count),
+      formatBytes(byKind[k].used),
+      formatBytes(byKind[k].quotaAssigned) +
+        (byKind[k].unlimited ? ` (+${byKind[k].unlimited} unlimited)` : '')
+    ]),
     ['Total', String(total.count), formatBytes(total.used), formatBytes(total.quotaAssigned)]
   ]
 

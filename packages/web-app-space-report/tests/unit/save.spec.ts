@@ -11,8 +11,8 @@ describe('helpers', () => {
     expect(normalizeFolder('')).toBe('')
   })
   it('adds the time before the extension', () => {
-    expect(withTime('space-report-a-2026-10-04.pdf', new Date(2026, 9, 4, 9, 5))).toBe(
-      'space-report-a-2026-10-04-0905.pdf'
+    expect(withTime('space-report-a-2026-10-04.md', new Date(2026, 9, 4, 9, 5))).toBe(
+      'space-report-a-2026-10-04-0905.md'
     )
   })
 })
@@ -27,16 +27,16 @@ describe('saveToSpace', () => {
       webdav,
       space,
       folder: 'Reports/Spaces',
-      fileName: 'r.pdf',
+      fileName: 'r.md',
       content: 'x'
     })
-    expect(path).toBe('/Reports/Spaces/r.pdf')
+    expect(path).toBe('/Reports/Spaces/r.md')
     expect(webdav.createFolder.mock.calls.map((c) => c[1].path)).toEqual([
       '/Reports',
       '/Reports/Spaces'
     ])
     expect(webdav.putFileContents).toHaveBeenCalledWith(space, {
-      path: '/Reports/Spaces/r.pdf',
+      path: '/Reports/Spaces/r.md',
       content: 'x',
       overwrite: false
     })

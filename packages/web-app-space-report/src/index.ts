@@ -42,7 +42,7 @@ export default defineWebApplication({
           if (!canView($ability as Ability)) {
             return { name: 'accessDenied' }
           }
-          // same as Admin Settings; also gives the token the ACR needed to list Vault spaces
+          // same as Admin Settings
           const capabilityStore = useCapabilityStore()
           if (capabilityStore.authMfaEnabled) {
             await useAuthService().requireAcr(capabilityStore.authMfaRequiredLevelname, to.fullPath)

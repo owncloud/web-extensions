@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { analyzeOrphans, summarizeOrphans } from '../../src/orphans'
-import { GraphDrive, MANAGER_ROLES, toRows } from '../../src/report'
+import { MANAGER_ROLES, toRows } from '../../src/report'
+import { DriveFixture, spaces } from './spaces'
 
 const MANAGER = MANAGER_ROLES[0]
 const EDITOR = '58c63c02-1d89-4572-916a-870abc5a1b7d'
@@ -11,7 +12,7 @@ const perm = (type: 'user' | 'group', id: string, role = EDITOR) => ({
   grantedToV2: { [type]: { id } }
 })
 
-const drives: GraphDrive[] = [
+const drives: DriveFixture[] = [
   // personal: owner exists / deleted / deleted-but-listing-truncated / disabled
   { id: 'p-ok', name: 'Alice', driveType: 'personal', owner: { user: { id: 'alice' } } },
   {
@@ -74,7 +75,7 @@ const lookups = {
 describe('analyzeOrphans', () => {
   it('classifies every case and only trusts confirmed lookups', async () => {
     const { rows, unverified } = await analyzeOrphans({
-      rows: toRows(drives),
+      rows: toRows(spaces(drives)),
       users,
       groups,
       lookups
@@ -119,20 +120,22 @@ describe('analyzeOrphans', () => {
   })
 
   it('never marks group-based projects orphaned without a group listing', async () => {
-    const rows = toRows([
-      { id: 's', driveType: 'project', root: { permissions: [perm('group', 'x')] } }
-    ])
+    const rows = toRows(
+      spaces([{ id: 's', driveType: 'project', root: { permissions: [perm('group', 'x')] } }])
+    )
     const res = await analyzeOrphans({ rows, users: [], groups: null, lookups })
     expect(res.rows[0].orphan).toBeNull()
   })
 
   it('caps lookups and reports the rest as unverified', async () => {
     const many = toRows(
-      Array.from({ length: 5 }, (_, i) => ({
-        id: `p${i}`,
-        driveType: 'personal',
-        owner: { user: { id: `u${i}` } }
-      }))
+      spaces(
+        Array.from({ length: 5 }, (_, i) => ({
+          id: `p${i}`,
+          driveType: 'personal',
+          owner: { user: { id: `u${i}` } }
+        }))
+      )
     )
     const res = await analyzeOrphans({
       rows: many,

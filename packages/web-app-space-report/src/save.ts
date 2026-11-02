@@ -9,7 +9,7 @@ export interface WebDavSubset {
   ): Promise<unknown>
   putFileContents(
     space: SpaceResource,
-    opts: { path: string; content: string | ArrayBuffer; overwrite?: boolean }
+    opts: { path: string; content: string; overwrite?: boolean }
   ): Promise<unknown>
 }
 
@@ -20,7 +20,7 @@ export const normalizeFolder = (folder: string) =>
     .filter((p) => p && p !== '.' && p !== '..')
     .join('/')
 
-/** "space-report-host-2026-10-04.pdf" -> "space-report-host-2026-10-04-1907.pdf" (saves never overwrite) */
+/** "space-report-host-2026-10-04.md" -> "space-report-host-2026-10-04-1907.md" (saves never overwrite) */
 export const withTime = (fileName: string, d: Date) => {
   const hhmm = `${String(d.getHours()).padStart(2, '0')}${String(d.getMinutes()).padStart(2, '0')}`
   return fileName.replace(/(\.[^.]+)$/, `-${hhmm}$1`)
@@ -44,7 +44,7 @@ export async function saveToSpace({
   space: SpaceResource
   folder: string
   fileName: string
-  content: string | ArrayBuffer
+  content: string
 }): Promise<string> {
   const dir = normalizeFolder(folder)
   let current = ''

@@ -15,12 +15,6 @@
           <oc-icon name="refresh" size="small" />{{ $gettext('Refresh') }}
         </oc-button>
         <oc-button
-          :disabled="!rows.length || exporting || orphanStatus === 'running'"
-          @click="downloadPdf"
-        >
-          <oc-icon name="file-pdf" size="small" />PDF
-        </oc-button>
-        <oc-button
           data-testid="space-report-markdown"
           :disabled="!rows.length || orphanStatus === 'running'"
           @click="downloadMarkdown"
@@ -28,37 +22,18 @@
           <oc-icon name="markdown" size="small" />Markdown
         </oc-button>
         <oc-button
-          id="space-report-save-btn"
-          v-oc-tooltip="personalSpace ? '' : $gettext('You have no personal space to save into')"
+          v-oc-tooltip="
+            personalSpace
+              ? $gettext('Saves the Markdown report to %{folder}', { folder: saveFolderLabel })
+              : $gettext('You have no personal space to save into')
+          "
           :disabled="!rows.length || saving || !personalSpace || orphanStatus === 'running'"
+          @click="saveReport"
         >
           <oc-icon :name="saving ? 'loader-4' : 'save'" size="small" />{{
             $gettext('Save to my files')
           }}
         </oc-button>
-        <oc-drop
-          drop-id="space-report-save-drop"
-          toggle="#space-report-save-btn"
-          mode="click"
-          close-on-click
-          padding-size="small"
-        >
-          <ul class="space-report-menu">
-            <li>
-              <oc-button appearance="raw" @click="saveReport('pdf')">
-                <oc-icon name="file-pdf" size="small" />{{ $gettext('Save as PDF') }}
-              </oc-button>
-            </li>
-            <li>
-              <oc-button appearance="raw" @click="saveReport('md')">
-                <oc-icon name="markdown" size="small" />{{ $gettext('Save as Markdown') }}
-              </oc-button>
-            </li>
-          </ul>
-          <p class="oc-text-small oc-text-muted oc-m-rm oc-mt-xs">
-            {{ $gettext('Folder: %{folder}', { folder: saveFolderLabel }) }}
-          </p>
-        </oc-drop>
         <oc-button :disabled="!rows.length" @click="downloadCsv">
           <oc-icon name="file-download" size="small" />CSV
         </oc-button>
@@ -84,14 +59,6 @@
         )
       }}
     </div>
-    <div v-if="vaultStatus === 'mfa-required'" class="space-report-notice oc-mb-m">
-      <oc-icon name="information" class="oc-mr-s" />
-      {{ $gettext('Vault spaces are not included: listing them needs a session with MFA.') }}
-    </div>
-    <div v-else-if="vaultStatus === 'error'" class="space-report-notice oc-mb-m">
-      <oc-icon name="information" class="oc-mr-s" />
-      {{ $gettext('Vault spaces could not be loaded.') }}
-    </div>
 
     <template v-if="rows.length || (!loading && !error)">
       <!-- summary tiles -->
@@ -111,13 +78,6 @@
             <template v-if="summary.byKind.project.disabled">
               · {{ $gettext('%{n} disabled', { n: String(summary.byKind.project.disabled) }) }}
             </template>
-          </div>
-        </div>
-        <div v-if="vaultStatus === 'ok'" class="space-report-tile">
-          <div class="space-report-tile-label">{{ $gettext('Vault spaces') }}</div>
-          <div class="space-report-tile-value">{{ vaultCount }}</div>
-          <div class="space-report-tile-sub">
-            {{ formatBytes(vaultUsed) }} {{ $gettext('used') }}
           </div>
         </div>
         <div class="space-report-tile">
@@ -405,15 +365,14 @@ import { computed, onMounted, ref, unref, watch } from 'vue'
 import { useGettext } from 'vue3-gettext'
 import {
   useAbility,
-  useAuthStore,
   useConfigStore,
   useClientService,
   useMessages,
+  useSharesStore,
   useSpacesStore,
   useUserStore
 } from '@ownclouders/web-pkg'
-import { useCapabilityStore } from '../compat'
-import { exists, fetchDrives, fetchGroups, fetchUsers, GraphError } from '../api'
+import { fetchGroups, fetchSpaces, fetchUsers, groupExists, userExists } from '../api'
 import { ORPHAN_LABEL, analyzeOrphans, summarizeOrphans } from '../orphans'
 import {
   SpaceKind,
@@ -431,14 +390,13 @@ import { normalizeFolder, saveToSpace, withTime } from '../save'
 type SortKey = 'kind' | 'name' | 'owner' | 'used' | 'quota' | 'ratio' | 'lastModified'
 
 const { $gettext } = useGettext()
-const authStore = useAuthStore()
 const configStore = useConfigStore()
-const capabilityStore = useCapabilityStore()
 const { can } = useAbility()
 const reportConfig = useReportConfig()
 const userStore = useUserStore()
 const { showMessage, showErrorMessage } = useMessages()
 const clientService = useClientService()
+const sharesStore = useSharesStore()
 const spacesStore = useSpacesStore()
 
 const threshold = computed(() => reportConfig.thresholdPercent / 100)
@@ -447,7 +405,6 @@ const thresholdPercent = computed(() => reportConfig.thresholdPercent)
 const loading = ref(false)
 const error = ref<string | null>(null)
 const rows = ref<SpaceRow[]>([])
-const vaultStatus = ref<'ok' | 'disabled' | 'mfa-required' | 'error'>('disabled')
 const generatedAt = ref<Date | null>(null)
 const orphanStatus = ref<'pending' | 'running' | 'ok' | 'skipped' | 'error'>('pending')
 const orphanUnverified = ref(0)
@@ -467,36 +424,17 @@ const load = async () => {
   controller?.abort()
   controller = new AbortController()
   const { signal } = controller
-  const common = { serverUrl: configStore.serverUrl, accessToken: authStore.accessToken, signal }
+  const graph = clientService.graphAuthenticated
+  const { graphRoles } = sharesStore
 
   loading.value = true
   error.value = null
   try {
     const [personal, project] = await Promise.all([
-      fetchDrives({ ...common, driveType: 'personal' }),
-      fetchDrives({ ...common, driveType: 'project' })
+      fetchSpaces(graph, graphRoles, 'personal', signal),
+      fetchSpaces(graph, graphRoles, 'project', signal)
     ])
-    let vaultRows: SpaceRow[] = []
-    if (capabilityStore.vaultEnabled) {
-      try {
-        const [vp, vpr] = await Promise.all([
-          fetchDrives({ ...common, driveType: 'personal', vault: true }),
-          fetchDrives({ ...common, driveType: 'project', vault: true })
-        ])
-        vaultRows = [...toRows(vp, true), ...toRows(vpr, true)]
-        vaultStatus.value = 'ok'
-      } catch (e) {
-        if (signal.aborted) return
-        vaultStatus.value =
-          e instanceof GraphError && (e.mfaRequired || e.status === 401 || e.status === 403)
-            ? 'mfa-required'
-            : 'error'
-        console.warn('[space-report] vault spaces', e)
-      }
-    } else {
-      vaultStatus.value = 'disabled'
-    }
-    rows.value = [...toRows(personal), ...toRows(project), ...vaultRows]
+    rows.value = [...toRows(personal), ...toRows(project)]
     generatedAt.value = new Date()
     loading.value = false
     await runOrphanAnalysis(signal)
@@ -517,13 +455,12 @@ const runOrphanAnalysis = async (signal: AbortSignal) => {
     return
   }
   orphanStatus.value = 'running'
-  const { serverUrl } = configStore
-  const token = authStore.accessToken
+  const graph = clientService.graphAuthenticated
   try {
     const [users, groups] = await Promise.all([
-      fetchUsers(serverUrl, token, signal),
+      fetchUsers(graph, signal),
       // without the group list, group memberships are treated as "unknown", never as orphaned
-      fetchGroups(serverUrl, token, signal).catch((e) => {
+      fetchGroups(graph, signal).catch((e) => {
         console.warn('[space-report] groups', e)
         return null
       })
@@ -533,8 +470,8 @@ const runOrphanAnalysis = async (signal: AbortSignal) => {
       users,
       groups,
       lookups: {
-        userExists: (id) => exists(serverUrl, token, 'users', id, signal),
-        groupExists: (id) => exists(serverUrl, token, 'groups', id, signal)
+        userExists: (id) => userExists(graph, id, signal),
+        groupExists: (id) => groupExists(graph, id, signal)
       }
     })
     if (signal.aborted) return
@@ -568,12 +505,6 @@ const orphanLabel = (r: SpaceRow) =>
 // ---- summary --------------------------------------------------------------------------------
 
 const summary = computed(() => summarize(unref(rows), unref(threshold), reportConfig.topN))
-const vaultCount = computed(
-  () => summary.value.byKind['vault-personal'].count + summary.value.byKind['vault-project'].count
-)
-const vaultUsed = computed(
-  () => summary.value.byKind['vault-personal'].used + summary.value.byKind['vault-project'].used
-)
 const personalUsages = computed(() =>
   unref(rows)
     .filter((r) => r.kind === 'personal')
@@ -599,17 +530,14 @@ const barWidth = (value: number, max: number) =>
 const kindLabel = (k: SpaceKind) =>
   ({
     personal: $gettext('Personal'),
-    project: $gettext('Project'),
-    'vault-personal': $gettext('Vault personal'),
-    'vault-project': $gettext('Vault project')
+    project: $gettext('Project')
   })[k]
 
-const kindFilter = ref<'all' | 'personal' | 'project' | 'vault' | 'orphaned'>('all')
+const kindFilter = ref<'all' | 'personal' | 'project' | 'orphaned'>('all')
 const kindFilters = computed(() => [
   { value: 'all' as const, label: $gettext('All') },
   { value: 'personal' as const, label: $gettext('Personal') },
   { value: 'project' as const, label: $gettext('Project') },
-  ...(unref(vaultStatus) === 'ok' ? [{ value: 'vault' as const, label: $gettext('Vault') }] : []),
   ...(unref(orphanStatus) === 'ok'
     ? [{ value: 'orphaned' as const, label: $gettext('Orphaned') }]
     : [])
@@ -646,7 +574,6 @@ const filteredRows = computed(() => {
   const dir = unref(sortDir) === 'asc' ? 1 : -1
   return unref(rows)
     .filter((r) => {
-      if (kind === 'vault' && !r.kind.startsWith('vault-')) return false
       if (kind === 'orphaned' && !r.orphan) return false
       if ((kind === 'personal' || kind === 'project') && r.kind !== kind) return false
       return !q || r.name.toLowerCase().includes(q) || r.owner.toLowerCase().includes(q)
@@ -672,14 +599,13 @@ const downloadCsv = () => {
   )
 }
 
-/** Markdown/PDF always cover all spaces (not the current filter), like a status report should. */
+/** Markdown always covers all spaces (not the current filter), like a status report should. */
 const reportData = (): ReportData => ({
   meta: {
     server: unref(serverHost),
     generatedAt: unref(generatedAt) || new Date(),
     generatedBy: userStore.user?.displayName || userStore.user?.onPremisesSamAccountName || '',
     thresholdPercent: unref(thresholdPercent),
-    vault: unref(vaultStatus),
     complete: unref(canSeeForeignPersonal),
     orphans: unref(orphanStatus),
     orphansUnverified: unref(orphanUnverified)
@@ -691,7 +617,7 @@ const reportData = (): ReportData => ({
 const downloadMarkdown = () => {
   const data = reportData()
   const blob = new Blob([buildMarkdown(data)], { type: 'text/markdown;charset=utf-8' })
-  downloadBlob(blob, reportFileName(data.meta, 'md'))
+  downloadBlob(blob, reportFileName(data.meta))
 }
 
 const personalSpace = computed(() => spacesStore.personalSpace)
@@ -701,25 +627,18 @@ const saveFolderLabel = computed(() => {
 })
 
 const saving = ref(false)
-const saveReport = async (format: 'pdf' | 'md') => {
+const saveReport = async () => {
   const space = unref(personalSpace)
   if (!space) return
   saving.value = true
   try {
     const data = reportData()
-    let content: string | ArrayBuffer
-    if (format === 'pdf') {
-      const { buildPdf } = await import('../pdf')
-      content = await buildPdf(data).arrayBuffer()
-    } else {
-      content = buildMarkdown(data)
-    }
     const path = await saveToSpace({
       webdav: clientService.webdav as any,
       space,
       folder: reportConfig.saveFolder,
-      fileName: withTime(reportFileName(data.meta, format), new Date()),
-      content
+      fileName: withTime(reportFileName(data.meta), new Date()),
+      content: buildMarkdown(data)
     })
     showMessage({
       title: $gettext('Report saved'),
@@ -730,22 +649,6 @@ const saveReport = async (format: 'pdf' | 'md') => {
     showErrorMessage({ title: $gettext('Saving the report failed'), errors: [e as Error] })
   } finally {
     saving.value = false
-  }
-}
-
-const exporting = ref(false)
-const downloadPdf = async () => {
-  exporting.value = true
-  try {
-    // jsPDF is only loaded when needed
-    const { buildPdf } = await import('../pdf')
-    const data = reportData()
-    downloadBlob(buildPdf(data), reportFileName(data.meta, 'pdf'))
-  } catch (e) {
-    console.error('[space-report] pdf', e)
-    showErrorMessage({ title: $gettext('Creating the PDF failed'), errors: [e as Error] })
-  } finally {
-    exporting.value = false
   }
 }
 
@@ -795,14 +698,6 @@ const print = () => {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-.space-report-menu {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.space-report-menu li {
-  padding: 0.25rem 0.25rem;
 }
 .space-report-notice {
   display: flex;

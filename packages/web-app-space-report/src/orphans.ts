@@ -78,7 +78,7 @@ export async function analyzeOrphans({
   const unknownUsers = new Set<string>()
   const unknownGroups = new Set<string>()
   for (const r of rows) {
-    if (r.kind.endsWith('personal')) {
+    if (r.kind === 'personal') {
       if (r.ownerId && !userById.has(r.ownerId)) unknownUsers.add(r.ownerId)
     } else {
       for (const m of r.members) {
@@ -115,7 +115,7 @@ export async function analyzeOrphans({
 
   const out = rows.map((r): SpaceRow => {
     const row: SpaceRow = { ...r, orphan: null, ownerDisabled: false, noManager: false }
-    if (r.kind.endsWith('personal')) {
+    if (r.kind === 'personal') {
       if (!r.ownerId) {
         row.orphan = 'owner-missing'
       } else {

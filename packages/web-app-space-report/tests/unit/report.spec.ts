@@ -1,10 +1,11 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
-import { formatBytes, formatPercent, summarize, toCsv, toRows, GraphDrive } from '../../src/report'
-import { fetchDrives, GraphError } from '../../src/api'
+import { describe, it, expect, vi } from 'vitest'
+import { formatBytes, formatPercent, summarize, toCsv, toRows } from '../../src/report'
+import { fetchSpaces, GraphClient, userExists } from '../../src/api'
+import { DriveFixture, spaces } from './spaces'
 
 const GiB = 1024 ** 3
 
-const drives: GraphDrive[] = [
+const drives: DriveFixture[] = [
   {
     id: 'p1',
     name: 'Alice',
@@ -26,7 +27,7 @@ const drives: GraphDrive[] = [
 ]
 
 describe('toRows / summarize', () => {
-  const rows = toRows(drives)
+  const rows = toRows(spaces(drives))
 
   it('keeps only personal and project spaces, deduped', () => {
     expect(rows.map((r) => r.id)).toEqual(['p1', 'p2', 's1'])
@@ -37,18 +38,17 @@ describe('toRows / summarize', () => {
   })
 
   it('aggregates per kind and in total', () => {
-    const s = summarize([...rows, ...toRows([drives[0]], true)], 0.9)
+    const s = summarize(rows, 0.9)
     expect(s.byKind.personal.count).toBe(2)
     expect(s.byKind.personal.unlimited).toBe(1)
     expect(s.byKind.project.disabled).toBe(1)
-    expect(s.byKind['vault-personal'].count).toBe(1)
-    expect(s.total.count).toBe(4)
-    expect(s.total.used).toBe((9.5 + 1 + 120 + 9.5) * GiB)
-    expect(s.total.quotaAssigned).toBe((10 + 100 + 10) * GiB)
-    expect(s.total.overThreshold).toBe(3)
+    expect(s.total.count).toBe(3)
+    expect(s.total.used).toBe((9.5 + 1 + 120) * GiB)
+    expect(s.total.quotaAssigned).toBe((10 + 100) * GiB)
+    expect(s.total.overThreshold).toBe(2)
     expect(s.total.exceeded).toBe(1)
     expect(s.largest[0].id).toBe('s1')
-    expect(s.fullest.map((r) => r.id)).toEqual(['s1', 'p1', 'p1'])
+    expect(s.fullest.map((r) => r.id)).toEqual(['s1', 'p1'])
   })
 })
 
@@ -64,7 +64,9 @@ describe('formatting', () => {
 
   it('writes CSV with quoting and formula neutralisation', () => {
     const csv = toCsv(
-      toRows([{ id: 'x', name: '=HYPERLINK("evil")', driveType: 'project', quota: { used: 1 } }])
+      toRows(
+        spaces([{ id: 'x', name: '=HYPERLINK("evil")', driveType: 'project', quota: { used: 1 } }])
+      )
     )
     const [header, line] = csv.trim().split('\r\n')
     expect(header).toContain('"used_bytes"')
@@ -72,49 +74,30 @@ describe('formatting', () => {
   })
 })
 
-describe('fetchDrives', () => {
-  afterEach(() => vi.unstubAllGlobals())
-
-  it('calls the all-drives endpoint with the filter and bearer token', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue(new Response(JSON.stringify({ value: [drives[0]] }), { status: 200 }))
-    vi.stubGlobal('fetch', fetchMock)
-    const res = await fetchDrives({
-      serverUrl: 'https://cloud.example.org/',
-      accessToken: 'T',
-      driveType: 'personal',
-      vault: true
-    })
+describe('api', () => {
+  it('lists all spaces of a type through web-client', async () => {
+    const listAllDrives = vi.fn().mockResolvedValue(spaces([drives[0]]))
+    const graph = { drives: { listAllDrives } } as unknown as GraphClient
+    const signal = new AbortController().signal
+    const res = await fetchSpaces(graph, {}, 'personal', signal)
     expect(res).toHaveLength(1)
-    const [url, init] = fetchMock.mock.calls[0]
-    expect(url).toBe(
-      'https://cloud.example.org/vault/graph/v1beta1/drives?%24filter=driveType+eq+personal&%24orderby=name+asc'
+    expect(listAllDrives).toHaveBeenCalledWith(
+      {},
+      { filter: 'driveType eq personal', orderBy: 'name asc' },
+      { signal }
     )
-    expect(init.headers.Authorization).toBe('Bearer T')
   })
 
-  it('handles `null` bodies and flags MFA-required errors', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('null', { status: 200 })))
-    expect(
-      await fetchDrives({ serverUrl: 'https://c/', accessToken: 'T', driveType: 'project' })
-    ).toEqual([])
+  it('treats only a 404 as "user does not exist"', async () => {
+    const httpError = (status: number) => Object.assign(new Error(), { response: { status } })
+    const getUser = vi.fn()
+    const graph = { users: { getUser } } as unknown as GraphClient
 
-    vi.stubGlobal(
-      'fetch',
-      vi
-        .fn()
-        .mockResolvedValue(
-          new Response('', { status: 403, headers: { 'X-OCIS-MFA-Required': 'true' } })
-        )
-    )
-    const err = await fetchDrives({
-      serverUrl: 'https://c/',
-      accessToken: 'T',
-      driveType: 'project',
-      vault: true
-    }).catch((e) => e)
-    expect(err).toBeInstanceOf(GraphError)
-    expect(err.mfaRequired).toBe(true)
+    getUser.mockResolvedValueOnce({ id: 'a' })
+    expect(await userExists(graph, 'a')).toBe(true)
+    getUser.mockRejectedValueOnce(httpError(404))
+    expect(await userExists(graph, 'b')).toBe(false)
+    getUser.mockRejectedValueOnce(httpError(500))
+    await expect(userExists(graph, 'c')).rejects.toThrow()
   })
 })

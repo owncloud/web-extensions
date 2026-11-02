@@ -1,29 +1,9 @@
-// Pure logic for the report: normalising Graph drives, aggregating, formatting, CSV.
+// Pure logic for the report: normalising spaces, aggregating, formatting, CSV.
+import type { SpaceResource } from '@ownclouders/web-client'
 
-export type SpaceKind = 'personal' | 'project' | 'vault-personal' | 'vault-project'
+export type SpaceKind = 'personal' | 'project'
 
 export type QuotaState = 'normal' | 'nearing' | 'critical' | 'exceeded' | 'unknown'
-
-/** Subset of a libregraph Drive as returned by /graph/v1beta1/drives */
-export interface GraphDrive {
-  id?: string
-  name?: string
-  driveType?: string
-  driveAlias?: string
-  lastModifiedDateTime?: string
-  owner?: { user?: { id?: string; displayName?: string } }
-  quota?: { total?: number; used?: number; remaining?: number; state?: string }
-  root?: { deleted?: { state?: string }; permissions?: GraphPermission[] }
-}
-
-/** Space membership as listed in drive.root.permissions (v1beta1) */
-export interface GraphPermission {
-  roles?: string[]
-  grantedToV2?: {
-    user?: { id?: string; displayName?: string }
-    group?: { id?: string; displayName?: string }
-  }
-}
 
 export interface Member {
   type: 'user' | 'group'
@@ -62,40 +42,38 @@ const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v > 
 const toState = (s: unknown): QuotaState =>
   s === 'normal' || s === 'nearing' || s === 'critical' || s === 'exceeded' ? s : 'unknown'
 
-export function toRow(d: GraphDrive, vault: boolean): SpaceRow | null {
-  const type = d.driveType
+/** Space as built by web-client (graph.drives.listAllDrives) -> report row */
+export function toRow(space: SpaceResource): SpaceRow | null {
+  const type = space.driveType
   if (type !== 'personal' && type !== 'project') return null // skip virtual/mountpoint (shares)
-  const kind = `${vault ? 'vault-' : ''}${type}` as SpaceKind
-  const used = num(d.quota?.used)
-  const quota = num(d.quota?.total)
+  const used = num(space.spaceQuota?.used)
+  const quota = num(space.spaceQuota?.total)
   return {
-    id: d.id || '',
-    kind,
-    name: d.name || d.driveAlias || d.id || '?',
-    owner: type === 'personal' ? d.owner?.user?.displayName || d.name || '' : '',
+    id: space.id || '',
+    kind: type,
+    name: space.name || space.driveAlias || space.id || '?',
+    owner: type === 'personal' ? space.owner?.displayName || space.name || '' : '',
     used,
     quota,
     ratio: quota ? used / quota : null,
-    state: toState(d.quota?.state),
-    disabled: d.root?.deleted?.state === 'trashed',
-    lastModified: d.lastModifiedDateTime || null,
-    ownerId: d.owner?.user?.id || '',
-    members: (d.root?.permissions || []).flatMap((p): Member[] => {
-      const manager = (p.roles || []).some((r) => MANAGER_ROLES.includes(r))
-      const u = p.grantedToV2?.user?.id
-      const g = p.grantedToV2?.group?.id
-      if (u) return [{ type: 'user', id: u, manager }]
-      if (g) return [{ type: 'group', id: g, manager }]
-      return []
-    })
+    state: toState(space.spaceQuota?.state),
+    disabled: !!space.disabled,
+    lastModified: space.mdate || null,
+    ownerId: space.owner?.id || '',
+    // web-client keys the members by user/group id (from drive.root.permissions)
+    members: Object.entries(space.members || {}).map(([id, m]): Member => ({
+      type: m.grantedTo?.group ? 'group' : 'user',
+      id,
+      manager: MANAGER_ROLES.includes(m.roleId)
+    }))
   }
 }
 
-export function toRows(drives: GraphDrive[] | null | undefined, vault = false): SpaceRow[] {
+export function toRows(spaces: SpaceResource[] | null | undefined): SpaceRow[] {
   const seen = new Set<string>()
   const rows: SpaceRow[] = []
-  for (const d of drives || []) {
-    const row = toRow(d, vault)
+  for (const space of spaces || []) {
+    const row = toRow(space)
     if (!row || (row.id && seen.has(row.id))) continue
     if (row.id) seen.add(row.id)
     rows.push(row)
@@ -135,9 +113,7 @@ const emptyKind = (): KindSummary => ({
 export function summarize(rows: SpaceRow[], threshold = 0.9, topN = 10): Summary {
   const byKind = {
     personal: emptyKind(),
-    project: emptyKind(),
-    'vault-personal': emptyKind(),
-    'vault-project': emptyKind()
+    project: emptyKind()
   } as Record<SpaceKind, KindSummary>
   const total = emptyKind()
 

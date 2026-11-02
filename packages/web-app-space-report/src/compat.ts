@@ -3,7 +3,6 @@
 import * as webPkg from '@ownclouders/web-pkg'
 
 export interface CapabilityStoreSubset {
-  vaultEnabled: boolean
   authMfaEnabled: boolean
   authMfaRequiredLevelname: string
 }
