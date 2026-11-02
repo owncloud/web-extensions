@@ -15,10 +15,10 @@
     "test:e2e": "pnpm -r playwright test"
   },
   "devDependencies": {
-    "@ownclouders/eslint-config": "^12.5.0",
-    "@ownclouders/prettier-config": "0.0.1",
-    "@ownclouders/tsconfig": "0.0.6",
-    "@playwright/test": "1.64.0",
+    "@ownclouders/eslint-config": "^12.5.1",
+    "@ownclouders/prettier-config": "0.0.2",
+    "@ownclouders/tsconfig": "0.0.7",
+    "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "@vue/test-utils": "^2.5.1",
     "eslint": "9.8.0",
