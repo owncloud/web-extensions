@@ -13,8 +13,8 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@ownclouders/web-client": "^12.5.0",
-    "@ownclouders/web-pkg": "^12.5.0",
+    "@ownclouders/web-client": "^13.0.0",
+    "@ownclouders/web-pkg": "^13.0.0",
     "dompurify": "^3.4.17",
     "js-yaml": "^5.5.0",
     "marked": "^18.1.1",
@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",
-    "@ownclouders/web-test-helpers": "^12.5.0",
+    "@ownclouders/web-test-helpers": "^13.0.0",
     "@playwright/test": "^1.64.1",
     "@types/js-yaml": "^4.0.9",
     "@vitejs/plugin-vue": "^6.0.10",
