@@ -1,3 +1,6 @@
 {
-  "extends": "@ownclouders/tsconfig"
+  "extends": "@ownclouders/tsconfig",
+  "compilerOptions": {
+    "types": ["vitest/globals", "node"]
+  }
 }
