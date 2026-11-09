@@ -17,7 +17,7 @@
     "@ownclouders/web-test-helpers": "^13.0.0",
     "@vueuse/core": "^14.4.0",
     "vue": "^3.5.44",
-    "vue3-gettext": "^2.4.0"
+    "vue3-gettext": "^4.0.1"
   },
   "dependencies": {
     "@ownclouders/web-client": "^13.0.0",

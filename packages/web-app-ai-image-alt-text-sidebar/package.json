@@ -18,7 +18,7 @@
     "@ownclouders/web-client": "^13.0.0",
     "@ownclouders/web-pkg": "^13.0.0",
     "vue": "^3.5.44",
-    "vue3-gettext": "^2.4.0"
+    "vue3-gettext": "^4.0.1"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",

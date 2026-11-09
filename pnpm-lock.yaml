@@ -67,8 +67,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/ai-llm-proxy:
     devDependencies:
@@ -104,8 +104,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-ai-data-insights-sidebar:
     dependencies:
@@ -156,8 +156,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-ai-doc-summary:
     dependencies:
@@ -174,8 +174,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -214,8 +214,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -294,8 +294,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-ai-image-alt-text-sidebar:
     dependencies:
@@ -309,8 +309,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -346,8 +346,8 @@ importers:
         specifier: ^13.0.0
         version: 13.0.0(@vue/compiler-sfc@3.5.44)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@5.9.3)))(esbuild@0.28.1)(rollup@4.62.2)(typescript@5.9.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.106.1)(sass@1.106.1)(yaml@2.9.0))(vitest@4.1.11(@types/node@24.19.2)(happy-dom@20.14.5)(jsdom@30.1.3)(vite@7.2.2(@types/node@24.19.2)(sass-embedded@1.106.1)(sass@1.106.1)(yaml@2.9.0)))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -438,8 +438,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-ai-sensitive-data-scanner:
     dependencies:
@@ -456,8 +456,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -533,8 +533,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-ai-smart-file-tagger-qa:
     dependencies:
@@ -588,8 +588,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-cast:
     dependencies:
@@ -613,8 +613,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-chat-with-file:
     dependencies:
@@ -622,8 +622,8 @@ importers:
         specifier: ^6.4.299
         version: 6.4.299
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/eslint-config':
         specifier: 12.5.1
@@ -705,8 +705,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-external-sites:
     dependencies:
@@ -730,8 +730,8 @@ importers:
         specifier: ^5.4.0
         version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.106.1)(sass@1.106.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -757,8 +757,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
     devDependencies:
       '@ownclouders/extension-sdk':
         specifier: ^12.5.1
@@ -813,8 +813,8 @@ importers:
         specifier: ^5.4.0
         version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.106.1)(sass@1.106.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-importer:
     dependencies:
@@ -853,8 +853,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-json-viewer:
     dependencies:
@@ -881,8 +881,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-jupyter:
     dependencies:
@@ -903,8 +903,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-photo-addon:
     dependencies:
@@ -937,8 +937,8 @@ importers:
         specifier: ^5.4.0
         version: 5.4.0(@vue/compiler-sfc@3.5.44)(esbuild@0.28.1)(pinia@3.0.4(typescript@5.9.3)(vue@3.5.44(typescript@5.9.3)))(rollup@4.62.2)(vite@7.3.2(@types/node@26.6.5)(sass-embedded@1.106.1)(sass@1.106.1)(yaml@2.9.0))(vue@3.5.44(typescript@5.9.3))
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-progress-bars:
     dependencies:
@@ -959,8 +959,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-unzip:
     dependencies:
@@ -993,8 +993,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-version-changelog:
     dependencies:
@@ -1045,8 +1045,8 @@ importers:
         specifier: 3.3.13
         version: 3.3.13(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
   packages/web-app-vim-nav:
     dependencies:
@@ -1070,8 +1070,8 @@ importers:
         specifier: ^3.5.44
         version: 3.5.44(typescript@5.9.3)
       vue3-gettext:
-        specifier: ^2.4.0
-        version: 2.4.0(@vue/compiler-sfc@3.5.44)(vue@3.5.44(typescript@5.9.3))
+        specifier: ^4.0.1
+        version: 4.0.1(vue@3.5.44(typescript@5.9.3))
 
 packages:
 
@@ -1892,35 +1892,30 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/canvas-linux-arm64-musl@1.0.11':
     resolution: {integrity: sha512-6Jz6jys17yXydO+WdJgu7JhoB4K7/w9sWHByzzTmLjQghUx3TDMWvLv+UcCdnWhg4oprET67EMymnrETdeGNAg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/canvas-linux-riscv64-gnu@1.0.11':
     resolution: {integrity: sha512-lf2XeEebWiUYVOVEjLXxF7dfXrBBSEOBn9AqBh39VYXrPt5cDqI+1t58IFSjn8npqkg5jIOs8TQbjKABbFW1gQ==}
     engines: {node: '>= 10'}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/canvas-linux-x64-gnu@1.0.11':
     resolution: {integrity: sha512-iDapw7nFSE5tsmQxcH2+KotJhyfVPmHd6vUOQN/Em+8WNbkZJwJ/rDowlJMFnMl0SYSDSfgKCNUGi6Sn5++Smg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@napi-rs/canvas-linux-x64-musl@1.0.11':
     resolution: {integrity: sha512-26q26AyITo3CGZX4HWFIMgBMA1lu3YN07gxzBm4tW6Hglq/OVyTP50kDrmWuKybCX6dh3m8Ly+c7YhI+sqCgCQ==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@napi-rs/canvas-win32-arm64-msvc@1.0.11':
     resolution: {integrity: sha512-cUO96IdsfvIj2S+2PNcDSkTcLhjPj8pIOEWRV1Kj70MOP4wnE9zSk7N4C1EKHlFGRcgdR5AkbnBZj0dfHK9nbQ==}
@@ -2031,42 +2026,36 @@ packages:
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm-musl@2.6.0':
     resolution: {integrity: sha512-9c6AUHgHoG+IY88MRIHupztQiQnrbqHYQjkM2btA+Bf/wQnQMuiD0Wfk1EVv3TlNT3x41uU71rn6E4xh/+zvkw==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-linux-arm64-glibc@2.6.0':
     resolution: {integrity: sha512-yHRqS2owEXe6Hic9z6Mh1ECsCd+ODVOGvZDyciqRd21+v+o+DnXMOrw50DSpIG2sb8GPEaPPmfeCAWKPJdq46g==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-arm64-musl@2.6.0':
     resolution: {integrity: sha512-WhB2e/V7rqdHHWZusBSPuy5Ei8S6lSz6FE5TKKQz5h3a0O+C+mhY7vxU9b/stqvMb8beLnPY82ZrFTLKs+SrKA==}
     engines: {node: '>= 10.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-linux-x64-glibc@2.6.0':
     resolution: {integrity: sha512-ulGE6x6Oz6iAwg75T8YQSoguBWasniIbX+QWpaYPcCnDOpdWX3k+4xbEYPZVLxOuoJI+svJJPD3sEj8G7lrQ3A==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@parcel/watcher-linux-x64-musl@2.6.0':
     resolution: {integrity: sha512-tkBYKt7YQrjIJWYDnto2YgO8MRkjlMTSNoRHzsXinBqbLdeOM3L32wPZJvIZxqaLMfSlS/4sUjH/6STVP/XDLw==}
     engines: {node: '>= 10.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@parcel/watcher-win32-arm64@2.6.0':
     resolution: {integrity: sha512-gIZAP23jaHjGWasY/TY6yL7NHFClf0Ga7FN+iINvk+KN94rhm94lYZhFsbYFNcA04/onvGD9kKmiJLJB2HbNwQ==}
@@ -2150,79 +2139,66 @@ packages:
     resolution: {integrity: sha512-n1GJHPOvpIfhi3TmrCeh6S6URt9BFCt0KQE3qvexyGCTAKpR4Lg+eWvNZEqu7epxwus/8ElT3hacYEucm49SZg==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.62.2':
     resolution: {integrity: sha512-JqgflS8wEB+UXV/vS1RpRbifGBeN4D5lz8D8oOFbFZw4vedvdOgCFAjfBmIMdW3yL10XpQQ0Ambepw6MXrhOnA==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.62.2':
     resolution: {integrity: sha512-wnFJkogWvN4jm/hQRF2UBaeUmk20j5+DmHvoyWii2b8HJDyvz1MF2OU/6ynXt2KR63rbZLWkFpoytpdc/yBuSA==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.62.2':
     resolution: {integrity: sha512-HVu2bp0zhvJ8xHEV9+UUs7S90VadmBSY3LcIMvozbPo4AuMGDWlz3ymHLHZPX4hR67TKTt8Qp5PJ5RBg/i+RMQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-loong64-gnu@4.62.2':
     resolution: {integrity: sha512-mQqqAV8QaoSgr9I2fKDLY2BAVvmKjWoGiu/cSYQonsLvtqwEn1E4QYfnCOcp5zoEqNhsDYin1s6jx/VJmrxlZg==}
     cpu: [loong64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-loong64-musl@4.62.2':
     resolution: {integrity: sha512-IxKLoxCQ2IWi6bT2akyDUBGsOImDKB+sPp4EsTmwFQ/fMwpCKm8uLSSgP/Kx/QYUgKis6SEZ5/Nlhup0DIA0PQ==}
     cpu: [loong64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-ppc64-gnu@4.62.2':
     resolution: {integrity: sha512-Mk5ha2RQSgyFfmYYLkBpPnUk8D8FriBxesO1u9O75X0mHgXL1UQcH5Itl2lurWL2tj0RxV9b9tJgipac0hRY9A==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-ppc64-musl@4.62.2':
     resolution: {integrity: sha512-CjvEnqJL/0/TQ3TXX3OPIJ/kmBellrWd4heXUmHeJlTnmwjKpSJzoehLaL6Xk0ZnMHBu9dZuFADNOrtjF4v+2w==}
     cpu: [ppc64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-riscv64-gnu@4.62.2':
     resolution: {integrity: sha512-1SiZbzwdkaDURsew/tSOrooKiYy7EQGT6m8ufavAi9NEyQb/6VuIxFXAL1fqa4iZe3g4NbNk4P7J32z2tw5Mgg==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-musl@4.62.2':
     resolution: {integrity: sha512-nQts12zJ3NQRoE6uYljOH89v7szzLDvG2JD/vsX+vGXU8w/At1GowTZ5/7qeFQ8m7L55rpR8Okugnuo5bgjy2Q==}
     cpu: [riscv64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-s390x-gnu@4.62.2':
     resolution: {integrity: sha512-E9/ll019jhPIJgpzfZoIkBGhcz+kKNgVWYRY0zr9srBdPPFVpvOKW8VaJKUbeK+eZXyQF9ltME+Kk6affeaPgg==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.62.2':
     resolution: {integrity: sha512-5BqxR/pshjey51iliyzTD5Xi3EN0aLmQ2lZ3lvefVV9c82BvrLo2/6OT55iifpWBufs6kdwWbuOKS841DrmK9A==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.62.2':
     resolution: {integrity: sha512-uNN83XxQrRAh/w0/pmAfibcwyb6YWt4gP+dpnQKPVJshAloQ785ii8CT8ZCIxkGg9opVsvAlGhFitSm6D1Jjpg==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-openbsd-x64@4.62.2':
     resolution: {integrity: sha512-srjEIxSH3LRnJN6THczDHWQplqEMFiAJrTab0msUryh9kwNpkICf3Ea6q6MN/2cZwRFUNx5w+h6Hpi4QuHS6Zg==}
@@ -4503,56 +4479,48 @@ packages:
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: glibc
 
   sass-embedded-linux-arm@1.106.1:
     resolution: {integrity: sha512-EfhuxqURaMpP/eG4bg3fk4XZvRzMJBIw2iSVNRRbpwMOZLhDce8Eys95rTuOuU2R9/pHMwcVwpj/ZU3mZyLHog==}
     engines: {node: '>=14.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: glibc
 
   sass-embedded-linux-musl-arm64@1.106.1:
     resolution: {integrity: sha512-yDUGDnNbPOoVaeEapLomFnwQkLQF4pveitqjq3J9Oi7qmg8mM/PXJYWOqCOq1ifXSbnnWppfuylUSkGTwnO1Hg==}
     engines: {node: '>=14.0.0'}
     cpu: [arm64]
     os: [linux]
-    libc: musl
 
   sass-embedded-linux-musl-arm@1.106.1:
     resolution: {integrity: sha512-ToaDrOiunMuD64XLelRqjC0LWuEKt8q6vpqPsHdSN8T5paJWrAXP8EXMcuR/iIBigsssifAPym/MHEWLkLSTlg==}
     engines: {node: '>=14.0.0'}
     cpu: [arm]
     os: [linux]
-    libc: musl
 
   sass-embedded-linux-musl-riscv64@1.106.1:
     resolution: {integrity: sha512-mQwiwXzfYlT/3Tb7TAvly9eoJc6Q6z+PC2e8mtuajr77DWAGa+8Ibte1umkG/F6o9jFNG8k752A4EAlSRTXfNg==}
     engines: {node: '>=14.0.0'}
     cpu: [riscv64]
     os: [linux]
-    libc: musl
 
   sass-embedded-linux-musl-x64@1.106.1:
     resolution: {integrity: sha512-GwVa+GJGeu8ACw06aGXz8uuc9rFXRJsceMHHi02fpuv3qsy2asMgy9xgN4GPVJLac4yjCBmf09sUUqWpOCrkzw==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: musl
 
   sass-embedded-linux-riscv64@1.106.1:
     resolution: {integrity: sha512-biV7fnrlTBAfl+bzIMTgGUHaW803NJti4XcKpX70ukOOKOgxsEwwvk21tI0w8VLKIyXFuLKM3TJxe3Ze1DR0tQ==}
     engines: {node: '>=14.0.0'}
     cpu: [riscv64]
     os: [linux]
-    libc: glibc
 
   sass-embedded-linux-x64@1.106.1:
     resolution: {integrity: sha512-Ev2UktLmdFVvCFeSNyow0HNdxmNHqcXLRgEeesKpw4mtcuLN5HHocOJw9LrHiTbcpMPsfxgymS4jJBg43AptaA==}
     engines: {node: '>=14.0.0'}
     cpu: [x64]
     os: [linux]
-    libc: glibc
 
   sass-embedded-unknown-all@1.106.1:
     resolution: {integrity: sha512-uaeOeGCaHnhqpfZnjy5wGMcuyYbnDyXhzWCniGctqCj/Inlst4eDZaweowo+sJLExRvmToBhQ8seZyEvfGMQ4g==}
