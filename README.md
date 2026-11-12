@@ -10,7 +10,7 @@ Web Extensions is a collection of community and supplementary extensions for the
 
 This repository is part of the [ownCloud Infinite Scale (oCIS)](https://github.com/owncloud/ocis) ecosystem. The extensions integrate with the [ownCloud Web](https://github.com/owncloud/web) frontend and can be individually enabled in oCIS deployments.
 
-Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/web-extensions).
+Web Extensions are available on [Docker Hub](https://hub.docker.com/r/owncloud/web-extensions). The images are built and published from [owncloud-docker/web-extensions](https://github.com/owncloud-docker/web-extensions).
 
 ### Included Extensions
 
