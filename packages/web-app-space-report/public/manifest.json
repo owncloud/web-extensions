@@ -1,0 +1,8 @@
+{
+  "entrypoint": "space-report.js",
+  "config": {
+    "thresholdPercent": 90,
+    "topN": 10,
+    "saveFolder": "Space reports"
+  }
+}
