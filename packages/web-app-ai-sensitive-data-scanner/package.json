@@ -17,14 +17,14 @@
   "dependencies": {
     "@ownclouders/web-client": "^13.0.0",
     "@ownclouders/web-pkg": "^13.0.0",
-    "pdfjs-dist": "^6.4.299",
-    "vue": "^3.5.44",
+    "pdfjs-dist": "^6.5.438",
+    "vue": "^3.5.45",
     "vue3-gettext": "^4.0.1"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",
     "@ownclouders/web-test-helpers": "^13.0.0",
-    "@playwright/test": "^1.64.1",
+    "@playwright/test": "^1.65.0",
     "@vitejs/plugin-vue": "^6.0.10",
     "eslint": "^9.8.0",
     "typescript": "^5.4.0",
