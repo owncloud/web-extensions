@@ -25,7 +25,7 @@
     "@ownclouders/extension-sdk": "^12.5.1",
     "@ownclouders/web-test-helpers": "^13.0.0",
     "@uppy/core": "^5.2.0",
-    "vue": "^3.5.44",
+    "vue": "^3.5.45",
     "vue3-gettext": "^4.0.1"
   }
 }
