@@ -58,6 +58,7 @@ services:
       - ./packages/web-app-ai-smart-collections-nav/dist:/web/apps/ai-smart-collections-nav
       - ./packages/web-app-ai-folder-readme-generator/dist:/web/apps/ai-folder-readme-generator
       - ./packages/web-app-jupyter/dist:/web/apps/jupyter
+      - ./packages/web-app-space-report/dist:/web/apps/space-report
     depends_on:
       - traefik
 
