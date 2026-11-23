@@ -15,7 +15,7 @@
   "dependencies": {
     "@ownclouders/web-client": "^13.0.0",
     "@ownclouders/web-pkg": "^13.0.0",
-    "@zip.js/zip.js": "2.24.0"
+    "@zip.js/zip.js": "2.25.0"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",
