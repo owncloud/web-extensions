@@ -15,16 +15,16 @@
   "dependencies": {
     "@ownclouders/web-client": "^13.0.0",
     "@ownclouders/web-pkg": "^13.0.0",
-    "@uppy/dashboard": "^5.1.1",
-    "@uppy/google-drive": "^5.1.0",
-    "@uppy/onedrive": "^5.1.0",
-    "@uppy/webdav": "1.1.1",
+    "@uppy/dashboard": "^6.0.3",
+    "@uppy/google-drive": "^6.0.2",
+    "@uppy/onedrive": "^6.0.1",
+    "@uppy/webdav": "2.0.2",
     "pinia": "^3.0.3"
   },
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",
     "@ownclouders/web-test-helpers": "^13.0.0",
-    "@uppy/core": "^5.2.0",
+    "@uppy/core": "6.3.2",
     "vue": "^3.5.45",
     "vue3-gettext": "^4.0.1"
   }

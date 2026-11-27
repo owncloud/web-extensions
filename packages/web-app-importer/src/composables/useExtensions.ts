@@ -60,6 +60,13 @@ export const useExtensions = ({ applicationConfig }: ApplicationSetupOptions) =>
     removeUppyPlugins()
   })
 
+  // The plugins ship with @uppy/core 6 while the host's UppyService is typed against the @uppy/core
+  // version bundled with web-pkg, so TypeScript sees two unrelated `Uppy` classes. At runtime the
+  // plugins only use the public plugin API, so the host instance accepts them.
+  type HostPlugin = Parameters<UppyService['addPlugin']>[0]
+  const addPlugin = (plugin: unknown, options: Record<string, unknown>) =>
+    uppyService.addPlugin(plugin as HostPlugin, options)
+
   const getUppyPlugins = async () => {
     // lazy loading to avoid loading these on page load
     const Dashboard = (await import('@uppy/dashboard')).default
@@ -82,7 +89,7 @@ export const useExtensions = ({ applicationConfig }: ApplicationSetupOptions) =>
 
     await nextTick()
 
-    uppyService.addPlugin(Dashboard, {
+    addPlugin(Dashboard, {
       inline: true,
       target: '.oc-modal-body',
       disableLocalFiles: true,
@@ -99,19 +106,19 @@ export const useExtensions = ({ applicationConfig }: ApplicationSetupOptions) =>
     })
 
     if (supportedClouds.includes('OneDrive')) {
-      uppyService.addPlugin(OneDrive, {
+      addPlugin(OneDrive, {
         companionUrl
       })
     }
 
     if (supportedClouds.includes('GoogleDrive')) {
-      uppyService.addPlugin(GoogleDrive, {
+      addPlugin(GoogleDrive, {
         companionUrl
       })
     }
 
     if (supportedClouds.includes('WebdavPublicLink')) {
-      uppyService.addPlugin(Webdav, {
+      addPlugin(Webdav, {
         id: 'WebdavPublicLink',
         companionUrl,
         ...(webdavCloudType && { cloudType: webdavCloudType })
