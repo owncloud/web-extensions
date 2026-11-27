@@ -158,7 +158,8 @@ export function useBoardClassification(llmConfig: LLMConfig | null): UseBoardCla
       'based on its file name and content excerpt (when present).',
       `Any explanatory text must be written in the language with BCP 47 tag "${lang}" — lane values themselves must stay in English.`,
       'Return a JSON object with exactly one key "classifications": an array of objects,',
-      'each with a "fileId" (must match the "id" given below verbatim) and a "lane" (one of "draft", "in-review", "final").',
+      'each with exactly two keys: "fileId" (must match the "id" given below verbatim) and "lane" (one of "draft", "in-review", "final").',
+      'No other keys or nested objects are allowed.',
       'Return only the JSON object. No markdown, no code fences, no extra text.',
       '\n\nFiles:\n' + lines.join('\n')
     ].join(' ')

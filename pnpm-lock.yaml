@@ -414,7 +414,7 @@ importers:
         specifier: 9.39.4
         version: 9.39.4
       happy-dom:
-        specifier: ^20.11.0
+        specifier: ^20.14.5
         version: 20.14.5
       prettier:
         specifier: 3.9.5

@@ -18,6 +18,11 @@ Requests flow **browser → `ai-llm-proxy` sidecar → LLM**. The sidecar valida
 oCIS bearer token and forwards the request to the configured LLM with the API key injected
 server-side. The API key never reaches the browser.
 
+The sidecar also performs an authoritative server-side `Origin` check against `OCIS_URL`
+and rejects any request from a different origin with `403` (CORS headers alone are only
+browser-enforced). The extension additionally refuses to call an endpoint that is not
+same-origin with oCIS. Do not expose the LLM through anything that skips this check.
+
 ## Features
 
 - Adds a "Status Board" entry to the file view's view-mode switcher
