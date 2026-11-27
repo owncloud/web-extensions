@@ -23,8 +23,8 @@
   "devDependencies": {
     "@ownclouders/extension-sdk": "^12.5.1",
     "@ownclouders/web-test-helpers": "^13.0.0",
-    "@playwright/test": "^1.65.0",
-    "@vitejs/plugin-vue": "^6.0.10",
+    "@playwright/test": "^1.65.1",
+    "@vitejs/plugin-vue": "^6.0.11",
     "eslint": "^9.8.0",
     "typescript": "^5.4.0",
     "vite": "7.2.2",
